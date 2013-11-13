@@ -5,7 +5,11 @@ require('vendor/autoload.php');
 $filename = '/Users/jessed/Projects/Boomerang/src/Boomerang/HttpRequest.php';
 
 function formatType( $type ) {
-	$types = explode('|', $type);
+	$types = array_filter(explode('|', $type));
+
+	if( !$types ) {
+		$types = array( 'mixed' );
+	}
 
 	$output = '';
 	foreach( $types as $t ) {
@@ -30,7 +34,7 @@ function ScanClassFile( $filename ) {
 		 * @var $class phpDocumentor\Reflection\ClassReflector
 		 */
 
-		echo '### Class: `' . $class->getName() . '`';
+		echo '### Class: ' . $class->getShortName() . ' - `' . $class->getName() . '`';
 		echo PHP_EOL . PHP_EOL;
 
 
@@ -43,17 +47,17 @@ function ScanClassFile( $filename ) {
 
 			if( $method->getVisibility() == 'public' ) {
 
-				$block = $method->getDocBlock();
+				if( $block = $method->getDocBlock() ) {
+					if($block->getTagsByName('ignore')) {
+						continue;
+					}
+				}
 
 				$name = $method->getShortName();
-				$args = '';
-				foreach( $method->getArguments() as $argument ) {
-					$args .= $argument->getName();
-					$args .= ', ';
-				}
-				$args = rtrim($args, ' ,');
 
-				echo "#### Method: `{$name}({$args})`";
+				$args = getArgumentString($method);
+
+				echo "#### Method: `". $class->getShortName() ."`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
 
 				echo PHP_EOL . PHP_EOL;
 
@@ -94,7 +98,7 @@ function ScanClassFile( $filename ) {
 						echo '##### Returns';
 						echo PHP_EOL . PHP_EOL;
 
-						echo '' . formatType($return->getType()) . ' ' . $return->getDescription();
+						echo '' . formatType($return->getType()) . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '');
 
 						echo PHP_EOL . PHP_EOL;
 					}
@@ -110,14 +114,71 @@ function ScanClassFile( $filename ) {
 	}
 }
 
+/**
+ * @param $method
+ * @return string
+ */
+function getArgumentString( phpDocumentor\Reflection\ClassReflector\MethodReflector $method ) {
+	$req_args = array();
+	$opt_args = array();
+	foreach( $method->getArguments() as $argument ) {
+		if( $optDefault = $argument->getDefault() ) {
+			$opt_args[] = $argument->getName() . ' = ' . $optDefault;
+		} else {
+			$req_args[] = $argument->getName();
+		}
+	}
+
+	$args = implode(', ', $req_args) . ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') . implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
+
+	return $args;
+}
+
+function getFileList( $path ) {
+	if( $real = realpath($path) ) {
+		$path = $real;
+	}
+
+	$path = rtrim($path, DIRECTORY_SEPARATOR);
+
+	if( is_dir($path) ) {
+		$dir   = new \RecursiveDirectoryIterator($path);
+		$ite   = new \RecursiveIteratorIterator($dir);
+		$files = new \RegexIterator($ite, "/\.php$/");
+
+		return $files;
+	} elseif( is_readable($path) ) {
+		return new \ArrayIterator(array( $path ));
+	}
+
+
+	$this->ui->dropError("Cannot find file \"$path\"");
+
+}
+
 $documentation = array(
-	'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpRequest.php',
-	'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpResponse.php'
+	'Application' => array(
+		'/Users/jessed/Projects/Boomerang/src/Boomerang/Boomerang.php',
+	),
+	'Http'        => array(
+		'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpRequest.php',
+		'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpResponse.php',
+	),
+	'Validators'  => array(
+		'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpResponseValidator.php',
+		'/Users/jessed/Projects/Boomerang/src/Boomerang/JSONValidator.php',
+	),
+	'Type Expectations' => getFileList( '/Users/jessed/Projects/Boomerang/src/Boomerang/TypeExpectations' )
 );
 
-foreach($documentation as $filename) {
-	echo '### ' . $filename . PHP_EOL . PHP_EOL;
-	ScanClassFile($filename);
+foreach( $documentation as $sectionName => $filenames ) {
+
+	echo '## ' . $sectionName . PHP_EOL . PHP_EOL;
+
+	foreach( $filenames as $filename ) {
+//		echo '### ' . $filename . PHP_EOL . PHP_EOL;
+		ScanClassFile(trim($filename));
+	}
 }
 
 
