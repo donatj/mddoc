@@ -4,19 +4,19 @@ require('vendor/autoload.php');
 
 $filename = '/Users/jessed/Projects/Boomerang/src/Boomerang/HttpRequest.php';
 
-function formatType( $type ) {
+function formatType( $type, $default = 'mixed' ) {
 	$types = array_filter(explode('|', $type));
 
 	if( !$types ) {
-		$types = array( 'mixed' );
+		$types = array( $default );
 	}
 
 	$output = '';
 	foreach( $types as $t ) {
-		$output .= "`{$t}` | ";
+		$output .= "***{$t}*** | ";
 	}
 
-	return '(' . trim($output, ' |') . ')';
+	return trim($output, ' |');
 }
 
 /**
@@ -27,7 +27,6 @@ function ScanClassFile( $filename ) {
 	$x->process();
 	$x->scanForMarkers();
 
-	$i = 0;
 	foreach( $x->getClasses() as $class ) {
 
 		/**
@@ -37,7 +36,7 @@ function ScanClassFile( $filename ) {
 		echo '### Class: ' . $class->getShortName() . ' - `' . $class->getName() . '`';
 		echo PHP_EOL . PHP_EOL;
 
-
+		$i = 0;
 		foreach( $class->getMethods() as $method ) {
 
 			/**
@@ -47,23 +46,30 @@ function ScanClassFile( $filename ) {
 
 			if( $method->getVisibility() == 'public' ) {
 
-				if( $block = $method->getDocBlock() ) {
-					if($block->getTagsByName('ignore')) {
-						continue;
-					}
-				}
 
 				$name = $method->getShortName();
-
 				$args = getArgumentString($method);
 
-				echo "#### Method: `". $class->getShortName() ."`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
+				if( $block = $method->getDocBlock() ) {
+					if( $block->getTagsByName('ignore') ) {
+						continue;
+					}
 
-				echo PHP_EOL . PHP_EOL;
+					$i++;
 
-				if( $block ) {
+					if( $i > 1 ) {
+						echo '---' . PHP_EOL . PHP_EOL;
+					}
+
+					echo "#### Method: `" . $class->getShortName() . "`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
+
+					echo PHP_EOL . PHP_EOL;
+
 					if( $methodDescr = $block->getShortDescription() ) {
-						echo $methodDescr;
+
+						echo descriptionFormat($block->getShortDescription(), $block->getLongDescription()->getContents());
+
+//						see('x', $methodDescr, $methodDescr->getContents(), $block->getShortDescription());
 						echo PHP_EOL . PHP_EOL;
 					}
 
@@ -72,18 +78,22 @@ function ScanClassFile( $filename ) {
 					 * @var $tag phpDocumentor\Reflection\DocBlock\Tag\ParamTag
 					 */
 					if( $methodParams = $block->getTagsByName('param') ) {
-						echo '##### Arguments';
+
+
+						echo '##### Parameters';
 						echo PHP_EOL . PHP_EOL;
 
 						foreach( $block->getTagsByName('param') as $tag ) {
 
-							echo '- `' . $tag->getVariableName() . '` ' . formatType($tag->getType());
-							echo PHP_EOL;
+							echo '- ' . formatType($tag->getType()) . ' `' . $tag->getVariableName() . '`';
+
 
 							if( $tagDescr = $tag->getDescription() ) {
-								echo '	- ' . $tagDescr;
-								echo PHP_EOL;
+								echo ' - ' . $tagDescr;
+
 							}
+
+							echo PHP_EOL;
 
 						}
 
@@ -98,13 +108,14 @@ function ScanClassFile( $filename ) {
 						echo '##### Returns';
 						echo PHP_EOL . PHP_EOL;
 
-						echo '' . formatType($return->getType()) . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '');
+						echo '- ' . formatType($return->getType(), 'void') . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '');
 
 						echo PHP_EOL . PHP_EOL;
 					}
 
 				} else {
-
+					$i++;
+					echo "#### Undocumented Method: `" . $class->getShortName() . "`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
 				}
 
 				echo PHP_EOL;
@@ -113,6 +124,40 @@ function ScanClassFile( $filename ) {
 		}
 	}
 }
+
+function descriptionFormat() {
+	$string = implode(PHP_EOL, func_get_args());
+	$parts  = explode(PHP_EOL, $string);
+
+	$output = '';
+
+	while( ($part = current($parts)) !== false ) {
+
+		$part = rtrim($part);
+		$next = next($parts);
+
+		$lastPart = strrev($part);
+		if( $lastPart ) {
+			$lastPart = $lastPart[0];
+		}
+
+		if( $lastPart == ':' ) {
+			$part = '##### ' . substr($part,0,-1);
+		}
+
+		if( in_array($lastPart, array( ',', '.', ';' )) || (strlen($next) > 3 && $next[0] = ' ' && $next[1] == ' ' && $next[2] == ' ') || trim($next) == '' ) {
+			$output .= $part . '  ' . PHP_EOL;
+		} else {
+			$output .= $part;
+		}
+
+	}
+
+
+	return $output;
+}
+
+//function getUnified( phpDocumentor\Reflection\ClassReflector\MethodReflector $method ) {
 
 /**
  * @param $method
@@ -157,19 +202,23 @@ function getFileList( $path ) {
 }
 
 $documentation = array(
-	'Application' => array(
+	'Application'       => array(
 		'/Users/jessed/Projects/Boomerang/src/Boomerang/Boomerang.php',
 	),
-	'Http'        => array(
+	'Http'              => array(
 		'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpRequest.php',
 		'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpResponse.php',
 	),
-	'Validators'  => array(
+	'Validators'        => array(
 		'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpResponseValidator.php',
 		'/Users/jessed/Projects/Boomerang/src/Boomerang/JSONValidator.php',
 	),
-	'Type Expectations' => getFileList( '/Users/jessed/Projects/Boomerang/src/Boomerang/TypeExpectations' )
+	'Type Expectations' => getFileList('/Users/jessed/Projects/Boomerang/src/Boomerang/TypeExpectations')
 );
+
+//$documentation = array(
+//	'Flags' => getFileList('/Users/jessed/Projects/Flags/src')
+//);
 
 foreach( $documentation as $sectionName => $filenames ) {
 
