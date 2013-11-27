@@ -2,6 +2,25 @@
 
 require('vendor/autoload.php');
 
+//define('STDERR', STDOUT);
+
+spl_autoload_register(function ( $className ) {
+	$className = ltrim($className, '\\');
+	$fileName  = '';
+	$namespace = '';
+	if( $lastNsPos = strrpos($className, '\\') ) {
+		$namespace = substr($className, 0, $lastNsPos);
+		$className = substr($className, $lastNsPos + 1);
+		$fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+	}
+	$fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+
+	$fileName = dirname(__FILE__) . '/src/' . $fileName;
+	if( file_exists($fileName) ) {
+		require($fileName);
+	}
+});
+
 $filename = '/Users/jessed/Projects/Boomerang/src/Boomerang/HttpRequest.php';
 
 function formatType( $type, $default = 'mixed' ) {
@@ -27,31 +46,66 @@ function ScanClassFile( $filename ) {
 	$x->process();
 	$x->scanForMarkers();
 
-	foreach( $x->getClasses() as $class ) {
+	$factory = new \donatj\MDDoc\TaxonomyReflectorFactory();
 
-		/**
-		 * @var $class phpDocumentor\Reflection\ClassReflector
-		 */
+	$n = $factory->newInstance($filename, function ( $className ) {
+		$className = ltrim($className, '\\');
+		$fileName  = '';
+		$namespace = '';
+		if( $lastNsPos = strrpos($className, '\\') ) {
+			$namespace = substr($className, 0, $lastNsPos);
+			$className = substr($className, $lastNsPos + 1);
+			$fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+		}
+		$fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+
+		$fileName = '/Users/jessed/Projects/Boomerang/src/' . $fileName;
+		if( file_exists($fileName) ) {
+			return $fileName;
+		}
+
+		return null;
+	});
+
+	$methodData = $n->getMethods();
+	if( $class = $n->getReflector() ) {
 
 		echo '### Class: ' . $class->getShortName() . ' - `' . $class->getName() . '`';
 		echo PHP_EOL . PHP_EOL;
 
 		$i = 0;
-		foreach( $class->getMethods() as $method ) {
-
-			/**
-			 * @var $method phpDocumentor\Reflection\ClassReflector\MethodReflector
-			 */
-
+		foreach( $methodData as $methods ) {
+			$method = reset($methods);
 
 			if( $method->getVisibility() == 'public' ) {
 
 
 				$name = $method->getShortName();
+//				see($class->getInterfaces(), $class->getParentClass());
 				$args = getArgumentString($method);
 
-				if( $block = $method->getDocBlock() ) {
-					if( $block->getTagsByName('ignore') ) {
+				$block = false;
+				foreach( $methods as $xmethod ) {
+					if( $block = $xmethod->getDocBlock() ) {
+						break;
+					}
+				}
+
+
+				/**
+				 * @var $block \phpDocumentor\Reflection\DocBlock
+				 */
+				if( $block ) {
+					if( $access = $block->getTagsByName('access') ) {
+						$access = reset($access);
+						/**
+						 * @var $access \phpDocumentor\Reflection\DocBlock\Tag
+						 */
+
+						if( $access->getContent() == 'private' ) {
+							continue;
+						}
+					} elseif( $block->getTagsByName('ignore') || $block->getTagsByName('access') ) {
 						continue;
 					}
 
@@ -121,6 +175,7 @@ function ScanClassFile( $filename ) {
 				echo PHP_EOL;
 
 			}
+
 		}
 	}
 }
@@ -142,7 +197,7 @@ function descriptionFormat() {
 		}
 
 		if( $lastPart == ':' ) {
-			$part = '##### ' . substr($part,0,-1);
+			$part = '##### ' . substr($part, 0, -1);
 		}
 
 		if( in_array($lastPart, array( ',', '.', ';' )) || (strlen($next) > 3 && $next[0] = ' ' && $next[1] == ' ' && $next[2] == ' ') || trim($next) == '' ) {
