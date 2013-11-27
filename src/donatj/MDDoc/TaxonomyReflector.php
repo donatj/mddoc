@@ -18,9 +18,11 @@ class TaxonomyReflector {
 	private $data;
 	private $parserFactory;
 
+	private $reflector = null;
+
 	/**
-	 * @param string              $filename
-	 * @param callable            $autoLoader
+	 * @param string                   $filename
+	 * @param callable                 $autoLoader
 	 * @param TaxonomyReflectorFactory $parserFactory
 	 */
 	public function __construct( $filename, callable $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
@@ -45,6 +47,10 @@ class TaxonomyReflector {
 
 	private function registerReflectors( InterfaceReflector $reflector ) {
 
+		if( !$this->reflector ) {
+			$this->reflector = $reflector;
+		}
+
 		$loader = $this->autoLoader;
 
 		/**
@@ -52,24 +58,20 @@ class TaxonomyReflector {
 		 */
 		$reflector->getName();
 		foreach( $reflector->getMethods() as $method ) {
-			$this->data['methods'][$method->getShortName()][] = $this->fileName;
+			$this->data['methods'][$method->getShortName()][] = $method;
 		}
 
 		if( $reflector instanceof ClassReflector ) {
 			if( $parent = $reflector->getParentClass() ) {
 				$parser     = $this->parserFactory->newInstance($loader($parent), $loader);
-				$parserData = $parser->getData();
-				$this->data = array_merge_recursive( $this->data, $parserData );
-//				$this->mergeIntoData($parserData, $reflector);
+				$this->data = array_merge_recursive($this->data, $parser->getData());
 			}
 		}
 
 		if( method_exists($reflector, 'getInterfaces') ) {
 			foreach( $reflector->getInterfaces() as $interface ) {
 				$parser     = $this->parserFactory->newInstance($loader($interface), $loader);
-				$parserData = $parser->getData();
-				$this->data = array_merge_recursive( $this->data, $parserData );
-//				$this->mergeIntoData($parserData, $reflector);
+				$this->data = array_merge_recursive($this->data, $parser->getData());
 			}
 		}
 
@@ -80,6 +82,13 @@ class TaxonomyReflector {
 	 */
 	public function getData() {
 		return $this->data;
+	}
+
+	/**
+	 * @return null|InterfaceReflector
+	 */
+	public function getReflector() {
+		return $this->reflector;
 	}
 
 	public function getMethods() {
