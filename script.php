@@ -281,7 +281,11 @@ foreach( $documentation as $sectionName => $filenames ) {
 
 	foreach( $filenames as $filename ) {
 //		echo '### ' . $filename . PHP_EOL . PHP_EOL;
-		ScanClassFile(trim($filename));
+		try {
+			ScanClassFile(trim($filename));
+		}catch (\phpDocumentor\Reflection\Exception\UnreadableFile $ex) {
+			//ignore, means empty file
+		}
 	}
 }
 
