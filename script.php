@@ -41,37 +41,25 @@ function formatType( $type, $default = 'mixed' ) {
 /**
  * @param $filename
  */
-function ScanClassFile( $filename ) {
+function ScanClassFile( $filename, $autoloader ) {
 	$x = new \phpDocumentor\Reflection\FileReflector($filename);
 	$x->process();
 	$x->scanForMarkers();
 
 	$factory = new \donatj\MDDoc\TaxonomyReflectorFactory();
 
-	$n = $factory->newInstance($filename, function ( $className ) {
-		$className = ltrim($className, '\\');
-		$fileName  = '';
-		$namespace = '';
-		if( $lastNsPos = strrpos($className, '\\') ) {
-			$namespace = substr($className, 0, $lastNsPos);
-			$className = substr($className, $lastNsPos + 1);
-			$fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-		}
-		$fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-
-		$fileName = '/Users/jessed/Projects/Boomerang/src/' . $fileName;
-		if( file_exists($fileName) ) {
-			return $fileName;
-		}
-
-		return null;
-	});
+	$n = $factory->newInstance($filename, $autoloader);
 
 	$methodData = $n->getMethods();
 	if( $class = $n->getReflector() ) {
 
 		echo '### Class: ' . $class->getShortName() . ' - `' . $class->getName() . '`';
 		echo PHP_EOL . PHP_EOL;
+
+		if( $classBlock = $class->getDocBlock() ) {
+			echo $classBlock->getText();
+			echo PHP_EOL . PHP_EOL;
+		}
 
 		$i = 0;
 		foreach( $methodData as $methods ) {
@@ -271,10 +259,6 @@ $documentation = array(
 	'Type Expectations' => getFileList('/Users/jessed/Projects/Boomerang/src/Boomerang/TypeExpectations')
 );
 
-//$documentation = array(
-//	'Flags' => getFileList('/Users/jessed/Projects/Flags/src')
-//);
-
 foreach( $documentation as $sectionName => $filenames ) {
 
 	echo '## ' . $sectionName . PHP_EOL . PHP_EOL;
@@ -282,9 +266,28 @@ foreach( $documentation as $sectionName => $filenames ) {
 	foreach( $filenames as $filename ) {
 //		echo '### ' . $filename . PHP_EOL . PHP_EOL;
 		try {
-			ScanClassFile(trim($filename));
-		}catch (\phpDocumentor\Reflection\Exception\UnreadableFile $ex) {
-			//ignore, means empty file
+			ScanClassFile(trim($filename), function ( $className ) {
+				$className = ltrim($className, '\\');
+				$fileName  = '';
+				$namespace = '';
+				if( $lastNsPos = strrpos($className, '\\') ) {
+					$namespace = substr($className, 0, $lastNsPos);
+					$className = substr($className, $lastNsPos + 1);
+					$fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+				}
+				$fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+
+				$fileName = '/Users/jessed/Projects/Boomerang/src/' . $fileName;
+				if( file_exists($fileName) ) {
+					return $fileName;
+				}
+
+				drop($fileName);
+
+				return null;
+			});
+		} catch(\phpDocumentor\Reflection\Exception\UnreadableFile $ex) {
+			drop($ex->getMessage(), $ex->getFile(), $ex->getTrace());
 		}
 	}
 }
