@@ -17,7 +17,6 @@ class TaxonomyReflector {
 	private $autoLoader;
 	private $data;
 	private $parserFactory;
-
 	private $reflector = null;
 
 	/**
@@ -63,14 +62,16 @@ class TaxonomyReflector {
 
 		if( $reflector instanceof ClassReflector ) {
 			if( $parent = $reflector->getParentClass() ) {
-				$parser     = $this->parserFactory->newInstance($loader($parent), $loader);
+				$filename   = $loader($parent);
+				$parser     = $this->parserFactory->newInstance($filename, $loader);
 				$this->data = array_merge_recursive($this->data, $parser->getData());
 			}
 		}
 
 		if( method_exists($reflector, 'getInterfaces') ) {
 			foreach( $reflector->getInterfaces() as $interface ) {
-				$parser     = $this->parserFactory->newInstance($loader($interface), $loader);
+				$filename   = $loader($interface);
+				$parser     = $this->parserFactory->newInstance($filename, $loader);
 				$this->data = array_merge_recursive($this->data, $parser->getData());
 			}
 		}
