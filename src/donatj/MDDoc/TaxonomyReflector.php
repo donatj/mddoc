@@ -62,17 +62,21 @@ class TaxonomyReflector {
 
 		if( $reflector instanceof ClassReflector ) {
 			if( $parent = $reflector->getParentClass() ) {
-				$filename   = $loader($parent);
-				$parser     = $this->parserFactory->newInstance($filename, $loader);
-				$this->data = array_merge_recursive($this->data, $parser->getData());
+				$filename = $loader($parent);
+				if( is_readable($filename) ) {
+					$parser     = $this->parserFactory->newInstance($filename, $loader);
+					$this->data = array_merge_recursive($this->data, $parser->getData());
+				}
 			}
 		}
 
 		if( method_exists($reflector, 'getInterfaces') ) {
 			foreach( $reflector->getInterfaces() as $interface ) {
-				$filename   = $loader($interface);
-				$parser     = $this->parserFactory->newInstance($filename, $loader);
-				$this->data = array_merge_recursive($this->data, $parser->getData());
+				$filename = $loader($interface);
+				if( is_readable($filename) ) {
+					$parser     = $this->parserFactory->newInstance($filename, $loader);
+					$this->data = array_merge_recursive($this->data, $parser->getData());
+				}
 			}
 		}
 
@@ -93,7 +97,7 @@ class TaxonomyReflector {
 	}
 
 	public function getMethods() {
-		return $this->data['methods'];
+		return $this->data['methods'] ?: array();
 	}
 
 

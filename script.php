@@ -21,8 +21,6 @@ spl_autoload_register(function ( $className ) {
 	}
 });
 
-$filename = '/Users/jessed/Projects/Boomerang/src/Boomerang/HttpRequest.php';
-
 function formatType( $type, $default = 'mixed' ) {
 	$types = array_filter(explode('|', $type));
 
@@ -216,7 +214,7 @@ function getArgumentString( phpDocumentor\Reflection\ClassReflector\MethodReflec
 
 	$args = implode(', ', $req_args) . ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') . implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 
-	return $args;
+	return $args ?: array();
 }
 
 function getFileList( $path ) {
@@ -243,17 +241,21 @@ function getFileList( $path ) {
 
 $documentation = array(
 	'Application'       => array(
-		'/Users/jessed/Projects/Boomerang/src/Boomerang/Boomerang.php',
+		'/Users/jdonat/Projects/Boomerang/src/Boomerang/Boomerang.php',
 	),
 	'Http'              => array(
-		'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpRequest.php',
-		'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpResponse.php',
+		'/Users/jdonat/Projects/Boomerang/src/Boomerang/HttpRequest.php',
+		'/Users/jdonat/Projects/Boomerang/src/Boomerang/HttpResponse.php',
 	),
 	'Validators'        => array(
-		'/Users/jessed/Projects/Boomerang/src/Boomerang/HttpResponseValidator.php',
-		'/Users/jessed/Projects/Boomerang/src/Boomerang/JSONValidator.php',
+		'/Users/jdonat/Projects/Boomerang/src/Boomerang/HttpResponseValidator.php',
+		'/Users/jdonat/Projects/Boomerang/src/Boomerang/JSONValidator.php',
 	),
-	'Type Expectations' => getFileList('/Users/jessed/Projects/Boomerang/src/Boomerang/TypeExpectations')
+	'Type Expectations' => getFileList('/Users/jdonat/Projects/Boomerang/src/Boomerang/TypeExpectations')
+);
+
+$documentation = array(
+	'Documentation' => getFileList('/Users/jdonat/Projects/IniBuilder/src/donatj/Ini')
 );
 
 foreach( $documentation as $sectionName => $filenames ) {
@@ -263,9 +265,9 @@ foreach( $documentation as $sectionName => $filenames ) {
 	foreach( $filenames as $filename ) {
 //		echo '### ' . $filename . PHP_EOL . PHP_EOL;
 		try {
-			ScanClassFile(trim($filename), PSR0('/Users/jessed/Projects/Boomerang/src/') );
+			ScanClassFile(trim($filename), PSR0('/Users/jdonat/Projects/Boomerang/src/') );
 		} catch(\phpDocumentor\Reflection\Exception\UnreadableFile $ex) {
-			drop($ex->getMessage(), $ex->getFile(), $ex->getTrace());
+			drop(trim($filename), $ex->getMessage(), $ex->getFile(), $ex->getTrace());
 		}
 	}
 }
