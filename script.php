@@ -214,7 +214,7 @@ function getArgumentString( phpDocumentor\Reflection\ClassReflector\MethodReflec
 
 	$args = implode(', ', $req_args) . ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') . implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 
-	return $args ?: array();
+	return $args;
 }
 
 function getFileList( $path ) {
