@@ -41,7 +41,7 @@ function ScanClassFile( $filename, $autoloader ) {
 	$x->process();
 	$x->scanForMarkers();
 
-	$factory = new \donatj\MDDoc\TaxonomyReflectorFactory();
+	$factory = new \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory();
 
 	$n = $factory->newInstance($filename, $autoloader);
 

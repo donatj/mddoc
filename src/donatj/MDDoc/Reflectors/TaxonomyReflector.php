@@ -1,6 +1,6 @@
 <?php
 
-namespace donatj\MDDoc;
+namespace donatj\MDDoc\Reflectors;
 
 use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
