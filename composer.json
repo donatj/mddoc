@@ -1,9 +1,9 @@
 {
     "name": "donatj/mddoc",
     "require": {
-        "phpdocumentor/reflection": "*",
-        "donatj/flags": "*",
-        "donatj/cli-toolkit": "*"
+        "phpdocumentor/reflection": "1.*",
+        "donatj/flags": "1.*",
+        "donatj/cli-toolkit": "0.*"
     },
     "require-dev": {
         "donatj/drop": "*"
@@ -14,5 +14,13 @@
             "name": "Jesse Donat",
             "email": "donatj@gmail.com"
         }
-    ]
+    ],
+	"autoload": {
+		"psr-0": {
+			"donatj": "src/"
+		}
+	},
+	"bin": [
+		"composer/bin/mddoc"
+	]
 }
