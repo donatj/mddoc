@@ -9,7 +9,7 @@ class IncludeSource extends IncludeFile {
 	 */
 	private $lang = '';
 
-	function __construct($name, $lang = null) {
+	function __construct( $name, $lang = null ) {
 		parent::__construct($name);
 
 		if( $lang ) {
@@ -17,13 +17,12 @@ class IncludeSource extends IncludeFile {
 		}
 	}
 
-
 	/**
 	 * @param int $depth
 	 * @return string
 	 */
 	public function output( $depth ) {
-		return "```\n" . file_get_contents($this->name) . "\n```\n\n`";
+		return "```" . ($this->lang ? : '') . "\n" . file_get_contents($this->name) . "\n```\n\n";
 	}
 
 }

@@ -7,6 +7,7 @@ use donatj\MDDoc\Documentation\DocPage;
 use donatj\MDDoc\Documentation\DocRoot;
 use donatj\MDDoc\Documentation\File;
 use donatj\MDDoc\Documentation\IncludeFile;
+use donatj\MDDoc\Documentation\IncludeSource;
 use donatj\MDDoc\Documentation\RecursiveDirectory;
 use donatj\MDDoc\Documentation\Section;
 use donatj\MDDoc\Documentation\Text;
@@ -72,6 +73,11 @@ class ConfigParser {
 					case 'include':
 						$name     = $this->requireAttribute($child, 'name');
 						$childDoc = new IncludeFile($name);
+						break;
+					case 'source':
+						$name     = $this->requireAttribute($child, 'name');
+						$language = $child->getAttribute('lang') ?: null;
+						$childDoc = new IncludeSource($name, $language);
 						break;
 					default:
 						throw new ConfigException("Invalid XML Tag: {$child->nodeName}");
