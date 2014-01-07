@@ -3,6 +3,7 @@
 namespace donatj\MDDoc;
 
 use donatj\Flags;
+use donatj\MDDoc\Runner\ConfigParser;
 
 /**
  * Application MDDoc
@@ -14,6 +15,8 @@ class MDDoc {
 	function __construct( $args ) {
 
 		$this->init($args);
+
+		$x = new ConfigParser('mddoc.xml');
 
 	}
 

@@ -7,13 +7,13 @@ abstract class AbstractNestedDoc implements DocInterface {
 	/**
 	 * @var DocInterface[]
 	 */
-	private $children;
+	private $children = array();
 
 	/**
 	 * @param DocInterface $child
 	 */
 	public function addChild( DocInterface $child ) {
-		$children[] = $child;
+		$this->children[] = $child;
 	}
 
 	/**

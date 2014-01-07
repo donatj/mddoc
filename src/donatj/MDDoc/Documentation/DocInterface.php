@@ -4,8 +4,10 @@ namespace donatj\MDDoc\Documentation;
 
 interface DocInterface {
 
-	public function __construct($depth);
-
-	public function getMarkdown();
+	/**
+	 * @param int $depth
+	 * @return string
+	 */
+	public function output( $depth );
 
 } 

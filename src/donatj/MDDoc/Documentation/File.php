@@ -4,12 +4,18 @@ namespace donatj\MDDoc\Documentation;
 
 class File implements DocInterface {
 
-	public function __construct( $depth ) {
-		// TODO: Implement __construct() method.
+	private $name;
+
+	public function __construct( $name ) {
+		$this->name = $name;
 	}
 
-	public function getMarkdown() {
-		// TODO: Implement getMarkdown() method.
+	public function output( $depth ) {
+
+
+		see($this->name, $depth);
+
+
 	}
 
 } 
