@@ -34,6 +34,12 @@ abstract class AbstractNestedDoc implements DocInterface {
 		return $this->children;
 	}
 
+	/**
+	 * @param string $input
+	 */
+	protected function cleanup($input) {
+		return rtrim($input, "\n") . "\n\n";
+	}
 
 
 } 

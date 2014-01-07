@@ -17,6 +17,6 @@ class Section extends AbstractNestedDoc {
 			$output .= $child->output($depth + 1);
 		}
 
-		return $output . "\n\n";
+		return $this->cleanup($output);
 	}
 }

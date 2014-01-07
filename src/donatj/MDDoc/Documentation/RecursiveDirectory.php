@@ -52,10 +52,10 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 			if( $this->autoloader instanceof \Closure ) {
 				$child->setAutoloader($this->autoloader);
 			}
-			$output .= $child->output($depth);
+			$output .= $this->cleanup($child->output($depth));
 		}
 
-		return $output;
+		return $this->cleanup($output);
 	}
 
 
