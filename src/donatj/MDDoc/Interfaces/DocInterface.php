@@ -1,6 +1,6 @@
 <?php
 
-namespace donatj\MDDoc\Documentation;
+namespace donatj\MDDoc\Interfaces;
 
 interface DocInterface {
 

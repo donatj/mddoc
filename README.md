@@ -52,9 +52,28 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 #### Undocumented Method: `File`->`__construct($name)`
 #### Undocumented Method: `File`->`output($depth)`
+#### Undocumented Method: `File`->`setAutoloader($autoloader)`
+### Class: IncludeFile - `\donatj\MDDoc\Documentation\IncludeFile`
+
+#### Undocumented Method: `IncludeFile`->`__construct($name)`
+---
+
+#### Method: `IncludeFile`->`output($depth)`
+
+##### Parameters
+
+- ***int*** `$depth`
+
+
+##### Returns
+
+- ***string***
+
+
 ### Class: RecursiveDirectory - `\donatj\MDDoc\Documentation\RecursiveDirectory`
 
 #### Undocumented Method: `RecursiveDirectory`->`__construct($name)`
+#### Undocumented Method: `RecursiveDirectory`->`setAutoloader($autoloader)`
 #### Undocumented Method: `RecursiveDirectory`->`output($depth)`
 ### Class: Section - `\donatj\MDDoc\Documentation\Section`
 
@@ -75,8 +94,13 @@ Class Text
 #### Undocumented Method: `Text`->`output($depth)`
 ### Class: ConfigException - `\donatj\MDDoc\Exceptions\ConfigException`
 
+### Class: PathNotReadableException - `\donatj\MDDoc\Exceptions\PathNotReadableException`
+
 ### Class: TargetNotWritableException - `\donatj\MDDoc\Exceptions\TargetNotWritableException`
 
+### Class: AutoloaderAware - `\donatj\MDDoc\Interfaces\AutoloaderAware`
+
+#### Undocumented Method: `AutoloaderAware`->`setAutoloader($autoloader)`
 ### Class: AutoloaderInterface - `\donatj\MDDoc\Interfaces\AutoloaderInterface`
 
 #### Method: `AutoloaderInterface`::`makeAutoloader($root)`

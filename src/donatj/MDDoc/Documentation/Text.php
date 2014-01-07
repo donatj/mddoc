@@ -2,6 +2,8 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Interfaces\DocInterface;
+
 /**
  * Class Text
  *
@@ -19,7 +21,7 @@ class Text implements DocInterface {
 	}
 
 	public function output( $depth ) {
-		return trim($this->text) . "\n";
+		return trim($this->text) . "\n\n";
 	}
 
 

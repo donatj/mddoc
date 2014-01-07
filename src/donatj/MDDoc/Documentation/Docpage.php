@@ -20,7 +20,7 @@ class DocPage extends AbstractNestedDoc {
 	public function output($depth) {
 		$output = '';
 		foreach($this->getChildren() as $child) {
-			$output .= $child->output($depth);
+			$output .= $child->output(0);
 		}
 
 		file_put_contents($this->target, $output);
