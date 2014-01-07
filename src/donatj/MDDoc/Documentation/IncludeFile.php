@@ -7,7 +7,7 @@ use donatj\MDDoc\Interfaces\DocInterface;
 
 class IncludeFile implements DocInterface {
 
-	private $name;
+	protected $name;
 
 	function __construct( $name ) {
 		if( !is_readable($name) ) {
@@ -22,7 +22,7 @@ class IncludeFile implements DocInterface {
 	 * @return string
 	 */
 	public function output( $depth ) {
-		return file_get_contents($this->name);
+		return file_get_contents($this->name) . "\n\n";
 	}
 
 }
