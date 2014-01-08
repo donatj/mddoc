@@ -3,16 +3,16 @@ namespace donatj\MDDoc\Runner;
 
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Documentation\AbstractNestedDoc;
+use donatj\MDDoc\Documentation\ClassFile;
 use donatj\MDDoc\Documentation\DocPage;
 use donatj\MDDoc\Documentation\DocRoot;
-use donatj\MDDoc\Documentation\ClassFile;
 use donatj\MDDoc\Documentation\IncludeFile;
 use donatj\MDDoc\Documentation\IncludeSource;
+use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Documentation\RecursiveDirectory;
 use donatj\MDDoc\Documentation\Section;
 use donatj\MDDoc\Documentation\Text;
 use donatj\MDDoc\Exceptions\ConfigException;
-use donatj\MDDoc\Interfaces\AutoloaderAware;
 
 class ConfigParser {
 

@@ -8,7 +8,7 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use donatj\MDDoc\Interfaces\AutoloaderAware;
+use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 
 class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace donatj\MDDoc\Interfaces;
+namespace donatj\MDDoc\Documentation\Interfaces;
 
-interface DocInterface {
+interface DocumentationInterface {
 
 	/**
 	 * @param int $depth

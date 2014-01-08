@@ -2,24 +2,24 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use donatj\MDDoc\Interfaces\DocInterface;
+use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 
-abstract class AbstractNestedDoc implements DocInterface {
+abstract class AbstractNestedDoc implements DocumentationInterface {
 
 	/**
-	 * @var DocInterface[]
+	 * @var \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]
 	 */
 	private $children = array();
 
 	/**
-	 * @param DocInterface $child
+	 * @param \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface $child
 	 */
-	public function addChild( DocInterface $child ) {
+	public function addChild( DocumentationInterface $child ) {
 		$this->children[] = $child;
 	}
 
 	/**
-	 * @param \donatj\MDDoc\Interfaces\DocInterface[] $children
+	 * @param \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[] $children
 	 */
 	public function setChildren( $children ) {
 		foreach($children as $child) {
@@ -28,7 +28,7 @@ abstract class AbstractNestedDoc implements DocInterface {
 	}
 
 	/**
-	 * @return \donatj\MDDoc\Interfaces\DocInterface[]
+	 * @return \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]
 	 */
 	public function getChildren() {
 		return $this->children;

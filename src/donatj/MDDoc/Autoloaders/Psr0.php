@@ -2,7 +2,7 @@
 
 namespace donatj\MDDoc\Autoloaders;
 
-use donatj\MDDoc\Interfaces\AutoloaderInterface;
+use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 
 class Psr0 implements AutoloaderInterface {
 

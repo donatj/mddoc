@@ -1,6 +1,6 @@
 <?php
 
-namespace donatj\MDDoc\Interfaces;
+namespace donatj\MDDoc\Autoloaders\Interfaces;
 
 interface AutoloaderInterface {
 

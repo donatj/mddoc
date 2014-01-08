@@ -2,10 +2,10 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
-use donatj\MDDoc\Interfaces\DocInterface;
 
-class IncludeFile implements DocInterface {
+class IncludeFile implements DocumentationInterface {
 
 	protected $name;
 

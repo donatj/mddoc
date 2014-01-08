@@ -2,14 +2,14 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use donatj\MDDoc\Interfaces\DocInterface;
+use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 
 /**
  * Class Text
  *
  * @package donatj\MDDoc\Documentation
  */
-class Text implements DocInterface {
+class Text implements DocumentationInterface {
 
 	private $text;
 

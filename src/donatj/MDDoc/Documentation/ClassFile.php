@@ -3,12 +3,12 @@
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Autoloaders\Psr0;
-use donatj\MDDoc\Interfaces\AutoloaderAware;
-use donatj\MDDoc\Interfaces\DocInterface;
+use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
+use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 
-class ClassFile implements DocInterface, AutoloaderAware {
+class ClassFile implements DocumentationInterface, AutoloaderAware {
 
 	private $name;
 	private $autoloader;
@@ -63,7 +63,6 @@ class ClassFile implements DocInterface, AutoloaderAware {
 							break;
 						}
 					}
-
 
 					/**
 					 * @var $block \phpDocumentor\Reflection\DocBlock
@@ -188,9 +187,7 @@ class ClassFile implements DocInterface, AutoloaderAware {
 			} else {
 				$output .= $part;
 			}
-
 		}
-
 
 		return $output;
 	}
