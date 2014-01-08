@@ -1,26 +1,27 @@
 {
-    "name": "donatj/mddoc",
-    "require": {
-        "phpdocumentor/reflection": "1.*",
-        "donatj/flags": "1.*",
-        "donatj/cli-toolkit": "0.*"
-    },
-    "require-dev": {
-        "donatj/drop": "*"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Jesse Donat",
-            "email": "donatj@gmail.com"
-        }
-    ],
-	"autoload": {
+	"name"       : "donatj/mddoc",
+	"require"    : {
+		"ext-dom"                 : "*",
+		"phpdocumentor/reflection": "1.*",
+		"donatj/flags"            : "1.*",
+		"donatj/cli-toolkit"      : "0.*"
+	},
+	"require-dev": {
+		"donatj/drop": "*"
+	},
+	"license"    : "MIT",
+	"authors"    : [
+		{
+			"name" : "Jesse Donat",
+			"email": "donatj@gmail.com"
+		}
+	],
+	"autoload"   : {
 		"psr-0": {
 			"donatj": "src/"
 		}
 	},
-	"bin": [
+	"bin"        : [
 		"composer/bin/mddoc"
 	]
 }
