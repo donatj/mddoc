@@ -7,7 +7,7 @@ use donatj\MDDoc\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Interfaces\DocInterface;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 
-class File implements DocInterface, AutoloaderAware {
+class ClassFile implements DocInterface, AutoloaderAware {
 
 	private $name;
 	private $autoloader;
@@ -55,9 +55,8 @@ class File implements DocInterface, AutoloaderAware {
 
 				if( $method->getVisibility() == 'public' ) {
 
-
 					$name = $method->getShortName();
-//				see($class->getInterfaces(), $class->getParentClass());
+
 					$args = $this->getArgumentString($method);
 
 					$block = false;
@@ -92,11 +91,9 @@ class File implements DocInterface, AutoloaderAware {
 						}
 
 						$output .= "#### Method: `" . $class->getShortName() . "`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
-
 						$output .= PHP_EOL . PHP_EOL;
 
 						if( $methodDescr = $block->getShortDescription() ) {
-
 							$output .= $this->descriptionFormat($block->getShortDescription(), $block->getLongDescription()->getContents());
 							$output .= PHP_EOL . PHP_EOL;
 						}
@@ -114,14 +111,11 @@ class File implements DocInterface, AutoloaderAware {
 
 								$output .= '- ' . $this->formatType($tag->getType()) . ' `' . $tag->getVariableName() . '`';
 
-
 								if( $tagDescr = $tag->getDescription() ) {
 									$output .= ' - ' . $tagDescr;
-
 								}
 
 								$output .= PHP_EOL;
-
 							}
 
 							$output .= PHP_EOL . PHP_EOL;
@@ -153,10 +147,6 @@ class File implements DocInterface, AutoloaderAware {
 		}
 
 		return $output;
-	}
-
-	public function setAutoloader( \Closure $autoloader ) {
-		$this->autoloader = $autoloader;
 	}
 
 	private function getArgumentString( MethodReflector $method ) {
@@ -220,6 +210,10 @@ class File implements DocInterface, AutoloaderAware {
 		}
 
 		return trim($output, ' |');
+	}
+
+	public function setAutoloader( \Closure $autoloader ) {
+		$this->autoloader = $autoloader;
 	}
 
 } 

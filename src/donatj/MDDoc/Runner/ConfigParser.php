@@ -5,7 +5,7 @@ use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Documentation\AbstractNestedDoc;
 use donatj\MDDoc\Documentation\DocPage;
 use donatj\MDDoc\Documentation\DocRoot;
-use donatj\MDDoc\Documentation\File;
+use donatj\MDDoc\Documentation\ClassFile;
 use donatj\MDDoc\Documentation\IncludeFile;
 use donatj\MDDoc\Documentation\IncludeSource;
 use donatj\MDDoc\Documentation\RecursiveDirectory;
@@ -64,7 +64,7 @@ class ConfigParser {
 						break;
 					case 'file';
 						$name     = $this->requireAttribute($child, 'name');
-						$childDoc = new File($name);
+						$childDoc = new ClassFile($name);
 						break;
 					case 'recursivedirectory':
 						$name     = $this->requireAttribute($child, 'name');
