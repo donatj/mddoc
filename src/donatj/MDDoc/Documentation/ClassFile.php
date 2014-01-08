@@ -5,6 +5,7 @@ namespace donatj\MDDoc\Documentation;
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Interfaces\DocInterface;
+use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 
 class ClassFile implements DocInterface, AutoloaderAware {
@@ -30,18 +31,15 @@ class ClassFile implements DocInterface, AutoloaderAware {
 	 */
 	private function scanClassFile( $filename, $depth, $autoloader ) {
 		$output = '';
-//		$x = new \phpDocumentor\Reflection\FileReflector($filename);
-//		$x->process();
-//		$x->scanForMarkers();
 
-		$factory = new \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory();
+		$factory = new TaxonomyReflectorFactory();
 
-		$n = $factory->newInstance($filename, $autoloader);
+		$reflector = $factory->newInstance($filename, $autoloader);
 
-		$methodData = $n->getMethods();
-		if( $class = $n->getReflector() ) {
+		$methodData = $reflector->getMethods();
+		if( $class = $reflector->getReflector() ) {
 
-			$output .= '### Class: ' . $class->getShortName() . ' - `' . $class->getName() . '`';
+			$output .= str_repeat('#', $depth + 1) . ' Class: ' . $class->getShortName() . ' - `' . $class->getName() . '`';
 			$output .= PHP_EOL . PHP_EOL;
 
 			if( $classBlock = $class->getDocBlock() ) {
@@ -90,7 +88,7 @@ class ClassFile implements DocInterface, AutoloaderAware {
 							$output .= '---' . PHP_EOL . PHP_EOL;
 						}
 
-						$output .= "#### Method: `" . $class->getShortName() . "`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
+						$output .= str_repeat('#', $depth + 2) . " Method: `" . $class->getShortName() . "`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
 						$output .= PHP_EOL . PHP_EOL;
 
 						if( $methodDescr = $block->getShortDescription() ) {
@@ -104,7 +102,7 @@ class ClassFile implements DocInterface, AutoloaderAware {
 						 */
 						if( $methodParams = $block->getTagsByName('param') ) {
 
-							$output .= '##### Parameters';
+							$output .= str_repeat('#', $depth + 3) . ' Parameters';
 							$output .= PHP_EOL . PHP_EOL;
 
 							foreach( $block->getTagsByName('param') as $tag ) {
@@ -126,7 +124,7 @@ class ClassFile implements DocInterface, AutoloaderAware {
 						 * @var $return \phpDocumentor\Reflection\DocBlock\Tag\ReturnTag
 						 */
 						if( $return = current($block->getTagsByName('return')) ) {
-							$output .= '##### Returns';
+							$output .= str_repeat('#', $depth + 3) . ' Returns';
 							$output .= PHP_EOL . PHP_EOL;
 
 							$output .= '- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '');
@@ -136,7 +134,7 @@ class ClassFile implements DocInterface, AutoloaderAware {
 
 					} else {
 						$i++;
-						$output .= "#### Undocumented Method: `" . $class->getShortName() . "`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
+						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . "`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
 					}
 
 					$output .= PHP_EOL;
