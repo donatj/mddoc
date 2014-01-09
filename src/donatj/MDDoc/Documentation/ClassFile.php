@@ -12,9 +12,11 @@ class ClassFile implements DocumentationInterface, AutoloaderAware {
 
 	private $name;
 	private $autoloader;
+	private $methodFilter;
 
-	public function __construct( $name ) {
-		$this->name = $name;
+	public function __construct( $name, $methodFilter = null ) {
+		$this->methodFilter = $methodFilter ? : null;
+		$this->name         = $name;
 	}
 
 	public function output( $depth ) {
@@ -54,7 +56,6 @@ class ClassFile implements DocumentationInterface, AutoloaderAware {
 				if( $method->getVisibility() == 'public' ) {
 
 					$name = $method->getShortName();
-
 					$args = $this->getArgumentString($method);
 
 					$block = false;
@@ -81,13 +82,22 @@ class ClassFile implements DocumentationInterface, AutoloaderAware {
 							continue;
 						}
 
+						$operator            = ($method->isStatic() ? '::' : '->');
+						$canonicalMethodName = $class->getName() . $operator . "$name($args)";
+
+						if( $this->methodFilter ) {
+							if( !preg_match($this->methodFilter, $canonicalMethodName) ) {
+								continue;
+							}
+						}
+
 						$i++;
 
 						if( $i > 1 ) {
 							$output .= '---' . PHP_EOL . PHP_EOL;
 						}
 
-						$output .= str_repeat('#', $depth + 2) . " Method: `" . $class->getShortName() . "`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
+						$output .= str_repeat('#', $depth + 2) . " Method: `" . $class->getShortName() . "`{$operator}`{$name}({$args})`";
 						$output .= PHP_EOL . PHP_EOL;
 
 						if( $methodDescr = $block->getShortDescription() ) {

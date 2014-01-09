@@ -75,8 +75,9 @@ class ConfigParser {
 						$childDoc = new Text($child->textContent);
 						break;
 					case 'file';
-						$name     = $this->requireAttr($child, 'name');
-						$childDoc = new ClassFile($name);
+						$name         = $this->requireAttr($child, 'name');
+						$methodFilter = $this->optionalAttr($child, 'method-filter');
+						$childDoc     = new ClassFile($name, $methodFilter);
 						break;
 					case 'recursivedirectory':
 						$name     = $this->requireAttr($child, 'name');
