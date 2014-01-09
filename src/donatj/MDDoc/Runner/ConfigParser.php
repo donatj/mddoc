@@ -34,7 +34,7 @@ class ConfigParser {
 		} else {
 			if( $root->nodeName ) {
 				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid.");
-			}else{
+			} else {
 				throw new ConfigException("Error parsing {$filename}");
 			}
 		}
@@ -47,7 +47,7 @@ class ConfigParser {
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
 			switch( strtolower($sel_loader) ) {
 				case 'psr0':
-					$root                     = $this->requireAttribute($node, 'autoloader-root');
+					$root                     = $this->requireAttr($node, 'autoloader-root');
 					$tree_extra['autoloader'] = Psr0::makeAutoloader($root);
 					break;
 				default:
@@ -60,31 +60,35 @@ class ConfigParser {
 
 				switch( strtolower($child->nodeName) ) {
 					case 'section':
-						$title    = $this->requireAttribute($child, 'title');
+						$title    = $this->requireAttr($child, 'title');
 						$childDoc = new Section($title);
 						break;
 					case 'docpage';
-						$target   = $this->requireAttribute($child, 'target');
-						$childDoc = new DocPage($target);
+						$target       = $this->requireAttr($child, 'target');
+						$link         = $this->optionalAttr($child, 'link');
+						$linkText     = $this->optionalAttr($child, 'link-text');
+						$preLinkText  = $this->optionalAttr($child, 'link-pre-text');
+						$postLinkText = $this->optionalAttr($child, 'link-post-text');
+						$childDoc     = new DocPage($target, $link, $linkText, $preLinkText, $postLinkText);
 						break;
 					case 'text':
 						$childDoc = new Text($child->textContent);
 						break;
 					case 'file';
-						$name     = $this->requireAttribute($child, 'name');
+						$name     = $this->requireAttr($child, 'name');
 						$childDoc = new ClassFile($name);
 						break;
 					case 'recursivedirectory':
-						$name     = $this->requireAttribute($child, 'name');
+						$name     = $this->requireAttr($child, 'name');
 						$childDoc = new RecursiveDirectory($name);
 						break;
 					case 'include':
-						$name     = $this->requireAttribute($child, 'name');
+						$name     = $this->requireAttr($child, 'name');
 						$childDoc = new IncludeFile($name);
 						break;
 					case 'source':
-						$name     = $this->requireAttribute($child, 'name');
-						$language = $child->getAttribute('lang') ?: null;
+						$name     = $this->requireAttr($child, 'name');
+						$language = $this->optionalAttr($child, 'lang');
 						$childDoc = new IncludeSource($name, $language);
 						break;
 					default:
@@ -107,11 +111,15 @@ class ConfigParser {
 
 	}
 
-	private function requireAttribute( \DOMElement $node, $attribute ) {
+	private function requireAttr( \DOMElement $node, $attribute ) {
 		if( !$value = $node->getAttribute($attribute) ) {
 			throw new ConfigException("Element `{$node->nodeName}` missing required attribute: {$attribute}");
 		}
 
 		return $value;
+	}
+
+	private function optionalAttr( \DOMElement $node, $attribute ) {
+		return $node->getAttribute($attribute) ? : null;
 	}
 }
