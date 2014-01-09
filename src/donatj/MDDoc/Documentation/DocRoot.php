@@ -14,6 +14,7 @@ class DocRoot extends AbstractNestedDoc {
 			$output .= $child->output($depth);
 		}
 
-		drop($output);
+		see(trim($output));
 	}
+
 }
