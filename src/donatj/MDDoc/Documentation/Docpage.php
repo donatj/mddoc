@@ -10,16 +10,41 @@ class DocPage extends AbstractNestedDoc {
 
 	function __construct( $target ) {
 
-		if( (is_file($target) && !is_writable($target)) || !touch($target) ) {
+		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
 			throw new TargetNotWritableException($target . ' not writable');
 		}
 
 		$this->target = $target;
 	}
 
-	public function output($depth) {
+	private function recursiveTouch( $new, $time = false ) {
+		if( !$time ) {
+			$time = time();
+		}
+
+		if( $new[0] != '/' && $new[0] != '.' ) {
+			$new = realpath('.') . '/' . $new;
+		}
+
+		$dirs = explode('/', $new);
+		array_pop($dirs);
+
+		$path = '';
+		array_filter($dirs);
+		foreach( $dirs as $dir ) {
+			$path .= '/' . $dir;
+			if( !is_dir($path) ) {
+				see($path);
+				if( !mkdir($path) ) return false;
+			}
+		}
+
+		return touch($new, $time);
+	}
+
+	public function output( $depth ) {
 		$output = '';
-		foreach($this->getChildren() as $child) {
+		foreach( $this->getChildren() as $child ) {
 			$output .= $child->output(0);
 		}
 
