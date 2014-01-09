@@ -18,6 +18,10 @@ class ConfigParser {
 
 	function __construct( $filename ) {
 
+		if( !is_readable($filename) ) {
+			throw new ConfigException("Config file '{$filename}' not readable");
+		}
+
 		$dom = new \DOMDocument();
 		$dom->load($filename);
 
@@ -28,7 +32,11 @@ class ConfigParser {
 		if( $root->nodeName == 'mddoc' ) {
 			$this->loadChildren($root, $docRoot);
 		} else {
-			throw new ConfigException('Root element `{$root->nodeName}` is invalid.');
+			if( $root->nodeName ) {
+				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid.");
+			}else{
+				throw new ConfigException("Error parsing {$filename}");
+			}
 		}
 
 		$docRoot->output();
