@@ -7,14 +7,18 @@ use donatj\MDDoc\Exceptions\TargetNotWritableException;
 class DocPage extends AbstractNestedDoc {
 
 	private $target;
+	private $link;
+	private $link_text;
 
-	function __construct( $target ) {
+	function __construct( $target, $link = null, $link_text = null  ) {
 
 		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
 			throw new TargetNotWritableException($target . ' not writable');
 		}
 
 		$this->target = $target;
+		$this->link = $link;
+		$this->link_text = $link_text;
 	}
 
 	private function recursiveTouch( $new, $time = false ) {
