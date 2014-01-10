@@ -42,7 +42,7 @@ class ConfigParser {
 		$docRoot->output();
 	}
 
-	private function loadChildren( \DOMElement $node, AbstractNestedDoc &$parent, array $tree_extra = array() ) {
+	private function loadChildren( \DOMElement $node, AbstractNestedDoc &$parent, array $tree_extra = array(), $attribute_tree = array() ) {
 
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
 			switch( strtolower($sel_loader) ) {
@@ -58,43 +58,38 @@ class ConfigParser {
 		foreach( $node->childNodes as $child ) {
 			if( $child instanceof \DOMElement ) {
 
+				$attributes     = $this->nodeAttr($child);
+				$child_attribute_tree = array_merge($attribute_tree, $attributes);
+
 				switch( strtolower($child->nodeName) ) {
 					case 'section':
-						$title    = $this->requireAttr($child, 'title');
-						$childDoc = new Section($title);
+						$childDoc = new Section( /* $title */);
 						break;
 					case 'docpage';
-						$target       = $this->requireAttr($child, 'target');
-						$link         = $this->optionalAttr($child, 'link');
-						$linkText     = $this->optionalAttr($child, 'link-text');
-						$preLinkText  = $this->optionalAttr($child, 'link-pre-text');
-						$postLinkText = $this->optionalAttr($child, 'link-post-text');
-						$childDoc     = new DocPage($target, $link, $linkText, $preLinkText, $postLinkText);
+						$childDoc = new DocPage( /* $target, $link, $linkText, $preLinkText, $postLinkText */);
 						break;
 					case 'text':
 						$childDoc = new Text($child->textContent);
 						break;
 					case 'file';
-						$name         = $this->requireAttr($child, 'name');
-						$methodFilter = $this->optionalAttr($child, 'method-filter');
-						$childDoc     = new ClassFile($name, $methodFilter);
+						$childDoc = new ClassFile( /* $name, $methodFilter */);
 						break;
 					case 'recursivedirectory':
-						$name     = $this->requireAttr($child, 'name');
-						$childDoc = new RecursiveDirectory($name);
+						$childDoc = new RecursiveDirectory( /* $name */);
 						break;
 					case 'include':
-						$name     = $this->requireAttr($child, 'name');
-						$childDoc = new IncludeFile($name);
+						$childDoc = new IncludeFile( /* $name */);
 						break;
 					case 'source':
-						$name     = $this->requireAttr($child, 'name');
-						$language = $this->optionalAttr($child, 'lang');
-						$childDoc = new IncludeSource($name, $language);
+						$childDoc = new IncludeSource( /* $name, $language */);
 						break;
 					default:
 						throw new ConfigException("Invalid XML Tag: {$child->nodeName}");
 				}
+
+//				see($child->nodeName, $attributes, $child_attribute_tree);
+
+				$childDoc->setOptions($attributes, $child_attribute_tree);
 
 				$parent->addChild($childDoc);
 
@@ -103,13 +98,24 @@ class ConfigParser {
 				}
 
 				if( $child->hasChildNodes() && $childDoc instanceof AbstractNestedDoc ) {
-					$this->loadChildren($child, $childDoc, $tree_extra);
+					$this->loadChildren($child, $childDoc, $tree_extra, $child_attribute_tree);
 				}
 
 			}
 
 		}
 
+	}
+
+	private function nodeAttr( \DOMElement $node ) {
+		$attributes = array();
+		if( $node->hasAttributes() ) {
+			foreach( $node->attributes as $attr ) {
+				$attributes[strtolower($attr->nodeName)] = $attr->nodeValue;
+			}
+		}
+
+		return $attributes;
 	}
 
 	private function requireAttr( \DOMElement $node, $attribute ) {

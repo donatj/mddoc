@@ -10,9 +10,39 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 
 
+### Class: AutoloaderInterface - `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
+
+#### Method: `AutoloaderInterface`::`makeAutoloader($root)`
+
+##### Parameters
+
+- ***string*** `$root`
+
+
+##### Returns
+
+- ***\Closure***
+
 ### Class: Psr0 - `\donatj\MDDoc\Autoloaders\Psr0`
 
 #### Undocumented Method: `Psr0`::`makeAutoloader($root)`
+
+### Class: AbstractDocPart - `\donatj\MDDoc\Documentation\AbstractDocPart`
+
+#### Undocumented Method: `AbstractDocPart`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `AbstractDocPart`->`getOption($key [, $tree = false])`
+
+##### Parameters
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns
+
+- ***null*** | ***string***
 
 ### Class: AbstractNestedDoc - `\donatj\MDDoc\Documentation\AbstractNestedDoc`
 
@@ -20,7 +50,7 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ##### Parameters
 
-- ***\donatj\MDDoc\Interfaces\DocInterface*** `$child`
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
 
 
 
@@ -30,7 +60,7 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ##### Parameters
 
-- ***\donatj\MDDoc\Interfaces\DocInterface[]*** `$children`
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
 
 
 
@@ -40,28 +70,22 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ##### Returns
 
-- ***\donatj\MDDoc\Interfaces\DocInterface[]***
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+### Class: ClassFile - `\donatj\MDDoc\Documentation\ClassFile`
+
+#### Undocumented Method: `ClassFile`->`output($depth)`
+#### Undocumented Method: `ClassFile`->`setAutoloader($autoloader)`
 
 ### Class: DocPage - `\donatj\MDDoc\Documentation\DocPage`
 
-#### Undocumented Method: `DocPage`->`__construct($target)`
 #### Undocumented Method: `DocPage`->`output($depth)`
 
 ### Class: DocRoot - `\donatj\MDDoc\Documentation\DocRoot`
 
-#### Undocumented Method: `DocRoot`->`__construct()`
 #### Undocumented Method: `DocRoot`->`output($depth)`
 
-### Class: File - `\donatj\MDDoc\Documentation\File`
-
-#### Undocumented Method: `File`->`__construct($name)`
-#### Undocumented Method: `File`->`output($depth)`
-#### Undocumented Method: `File`->`setAutoloader($autoloader)`
-
 ### Class: IncludeFile - `\donatj\MDDoc\Documentation\IncludeFile`
-
-#### Undocumented Method: `IncludeFile`->`__construct($name)`
----
 
 #### Method: `IncludeFile`->`output($depth)`
 
@@ -76,10 +100,24 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ### Class: IncludeSource - `\donatj\MDDoc\Documentation\IncludeSource`
 
-#### Undocumented Method: `IncludeSource`->`__construct($name [, $lang = null])`
----
-
 #### Method: `IncludeSource`->`output($depth)`
+
+##### Parameters
+
+- ***int*** `$depth`
+
+
+##### Returns
+
+- ***string***
+
+### Class: AutoloaderAware - `\donatj\MDDoc\Documentation\Interfaces\AutoloaderAware`
+
+#### Undocumented Method: `AutoloaderAware`->`setAutoloader($autoloader)`
+
+### Class: DocumentationInterface - `\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface`
+
+#### Method: `DocumentationInterface`->`output($depth)`
 
 ##### Parameters
 
@@ -92,13 +130,11 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ### Class: RecursiveDirectory - `\donatj\MDDoc\Documentation\RecursiveDirectory`
 
-#### Undocumented Method: `RecursiveDirectory`->`__construct($name)`
 #### Undocumented Method: `RecursiveDirectory`->`setAutoloader($autoloader)`
 #### Undocumented Method: `RecursiveDirectory`->`output($depth)`
 
 ### Class: Section - `\donatj\MDDoc\Documentation\Section`
 
-#### Undocumented Method: `Section`->`__construct($title)`
 #### Undocumented Method: `Section`->`output($depth)`
 
 ### Class: Text - `\donatj\MDDoc\Documentation\Text`
@@ -120,36 +156,6 @@ Class Text
 ### Class: PathNotReadableException - `\donatj\MDDoc\Exceptions\PathNotReadableException`
 
 ### Class: TargetNotWritableException - `\donatj\MDDoc\Exceptions\TargetNotWritableException`
-
-### Class: AutoloaderAware - `\donatj\MDDoc\Interfaces\AutoloaderAware`
-
-#### Undocumented Method: `AutoloaderAware`->`setAutoloader($autoloader)`
-
-### Class: AutoloaderInterface - `\donatj\MDDoc\Interfaces\AutoloaderInterface`
-
-#### Method: `AutoloaderInterface`::`makeAutoloader($root)`
-
-##### Parameters
-
-- ***string*** `$root`
-
-
-##### Returns
-
-- ***\Closure***
-
-### Class: DocInterface - `\donatj\MDDoc\Interfaces\DocInterface`
-
-#### Method: `DocInterface`->`output($depth)`
-
-##### Parameters
-
-- ***int*** `$depth`
-
-
-##### Returns
-
-- ***string***
 
 ### Class: MDDoc - `\donatj\MDDoc\MDDoc`
 
@@ -187,7 +193,13 @@ Application MDDoc
 - ***null*** | ***\phpDocumentor\Reflection\InterfaceReflector***
 
 
-#### Undocumented Method: `TaxonomyReflector`->`getMethods()`
+---
+
+#### Method: `TaxonomyReflector`->`getMethods()`
+
+##### Returns
+
+- ***\phpDocumentor\Reflection\ClassReflector\MethodReflector[][]***
 
 ### Class: TaxonomyReflectorFactory - `\donatj\MDDoc\Reflectors\TaxonomyReflectorFactory`
 
@@ -206,4 +218,13 @@ Application MDDoc
 ### Class: ConfigParser - `\donatj\MDDoc\Runner\ConfigParser`
 
 #### Undocumented Method: `ConfigParser`->`__construct($filename)`
+
+### Class: UserInterface - `\donatj\MDDoc\Runner\UserInterface`
+
+#### Undocumented Method: `UserInterface`->`__construct($STDOUT, $STDERR)`
+#### Undocumented Method: `UserInterface`->`dumpOptions($additional)`
+#### Undocumented Method: `UserInterface`->`dropError($text [, $code = 1 [, $additional = false]])`
+#### Undocumented Method: `UserInterface`->`outputMsg($text)`
+
+Different Level
 

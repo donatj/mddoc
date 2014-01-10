@@ -96,6 +96,9 @@ class TaxonomyReflector {
 		return $this->reflector;
 	}
 
+	/**
+	 * @return \phpDocumentor\Reflection\ClassReflector\MethodReflector[][]
+	 */
 	public function getMethods() {
 		return $this->data['methods'] ?: array();
 	}

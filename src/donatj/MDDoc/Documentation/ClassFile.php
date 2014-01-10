@@ -4,25 +4,17 @@ namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
-use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 
-class ClassFile implements DocumentationInterface, AutoloaderAware {
+class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
-	private $name;
 	private $autoloader;
-	private $methodFilter;
-
-	public function __construct( $name, $methodFilter = null ) {
-		$this->methodFilter = $methodFilter ? : null;
-		$this->name         = $name;
-	}
 
 	public function output( $depth ) {
+		$this->requireOptions('name');
 
-		return $this->scanClassFile($this->name, $depth, Psr0::makeAutoloader('/Users/jdonat/Projects/Boomerang/src'));
-
+		return $this->scanClassFile($this->getOption('name'), $depth, Psr0::makeAutoloader('/Users/jdonat/Projects/Boomerang/src'));
 	}
 
 	/**
@@ -85,8 +77,8 @@ class ClassFile implements DocumentationInterface, AutoloaderAware {
 						$operator            = ($method->isStatic() ? '::' : '->');
 						$canonicalMethodName = $class->getName() . $operator . "$name($args)";
 
-						if( $this->methodFilter ) {
-							if( !preg_match($this->methodFilter, $canonicalMethodName) ) {
+						if( $methodFilter = $this->getOption('methodFilter') ) {
+							if( !preg_match($methodFilter, $canonicalMethodName) ) {
 								continue;
 							}
 						}

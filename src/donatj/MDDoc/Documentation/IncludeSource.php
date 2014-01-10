@@ -5,24 +5,16 @@ namespace donatj\MDDoc\Documentation;
 class IncludeSource extends IncludeFile {
 
 	/**
-	 * @var string
-	 */
-	private $lang = '';
-
-	function __construct( $name, $lang = null ) {
-		parent::__construct($name);
-
-		if( $lang ) {
-			$this->lang = $lang;
-		}
-	}
-
-	/**
 	 * @param int $depth
 	 * @return string
 	 */
 	public function output( $depth ) {
-		return "```" . ($this->lang ? : '') . "\n" . file_get_contents($this->name) . "\n```\n\n";
+
+		$this->requireOptions('name');
+		$name = $this->getOption('name');
+		$lang = $this->getOption('lang');
+
+		return "```" . ($lang ? : '') . "\n" . file_get_contents($name) . "\n```\n\n";
 	}
 
 }

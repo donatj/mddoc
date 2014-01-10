@@ -4,7 +4,7 @@ namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 
-abstract class AbstractNestedDoc implements DocumentationInterface {
+abstract class AbstractNestedDoc extends AbstractDocPart {
 
 	/**
 	 * @var \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]

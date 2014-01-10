@@ -14,10 +14,32 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 
 	private $autoloader;
 
-	function __construct( $name ) {
+	public function setAutoloader( \Closure $autoloader ) {
+		$this->autoloader = $autoloader;
+	}
+
+	public function output( $depth ) {
+		$this->requireOptions('name');
+		$name = $this->getOption('name');
+
 		foreach( $this->getFileList($name) as $file ) {
-			$this->addChild(new ClassFile((string)$file));
+			$class = new ClassFile();
+			$class->setOptions(array('name' => (string)$file), $this->treeOptions);
+			$this->addChild($class);
 		}
+
+		$output = '';
+		foreach( $this->getChildren() as $child ) {
+			/**
+			 * @var ClassFile $child
+			 */
+			if( $this->autoloader instanceof \Closure ) {
+				$child->setAutoloader($this->autoloader);
+			}
+			$output .= $this->cleanup($child->output($depth));
+		}
+
+		return $this->cleanup($output);
 	}
 
 	private function getFileList( $path ) {
@@ -37,25 +59,6 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 			return new \ArrayIterator(array( $path ));
 		}
 
-	}
-
-	public function setAutoloader( \Closure $autoloader ) {
-		$this->autoloader = $autoloader;
-	}
-
-	public function output( $depth ) {
-		$output = '';
-		foreach( $this->getChildren() as $child ) {
-			/**
-			 * @var ClassFile $child
-			 */
-			if( $this->autoloader instanceof \Closure ) {
-				$child->setAutoloader($this->autoloader);
-			}
-			$output .= $this->cleanup($child->output($depth));
-		}
-
-		return $this->cleanup($output);
 	}
 
 

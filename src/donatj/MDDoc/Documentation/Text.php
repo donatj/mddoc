@@ -9,7 +9,7 @@ use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
  *
  * @package donatj\MDDoc\Documentation
  */
-class Text implements DocumentationInterface {
+class Text extends AbstractDocPart {
 
 	private $text;
 
