@@ -31,12 +31,14 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		$methodData = $reflector->getMethods();
 		if( $class = $reflector->getReflector() ) {
 
-			$output .= str_repeat('#', $depth + 1) . ' Class: ' . $class->getShortName() . ' - `' . $class->getName() . '`';
-			$output .= PHP_EOL . PHP_EOL;
-
-			if( $classBlock = $class->getDocBlock() ) {
-				$output .= $classBlock->getText();
+			if( !$this->getOption('skip-class-header', true) ) {
+				$output .= str_repeat('#', $depth + 1) . ' Class: ' . $class->getShortName() . ' - `' . $class->getName() . '`';
 				$output .= PHP_EOL . PHP_EOL;
+
+				if( $classBlock = $class->getDocBlock() ) {
+					$output .= $classBlock->getText();
+					$output .= PHP_EOL . PHP_EOL;
+				}
 			}
 
 			$i = 0;
@@ -75,7 +77,8 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						$operator            = ($method->isStatic() ? '::' : '->');
 						$canonicalMethodName = $class->getName() . $operator . "$name($args)";
 
-						if( $methodFilter = $this->getOption('methodFilter') ) {
+						if( $methodFilter = $this->getOption('method-filter') ) {
+
 							if( !preg_match($methodFilter, $canonicalMethodName) ) {
 								continue;
 							}
@@ -122,13 +125,15 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						/**
 						 * @var $return \phpDocumentor\Reflection\DocBlock\Tag\ReturnTag
 						 */
-						if( $return = current($block->getTagsByName('return')) ) {
-							$output .= str_repeat('#', $depth + 3) . ' Returns';
-							$output .= PHP_EOL . PHP_EOL;
+						if( !$this->getOption('skip-method-returns', true) ) {
+							if( $return = current($block->getTagsByName('return')) ) {
+								$output .= str_repeat('#', $depth + 3) . ' Returns';
+								$output .= PHP_EOL . PHP_EOL;
 
-							$output .= '- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '');
+								$output .= '- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '');
 
-							$output .= PHP_EOL . PHP_EOL;
+								$output .= PHP_EOL . PHP_EOL;
+							}
 						}
 
 					} else {
@@ -177,7 +182,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			if( $lastPart ) {
 				$lastPart = $lastPart[0];
 			}
-
+			//FIXME: $depth
 			if( $lastPart == ':' ) {
 				$part = '##### ' . substr($part, 0, -1);
 			}
