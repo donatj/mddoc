@@ -2,7 +2,6 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 
 class IncludeFile extends AbstractDocPart {
@@ -13,7 +12,6 @@ class IncludeFile extends AbstractDocPart {
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
 	 */
 	public function output( $depth ) {
-		$this->requireOptions('name');
 		$name = $this->getOption('name');
 
 		if( !is_readable($name) ) {
@@ -21,6 +19,10 @@ class IncludeFile extends AbstractDocPart {
 		}
 
 		return file_get_contents($name) . "\n\n";
+	}
+
+	protected function init() {
+		$this->requireOptions('name');
 	}
 
 }

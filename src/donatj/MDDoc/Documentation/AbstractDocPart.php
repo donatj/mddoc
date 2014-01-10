@@ -10,6 +10,14 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	protected $options;
 	protected $treeOptions;
 
+	public function __construct( array $options, array $tree_options ) {
+		$this->setOptions($options, $tree_options);
+
+		$this->init();
+	}
+
+	abstract protected function init();
+
 	public function setOptions( array $options, array $tree_options ) {
 		$this->options     = $options;
 		$this->treeOptions = $tree_options;

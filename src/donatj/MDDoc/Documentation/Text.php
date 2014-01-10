@@ -2,8 +2,6 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
-
 /**
  * Class Text
  *
@@ -13,16 +11,15 @@ class Text extends AbstractDocPart {
 
 	private $text;
 
-	/**
-	 * @param string $text
-	 */
-	function __construct( $text ) {
+	public function __construct( array $options, array $tree_options, $text = '' ) {
 		$this->text = $text;
+		parent::__construct($options, $tree_options);
 	}
 
 	public function output( $depth ) {
 		return trim($this->text) . "\n\n";
 	}
 
+	protected function init() { }
 
 }

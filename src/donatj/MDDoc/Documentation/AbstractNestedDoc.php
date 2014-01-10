@@ -12,22 +12,6 @@ abstract class AbstractNestedDoc extends AbstractDocPart {
 	private $children = array();
 
 	/**
-	 * @param \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface $child
-	 */
-	public function addChild( DocumentationInterface $child ) {
-		$this->children[] = $child;
-	}
-
-	/**
-	 * @param \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[] $children
-	 */
-	public function setChildren( $children ) {
-		foreach($children as $child) {
-			$this->addChild($child);
-		}
-	}
-
-	/**
 	 * @return \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]
 	 */
 	public function getChildren() {
@@ -35,9 +19,26 @@ abstract class AbstractNestedDoc extends AbstractDocPart {
 	}
 
 	/**
-	 * @param string $input
+	 * @param \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[] $children
 	 */
-	protected function cleanup($input) {
+	public function setChildren( $children ) {
+		foreach( $children as $child ) {
+			$this->addChild($child);
+		}
+	}
+
+	/**
+	 * @param \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface $child
+	 */
+	public function addChild( DocumentationInterface $child ) {
+		$this->children[] = $child;
+	}
+
+	/**
+	 * @param $input
+	 * @return string
+	 */
+	protected function cleanup( $input ) {
 		return rtrim($input, "\n") . "\n\n";
 	}
 

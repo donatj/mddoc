@@ -12,8 +12,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	private $autoloader;
 
 	public function output( $depth ) {
-		$this->requireOptions('name');
-
 		return $this->scanClassFile($this->getOption('name'), $depth, Psr0::makeAutoloader('/Users/jdonat/Projects/Boomerang/src'));
 	}
 
@@ -211,6 +209,10 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 	public function setAutoloader( \Closure $autoloader ) {
 		$this->autoloader = $autoloader;
+	}
+
+	protected function init() {
+		$this->requireOptions('name');
 	}
 
 } 

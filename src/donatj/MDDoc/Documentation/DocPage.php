@@ -7,7 +7,7 @@ use donatj\MDDoc\Exceptions\TargetNotWritableException;
 class DocPage extends AbstractNestedDoc {
 
 	public function output( $depth ) {
-		$this->requireOptions('target');
+
 
 		$target         = $this->getOption('target');
 		$link           = $this->getOption('link') ? : $target;
@@ -52,5 +52,9 @@ class DocPage extends AbstractNestedDoc {
 		}
 
 		return touch($new, $time);
+	}
+
+	protected function init() {
+		$this->requireOptions('target');
 	}
 }

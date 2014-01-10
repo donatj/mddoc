@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jdonat
- * Date: 1/6/14
- * Time: 5:45 PM
- */
 
 namespace donatj\MDDoc\Documentation;
 
@@ -19,12 +13,10 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 	}
 
 	public function output( $depth ) {
-		$this->requireOptions('name');
 		$name = $this->getOption('name');
 
 		foreach( $this->getFileList($name) as $file ) {
-			$class = new ClassFile();
-			$class->setOptions(array('name' => (string)$file), $this->treeOptions);
+			$class = new ClassFile(array( 'name' => (string)$file ), $this->treeOptions);
 			$this->addChild($class);
 		}
 
@@ -59,6 +51,10 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 			return new \ArrayIterator(array( $path ));
 		}
 
+	}
+
+	protected function init() {
+		$this->requireOptions('name');
 	}
 
 

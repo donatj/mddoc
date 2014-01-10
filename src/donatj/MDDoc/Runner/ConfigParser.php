@@ -27,7 +27,7 @@ class ConfigParser {
 
 		$root = $dom->firstChild;
 
-		$docRoot = new DocRoot();
+		$docRoot = new DocRoot(array(), array());
 
 		if( $root->nodeName == 'mddoc' ) {
 			$this->loadChildren($root, $docRoot);
@@ -58,38 +58,34 @@ class ConfigParser {
 		foreach( $node->childNodes as $child ) {
 			if( $child instanceof \DOMElement ) {
 
-				$attributes     = $this->nodeAttr($child);
+				$attributes           = $this->nodeAttr($child);
 				$child_attribute_tree = array_merge($attribute_tree, $attributes);
 
 				switch( strtolower($child->nodeName) ) {
 					case 'section':
-						$childDoc = new Section( /* $title */);
+						$childDoc = new Section($attributes, $child_attribute_tree);
 						break;
 					case 'docpage';
-						$childDoc = new DocPage( /* $target, $link, $linkText, $preLinkText, $postLinkText */);
+						$childDoc = new DocPage($attributes, $child_attribute_tree);
 						break;
 					case 'text':
-						$childDoc = new Text($child->textContent);
+						$childDoc = new Text($attributes, $child_attribute_tree, $child->textContent);
 						break;
 					case 'file';
-						$childDoc = new ClassFile( /* $name, $methodFilter */);
+						$childDoc = new ClassFile($attributes, $child_attribute_tree);
 						break;
 					case 'recursivedirectory':
-						$childDoc = new RecursiveDirectory( /* $name */);
+						$childDoc = new RecursiveDirectory($attributes, $child_attribute_tree);
 						break;
 					case 'include':
-						$childDoc = new IncludeFile( /* $name */);
+						$childDoc = new IncludeFile($attributes, $child_attribute_tree);
 						break;
 					case 'source':
-						$childDoc = new IncludeSource( /* $name, $language */);
+						$childDoc = new IncludeSource($attributes, $child_attribute_tree);
 						break;
 					default:
 						throw new ConfigException("Invalid XML Tag: {$child->nodeName}");
 				}
-
-//				see($child->nodeName, $attributes, $child_attribute_tree);
-
-				$childDoc->setOptions($attributes, $child_attribute_tree);
 
 				$parent->addChild($childDoc);
 
@@ -107,6 +103,14 @@ class ConfigParser {
 
 	}
 
+	private function requireAttr( \DOMElement $node, $attribute ) {
+		if( !$value = $node->getAttribute($attribute) ) {
+			throw new ConfigException("Element `{$node->nodeName}` missing required attribute: {$attribute}");
+		}
+
+		return $value;
+	}
+
 	private function nodeAttr( \DOMElement $node ) {
 		$attributes = array();
 		if( $node->hasAttributes() ) {
@@ -116,14 +120,6 @@ class ConfigParser {
 		}
 
 		return $attributes;
-	}
-
-	private function requireAttr( \DOMElement $node, $attribute ) {
-		if( !$value = $node->getAttribute($attribute) ) {
-			throw new ConfigException("Element `{$node->nodeName}` missing required attribute: {$attribute}");
-		}
-
-		return $value;
 	}
 
 	private function optionalAttr( \DOMElement $node, $attribute ) {

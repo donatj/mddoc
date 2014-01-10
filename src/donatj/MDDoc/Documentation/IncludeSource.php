@@ -10,11 +10,11 @@ class IncludeSource extends IncludeFile {
 	 */
 	public function output( $depth ) {
 
-		$this->requireOptions('name');
 		$name = $this->getOption('name');
 		$lang = $this->getOption('lang');
 
 		return "```" . ($lang ? : '') . "\n" . file_get_contents($name) . "\n```\n\n";
+
 	}
 
 }

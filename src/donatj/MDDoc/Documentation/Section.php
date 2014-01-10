@@ -5,8 +5,6 @@ namespace donatj\MDDoc\Documentation;
 class Section extends AbstractNestedDoc {
 
 	public function output( $depth ) {
-
-		$this->requireOptions('title');
 		$title = $this->getOption('title');
 
 		$output = str_repeat('#', $depth + 1) . " {$title}\n\n";
@@ -17,4 +15,9 @@ class Section extends AbstractNestedDoc {
 
 		return $this->cleanup($output);
 	}
+
+	protected function init() {
+		$this->requireOptions('title');
+	}
+
 }
