@@ -10,55 +10,55 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 
 
-### Class: AutoloaderInterface - `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
+### Class: AutoloaderInterface \[ `\donatj\MDDoc\Autoloaders\Interfaces` \]
 
 #### Method: `AutoloaderInterface`::`makeAutoloader($root)`
 
-##### Parameters
+##### Parameters:
 
 - ***string*** `$root`
 
 
-##### Returns
+##### Returns:
 
 - ***\Closure***
 
-### Class: Psr0 - `\donatj\MDDoc\Autoloaders\Psr0`
+### Class: Psr0 \[ `\donatj\MDDoc\Autoloaders` \]
 
 #### Undocumented Method: `Psr0`::`makeAutoloader($root)`
 
-### Class: AbstractDocPart - `\donatj\MDDoc\Documentation\AbstractDocPart`
+### Class: AbstractDocPart \[ `\donatj\MDDoc\Documentation` \]
 
+#### Undocumented Method: `AbstractDocPart`->`__construct($options, $tree_options)`
 #### Undocumented Method: `AbstractDocPart`->`setOptions($options, $tree_options)`
 ---
 
 #### Method: `AbstractDocPart`->`getOption($key [, $tree = false])`
 
-##### Parameters
+##### Parameters:
 
 - ***string*** `$key`
 - ***bool*** `$tree`
 
 
-##### Returns
+##### Returns:
 
 - ***null*** | ***string***
 
-### Class: AbstractNestedDoc - `\donatj\MDDoc\Documentation\AbstractNestedDoc`
+### Class: AbstractNestedDoc \[ `\donatj\MDDoc\Documentation` \]
 
-#### Method: `AbstractNestedDoc`->`addChild($child)`
+#### Method: `AbstractNestedDoc`->`getChildren()`
 
-##### Parameters
+##### Returns:
 
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
-
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
 
 ---
 
 #### Method: `AbstractNestedDoc`->`setChildren($children)`
 
-##### Parameters
+##### Parameters:
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
 
@@ -66,108 +66,93 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ---
 
-#### Method: `AbstractNestedDoc`->`getChildren()`
+#### Method: `AbstractNestedDoc`->`addChild($child)`
 
-##### Returns
+##### Parameters:
 
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
 
-### Class: ClassFile - `\donatj\MDDoc\Documentation\ClassFile`
+### Class: ClassFile \[ `\donatj\MDDoc\Documentation` \]
 
 #### Undocumented Method: `ClassFile`->`output($depth)`
 #### Undocumented Method: `ClassFile`->`setAutoloader($autoloader)`
 
-### Class: DocPage - `\donatj\MDDoc\Documentation\DocPage`
+### Class: DocPage \[ `\donatj\MDDoc\Documentation` \]
 
 #### Undocumented Method: `DocPage`->`output($depth)`
 
-### Class: DocRoot - `\donatj\MDDoc\Documentation\DocRoot`
+### Class: DocRoot \[ `\donatj\MDDoc\Documentation` \]
 
 #### Undocumented Method: `DocRoot`->`output($depth)`
 
-### Class: IncludeFile - `\donatj\MDDoc\Documentation\IncludeFile`
+### Class: IncludeFile \[ `\donatj\MDDoc\Documentation` \]
 
 #### Method: `IncludeFile`->`output($depth)`
 
-##### Parameters
+##### Parameters:
 
 - ***int*** `$depth`
 
 
-##### Returns
+##### Returns:
 
 - ***string***
 
-### Class: IncludeSource - `\donatj\MDDoc\Documentation\IncludeSource`
-
-#### Method: `IncludeSource`->`output($depth)`
-
-##### Parameters
-
-- ***int*** `$depth`
-
-
-##### Returns
-
-- ***string***
-
-### Class: AutoloaderAware - `\donatj\MDDoc\Documentation\Interfaces\AutoloaderAware`
+### Class: AutoloaderAware \[ `\donatj\MDDoc\Documentation\Interfaces` \]
 
 #### Undocumented Method: `AutoloaderAware`->`setAutoloader($autoloader)`
 
-### Class: DocumentationInterface - `\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface`
+### Class: DocumentationInterface \[ `\donatj\MDDoc\Documentation\Interfaces` \]
+
+#### Undocumented Method: `DocumentationInterface`->`__construct($options, $tree_options)`
+---
 
 #### Method: `DocumentationInterface`->`output($depth)`
 
-##### Parameters
+##### Parameters:
 
 - ***int*** `$depth`
 
 
-##### Returns
+##### Returns:
 
 - ***string***
 
-### Class: RecursiveDirectory - `\donatj\MDDoc\Documentation\RecursiveDirectory`
+### Class: RecursiveDirectory \[ `\donatj\MDDoc\Documentation` \]
 
 #### Undocumented Method: `RecursiveDirectory`->`setAutoloader($autoloader)`
 #### Undocumented Method: `RecursiveDirectory`->`output($depth)`
 
-### Class: Section - `\donatj\MDDoc\Documentation\Section`
+### Class: Section \[ `\donatj\MDDoc\Documentation` \]
 
 #### Undocumented Method: `Section`->`output($depth)`
 
-### Class: Text - `\donatj\MDDoc\Documentation\Text`
+
+
+### Class: Text \[ `\donatj\MDDoc\Documentation` \]
 
 Class Text
 
-#### Method: `Text`->`__construct($text)`
-
-##### Parameters
-
-- ***string*** `$text`
-
-
-
+#### Undocumented Method: `Text`->`__construct($options, $tree_options [, $text = ''])`
 #### Undocumented Method: `Text`->`output($depth)`
 
-### Class: ConfigException - `\donatj\MDDoc\Exceptions\ConfigException`
+### Class: ConfigException \[ `\donatj\MDDoc\Exceptions` \]
 
-### Class: PathNotReadableException - `\donatj\MDDoc\Exceptions\PathNotReadableException`
+### Class: PathNotReadableException \[ `\donatj\MDDoc\Exceptions` \]
 
-### Class: TargetNotWritableException - `\donatj\MDDoc\Exceptions\TargetNotWritableException`
+### Class: TargetNotWritableException \[ `\donatj\MDDoc\Exceptions` \]
 
-### Class: MDDoc - `\donatj\MDDoc\MDDoc`
+### Class: MDDoc \[ `\donatj\MDDoc` \]
 
 Application MDDoc
 
 #### Undocumented Method: `MDDoc`->`__construct($args)`
 
-### Class: TaxonomyReflector - `\donatj\MDDoc\Reflectors\TaxonomyReflector`
+### Class: TaxonomyReflector \[ `\donatj\MDDoc\Reflectors` \]
 
 #### Method: `TaxonomyReflector`->`__construct($filename, $autoLoader, $parserFactory)`
 
-##### Parameters
+##### Parameters:
 
 - ***string*** `$filename`
 - ***callable*** `$autoLoader`
@@ -179,7 +164,7 @@ Application MDDoc
 
 #### Method: `TaxonomyReflector`->`getData()`
 
-##### Returns
+##### Returns:
 
 - ***mixed***
 
@@ -188,7 +173,7 @@ Application MDDoc
 
 #### Method: `TaxonomyReflector`->`getReflector()`
 
-##### Returns
+##### Returns:
 
 - ***null*** | ***\phpDocumentor\Reflection\InterfaceReflector***
 
@@ -197,29 +182,29 @@ Application MDDoc
 
 #### Method: `TaxonomyReflector`->`getMethods()`
 
-##### Returns
+##### Returns:
 
 - ***\phpDocumentor\Reflection\ClassReflector\MethodReflector[][]***
 
-### Class: TaxonomyReflectorFactory - `\donatj\MDDoc\Reflectors\TaxonomyReflectorFactory`
+### Class: TaxonomyReflectorFactory \[ `\donatj\MDDoc\Reflectors` \]
 
 #### Method: `TaxonomyReflectorFactory`->`newInstance($filename, $autoLoader)`
 
-##### Parameters
+##### Parameters:
 
 - ***mixed*** `$filename`
 - ***callable*** `$autoLoader`
 
 
-##### Returns
+##### Returns:
 
 - ***\donatj\MDDoc\Reflectors\TaxonomyReflector***
 
-### Class: ConfigParser - `\donatj\MDDoc\Runner\ConfigParser`
+### Class: ConfigParser \[ `\donatj\MDDoc\Runner` \]
 
 #### Undocumented Method: `ConfigParser`->`__construct($filename)`
 
-### Class: UserInterface - `\donatj\MDDoc\Runner\UserInterface`
+### Class: UserInterface \[ `\donatj\MDDoc\Runner` \]
 
 #### Undocumented Method: `UserInterface`->`__construct($STDOUT, $STDERR)`
 #### Undocumented Method: `UserInterface`->`dumpOptions($additional)`
