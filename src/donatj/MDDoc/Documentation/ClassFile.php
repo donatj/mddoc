@@ -93,7 +93,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							$output .= '---' . PHP_EOL . PHP_EOL;
 						}
 
-						$output .= str_repeat('#', $depth + 2) . " Method: `" . $class->getShortName() . "`{$operator}`{$name}({$args})`";
+						$output .= str_repeat('#', $depth + 2) . " Method: `" . $class->getShortName() . "{$operator}{$name}({$args})`";
 						$output .= PHP_EOL . PHP_EOL;
 
 						if( $methodDescr = $block->getShortDescription() ) {
@@ -141,7 +141,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 					} else {
 						$i++;
-						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . "`" . ($method->isStatic() ? '::' : '->') . "`{$name}({$args})`";
+						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
 					}
 
 					$output .= PHP_EOL;
