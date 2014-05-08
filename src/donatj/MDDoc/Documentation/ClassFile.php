@@ -32,7 +32,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		if( $class = $reflector->getReflector() ) {
 
 			if( !$this->getOption('skip-class-header', true) ) {
-				$output .= str_repeat('#', $depth + 1) . ' Class: ' . $class->getShortName() . ' - `' . $class->getName() . '`';
+				$output .= str_repeat('#', $depth + 1) . ' Class: ' . $class->getShortName() . ' \\[ `\\' . $class->getNamespace() . '` \\]';
 				$output .= PHP_EOL . PHP_EOL;
 
 				if( $classBlock = $class->getDocBlock() ) {
@@ -104,7 +104,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						 */
 						if( $methodParams = $block->getTagsByName('param') ) {
 
-							$output .= str_repeat('#', $depth + 3) . ' Parameters';
+							$output .= str_repeat('#', $depth + 3) . ' Parameters:';
 							$output .= PHP_EOL . PHP_EOL;
 
 							foreach( $block->getTagsByName('param') as $tag ) {
@@ -127,7 +127,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						 */
 						if( !$this->getOption('skip-method-returns', true) ) {
 							if( $return = current($block->getTagsByName('return')) ) {
-								$output .= str_repeat('#', $depth + 3) . ' Returns';
+								$output .= str_repeat('#', $depth + 3) . ' Returns:';
 								$output .= PHP_EOL . PHP_EOL;
 
 								$output .= '- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '');
