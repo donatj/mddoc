@@ -9,7 +9,7 @@ namespace donatj\MDDoc\Documentation;
  */
 class Text extends AbstractDocPart {
 
-	private $text;
+	protected $text;
 
 	public function __construct( array $options, array $tree_options, $text = '' ) {
 		$this->text = $text;
