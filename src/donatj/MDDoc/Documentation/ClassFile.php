@@ -3,7 +3,6 @@
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
-use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
@@ -16,9 +15,13 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return $this->scanClassFile($this->getOption('name'), $depth);
 	}
 
+	protected function init() {
+		$this->requireOptions('name');
+	}
+
 	/**
-	 * @param string   $filename
-	 * @param int      $depth
+	 * @param string $filename
+	 * @param int    $depth
 	 * @return string
 	 */
 	private function scanClassFile( $filename, $depth ) {
@@ -214,10 +217,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 	public function setAutoloader( AutoloaderInterface $autoloader ) {
 		$this->autoloader = $autoloader;
-	}
-
-	protected function init() {
-		$this->requireOptions('name');
 	}
 
 } 
