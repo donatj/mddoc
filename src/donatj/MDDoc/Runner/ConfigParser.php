@@ -48,7 +48,7 @@ class ConfigParser {
 			switch( strtolower($sel_loader) ) {
 				case 'psr0':
 					$root                     = $this->requireAttr($node, 'autoloader-root');
-					$tree_extra['autoloader'] = Psr0::makeAutoloader($root);
+					$tree_extra['autoloader'] = new Psr0($root);
 					break;
 				default:
 					throw new ConfigException("Unrecognized autoloader: {$sel_loader}");

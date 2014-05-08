@@ -2,6 +2,7 @@
 
 namespace donatj\MDDoc\Reflectors;
 
+use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use phpDocumentor\Reflection\ClassReflector;
 
 class TaxonomyReflectorFactory {
@@ -10,10 +11,10 @@ class TaxonomyReflectorFactory {
 
 	/**
 	 * @param          $filename
-	 * @param callable $autoLoader
+	 * @param AutoloaderInterface $autoLoader
 	 * @return TaxonomyReflector
 	 */
-	function newInstance( $filename, callable $autoLoader ) {
+	function newInstance( $filename, AutoloaderInterface $autoLoader ) {
 		if( !isset($this->parsers[$filename]) ) {
 			$this->parsers[$filename] = new TaxonomyReflector( $filename, $autoLoader, $this );
 		}

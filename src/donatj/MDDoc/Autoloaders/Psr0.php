@@ -4,28 +4,49 @@ namespace donatj\MDDoc\Autoloaders;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 
+/**
+ * Class Psr0
+ *
+ * @link https://github.com/CorpusPHP/Autoloader
+ * @package donatj\MDDoc\Autoloaders
+ */
 class Psr0 implements AutoloaderInterface {
 
-	public static function makeAutoloader( $root ) {
-		$root = rtrim($root, '/') . '/';
-		return function ( $className ) use ($root) {
-			$className = ltrim($className, '\\');
-			$fileName  = '';
-			$namespace = '';
-			if( $lastNsPos = strrpos($className, '\\') ) {
-				$namespace = substr($className, 0, $lastNsPos);
-				$className = substr($className, $lastNsPos + 1);
-				$fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-			}
-			$fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+	/**
+	 * @var string
+	 */
+	protected $path;
 
-			$fileName = $root . $fileName;
-			if( file_exists($fileName) ) {
-				return $fileName;
-			}
+	/**
+	 * @param string $path Root path
+	 */
+	public function __construct( $path ) {
+		$this->path = rtrim($path, DIRECTORY_SEPARATOR);
+	}
 
-			return null;
-		};
+	/**
+	 * @param string $path
+	 * @return string
+	 */
+	protected final function trimSlashes( $path ) {
+		return trim($path, ' /\\');
+	}
+
+	/**
+	 * @param $class
+	 * @return bool|string
+	 */
+	public function __invoke( $class ) {
+		$class       = $this->trimSlashes($class);
+		$class_parts = explode('\\', $class);
+
+		$filename = $this->path . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $class_parts) . ".php";
+
+		if( file_exists($filename) ) {
+			return $filename;
+		}
+
+		return null;
 	}
 
 }

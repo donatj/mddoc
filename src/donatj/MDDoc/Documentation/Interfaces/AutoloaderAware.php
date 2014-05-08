@@ -2,8 +2,10 @@
 
 namespace donatj\MDDoc\Documentation\Interfaces;
 
+use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
+
 interface AutoloaderAware {
 
-	public function setAutoloader( \Closure $autoloader );
+	public function setAutoloader( AutoloaderInterface $autoloader );
 
 }

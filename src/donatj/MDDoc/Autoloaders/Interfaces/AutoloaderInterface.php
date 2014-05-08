@@ -5,9 +5,9 @@ namespace donatj\MDDoc\Autoloaders\Interfaces;
 interface AutoloaderInterface {
 
 	/**
-	 * @param string $root
-	 * @return \Closure
+	 * @param $className
+	 * @return string|null
 	 */
-	public static function makeAutoloader( $root );
+	public function __invoke($className);
 
 } 

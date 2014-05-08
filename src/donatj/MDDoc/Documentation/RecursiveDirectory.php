@@ -2,15 +2,17 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 
 class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 
 	private $autoloader;
 
-	public function setAutoloader( \Closure $autoloader ) {
+	public function setAutoloader( AutoloaderInterface $autoloader ) {
 		$this->autoloader = $autoloader;
 	}
+
 
 	public function output( $depth ) {
 		$name = $this->getOption('name');
@@ -22,16 +24,16 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 
 		$output = '';
 		foreach( $this->getChildren() as $child ) {
-			/**
-			 * @var ClassFile $child
-			 */
-			if( $this->autoloader instanceof \Closure ) {
-				$child->setAutoloader($this->autoloader);
-			}
+			$child->setAutoloader($this->autoloader);
+
 			$output .= $this->cleanup($child->output($depth));
 		}
 
 		return $this->cleanup($output);
+	}
+
+	protected function init() {
+		$this->requireOptions('name');
 	}
 
 	private function getFileList( $path ) {
@@ -52,10 +54,5 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 		}
 
 	}
-
-	protected function init() {
-		$this->requireOptions('name');
-	}
-
 
 }

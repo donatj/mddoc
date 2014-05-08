@@ -2,6 +2,8 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Exceptions\PathNotReadableException;
+
 /**
  * Class Source
  *
@@ -12,6 +14,7 @@ class Source extends Text {
 	/**
 	 * @param int $depth
 	 * @return string
+	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
 	 */
 	public function output( $depth ) {
 
@@ -24,7 +27,7 @@ class Source extends Text {
 			throw new PathNotReadableException("{$name} not readable.");
 		}
 
-		return "```" . ($lang ? : '') . "\n" .  . "\n```\n\n";
+		return "```" . ($lang ? : '') . "\n" . $text . "\n```\n\n";
 
 	}
 

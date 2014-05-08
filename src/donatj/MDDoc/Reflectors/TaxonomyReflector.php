@@ -2,6 +2,7 @@
 
 namespace donatj\MDDoc\Reflectors;
 
+use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 use phpDocumentor\Reflection\FileReflector;
@@ -21,10 +22,10 @@ class TaxonomyReflector {
 
 	/**
 	 * @param string                   $filename
-	 * @param callable                 $autoLoader
+	 * @param AutoloaderInterface      $autoLoader
 	 * @param TaxonomyReflectorFactory $parserFactory
 	 */
-	public function __construct( $filename, callable $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
+	public function __construct( $filename, AutoloaderInterface $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
 		$this->fileName      = $filename;
 		$this->autoLoader    = $autoLoader;
 		$this->parserFactory = $parserFactory;

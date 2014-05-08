@@ -2,6 +2,7 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
@@ -12,21 +13,20 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	private $autoloader;
 
 	public function output( $depth ) {
-		return $this->scanClassFile($this->getOption('name'), $depth, Psr0::makeAutoloader('/Users/jdonat/Projects/Boomerang/src'));
+		return $this->scanClassFile($this->getOption('name'), $depth);
 	}
 
 	/**
 	 * @param string   $filename
 	 * @param int      $depth
-	 * @param callable $autoloader
 	 * @return string
 	 */
-	private function scanClassFile( $filename, $depth, $autoloader ) {
+	private function scanClassFile( $filename, $depth ) {
 		$output = '';
 
 		$factory = new TaxonomyReflectorFactory();
 
-		$reflector = $factory->newInstance($filename, $autoloader);
+		$reflector = $factory->newInstance($filename, $this->autoloader);
 
 		$methodData = $reflector->getMethods();
 		if( $class = $reflector->getReflector() ) {
@@ -212,7 +212,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return trim($output, ' |');
 	}
 
-	public function setAutoloader( \Closure $autoloader ) {
+	public function setAutoloader( AutoloaderInterface $autoloader ) {
 		$this->autoloader = $autoloader;
 	}
 
