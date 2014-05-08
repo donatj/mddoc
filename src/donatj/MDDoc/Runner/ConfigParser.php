@@ -3,6 +3,7 @@ namespace donatj\MDDoc\Runner;
 
 use donatj\MDDoc\Autoloaders\Mock;
 use donatj\MDDoc\Autoloaders\Psr0;
+use donatj\MDDoc\Autoloaders\Psr4;
 use donatj\MDDoc\Documentation\AbstractNestedDoc;
 use donatj\MDDoc\Documentation\ClassFile;
 use donatj\MDDoc\Documentation\DocPage;
@@ -50,6 +51,11 @@ class ConfigParser {
 				case 'psr0':
 					$root                     = $this->requireAttr($node, 'autoloader-root');
 					$tree_extra['autoloader'] = new Psr0($root);
+					break;
+				case 'psr4':
+					$root_namespace           = $this->requireAttr($node, 'autoloader-root-namespace');
+					$root                     = $this->requireAttr($node, 'autoloader-root');
+					$tree_extra['autoloader'] = new Psr4($root_namespace, $root);
 					break;
 				default:
 					throw new ConfigException("Unrecognized autoloader: {$sel_loader}");
