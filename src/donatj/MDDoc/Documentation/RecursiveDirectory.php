@@ -24,7 +24,9 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 
 		$output = '';
 		foreach( $this->getChildren() as $child ) {
-			$child->setAutoloader($this->autoloader);
+			if( $child instanceof AutoloaderAware ) {
+				$child->setAutoloader($this->autoloader);
+			}
 
 			$output .= $this->cleanup($child->output($depth));
 		}

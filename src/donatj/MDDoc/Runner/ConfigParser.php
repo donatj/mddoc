@@ -1,6 +1,7 @@
 <?php
 namespace donatj\MDDoc\Runner;
 
+use donatj\MDDoc\Autoloaders\Mock;
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Documentation\AbstractNestedDoc;
 use donatj\MDDoc\Documentation\ClassFile;
@@ -53,6 +54,8 @@ class ConfigParser {
 				default:
 					throw new ConfigException("Unrecognized autoloader: {$sel_loader}");
 			}
+		}elseif( !isset($tree_extra['autoloader']) ){
+			$tree_extra['autoloader'] = new Mock();
 		}
 
 		foreach( $node->childNodes as $child ) {
