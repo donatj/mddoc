@@ -12,20 +12,67 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ### Class: AutoloaderInterface \[ `\donatj\MDDoc\Autoloaders\Interfaces` \]
 
-#### Method: `AutoloaderInterface`::`makeAutoloader($root)`
+#### Method: `AutoloaderInterface`->`__invoke($className)`
 
 ##### Parameters:
 
-- ***string*** `$root`
+- ***mixed*** `$className`
 
 
 ##### Returns:
 
-- ***\Closure***
+- ***string*** | ***null***
 
 ### Class: Psr0 \[ `\donatj\MDDoc\Autoloaders` \]
 
-#### Undocumented Method: `Psr0`::`makeAutoloader($root)`
+Class Psr0
+
+#### Method: `Psr0`->`__construct($path)`
+
+##### Parameters:
+
+- ***string*** `$path` - Root path
+
+
+
+---
+
+#### Method: `Psr0`->`__invoke($class)`
+
+##### Parameters:
+
+- ***mixed*** `$class`
+
+
+##### Returns:
+
+- ***bool*** | ***string***
+
+### Class: Psr4 \[ `\donatj\MDDoc\Autoloaders` \]
+
+Class Psr4
+
+#### Method: `Psr4`->`__construct($root_namespace, $path)`
+
+##### Parameters:
+
+- ***string*** `$root_namespace` - Namespace prefix
+- ***string*** `$path` - Root path
+
+
+
+---
+
+#### Method: `Psr4`->`__invoke($class)`
+
+##### Parameters:
+
+- ***mixed*** `$class`
+
+
+##### Returns:
+
+- ***bool*** | ***string***
 
 ### Class: AbstractDocPart \[ `\donatj\MDDoc\Documentation` \]
 
@@ -44,6 +91,20 @@ This projects goal is to be able to define a set of directions for *how* to docu
 ##### Returns:
 
 - ***null*** | ***string***
+
+
+---
+
+#### Method: `AbstractDocPart`->`output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+
+##### Returns:
+
+- ***string***
 
 ### Class: AbstractNestedDoc \[ `\donatj\MDDoc\Documentation` \]
 
@@ -72,18 +133,186 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
 
+
+
+#### Undocumented Method: `AbstractNestedDoc`->`__construct($options, $tree_options)`
+#### Undocumented Method: `AbstractNestedDoc`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `AbstractNestedDoc`->`getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns:
+
+- ***null*** | ***string***
+
+
+---
+
+#### Method: `AbstractNestedDoc`->`output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+
+##### Returns:
+
+- ***string***
+
 ### Class: ClassFile \[ `\donatj\MDDoc\Documentation` \]
 
-#### Undocumented Method: `ClassFile`->`output($depth)`
+#### Method: `ClassFile`->`output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+
+##### Returns:
+
+- ***string***
+
+
 #### Undocumented Method: `ClassFile`->`setAutoloader($autoloader)`
+#### Undocumented Method: `ClassFile`->`__construct($options, $tree_options)`
+#### Undocumented Method: `ClassFile`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `ClassFile`->`getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns:
+
+- ***null*** | ***string***
 
 ### Class: DocPage \[ `\donatj\MDDoc\Documentation` \]
 
-#### Undocumented Method: `DocPage`->`output($depth)`
+#### Method: `DocPage`->`output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+
+##### Returns:
+
+- ***string***
+
+
+---
+
+#### Method: `DocPage`->`getChildren()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+
+---
+
+#### Method: `DocPage`->`setChildren($children)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
+
+
+
+---
+
+#### Method: `DocPage`->`addChild($child)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+
+
+
+#### Undocumented Method: `DocPage`->`__construct($options, $tree_options)`
+#### Undocumented Method: `DocPage`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `DocPage`->`getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns:
+
+- ***null*** | ***string***
 
 ### Class: DocRoot \[ `\donatj\MDDoc\Documentation` \]
 
-#### Undocumented Method: `DocRoot`->`output($depth)`
+#### Method: `DocRoot`->`output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+
+##### Returns:
+
+- ***string***
+
+
+---
+
+#### Method: `DocRoot`->`getChildren()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+
+---
+
+#### Method: `DocRoot`->`setChildren($children)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
+
+
+
+---
+
+#### Method: `DocRoot`->`addChild($child)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+
+
+
+#### Undocumented Method: `DocRoot`->`__construct($options, $tree_options)`
+#### Undocumented Method: `DocRoot`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `DocRoot`->`getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns:
+
+- ***null*** | ***string***
 
 ### Class: IncludeFile \[ `\donatj\MDDoc\Documentation` \]
 
@@ -97,6 +326,23 @@ This projects goal is to be able to define a set of directions for *how* to docu
 ##### Returns:
 
 - ***string***
+
+
+#### Undocumented Method: `IncludeFile`->`__construct($options, $tree_options)`
+#### Undocumented Method: `IncludeFile`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `IncludeFile`->`getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns:
+
+- ***null*** | ***string***
 
 ### Class: AutoloaderAware \[ `\donatj\MDDoc\Documentation\Interfaces` \]
 
@@ -121,20 +367,189 @@ This projects goal is to be able to define a set of directions for *how* to docu
 ### Class: RecursiveDirectory \[ `\donatj\MDDoc\Documentation` \]
 
 #### Undocumented Method: `RecursiveDirectory`->`setAutoloader($autoloader)`
-#### Undocumented Method: `RecursiveDirectory`->`output($depth)`
+---
+
+#### Method: `RecursiveDirectory`->`output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+
+##### Returns:
+
+- ***string***
+
+
+---
+
+#### Method: `RecursiveDirectory`->`getChildren()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+
+---
+
+#### Method: `RecursiveDirectory`->`setChildren($children)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
+
+
+
+---
+
+#### Method: `RecursiveDirectory`->`addChild($child)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+
+
+
+#### Undocumented Method: `RecursiveDirectory`->`__construct($options, $tree_options)`
+#### Undocumented Method: `RecursiveDirectory`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `RecursiveDirectory`->`getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns:
+
+- ***null*** | ***string***
 
 ### Class: Section \[ `\donatj\MDDoc\Documentation` \]
 
-#### Undocumented Method: `Section`->`output($depth)`
+#### Method: `Section`->`output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
 
 
+##### Returns:
+
+- ***string***
+
+
+---
+
+#### Method: `Section`->`getChildren()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+
+---
+
+#### Method: `Section`->`setChildren($children)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
+
+
+
+---
+
+#### Method: `Section`->`addChild($child)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+
+
+
+#### Undocumented Method: `Section`->`__construct($options, $tree_options)`
+#### Undocumented Method: `Section`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `Section`->`getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns:
+
+- ***null*** | ***string***
+
+### Class: Source \[ `\donatj\MDDoc\Documentation` \]
+
+Class Source
+
+#### Method: `Source`->`output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+
+##### Returns:
+
+- ***string***
+
+
+#### Undocumented Method: `Source`->`__construct($options, $tree_options [, $text = ''])`
+#### Undocumented Method: `Source`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `Source`->`getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns:
+
+- ***null*** | ***string***
 
 ### Class: Text \[ `\donatj\MDDoc\Documentation` \]
 
 Class Text
 
 #### Undocumented Method: `Text`->`__construct($options, $tree_options [, $text = ''])`
-#### Undocumented Method: `Text`->`output($depth)`
+---
+
+#### Method: `Text`->`output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+
+##### Returns:
+
+- ***string***
+
+
+#### Undocumented Method: `Text`->`setOptions($options, $tree_options)`
+---
+
+#### Method: `Text`->`getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+
+##### Returns:
+
+- ***null*** | ***string***
 
 ### Class: ConfigException \[ `\donatj\MDDoc\Exceptions` \]
 
@@ -155,7 +570,7 @@ Application MDDoc
 ##### Parameters:
 
 - ***string*** `$filename`
-- ***callable*** `$autoLoader`
+- ***\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface*** `$autoLoader`
 - ***\donatj\MDDoc\Reflectors\TaxonomyReflectorFactory*** `$parserFactory`
 
 
@@ -193,7 +608,7 @@ Application MDDoc
 ##### Parameters:
 
 - ***mixed*** `$filename`
-- ***callable*** `$autoLoader`
+- ***\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface*** `$autoLoader`
 
 
 ##### Returns:
