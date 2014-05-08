@@ -23,6 +23,19 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 - ***string*** | ***null***
 
+### Class: Mock \[ `\donatj\MDDoc\Autoloaders` \]
+
+#### Method: `Mock`->`__invoke($className)`
+
+##### Parameters:
+
+- ***mixed*** `$className`
+
+
+##### Returns:
+
+- ***string*** | ***null***
+
 ### Class: Psr0 \[ `\donatj\MDDoc\Autoloaders` \]
 
 Class Psr0
@@ -72,7 +85,7 @@ Class Psr4
 
 ##### Returns:
 
-- ***bool*** | ***string***
+- ***bool*** | ***null***
 
 ### Class: AbstractDocPart \[ `\donatj\MDDoc\Documentation` \]
 
