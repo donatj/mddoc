@@ -3,8 +3,8 @@
 namespace donatj\MDDoc\Reflectors;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
-use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
+use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\FileReflector;
 use phpDocumentor\Reflection\InterfaceReflector;
 
@@ -29,6 +29,7 @@ class TaxonomyReflector {
 		$this->fileName      = $filename;
 		$this->autoLoader    = $autoLoader;
 		$this->parserFactory = $parserFactory;
+		$this->data          = array();
 
 		$this->fileReflector = new FileReflector($filename);
 		$this->fileReflector->process();
@@ -101,8 +102,7 @@ class TaxonomyReflector {
 	 * @return \phpDocumentor\Reflection\ClassReflector\MethodReflector[][]
 	 */
 	public function getMethods() {
-		return $this->data['methods'] ?: array();
+		return isset($this->data['methods']) ? $this->data['methods'] : array();
 	}
-
 
 }
