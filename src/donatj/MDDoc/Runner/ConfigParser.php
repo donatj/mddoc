@@ -1,7 +1,7 @@
 <?php
 namespace donatj\MDDoc\Runner;
 
-use donatj\MDDoc\Autoloaders\Mock;
+use donatj\MDDoc\Autoloaders\NullLoader;
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Autoloaders\Psr4;
 use donatj\MDDoc\Documentation\AbstractNestedDoc;
@@ -61,7 +61,7 @@ class ConfigParser {
 					throw new ConfigException("Unrecognized autoloader: {$sel_loader}");
 			}
 		}elseif( !isset($tree_extra['autoloader']) ){
-			$tree_extra['autoloader'] = new Mock();
+			$tree_extra['autoloader'] = new NullLoader();
 		}
 
 		foreach( $node->childNodes as $child ) {

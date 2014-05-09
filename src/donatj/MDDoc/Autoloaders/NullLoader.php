@@ -4,7 +4,7 @@ namespace donatj\MDDoc\Autoloaders;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 
-class Mock implements AutoloaderInterface {
+class NullLoader implements AutoloaderInterface {
 
 	/**
 	 * @param $className
