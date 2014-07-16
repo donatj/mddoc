@@ -4,6 +4,7 @@ namespace donatj\MDDoc;
 
 use donatj\Flags;
 use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDoc\Runner\ConfigParser;
 use donatj\MDDoc\Runner\UserInterface;
 
@@ -28,6 +29,8 @@ class MDDoc {
 			new ConfigParser($config);
 		}catch (ConfigException $e){
 			$ui->dropError("Configuration error; " . $e->getMessage());
+		}catch(PathNotReadableException $e) {
+			$ui->dropError("Path/File Not Readable " . $e->getPath());
 		}
 
 		$currMen = number_format(memory_get_usage() / 1048576, 2);

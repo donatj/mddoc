@@ -3,6 +3,7 @@
 namespace donatj\MDDoc\Reflectors;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
+use donatj\MDDoc\Exceptions\ClassNotReadableException;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\FileReflector;
@@ -24,6 +25,7 @@ class TaxonomyReflector {
 	 * @param string                   $filename
 	 * @param AutoloaderInterface      $autoLoader
 	 * @param TaxonomyReflectorFactory $parserFactory
+	 * @throws ClassNotReadableException
 	 */
 	public function __construct( $filename, AutoloaderInterface $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
 		$this->fileName      = $filename;
@@ -31,9 +33,13 @@ class TaxonomyReflector {
 		$this->parserFactory = $parserFactory;
 		$this->data          = array();
 
-		$this->fileReflector = new FileReflector($filename);
-		$this->fileReflector->process();
-		$this->fileReflector->scanForMarkers();
+		try {
+			$this->fileReflector = new FileReflector($filename);
+			$this->fileReflector->process();
+			$this->fileReflector->scanForMarkers();
+		} catch(\Exception $e) {
+			throw new ClassNotReadableException('Class not readable', $filename, $e);
+		}
 
 		foreach( $this->fileReflector->getInterfaces() as $interfaces ) {
 			$this->registerReflectors($interfaces);
