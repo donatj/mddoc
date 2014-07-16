@@ -23,9 +23,9 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 - ***string*** | ***null***
 
-### Class: Mock \[ `\donatj\MDDoc\Autoloaders` \]
+### Class: NullLoader \[ `\donatj\MDDoc\Autoloaders` \]
 
-#### Method: `Mock->__invoke($className)`
+#### Method: `NullLoader->__invoke($className)`
 
 ##### Parameters:
 
@@ -564,9 +564,29 @@ Class Text
 
 - ***null*** | ***string***
 
+### Class: ClassNotReadableException \[ `\donatj\MDDoc\Exceptions` \]
+
+#### Undocumented Method: `ClassNotReadableException->__construct($message, $path [, $previous_exception = null])`
+---
+
+#### Method: `ClassNotReadableException->getPath()`
+
+##### Returns:
+
+- ***mixed***
+
 ### Class: ConfigException \[ `\donatj\MDDoc\Exceptions` \]
 
 ### Class: PathNotReadableException \[ `\donatj\MDDoc\Exceptions` \]
+
+#### Undocumented Method: `PathNotReadableException->__construct($message, $path [, $previous_exception = null])`
+---
+
+#### Method: `PathNotReadableException->getPath()`
+
+##### Returns:
+
+- ***mixed***
 
 ### Class: TargetNotWritableException \[ `\donatj\MDDoc\Exceptions` \]
 
