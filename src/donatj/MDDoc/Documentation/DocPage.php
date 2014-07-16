@@ -29,8 +29,8 @@ class DocPage extends AbstractNestedDoc {
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
 	}
 
-	private function recursiveTouch( $new, $time = false ) {
-		if( !$time ) {
+	private function recursiveTouch( $new, $time = null ) {
+		if( is_null($time) ) {
 			$time = time();
 		}
 
