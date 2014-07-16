@@ -15,7 +15,7 @@ class IncludeFile extends AbstractDocPart {
 		$name = $this->getOption('name');
 
 		if( !is_readable($name) ) {
-			throw new PathNotReadableException("{$name} not readable.");
+			throw new PathNotReadableException("Path not readable.", $name);
 		}
 
 		return file_get_contents($name) . "\n\n";

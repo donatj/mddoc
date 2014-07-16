@@ -56,7 +56,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 			return new \ArrayIterator(array( $path ));
 		}
 
-		throw new PathNotReadableException("{$path} not readable");
+		throw new PathNotReadableException("Path not readable", $path);
 
 	}
 

@@ -24,7 +24,7 @@ class Source extends Text {
 		$text = ($name ? file_get_contents($name) : $this->text);
 
 		if( $name && !is_readable($name) ) {
-			throw new PathNotReadableException("{$name} not readable.");
+			throw new PathNotReadableException("Path not readable.", $name);
 		}
 
 		return "```" . ($lang ? : '') . "\n" . $text . "\n```\n\n";
