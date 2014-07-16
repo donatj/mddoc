@@ -49,7 +49,7 @@ class TaxonomyReflector {
 			$this->registerReflectors($interfaces);
 		}
 
-		$this->fileReflector->getClasses();
+//		$this->fileReflector->getClasses();  -- I don't think this did anything.
 	}
 
 	private function registerReflectors( InterfaceReflector $reflector ) {
