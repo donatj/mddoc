@@ -12,10 +12,10 @@ class DocPage extends AbstractNestedDoc {
 		$document = new Document();
 
 		$target         = $this->getOption('target');
-		$link           = $this->getOption('link') ? : $target;
-		$link_text      = $this->getOption('link-text') ? : "See: {$link}";
-		$pre_link_text  = $this->getOption('link-pre-text') ? : '';
-		$post_link_text = $this->getOption('link-post-text') ? : '';
+		$link           = $this->getOption('link') ?: $target;
+		$link_text      = $this->getOption('link-text') ?: "See: {$link}";
+		$pre_link_text  = $this->getOption('link-pre-text') ?: '';
+		$post_link_text = $this->getOption('link-post-text') ?: '';
 
 		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
 			throw new TargetNotWritableException($target . ' not writable');
@@ -23,7 +23,7 @@ class DocPage extends AbstractNestedDoc {
 
 //		$output = '';
 		foreach( $this->getChildren() as $child ) {
-			$document->appendChild( $child->output(0) );
+			$document->appendChild($child->output(0));
 		}
 
 		file_put_contents($target, $document->exportMarkdown());
