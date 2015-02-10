@@ -4,7 +4,8 @@
 		"ext-dom"                 : "*",
 		"phpdocumentor/reflection": "1.*",
 		"donatj/flags"            : "1.*",
-		"donatj/cli-toolkit"      : "0.*"
+		"donatj/cli-toolkit"      : "0.*",
+		"donatj/mddom"            : "dev-master"
 	},
 	"require-dev": {
 		"donatj/drop": "*"
