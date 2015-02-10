@@ -97,6 +97,7 @@ class ConfigParser {
 				}
 
 				$parent->addChild($childDoc);
+				$childDoc->setParent($parent);
 
 				if( $childDoc instanceof AutoloaderAware && isset($tree_extra['autoloader']) ) {
 					$childDoc->setAutoloader($tree_extra['autoloader']);

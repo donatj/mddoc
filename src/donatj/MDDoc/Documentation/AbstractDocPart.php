@@ -10,6 +10,11 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	protected $options;
 	protected $treeOptions;
 
+	/**
+	 * @var AbstractDocPart
+	 */
+	protected $parent = null;
+
 	public function __construct( array $options, array $tree_options ) {
 		$this->setOptions($options, $tree_options);
 
@@ -32,7 +37,6 @@ abstract class AbstractDocPart implements DocumentationInterface {
 		$data = $tree ? $this->treeOptions : $this->options;
 
 		return isset($data[$key]) ? $data[$key] : null;
-
 	}
 
 	/**
@@ -52,5 +56,18 @@ abstract class AbstractDocPart implements DocumentationInterface {
 		}
 	}
 
+	/**
+	 * @param \donatj\MDDoc\Documentation\AbstractDocPart $parent
+	 */
+	public function setParent( AbstractDocPart $parent ) {
+		$this->parent = $parent;
+	}
+
+	/**
+	 * @return AbstractDocPart|null
+	 */
+	public function getParent() {
+		return $this->parent;
+	}
 
 }
