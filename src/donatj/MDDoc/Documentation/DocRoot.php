@@ -14,6 +14,7 @@ class DocRoot extends AbstractNestedDoc {
 	}
 
 	protected function init() {
+
 	}
 
 }

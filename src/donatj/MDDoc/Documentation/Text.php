@@ -2,6 +2,8 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDom\Paragraph;
+
 /**
  * Class Text
  *
@@ -17,7 +19,7 @@ class Text extends AbstractDocPart {
 	}
 
 	public function output( $depth ) {
-		return trim($this->text) . "\n\n";
+		return new Paragraph($this->text);
 	}
 
 	protected function init() { }

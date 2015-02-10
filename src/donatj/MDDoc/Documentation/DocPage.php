@@ -3,11 +3,13 @@
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Exceptions\TargetNotWritableException;
+use donatj\MDDom\Document;
 
 class DocPage extends AbstractNestedDoc {
 
 	public function output( $depth ) {
 
+		$document = new Document();
 
 		$target         = $this->getOption('target');
 		$link           = $this->getOption('link') ? : $target;
@@ -19,12 +21,12 @@ class DocPage extends AbstractNestedDoc {
 			throw new TargetNotWritableException($target . ' not writable');
 		}
 
-		$output = '';
+//		$output = '';
 		foreach( $this->getChildren() as $child ) {
-			$output .= $child->output(0);
+			$document->appendChild( $child->output(0) );
 		}
-
-		file_put_contents($target, $output);
+var_export($document);
+		file_put_contents($target, $document->exportMarkdown());
 
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
 	}

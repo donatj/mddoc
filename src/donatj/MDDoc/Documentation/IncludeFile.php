@@ -3,12 +3,13 @@
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Exceptions\PathNotReadableException;
+use donatj\MDDom\Paragraph;
 
 class IncludeFile extends AbstractDocPart {
 
 	/**
 	 * @param int $depth
-	 * @return string
+	 * @return Paragraph
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
 	 */
 	public function output( $depth ) {
@@ -18,7 +19,7 @@ class IncludeFile extends AbstractDocPart {
 			throw new PathNotReadableException("Path not readable.", $name);
 		}
 
-		return file_get_contents($name) . "\n\n";
+		return new Paragraph(file_get_contents($name));
 	}
 
 	protected function init() {

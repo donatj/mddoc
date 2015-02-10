@@ -34,13 +34,4 @@ abstract class AbstractNestedDoc extends AbstractDocPart {
 		$this->children[] = $child;
 	}
 
-	/**
-	 * @param $input
-	 * @return string
-	 */
-	protected function cleanup( $input ) {
-		return rtrim($input, "\n") . "\n\n";
-	}
-
-
 } 

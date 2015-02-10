@@ -3,6 +3,7 @@
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Exceptions\PathNotReadableException;
+use donatj\MDDom\CodeBlock;
 
 /**
  * Class Source
@@ -17,7 +18,6 @@ class Source extends Text {
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
 	 */
 	public function output( $depth ) {
-
 		$name = $this->getOption('name');
 		$lang = $this->getOption('lang');
 
@@ -27,8 +27,7 @@ class Source extends Text {
 			throw new PathNotReadableException("Path not readable.", $name);
 		}
 
-		return "```" . ($lang ? : '') . "\n" . $text . "\n```\n\n";
-
+		return new CodeBlock($text, $lang);
 	}
 
 }

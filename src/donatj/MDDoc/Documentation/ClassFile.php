@@ -5,6 +5,12 @@ namespace donatj\MDDoc\Documentation;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
+use donatj\MDDom\Code;
+use donatj\MDDom\DocumentDepth;
+use donatj\MDDom\Header;
+use donatj\MDDom\HorizontalRule;
+use donatj\MDDom\Paragraph;
+use donatj\MDDom\Text as MdText;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 
 class ClassFile extends AbstractDocPart implements AutoloaderAware {
@@ -27,6 +33,8 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	private function scanClassFile( $filename, $depth ) {
 		$output = '';
 
+		$document = new DocumentDepth();
+
 		$factory = new TaxonomyReflectorFactory();
 
 		$reflector = $factory->newInstance($filename, $this->autoloader);
@@ -35,12 +43,14 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		if( $class = $reflector->getReflector() ) {
 
 			if( !$this->getOption('skip-class-header', true) ) {
-				$output .= str_repeat('#', $depth + 1) . ' Class: ' . $class->getShortName() . ' \\[ `\\' . $class->getNamespace() . '` \\]';
-				$output .= PHP_EOL . PHP_EOL;
+//				$output .= str_repeat('#', $depth + 1) . ' Class: ' . $class->getShortName() . ' \\[ `\\' . $class->getNamespace() . '` \\]';
+				$document->appendChild(new Header('Class: ' . $class->getShortName() . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]'));
+//				$output .= PHP_EOL . PHP_EOL;
 
 				if( $classBlock = $class->getDocBlock() ) {
-					$output .= $classBlock->getText();
-					$output .= PHP_EOL . PHP_EOL;
+					$document->appendChild(new Paragraph($classBlock->getText()));
+//					$output .= $classBlock->getText();
+//					$output .= PHP_EOL . PHP_EOL;
 				}
 			}
 
@@ -49,6 +59,9 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 				$method = reset($methods);
 
 				if( $method->getVisibility() == 'public' ) {
+
+					$subDocument = new DocumentDepth();
+					$document->appendChild($subDocument);
 
 					$name = $method->getShortName();
 					$args = $this->getArgumentString($method);
@@ -94,15 +107,16 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						$i++;
 
 						if( $i > 1 ) {
-							$output .= '---' . PHP_EOL . PHP_EOL;
+							$subDocument->appendChild(new HorizontalRule);
 						}
 
-						$output .= str_repeat('#', $depth + 2) . " Method: `" . $class->getShortName() . "{$operator}{$name}({$args})`";
-						$output .= PHP_EOL . PHP_EOL;
+						$subDocument->appendChild(
+							new Header('Method: ', new Code($class->getShortName() . "{$operator}{$name}({$args})"))
+						);
 
 						if( $methodDescr = $block->getShortDescription() ) {
-							$output .= $this->descriptionFormat($block->getShortDescription(), $block->getLongDescription()->getContents());
-							$output .= PHP_EOL . PHP_EOL;
+							$subDocument->appendChild($this->descriptionFormat($block->getShortDescription(), $block->getLongDescription()->getContents()));
+//							$output .= PHP_EOL . PHP_EOL;
 						}
 
 
@@ -111,8 +125,13 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						 */
 						if( $methodParams = $block->getTagsByName('param') ) {
 
-							$output .= str_repeat('#', $depth + 3) . ' Parameters:';
-							$output .= PHP_EOL . PHP_EOL;
+							$paramDoc = new DocumentDepth();
+							$subDocument->appendChild($paramDoc);
+
+//							$output .= str_repeat('#', $depth + 3) . ' Parameters:';
+//							$output .= PHP_EOL . PHP_EOL;
+
+							$paramDoc->appendChild(new Header('Parameters:'));
 
 							foreach( $block->getTagsByName('param') as $tag ) {
 
@@ -134,10 +153,14 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						 */
 						if( !$this->getOption('skip-method-returns', true) ) {
 							if( $return = current($block->getTagsByName('return')) ) {
-								$output .= str_repeat('#', $depth + 3) . ' Returns:';
-								$output .= PHP_EOL . PHP_EOL;
+								$returnDoc = new DocumentDepth();
+								$subDocument->appendChild($returnDoc);
 
-								$output .= '- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '');
+//								$output .= str_repeat('#', $depth + 3) . ' Returns:';
+								$returnDoc->appendChild(new Header('Returns:'));
+//								$output .= PHP_EOL . PHP_EOL;
+
+								$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '')));
 
 								$output .= PHP_EOL . PHP_EOL;
 							}
@@ -155,7 +178,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			}
 		}
 
-		return $output;
+		return $document;
 	}
 
 	private function getArgumentString( MethodReflector $method ) {
@@ -174,9 +197,14 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return $args;
 	}
 
+	/**
+	 * @return \donatj\MDDom\DocumentDepth
+	 */
 	private function  descriptionFormat() {
 		$string = implode(PHP_EOL, func_get_args());
 		$parts  = explode(PHP_EOL, $string);
+
+		$document = new DocumentDepth;
 
 		$output = '';
 
@@ -189,19 +217,15 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			if( $lastPart ) {
 				$lastPart = $lastPart[0];
 			}
-			//FIXME: $depth
-			if( $lastPart == ':' ) {
-				$part = '##### ' . substr($part, 0, -1);
-			}
 
-			if( in_array($lastPart, array( ',', '.', ';' )) || (strlen($next) > 3 && $next[0] = ' ' && $next[1] == ' ' && $next[2] == ' ') || trim($next) == '' ) {
-				$output .= $part . '  ' . PHP_EOL;
+			if( $lastPart == ':' ) {
+				$document->appendChild(new Header(substr($part, 0, -1)));
 			} else {
-				$output .= $part;
+				$document->appendChild(new Paragraph($part));
 			}
 		}
 
-		return $output;
+		return $document;
 	}
 
 	private function formatType( $type, $default = 'mixed' ) {
