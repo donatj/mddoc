@@ -54,8 +54,12 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					$args = $this->getArgumentString($method);
 
 					$block = false;
-					foreach( $methods as $xmethod ) {
-						if( $block = $xmethod->getDocBlock() ) {
+					
+					/**
+					 * @var $subMethod \phpDocumentor\Reflection\ClassReflector\MethodReflector
+					 */
+					foreach( $methods as $subMethod ) {
+						if( $block = $subMethod->getDocBlock() ) {
 							break;
 						}
 					}
