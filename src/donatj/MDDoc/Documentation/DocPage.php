@@ -25,7 +25,7 @@ class DocPage extends AbstractNestedDoc {
 		foreach( $this->getChildren() as $child ) {
 			$document->appendChild( $child->output(0) );
 		}
-var_export($document);
+
 		file_put_contents($target, $document->exportMarkdown());
 
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
