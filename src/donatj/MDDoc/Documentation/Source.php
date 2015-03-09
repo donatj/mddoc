@@ -21,11 +21,11 @@ class Source extends Text {
 		$name = $this->getOption('name');
 		$lang = $this->getOption('lang');
 
-		$text = ($name ? file_get_contents($name) : $this->text);
-
 		if( $name && !is_readable($name) ) {
 			throw new PathNotReadableException("Path not readable.", $name);
 		}
+
+		$text = ($name ? file_get_contents($name) : $this->text);
 
 		return new CodeBlock($text, $lang);
 	}
