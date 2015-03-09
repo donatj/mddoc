@@ -25,7 +25,9 @@ class ConfigParser {
 		}
 
 		$dom = new \DOMDocument();
-		$dom->load($filename);
+		if( @$dom->load($filename) === false ) {
+			throw new ConfigException("Error parsing {$filename}");
+		}
 
 		$root = $dom->firstChild;
 
