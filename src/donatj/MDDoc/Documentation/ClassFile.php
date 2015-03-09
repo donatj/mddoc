@@ -67,7 +67,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					$args = $this->getArgumentString($method);
 
 					$block = false;
-					
+
 					/**
 					 * @var $subMethod \phpDocumentor\Reflection\ClassReflector\MethodReflector
 					 */
@@ -156,25 +156,18 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 								$returnDoc = new DocumentDepth();
 								$subDocument->appendChild($returnDoc);
 
-//								$output .= str_repeat('#', $depth + 3) . ' Returns:';
 								$returnDoc->appendChild(new Header('Returns:'));
-//								$output .= PHP_EOL . PHP_EOL;
 
 								$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '')));
-
-								$output .= PHP_EOL . PHP_EOL;
 							}
 						}
-
 					} else {
 						$i++;
 						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
 					}
 
 					$output .= PHP_EOL;
-
 				}
-
 			}
 		}
 
@@ -200,13 +193,11 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	/**
 	 * @return \donatj\MDDom\DocumentDepth
 	 */
-	private function  descriptionFormat() {
+	private function descriptionFormat() {
 		$string = implode(PHP_EOL, func_get_args());
 		$parts  = explode(PHP_EOL, $string);
 
 		$document = new DocumentDepth;
-
-		$output = '';
 
 		while( ($part = current($parts)) !== false ) {
 
@@ -246,5 +237,4 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	public function setAutoloader( AutoloaderInterface $autoloader ) {
 		$this->autoloader = $autoloader;
 	}
-
-} 
+}
