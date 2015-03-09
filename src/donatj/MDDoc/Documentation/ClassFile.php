@@ -128,11 +128,9 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							$paramDoc = new DocumentDepth();
 							$subDocument->appendChild($paramDoc);
 
-//							$output .= str_repeat('#', $depth + 3) . ' Parameters:';
-//							$output .= PHP_EOL . PHP_EOL;
-
 							$paramDoc->appendChild(new Header('Parameters:'));
 
+							$output = '';
 							foreach( $block->getTagsByName('param') as $tag ) {
 
 								$output .= '- ' . $this->formatType($tag->getType()) . ' `' . $tag->getVariableName() . '`';
@@ -143,6 +141,8 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 								$output .= PHP_EOL;
 							}
+
+							$paramDoc->appendChild($output);
 
 							$output .= PHP_EOL . PHP_EOL;
 						}
