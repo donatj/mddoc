@@ -196,14 +196,16 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	}
 
 	/**
+	 * @param string $args,...
 	 * @return \donatj\MDDom\DocumentDepth
 	 */
-	private function descriptionFormat() {
+	private function descriptionFormat( $args ) {
 		$string = implode(PHP_EOL, func_get_args());
 		$parts  = explode(PHP_EOL, $string);
 
 		$document = new DocumentDepth;
 
+		$runningText = "";
 		while( ($part = current($parts)) !== false ) {
 
 			$part = rtrim($part);
@@ -215,10 +217,18 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			}
 
 			if( $lastPart == ':' ) {
+				if( trim($runningText) ) {
+					$document->appendChild(new MdText($this->smartLineTrim($runningText)));
+					$runningText = "";
+				}
 				$document->appendChild(new Header(substr($part, 0, -1)));
 			} else {
-				$document->appendChild(new Paragraph($part));
+				$runningText .= "  \n" . $part; // @todo this is gross... fix this.
 			}
+		}
+
+		if( trim($runningText) ) {
+			$document->appendChild(new MdText($this->smartLineTrim($runningText)));
 		}
 
 		return $document;
@@ -237,6 +247,10 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		}
 
 		return trim($output, ' |');
+	}
+
+	private function smartLineTrim( $data ) {
+		return preg_replace('/^\s*\n|\n\s*$/s', '', $data);
 	}
 
 	public function setAutoloader( AutoloaderInterface $autoloader ) {
