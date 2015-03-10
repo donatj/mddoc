@@ -6,9 +6,8 @@ This is a work in progress and not ready for use.
 
 This projects goal is to be able to define a set of directions for *how* to document a set of PHP files as well as markdown and other text to include, and output the final documentation in a jekyll or other markdown site builder ready form.
 
+
 ## Documentation Example (WIP)
-
-
 
 ### Class: AutoloaderInterface \[ `\donatj\MDDoc\Autoloaders\Interfaces` \]
 
@@ -17,7 +16,6 @@ This projects goal is to be able to define a set of directions for *how* to docu
 ##### Parameters:
 
 - ***mixed*** `$className`
-
 
 ##### Returns:
 
@@ -30,7 +28,6 @@ This projects goal is to be able to define a set of directions for *how* to docu
 ##### Parameters:
 
 - ***mixed*** `$className`
-
 
 ##### Returns:
 
@@ -46,8 +43,6 @@ Class Psr0
 
 - ***string*** `$path` - Root path
 
-
-
 ---
 
 #### Method: `Psr0->__invoke($class)`
@@ -55,7 +50,6 @@ Class Psr0
 ##### Parameters:
 
 - ***mixed*** `$class`
-
 
 ##### Returns:
 
@@ -72,8 +66,6 @@ Class Psr4
 - ***string*** `$root_namespace` - Namespace prefix
 - ***string*** `$path` - Root path
 
-
-
 ---
 
 #### Method: `Psr4->__invoke($class)`
@@ -82,15 +74,20 @@ Class Psr4
 
 - ***mixed*** `$class`
 
-
 ##### Returns:
 
 - ***bool*** | ***null***
 
 ### Class: AbstractDocPart \[ `\donatj\MDDoc\Documentation` \]
 
+
+
 #### Undocumented Method: `AbstractDocPart->__construct($options, $tree_options)`
+
+
+
 #### Undocumented Method: `AbstractDocPart->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `AbstractDocPart->getOption($key [, $tree = false])`
@@ -100,11 +97,25 @@ Class Psr4
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
 
+---
+
+#### Method: `AbstractDocPart->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `AbstractDocPart->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ---
 
@@ -113,7 +124,6 @@ Class Psr4
 ##### Parameters:
 
 - ***int*** `$depth`
-
 
 ##### Returns:
 
@@ -127,7 +137,6 @@ Class Psr4
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
-
 ---
 
 #### Method: `AbstractNestedDoc->setChildren($children)`
@@ -135,8 +144,6 @@ Class Psr4
 ##### Parameters:
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
-
 
 ---
 
@@ -149,7 +156,11 @@ Class Psr4
 
 
 #### Undocumented Method: `AbstractNestedDoc->__construct($options, $tree_options)`
+
+
+
 #### Undocumented Method: `AbstractNestedDoc->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `AbstractNestedDoc->getOption($key [, $tree = false])`
@@ -159,11 +170,25 @@ Class Psr4
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
 
+---
+
+#### Method: `AbstractNestedDoc->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `AbstractNestedDoc->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ---
 
@@ -172,7 +197,6 @@ Class Psr4
 ##### Parameters:
 
 - ***int*** `$depth`
-
 
 ##### Returns:
 
@@ -186,15 +210,22 @@ Class Psr4
 
 - ***int*** `$depth`
 
-
 ##### Returns:
 
 - ***string***
 
 
+
 #### Undocumented Method: `ClassFile->setAutoloader($autoloader)`
+
+
+
 #### Undocumented Method: `ClassFile->__construct($options, $tree_options)`
+
+
+
 #### Undocumented Method: `ClassFile->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `ClassFile->getOption($key [, $tree = false])`
@@ -204,10 +235,25 @@ Class Psr4
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
+
+---
+
+#### Method: `ClassFile->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `ClassFile->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ### Class: DocPage \[ `\donatj\MDDoc\Documentation` \]
 
@@ -217,11 +263,9 @@ Class Psr4
 
 - ***int*** `$depth`
 
-
 ##### Returns:
 
 - ***string***
-
 
 ---
 
@@ -231,7 +275,6 @@ Class Psr4
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
-
 ---
 
 #### Method: `DocPage->setChildren($children)`
@@ -239,8 +282,6 @@ Class Psr4
 ##### Parameters:
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
-
 
 ---
 
@@ -253,7 +294,11 @@ Class Psr4
 
 
 #### Undocumented Method: `DocPage->__construct($options, $tree_options)`
+
+
+
 #### Undocumented Method: `DocPage->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `DocPage->getOption($key [, $tree = false])`
@@ -263,10 +308,25 @@ Class Psr4
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
+
+---
+
+#### Method: `DocPage->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `DocPage->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ### Class: DocRoot \[ `\donatj\MDDoc\Documentation` \]
 
@@ -276,11 +336,9 @@ Class Psr4
 
 - ***int*** `$depth`
 
-
 ##### Returns:
 
 - ***string***
-
 
 ---
 
@@ -290,7 +348,6 @@ Class Psr4
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
-
 ---
 
 #### Method: `DocRoot->setChildren($children)`
@@ -298,8 +355,6 @@ Class Psr4
 ##### Parameters:
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
-
 
 ---
 
@@ -312,7 +367,11 @@ Class Psr4
 
 
 #### Undocumented Method: `DocRoot->__construct($options, $tree_options)`
+
+
+
 #### Undocumented Method: `DocRoot->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `DocRoot->getOption($key [, $tree = false])`
@@ -322,10 +381,25 @@ Class Psr4
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
+
+---
+
+#### Method: `DocRoot->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `DocRoot->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ### Class: IncludeFile \[ `\donatj\MDDoc\Documentation` \]
 
@@ -335,14 +409,18 @@ Class Psr4
 
 - ***int*** `$depth`
 
-
 ##### Returns:
 
-- ***string***
+- ***\donatj\MDDom\Paragraph***
+
 
 
 #### Undocumented Method: `IncludeFile->__construct($options, $tree_options)`
+
+
+
 #### Undocumented Method: `IncludeFile->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `IncludeFile->getOption($key [, $tree = false])`
@@ -352,18 +430,38 @@ Class Psr4
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
 
+---
+
+#### Method: `IncludeFile->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `IncludeFile->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
 ### Class: AutoloaderAware \[ `\donatj\MDDoc\Documentation\Interfaces` \]
+
+
 
 #### Undocumented Method: `AutoloaderAware->setAutoloader($autoloader)`
 
 ### Class: DocumentationInterface \[ `\donatj\MDDoc\Documentation\Interfaces` \]
 
+
+
 #### Undocumented Method: `DocumentationInterface->__construct($options, $tree_options)`
+
 ---
 
 #### Method: `DocumentationInterface->output($depth)`
@@ -372,14 +470,16 @@ Class Psr4
 
 - ***int*** `$depth`
 
-
 ##### Returns:
 
 - ***string***
 
 ### Class: RecursiveDirectory \[ `\donatj\MDDoc\Documentation` \]
 
+
+
 #### Undocumented Method: `RecursiveDirectory->setAutoloader($autoloader)`
+
 ---
 
 #### Method: `RecursiveDirectory->output($depth)`
@@ -388,11 +488,9 @@ Class Psr4
 
 - ***int*** `$depth`
 
-
 ##### Returns:
 
 - ***string***
-
 
 ---
 
@@ -402,7 +500,6 @@ Class Psr4
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
-
 ---
 
 #### Method: `RecursiveDirectory->setChildren($children)`
@@ -410,8 +507,6 @@ Class Psr4
 ##### Parameters:
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
-
 
 ---
 
@@ -424,7 +519,11 @@ Class Psr4
 
 
 #### Undocumented Method: `RecursiveDirectory->__construct($options, $tree_options)`
+
+
+
 #### Undocumented Method: `RecursiveDirectory->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `RecursiveDirectory->getOption($key [, $tree = false])`
@@ -434,10 +533,25 @@ Class Psr4
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
+
+---
+
+#### Method: `RecursiveDirectory->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `RecursiveDirectory->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ### Class: Section \[ `\donatj\MDDoc\Documentation` \]
 
@@ -447,11 +561,9 @@ Class Psr4
 
 - ***int*** `$depth`
 
-
 ##### Returns:
 
 - ***string***
-
 
 ---
 
@@ -461,7 +573,6 @@ Class Psr4
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
-
 ---
 
 #### Method: `Section->setChildren($children)`
@@ -469,8 +580,6 @@ Class Psr4
 ##### Parameters:
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
-
 
 ---
 
@@ -483,7 +592,11 @@ Class Psr4
 
 
 #### Undocumented Method: `Section->__construct($options, $tree_options)`
+
+
+
 #### Undocumented Method: `Section->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `Section->getOption($key [, $tree = false])`
@@ -493,10 +606,25 @@ Class Psr4
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
+
+---
+
+#### Method: `Section->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `Section->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ### Class: Source \[ `\donatj\MDDoc\Documentation` \]
 
@@ -508,14 +636,18 @@ Class Source
 
 - ***int*** `$depth`
 
-
 ##### Returns:
 
 - ***string***
 
 
+
 #### Undocumented Method: `Source->__construct($options, $tree_options [, $text = ''])`
+
+
+
 #### Undocumented Method: `Source->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `Source->getOption($key [, $tree = false])`
@@ -525,16 +657,34 @@ Class Source
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
+
+---
+
+#### Method: `Source->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `Source->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ### Class: Text \[ `\donatj\MDDoc\Documentation` \]
 
 Class Text
 
+
+
 #### Undocumented Method: `Text->__construct($options, $tree_options [, $text = ''])`
+
 ---
 
 #### Method: `Text->output($depth)`
@@ -543,13 +693,14 @@ Class Text
 
 - ***int*** `$depth`
 
-
 ##### Returns:
 
 - ***string***
 
 
+
 #### Undocumented Method: `Text->setOptions($options, $tree_options)`
+
 ---
 
 #### Method: `Text->getOption($key [, $tree = false])`
@@ -559,14 +710,32 @@ Class Text
 - ***string*** `$key`
 - ***bool*** `$tree`
 
-
 ##### Returns:
 
 - ***null*** | ***string***
 
+---
+
+#### Method: `Text->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `Text->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
 ### Class: ClassNotReadableException \[ `\donatj\MDDoc\Exceptions` \]
 
+
+
 #### Undocumented Method: `ClassNotReadableException->__construct($message, $path [, $previous_exception = null])`
+
 ---
 
 #### Method: `ClassNotReadableException->getPath()`
@@ -579,7 +748,10 @@ Class Text
 
 ### Class: PathNotReadableException \[ `\donatj\MDDoc\Exceptions` \]
 
+
+
 #### Undocumented Method: `PathNotReadableException->__construct($message, $path [, $previous_exception = null])`
+
 ---
 
 #### Method: `PathNotReadableException->getPath()`
@@ -594,6 +766,8 @@ Class Text
 
 Application MDDoc
 
+
+
 #### Undocumented Method: `MDDoc->__construct($args)`
 
 ### Class: TaxonomyReflector \[ `\donatj\MDDoc\Reflectors` \]
@@ -606,8 +780,6 @@ Application MDDoc
 - ***\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface*** `$autoLoader`
 - ***\donatj\MDDoc\Reflectors\TaxonomyReflectorFactory*** `$parserFactory`
 
-
-
 ---
 
 #### Method: `TaxonomyReflector->getData()`
@@ -616,7 +788,6 @@ Application MDDoc
 
 - ***mixed***
 
-
 ---
 
 #### Method: `TaxonomyReflector->getReflector()`
@@ -624,7 +795,6 @@ Application MDDoc
 ##### Returns:
 
 - ***null*** | ***\phpDocumentor\Reflection\InterfaceReflector***
-
 
 ---
 
@@ -643,19 +813,30 @@ Application MDDoc
 - ***mixed*** `$filename`
 - ***\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface*** `$autoLoader`
 
-
 ##### Returns:
 
 - ***\donatj\MDDoc\Reflectors\TaxonomyReflector***
 
 ### Class: ConfigParser \[ `\donatj\MDDoc\Runner` \]
 
+
+
 #### Undocumented Method: `ConfigParser->__construct($filename)`
 
 ### Class: UserInterface \[ `\donatj\MDDoc\Runner` \]
 
-#### Undocumented Method: `UserInterface->__construct($STDOUT, $STDERR)`
-#### Undocumented Method: `UserInterface->dumpOptions($additional)`
-#### Undocumented Method: `UserInterface->dropError($text [, $code = 1 [, $additional = false]])`
-#### Undocumented Method: `UserInterface->outputMsg($text)`
 
+
+#### Undocumented Method: `UserInterface->__construct($STDOUT, $STDERR)`
+
+
+
+#### Undocumented Method: `UserInterface->dumpOptions($additional)`
+
+
+
+#### Undocumented Method: `UserInterface->dropError($text [, $code = 1 [, $additional = false]])`
+
+
+
+#### Undocumented Method: `UserInterface->outputMsg($text)`
