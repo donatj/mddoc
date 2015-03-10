@@ -163,7 +163,12 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 					} else {
 						$i++;
-						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
+//						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
+
+						$subDocument = new DocumentDepth();
+						$document->appendChild($subDocument);
+
+						$subDocument->appendChild(new Header("Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`"));
 					}
 
 					$output .= PHP_EOL;
