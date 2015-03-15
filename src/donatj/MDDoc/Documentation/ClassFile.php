@@ -90,7 +90,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							if( $access->getContent() == 'private' ) {
 								continue;
 							}
-						} elseif( $block->getTagsByName('ignore') || $block->getTagsByName('access') ) {
+						} elseif( $block->getTagsByName('ignore') || $block->getTagsByName('private') ) {
 							continue;
 						}
 
