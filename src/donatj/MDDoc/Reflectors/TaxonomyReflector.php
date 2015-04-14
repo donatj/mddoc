@@ -4,10 +4,11 @@ namespace donatj\MDDoc\Reflectors;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Exceptions\ClassNotReadableException;
-use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 use phpDocumentor\Reflection\ClassReflector;
+use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 use phpDocumentor\Reflection\FileReflector;
 use phpDocumentor\Reflection\InterfaceReflector;
+use phpDocumentor\Reflection\TraitReflector;
 
 class TaxonomyReflector {
 
@@ -45,10 +46,13 @@ class TaxonomyReflector {
 			$this->registerReflectors($interfaces);
 		}
 
-		foreach( $this->fileReflector->getClasses() as $interfaces ) {
-			$this->registerReflectors($interfaces);
+		foreach( $this->fileReflector->getClasses() as $class ) {
+			$this->registerReflectors($class);
 		}
 
+		foreach( $this->fileReflector->getTraits() as $trait ) {
+			$this->registerReflectors($trait);
+		}
 //		$this->fileReflector->getClasses();  -- I don't think this did anything.
 	}
 
@@ -68,12 +72,22 @@ class TaxonomyReflector {
 			$this->data['methods'][$method->getShortName()][] = $method;
 		}
 
-		if( $reflector instanceof ClassReflector ) {
+		if( $reflector instanceof ClassReflector || $reflector instanceof TraitReflector ) {
 			if( $parent = $reflector->getParentClass() ) {
 				$filename = $loader($parent);
 				if( is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->getData());
+				}
+			}
+
+			if( $traits = $reflector->getTraits() ) {
+				foreach( $traits as $trait ) {
+					$filename = $loader($trait);
+					if( is_readable($filename) ) {
+						$parser     = $this->parserFactory->newInstance($filename, $loader);
+						$this->data = array_merge_recursive($this->data, $parser->getData());
+					}
 				}
 			}
 		}
@@ -87,7 +101,6 @@ class TaxonomyReflector {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -110,5 +123,4 @@ class TaxonomyReflector {
 	public function getMethods() {
 		return isset($this->data['methods']) ? $this->data['methods'] : array();
 	}
-
 }
