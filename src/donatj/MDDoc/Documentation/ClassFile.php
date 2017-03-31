@@ -119,6 +119,17 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 //							$output .= PHP_EOL . PHP_EOL;
 						}
 
+						if( $deprecatedBlocks = $block->getTagsByName('deprecated') ) {
+							$deprecatedDoc = new DocumentDepth();
+							$subDocument->appendChild($deprecatedDoc);
+
+							$deprecatedDoc->appendChild(new Header('DEPRECATED'));
+							foreach( $deprecatedBlocks as $deprecatedBlock ) {
+								if( $content = trim($deprecatedBlock->getContent()) ) {
+									$deprecatedDoc->appendChild(new MdText($content));
+								}
+							}
+						}
 
 						/**
 						 * @var $tag \phpDocumentor\Reflection\DocBlock\Tag\ParamTag
