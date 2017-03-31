@@ -2,7 +2,7 @@
 	"name"       : "donatj/mddoc",
 	"require"    : {
 		"ext-dom"                 : "*",
-		"phpdocumentor/reflection": "1.*",
+		"phpdocumentor/reflection": "3.*",
 		"donatj/flags"            : "1.*",
 		"donatj/cli-toolkit"      : "0.*",
 		"donatj/mddom"            : "dev-master"
