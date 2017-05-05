@@ -61,7 +61,7 @@ abstract class AbstractDocPart implements DocumentationInterface {
 
 		$options = (array)$options;
 		foreach( $options as $key ) {
-			if( !isset($data[$key]) ) {
+			if( $this->getOption($key) === null ) {
 				throw new ConfigException(get_called_class() . " requires {$key} attribute.");
 			}
 		}
