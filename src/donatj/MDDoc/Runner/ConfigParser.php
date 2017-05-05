@@ -100,6 +100,9 @@ class ConfigParser {
 					case 'badge-poser':
 						$childDoc = new Documentation\Badges\BadgePoser($attributes, $child_attribute_tree);
 						break;
+					case 'badge-travis':
+						$childDoc = new Documentation\Badges\BadgeTravis($attributes, $child_attribute_tree);
+						break;
 					default:
 						throw new ConfigException("Invalid XML Tag: {$child->nodeName}");
 				}
