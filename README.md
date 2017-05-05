@@ -90,6 +90,15 @@ Class Psr4
 
 ---
 
+#### Method: `AbstractDocPart->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
 #### Method: `AbstractDocPart->getOption($key [, $tree = false])`
 
 ##### Parameters:
@@ -163,6 +172,15 @@ Class Psr4
 
 ---
 
+#### Method: `AbstractNestedDoc->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
 #### Method: `AbstractNestedDoc->getOption($key [, $tree = false])`
 
 ##### Parameters:
@@ -202,6 +220,180 @@ Class Psr4
 
 - ***string***
 
+### Class: Badge \[ `\donatj\MDDoc\Documentation\Badges` \]
+
+#### Method: `Badge->output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+
+
+#### Undocumented Method: `Badge->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `Badge->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `Badge->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: `Badge->getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: `Badge->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `Badge->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: BadgePoser \[ `\donatj\MDDoc\Documentation\Badges` \]
+
+#### Method: `BadgePoser->output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+
+
+#### Undocumented Method: `BadgePoser->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `BadgePoser->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `BadgePoser->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: `BadgePoser->getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: `BadgePoser->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `BadgePoser->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: BadgeTravis \[ `\donatj\MDDoc\Documentation\Badges` \]
+
+#### Method: `BadgeTravis->output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+
+
+#### Undocumented Method: `BadgeTravis->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `BadgeTravis->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `BadgeTravis->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: `BadgeTravis->getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: `BadgeTravis->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `BadgeTravis->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
 ### Class: ClassFile \[ `\donatj\MDDoc\Documentation` \]
 
 #### Method: `ClassFile->output($depth)`
@@ -228,6 +420,15 @@ Class Psr4
 
 ---
 
+#### Method: `ClassFile->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
 #### Method: `ClassFile->getOption($key [, $tree = false])`
 
 ##### Parameters:
@@ -250,6 +451,122 @@ Class Psr4
 ---
 
 #### Method: `ClassFile->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: ComposerInstall \[ `\donatj\MDDoc\Documentation` \]
+
+#### Method: `ComposerInstall->output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+
+
+#### Undocumented Method: `ComposerInstall->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `ComposerInstall->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `ComposerInstall->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: `ComposerInstall->getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: `ComposerInstall->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `ComposerInstall->getParent()`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: ComposerRequires \[ `\donatj\MDDoc\Documentation` \]
+
+#### Method: `ComposerRequires->output($depth)`
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+
+
+#### Undocumented Method: `ComposerRequires->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `ComposerRequires->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `ComposerRequires->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: `ComposerRequires->getOption($key [, $tree = false])`
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: `ComposerRequires->setParent($parent)`
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `ComposerRequires->getParent()`
 
 ##### Returns:
 
@@ -298,6 +615,15 @@ Class Psr4
 
 
 #### Undocumented Method: `DocPage->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `DocPage->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
 
 ---
 
@@ -374,6 +700,15 @@ Class Psr4
 
 ---
 
+#### Method: `DocRoot->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
 #### Method: `DocRoot->getOption($key [, $tree = false])`
 
 ##### Parameters:
@@ -420,6 +755,15 @@ Class Psr4
 
 
 #### Undocumented Method: `IncludeFile->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `IncludeFile->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
 
 ---
 
@@ -526,6 +870,15 @@ Class Psr4
 
 ---
 
+#### Method: `RecursiveDirectory->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
 #### Method: `RecursiveDirectory->getOption($key [, $tree = false])`
 
 ##### Parameters:
@@ -599,6 +952,15 @@ Class Psr4
 
 ---
 
+#### Method: `Section->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
 #### Method: `Section->getOption($key [, $tree = false])`
 
 ##### Parameters:
@@ -647,6 +1009,15 @@ Class Source
 
 
 #### Undocumented Method: `Source->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `Source->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
 
 ---
 
@@ -700,6 +1071,15 @@ Class Text
 
 
 #### Undocumented Method: `Text->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `Text->setOptionDefault($key, $value)`
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
 
 ---
 
