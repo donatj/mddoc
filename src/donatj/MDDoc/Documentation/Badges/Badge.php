@@ -19,7 +19,7 @@ class Badge extends AbstractDocPart {
 		if( $href = $this->getOption(self::OPT_HREF) ) {
 			$out = new Anchor($href,
 				$img->exportMarkdown(),
-				$this->getOption(self::OPT_HREF) ?: '');
+				$this->getOption(self::OPT_TITLE) ?: '');
 		} else {
 			$out = $img;
 		}

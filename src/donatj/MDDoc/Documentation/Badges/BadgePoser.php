@@ -6,7 +6,8 @@ use donatj\MDDoc\Exceptions\ConfigException;
 
 class BadgePoser extends Badge {
 
-	const URL_BASE = 'https://poser.pugx.org/';
+	const URL_POSER_BASE     = 'https://poser.pugx.org/';
+	const URL_PACKAGIST_BASE = 'https://packagist.org/packages/';
 
 	const OPT_SUFFIX = 'suffix';
 
@@ -63,7 +64,8 @@ class BadgePoser extends Badge {
 			$this->getOption('name');
 		}
 
-		$this->setOptionDefault(self::OPT_SRC, self::URL_BASE . $name . $this->badges[$type][self::OPT_SUFFIX]);
+		$this->setOptionDefault(self::OPT_SRC, self::URL_POSER_BASE . $name . $this->badges[$type][self::OPT_SUFFIX]);
+		$this->setOptionDefault(self::OPT_HREF, self::URL_PACKAGIST_BASE . $name);
 		$this->setOptionDefault(self::OPT_ALT, $this->badges[$type][self::OPT_ALT]);
 
 		parent::init();
