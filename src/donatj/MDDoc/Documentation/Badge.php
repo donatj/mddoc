@@ -11,12 +11,14 @@ class Badge extends AbstractDocPart {
 		$img = new Image($this->getOption('src'), $this->getOption('alt'));
 
 		if( $href = $this->getOption('href') ) {
-			return new Anchor($href,
+			$out = new Anchor($href,
 				$img->exportMarkdown(),
 				$this->getOption('title') ?: '');
 		} else {
-			return $img;
+			$out = $img;
 		}
+
+		return $out->exportMarkdown() . "\n";
 	}
 
 	protected function init() {
