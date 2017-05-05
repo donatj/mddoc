@@ -95,7 +95,7 @@ class ConfigParser {
 						$childDoc = new Documentation\ComposerRequires($attributes, $child_attribute_tree);
 						break;
 					case 'badge':
-						$childDoc = new Documentation\Badge($attributes, $child_attribute_tree);
+						$childDoc = new Documentation\Badges\Badge($attributes, $child_attribute_tree);
 						break;
 					default:
 						throw new ConfigException("Invalid XML Tag: {$child->nodeName}");
