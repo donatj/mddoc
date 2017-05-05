@@ -7,6 +7,7 @@ use donatj\MDDoc\Exceptions\ConfigException;
 
 abstract class AbstractDocPart implements DocumentationInterface {
 
+	protected $defaults = [];
 	protected $options;
 	protected $treeOptions;
 
@@ -29,14 +30,24 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	}
 
 	/**
+	 * @param $key string
+	 * @param $value mixed
+	 */
+	public function setOptionDefault( $key, $value ) {
+		$this->defaults[$key] = $value;
+	}
+
+	/**
 	 * @param string $key
 	 * @param bool   $tree
 	 * @return null|string
 	 */
 	public function getOption( $key, $tree = false ) {
 		$data = $tree ? $this->treeOptions : $this->options;
+		$val  = isset($data[$key]) ? $data[$key] :
+			(isset($this->defaults[$key]) ? $this->defaults[$key] : null);
 
-		return isset($data[$key]) ? $data[$key] : null;
+		return $val;
 	}
 
 	/**
