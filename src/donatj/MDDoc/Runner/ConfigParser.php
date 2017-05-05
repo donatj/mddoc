@@ -4,16 +4,8 @@ namespace donatj\MDDoc\Runner;
 use donatj\MDDoc\Autoloaders\NullLoader;
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Autoloaders\Psr4;
-use donatj\MDDoc\Documentation\AbstractNestedDoc;
-use donatj\MDDoc\Documentation\ClassFile;
-use donatj\MDDoc\Documentation\DocPage;
-use donatj\MDDoc\Documentation\DocRoot;
-use donatj\MDDoc\Documentation\IncludeFile;
+use donatj\MDDoc\Documentation;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
-use donatj\MDDoc\Documentation\RecursiveDirectory;
-use donatj\MDDoc\Documentation\Section;
-use donatj\MDDoc\Documentation\Source;
-use donatj\MDDoc\Documentation\Text;
 use donatj\MDDoc\Exceptions\ConfigException;
 
 class ConfigParser {
@@ -30,9 +22,11 @@ class ConfigParser {
 		}
 
 		$root = $dom->firstChild;
+		if(!$root instanceof \DOMElement) {
+			throw new \RuntimeException('Needs a DOM element');
+		}
 
-		$docRoot = new DocRoot(array(), array());
-
+		$docRoot = new Documentation\DocRoot(array(), array());
 		if( $root->nodeName == 'mddoc' ) {
 			$this->loadChildren($root, $docRoot);
 		} else {
@@ -46,7 +40,7 @@ class ConfigParser {
 		$docRoot->output();
 	}
 
-	private function loadChildren( \DOMElement $node, AbstractNestedDoc &$parent, array $tree_extra = array(), $attribute_tree = array() ) {
+	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc &$parent, array $tree_extra = array(), $attribute_tree = array() ) {
 
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
 			switch( strtolower($sel_loader) ) {
@@ -74,25 +68,31 @@ class ConfigParser {
 
 				switch( strtolower($child->nodeName) ) {
 					case 'section':
-						$childDoc = new Section($attributes, $child_attribute_tree);
+						$childDoc = new Documentation\Section($attributes, $child_attribute_tree);
 						break;
 					case 'docpage';
-						$childDoc = new DocPage($attributes, $child_attribute_tree);
+						$childDoc = new Documentation\DocPage($attributes, $child_attribute_tree);
 						break;
 					case 'text':
-						$childDoc = new Text($attributes, $child_attribute_tree, $child->textContent);
+						$childDoc = new Documentation\Text($attributes, $child_attribute_tree, $child->textContent);
 						break;
 					case 'file';
-						$childDoc = new ClassFile($attributes, $child_attribute_tree);
+						$childDoc = new Documentation\ClassFile($attributes, $child_attribute_tree);
 						break;
 					case 'recursivedirectory':
-						$childDoc = new RecursiveDirectory($attributes, $child_attribute_tree);
+						$childDoc = new Documentation\RecursiveDirectory($attributes, $child_attribute_tree);
 						break;
 					case 'include':
-						$childDoc = new IncludeFile($attributes, $child_attribute_tree);
+						$childDoc = new Documentation\IncludeFile($attributes, $child_attribute_tree);
 						break;
 					case 'source':
-						$childDoc = new Source($attributes, $child_attribute_tree, $child->textContent);
+						$childDoc = new Documentation\Source($attributes, $child_attribute_tree, $child->textContent);
+						break;
+					case 'composer-install':
+						$childDoc = new Documentation\ComposerInstall($attributes, $child_attribute_tree);
+						break;
+					case 'composer-requires':
+						$childDoc = new Documentation\ComposerRequires($attributes, $child_attribute_tree);
 						break;
 					default:
 						throw new ConfigException("Invalid XML Tag: {$child->nodeName}");
@@ -105,7 +105,7 @@ class ConfigParser {
 					$childDoc->setAutoloader($tree_extra['autoloader']);
 				}
 
-				if( $child->hasChildNodes() && $childDoc instanceof AbstractNestedDoc ) {
+				if( $child->hasChildNodes() && $childDoc instanceof Documentation\AbstractNestedDoc ) {
 					$this->loadChildren($child, $childDoc, $tree_extra, $child_attribute_tree);
 				}
 
