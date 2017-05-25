@@ -47,22 +47,23 @@ class BadgePoser extends Badge {
 
 		$type = $this->getOption('type');
 		if( empty($this->badges[$type]) ) {
-			throw new ConfigException('Invalid poser type');
+			throw new ConfigException('Invalid Poser badge type');
 		}
 
 		$file = 'composer.json';
-		$name = false;
-		if( is_readable($file) ) {
+		$name = $this->getOption('name');
+		if( !$name && is_readable($file) ) {
 			$data   = file_get_contents($file);
 			$parsed = @json_decode($data, true);
 			if( !empty($parsed['name']) && is_string($parsed['name']) ) {
 				$name = $parsed['name'];
 			}
 		}
-		if( !$name ) {
-			$this->requireOptions('name');
-			$this->getOption('name');
+		if( $name ) {
+			$this->setOptionDefault('name', $name);
 		}
+
+		$this->requireOptions('name');
 
 		$this->setOptionDefault(self::OPT_SRC, self::URL_POSER_BASE . $name . $this->badges[$type][self::OPT_SUFFIX]);
 		$this->setOptionDefault(self::OPT_HREF, self::URL_PACKAGIST_BASE . $name);
