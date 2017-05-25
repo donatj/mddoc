@@ -6,6 +6,7 @@ use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use donatj\MDDom\Code;
+use donatj\MDDom\CodeBlock;
 use donatj\MDDom\DocumentDepth;
 use donatj\MDDom\Header;
 use donatj\MDDom\HorizontalRule;
@@ -111,7 +112,11 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 
 						$subDocument->appendChild(
-							new Header('Method: ', new Code($class->getShortName() . "{$operator}{$name}({$args})"))
+							new Header('Method: ', new Code($class->getShortName() . "{$operator}{$name}"))
+						);
+
+						$subDocument->appendChild(
+							new CodeBlock( "function {$name}({$args})", 'php')
 						);
 
 						if( $methodDescr = $block->getShortDescription() ) {

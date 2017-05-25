@@ -11,7 +11,11 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ### Class: AutoloaderInterface \[ `\donatj\MDDoc\Autoloaders\Interfaces` \]
 
-#### Method: `AutoloaderInterface->__invoke($className)`
+#### Method: `AutoloaderInterface->__invoke`
+
+```php
+function __invoke($className)
+```
 
 ##### Parameters:
 
@@ -23,7 +27,11 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ### Class: NullLoader \[ `\donatj\MDDoc\Autoloaders` \]
 
-#### Method: `NullLoader->__invoke($className)`
+#### Method: `NullLoader->__invoke`
+
+```php
+function __invoke($className)
+```
 
 ##### Parameters:
 
@@ -37,7 +45,11 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 Class Psr0
 
-#### Method: `Psr0->__construct($path)`
+#### Method: `Psr0->__construct`
+
+```php
+function __construct($path)
+```
 
 ##### Parameters:
 
@@ -45,7 +57,11 @@ Class Psr0
 
 ---
 
-#### Method: `Psr0->__invoke($class)`
+#### Method: `Psr0->__invoke`
+
+```php
+function __invoke($class)
+```
 
 ##### Parameters:
 
@@ -59,7 +75,11 @@ Class Psr0
 
 Class Psr4
 
-#### Method: `Psr4->__construct($root_namespace, $path)`
+#### Method: `Psr4->__construct`
+
+```php
+function __construct($root_namespace, $path)
+```
 
 ##### Parameters:
 
@@ -68,7 +88,11 @@ Class Psr4
 
 ---
 
-#### Method: `Psr4->__invoke($class)`
+#### Method: `Psr4->__invoke`
+
+```php
+function __invoke($class)
+```
 
 ##### Parameters:
 
@@ -90,7 +114,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractDocPart->setOptionDefault($key, $value)`
+#### Method: `AbstractDocPart->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -99,7 +127,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractDocPart->getOption($key [, $tree = false])`
+#### Method: `AbstractDocPart->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -112,7 +144,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractDocPart->setParent($parent)`
+#### Method: `AbstractDocPart->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -120,7 +156,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractDocPart->getParent()`
+#### Method: `AbstractDocPart->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -128,7 +168,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractDocPart->output($depth)`
+#### Method: `AbstractDocPart->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -140,7 +184,11 @@ Class Psr4
 
 ### Class: AbstractNestedDoc \[ `\donatj\MDDoc\Documentation` \]
 
-#### Method: `AbstractNestedDoc->getChildren()`
+#### Method: `AbstractNestedDoc->getChildren`
+
+```php
+function getChildren()
+```
 
 ##### Returns:
 
@@ -148,7 +196,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractNestedDoc->setChildren($children)`
+#### Method: `AbstractNestedDoc->setChildren`
+
+```php
+function setChildren($children)
+```
 
 ##### Parameters:
 
@@ -156,7 +208,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractNestedDoc->addChild($child)`
+#### Method: `AbstractNestedDoc->addChild`
+
+```php
+function addChild($child)
+```
 
 ##### Parameters:
 
@@ -172,7 +228,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractNestedDoc->setOptionDefault($key, $value)`
+#### Method: `AbstractNestedDoc->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -181,7 +241,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractNestedDoc->getOption($key [, $tree = false])`
+#### Method: `AbstractNestedDoc->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -194,7 +258,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractNestedDoc->setParent($parent)`
+#### Method: `AbstractNestedDoc->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -202,7 +270,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractNestedDoc->getParent()`
+#### Method: `AbstractNestedDoc->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -210,7 +282,11 @@ Class Psr4
 
 ---
 
-#### Method: `AbstractNestedDoc->output($depth)`
+#### Method: `AbstractNestedDoc->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -222,7 +298,11 @@ Class Psr4
 
 ### Class: Badge \[ `\donatj\MDDoc\Documentation\Badges` \]
 
-#### Method: `Badge->output($depth)`
+#### Method: `Badge->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -242,7 +322,11 @@ Class Psr4
 
 ---
 
-#### Method: `Badge->setOptionDefault($key, $value)`
+#### Method: `Badge->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -251,7 +335,11 @@ Class Psr4
 
 ---
 
-#### Method: `Badge->getOption($key [, $tree = false])`
+#### Method: `Badge->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -264,7 +352,11 @@ Class Psr4
 
 ---
 
-#### Method: `Badge->setParent($parent)`
+#### Method: `Badge->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -272,7 +364,11 @@ Class Psr4
 
 ---
 
-#### Method: `Badge->getParent()`
+#### Method: `Badge->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -280,7 +376,11 @@ Class Psr4
 
 ### Class: BadgePoser \[ `\donatj\MDDoc\Documentation\Badges` \]
 
-#### Method: `BadgePoser->output($depth)`
+#### Method: `BadgePoser->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -300,7 +400,11 @@ Class Psr4
 
 ---
 
-#### Method: `BadgePoser->setOptionDefault($key, $value)`
+#### Method: `BadgePoser->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -309,7 +413,11 @@ Class Psr4
 
 ---
 
-#### Method: `BadgePoser->getOption($key [, $tree = false])`
+#### Method: `BadgePoser->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -322,7 +430,11 @@ Class Psr4
 
 ---
 
-#### Method: `BadgePoser->setParent($parent)`
+#### Method: `BadgePoser->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -330,7 +442,89 @@ Class Psr4
 
 ---
 
-#### Method: `BadgePoser->getParent()`
+#### Method: `BadgePoser->getParent`
+
+```php
+function getParent()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: BadgeScrutinizer \[ `\donatj\MDDoc\Documentation\Badges` \]
+
+#### Method: `BadgeScrutinizer->output`
+
+```php
+function output($depth)
+```
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+
+
+#### Undocumented Method: `BadgeScrutinizer->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `BadgeScrutinizer->setOptions($options, $tree_options)`
+
+---
+
+#### Method: `BadgeScrutinizer->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: `BadgeScrutinizer->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: `BadgeScrutinizer->setParent`
+
+```php
+function setParent($parent)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: `BadgeScrutinizer->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -338,7 +532,11 @@ Class Psr4
 
 ### Class: BadgeTravis \[ `\donatj\MDDoc\Documentation\Badges` \]
 
-#### Method: `BadgeTravis->output($depth)`
+#### Method: `BadgeTravis->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -358,7 +556,11 @@ Class Psr4
 
 ---
 
-#### Method: `BadgeTravis->setOptionDefault($key, $value)`
+#### Method: `BadgeTravis->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -367,7 +569,11 @@ Class Psr4
 
 ---
 
-#### Method: `BadgeTravis->getOption($key [, $tree = false])`
+#### Method: `BadgeTravis->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -380,7 +586,11 @@ Class Psr4
 
 ---
 
-#### Method: `BadgeTravis->setParent($parent)`
+#### Method: `BadgeTravis->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -388,7 +598,11 @@ Class Psr4
 
 ---
 
-#### Method: `BadgeTravis->getParent()`
+#### Method: `BadgeTravis->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -396,7 +610,11 @@ Class Psr4
 
 ### Class: ClassFile \[ `\donatj\MDDoc\Documentation` \]
 
-#### Method: `ClassFile->output($depth)`
+#### Method: `ClassFile->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -420,7 +638,11 @@ Class Psr4
 
 ---
 
-#### Method: `ClassFile->setOptionDefault($key, $value)`
+#### Method: `ClassFile->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -429,7 +651,11 @@ Class Psr4
 
 ---
 
-#### Method: `ClassFile->getOption($key [, $tree = false])`
+#### Method: `ClassFile->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -442,7 +668,11 @@ Class Psr4
 
 ---
 
-#### Method: `ClassFile->setParent($parent)`
+#### Method: `ClassFile->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -450,7 +680,11 @@ Class Psr4
 
 ---
 
-#### Method: `ClassFile->getParent()`
+#### Method: `ClassFile->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -458,7 +692,11 @@ Class Psr4
 
 ### Class: ComposerInstall \[ `\donatj\MDDoc\Documentation` \]
 
-#### Method: `ComposerInstall->output($depth)`
+#### Method: `ComposerInstall->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -478,7 +716,11 @@ Class Psr4
 
 ---
 
-#### Method: `ComposerInstall->setOptionDefault($key, $value)`
+#### Method: `ComposerInstall->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -487,7 +729,11 @@ Class Psr4
 
 ---
 
-#### Method: `ComposerInstall->getOption($key [, $tree = false])`
+#### Method: `ComposerInstall->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -500,7 +746,11 @@ Class Psr4
 
 ---
 
-#### Method: `ComposerInstall->setParent($parent)`
+#### Method: `ComposerInstall->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -508,7 +758,11 @@ Class Psr4
 
 ---
 
-#### Method: `ComposerInstall->getParent()`
+#### Method: `ComposerInstall->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -516,7 +770,11 @@ Class Psr4
 
 ### Class: ComposerRequires \[ `\donatj\MDDoc\Documentation` \]
 
-#### Method: `ComposerRequires->output($depth)`
+#### Method: `ComposerRequires->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -536,7 +794,11 @@ Class Psr4
 
 ---
 
-#### Method: `ComposerRequires->setOptionDefault($key, $value)`
+#### Method: `ComposerRequires->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -545,7 +807,11 @@ Class Psr4
 
 ---
 
-#### Method: `ComposerRequires->getOption($key [, $tree = false])`
+#### Method: `ComposerRequires->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -558,7 +824,11 @@ Class Psr4
 
 ---
 
-#### Method: `ComposerRequires->setParent($parent)`
+#### Method: `ComposerRequires->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -566,7 +836,11 @@ Class Psr4
 
 ---
 
-#### Method: `ComposerRequires->getParent()`
+#### Method: `ComposerRequires->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -574,7 +848,11 @@ Class Psr4
 
 ### Class: DocPage \[ `\donatj\MDDoc\Documentation` \]
 
-#### Method: `DocPage->output($depth)`
+#### Method: `DocPage->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -586,7 +864,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocPage->getChildren()`
+#### Method: `DocPage->getChildren`
+
+```php
+function getChildren()
+```
 
 ##### Returns:
 
@@ -594,7 +876,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocPage->setChildren($children)`
+#### Method: `DocPage->setChildren`
+
+```php
+function setChildren($children)
+```
 
 ##### Parameters:
 
@@ -602,7 +888,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocPage->addChild($child)`
+#### Method: `DocPage->addChild`
+
+```php
+function addChild($child)
+```
 
 ##### Parameters:
 
@@ -618,7 +908,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocPage->setOptionDefault($key, $value)`
+#### Method: `DocPage->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -627,7 +921,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocPage->getOption($key [, $tree = false])`
+#### Method: `DocPage->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -640,7 +938,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocPage->setParent($parent)`
+#### Method: `DocPage->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -648,7 +950,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocPage->getParent()`
+#### Method: `DocPage->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -656,7 +962,11 @@ Class Psr4
 
 ### Class: DocRoot \[ `\donatj\MDDoc\Documentation` \]
 
-#### Method: `DocRoot->output($depth)`
+#### Method: `DocRoot->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -668,7 +978,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocRoot->getChildren()`
+#### Method: `DocRoot->getChildren`
+
+```php
+function getChildren()
+```
 
 ##### Returns:
 
@@ -676,7 +990,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocRoot->setChildren($children)`
+#### Method: `DocRoot->setChildren`
+
+```php
+function setChildren($children)
+```
 
 ##### Parameters:
 
@@ -684,7 +1002,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocRoot->addChild($child)`
+#### Method: `DocRoot->addChild`
+
+```php
+function addChild($child)
+```
 
 ##### Parameters:
 
@@ -700,7 +1022,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocRoot->setOptionDefault($key, $value)`
+#### Method: `DocRoot->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -709,7 +1035,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocRoot->getOption($key [, $tree = false])`
+#### Method: `DocRoot->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -722,7 +1052,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocRoot->setParent($parent)`
+#### Method: `DocRoot->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -730,7 +1064,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocRoot->getParent()`
+#### Method: `DocRoot->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -738,7 +1076,11 @@ Class Psr4
 
 ### Class: IncludeFile \[ `\donatj\MDDoc\Documentation` \]
 
-#### Method: `IncludeFile->output($depth)`
+#### Method: `IncludeFile->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -758,7 +1100,11 @@ Class Psr4
 
 ---
 
-#### Method: `IncludeFile->setOptionDefault($key, $value)`
+#### Method: `IncludeFile->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -767,7 +1113,11 @@ Class Psr4
 
 ---
 
-#### Method: `IncludeFile->getOption($key [, $tree = false])`
+#### Method: `IncludeFile->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -780,7 +1130,11 @@ Class Psr4
 
 ---
 
-#### Method: `IncludeFile->setParent($parent)`
+#### Method: `IncludeFile->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -788,7 +1142,11 @@ Class Psr4
 
 ---
 
-#### Method: `IncludeFile->getParent()`
+#### Method: `IncludeFile->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -808,7 +1166,11 @@ Class Psr4
 
 ---
 
-#### Method: `DocumentationInterface->output($depth)`
+#### Method: `DocumentationInterface->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -826,7 +1188,11 @@ Class Psr4
 
 ---
 
-#### Method: `RecursiveDirectory->output($depth)`
+#### Method: `RecursiveDirectory->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -838,7 +1204,11 @@ Class Psr4
 
 ---
 
-#### Method: `RecursiveDirectory->getChildren()`
+#### Method: `RecursiveDirectory->getChildren`
+
+```php
+function getChildren()
+```
 
 ##### Returns:
 
@@ -846,7 +1216,11 @@ Class Psr4
 
 ---
 
-#### Method: `RecursiveDirectory->setChildren($children)`
+#### Method: `RecursiveDirectory->setChildren`
+
+```php
+function setChildren($children)
+```
 
 ##### Parameters:
 
@@ -854,7 +1228,11 @@ Class Psr4
 
 ---
 
-#### Method: `RecursiveDirectory->addChild($child)`
+#### Method: `RecursiveDirectory->addChild`
+
+```php
+function addChild($child)
+```
 
 ##### Parameters:
 
@@ -870,7 +1248,11 @@ Class Psr4
 
 ---
 
-#### Method: `RecursiveDirectory->setOptionDefault($key, $value)`
+#### Method: `RecursiveDirectory->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -879,7 +1261,11 @@ Class Psr4
 
 ---
 
-#### Method: `RecursiveDirectory->getOption($key [, $tree = false])`
+#### Method: `RecursiveDirectory->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -892,7 +1278,11 @@ Class Psr4
 
 ---
 
-#### Method: `RecursiveDirectory->setParent($parent)`
+#### Method: `RecursiveDirectory->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -900,7 +1290,11 @@ Class Psr4
 
 ---
 
-#### Method: `RecursiveDirectory->getParent()`
+#### Method: `RecursiveDirectory->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -908,7 +1302,11 @@ Class Psr4
 
 ### Class: Section \[ `\donatj\MDDoc\Documentation` \]
 
-#### Method: `Section->output($depth)`
+#### Method: `Section->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -920,7 +1318,11 @@ Class Psr4
 
 ---
 
-#### Method: `Section->getChildren()`
+#### Method: `Section->getChildren`
+
+```php
+function getChildren()
+```
 
 ##### Returns:
 
@@ -928,7 +1330,11 @@ Class Psr4
 
 ---
 
-#### Method: `Section->setChildren($children)`
+#### Method: `Section->setChildren`
+
+```php
+function setChildren($children)
+```
 
 ##### Parameters:
 
@@ -936,7 +1342,11 @@ Class Psr4
 
 ---
 
-#### Method: `Section->addChild($child)`
+#### Method: `Section->addChild`
+
+```php
+function addChild($child)
+```
 
 ##### Parameters:
 
@@ -952,7 +1362,11 @@ Class Psr4
 
 ---
 
-#### Method: `Section->setOptionDefault($key, $value)`
+#### Method: `Section->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -961,7 +1375,11 @@ Class Psr4
 
 ---
 
-#### Method: `Section->getOption($key [, $tree = false])`
+#### Method: `Section->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -974,7 +1392,11 @@ Class Psr4
 
 ---
 
-#### Method: `Section->setParent($parent)`
+#### Method: `Section->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -982,7 +1404,11 @@ Class Psr4
 
 ---
 
-#### Method: `Section->getParent()`
+#### Method: `Section->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -992,7 +1418,11 @@ Class Psr4
 
 Class Source
 
-#### Method: `Source->output($depth)`
+#### Method: `Source->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -1012,7 +1442,11 @@ Class Source
 
 ---
 
-#### Method: `Source->setOptionDefault($key, $value)`
+#### Method: `Source->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -1021,7 +1455,11 @@ Class Source
 
 ---
 
-#### Method: `Source->getOption($key [, $tree = false])`
+#### Method: `Source->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -1034,7 +1472,11 @@ Class Source
 
 ---
 
-#### Method: `Source->setParent($parent)`
+#### Method: `Source->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -1042,7 +1484,11 @@ Class Source
 
 ---
 
-#### Method: `Source->getParent()`
+#### Method: `Source->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -1058,7 +1504,11 @@ Class Text
 
 ---
 
-#### Method: `Text->output($depth)`
+#### Method: `Text->output`
+
+```php
+function output($depth)
+```
 
 ##### Parameters:
 
@@ -1074,7 +1524,11 @@ Class Text
 
 ---
 
-#### Method: `Text->setOptionDefault($key, $value)`
+#### Method: `Text->setOptionDefault`
+
+```php
+function setOptionDefault($key, $value)
+```
 
 ##### Parameters:
 
@@ -1083,7 +1537,11 @@ Class Text
 
 ---
 
-#### Method: `Text->getOption($key [, $tree = false])`
+#### Method: `Text->getOption`
+
+```php
+function getOption($key [, $tree = false])
+```
 
 ##### Parameters:
 
@@ -1096,7 +1554,11 @@ Class Text
 
 ---
 
-#### Method: `Text->setParent($parent)`
+#### Method: `Text->setParent`
+
+```php
+function setParent($parent)
+```
 
 ##### Parameters:
 
@@ -1104,7 +1566,11 @@ Class Text
 
 ---
 
-#### Method: `Text->getParent()`
+#### Method: `Text->getParent`
+
+```php
+function getParent()
+```
 
 ##### Returns:
 
@@ -1118,7 +1584,11 @@ Class Text
 
 ---
 
-#### Method: `ClassNotReadableException->getPath()`
+#### Method: `ClassNotReadableException->getPath`
+
+```php
+function getPath()
+```
 
 ##### Returns:
 
@@ -1134,7 +1604,11 @@ Class Text
 
 ---
 
-#### Method: `PathNotReadableException->getPath()`
+#### Method: `PathNotReadableException->getPath`
+
+```php
+function getPath()
+```
 
 ##### Returns:
 
@@ -1152,7 +1626,11 @@ Application MDDoc
 
 ### Class: TaxonomyReflector \[ `\donatj\MDDoc\Reflectors` \]
 
-#### Method: `TaxonomyReflector->__construct($filename, $autoLoader, $parserFactory)`
+#### Method: `TaxonomyReflector->__construct`
+
+```php
+function __construct($filename, $autoLoader, $parserFactory)
+```
 
 ##### Parameters:
 
@@ -1162,7 +1640,11 @@ Application MDDoc
 
 ---
 
-#### Method: `TaxonomyReflector->getData()`
+#### Method: `TaxonomyReflector->getData`
+
+```php
+function getData()
+```
 
 ##### Returns:
 
@@ -1170,7 +1652,11 @@ Application MDDoc
 
 ---
 
-#### Method: `TaxonomyReflector->getReflector()`
+#### Method: `TaxonomyReflector->getReflector`
+
+```php
+function getReflector()
+```
 
 ##### Returns:
 
@@ -1178,7 +1664,11 @@ Application MDDoc
 
 ---
 
-#### Method: `TaxonomyReflector->getMethods()`
+#### Method: `TaxonomyReflector->getMethods`
+
+```php
+function getMethods()
+```
 
 ##### Returns:
 
@@ -1186,7 +1676,11 @@ Application MDDoc
 
 ### Class: TaxonomyReflectorFactory \[ `\donatj\MDDoc\Reflectors` \]
 
-#### Method: `TaxonomyReflectorFactory->newInstance($filename, $autoLoader)`
+#### Method: `TaxonomyReflectorFactory->newInstance`
+
+```php
+function newInstance($filename, $autoLoader)
+```
 
 ##### Parameters:
 
