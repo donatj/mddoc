@@ -72,6 +72,10 @@ class TaxonomyReflector {
 			$this->data['methods'][$method->getShortName()][] = $method;
 		}
 
+		foreach( $reflector->getConstants() as $constant ) {
+			$this->data['constants'][$constant->getShortName()][] = $constant;
+		}
+
 		if( $reflector instanceof ClassReflector || $reflector instanceof TraitReflector ) {
 			if( $parent = $reflector->getParentClass() ) {
 				$filename = $loader($parent);
@@ -122,5 +126,12 @@ class TaxonomyReflector {
 	 */
 	public function getMethods() {
 		return isset($this->data['methods']) ? $this->data['methods'] : array();
+	}
+
+	/**
+	 * @return \phpDocumentor\Reflection\ClassReflector\ConstantReflector[][]
+	 */
+	public function getConstants(){
+		return isset($this->data['constants']) ? $this->data['constants'] : array();
 	}
 }

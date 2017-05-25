@@ -13,6 +13,7 @@ use donatj\MDDom\HorizontalRule;
 use donatj\MDDom\Paragraph;
 use donatj\MDDom\Text as MdText;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
+use phpDocumentor\Reflection\DocBlock;
 
 class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
@@ -39,21 +40,49 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		$factory = new TaxonomyReflectorFactory();
 
 		$reflector = $factory->newInstance($filename, $this->autoloader);
-
-		$methodData = $reflector->getMethods();
 		if( $class = $reflector->getReflector() ) {
 
 			if( !$this->getOption('skip-class-header', true) ) {
-//				$output .= str_repeat('#', $depth + 1) . ' Class: ' . $class->getShortName() . ' \\[ `\\' . $class->getNamespace() . '` \\]';
-				$document->appendChild(new Header('Class: ' . $class->getShortName() . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]'));
-//				$output .= PHP_EOL . PHP_EOL;
+				$document->appendChild(new Header('Class: ' . $class->getName() /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
 
 				if( $classBlock = $class->getDocBlock() ) {
+					if($this->shouldSkip($classBlock)) {
+						return '';
+					}
 					$document->appendChild(new Paragraph($classBlock->getText()));
-//					$output .= $classBlock->getText();
-//					$output .= PHP_EOL . PHP_EOL;
 				}
 			}
+
+			if($class->getParentInterfaces()) {
+				drop($class->getParentInterfaces());
+			}
+
+			$classInner   = "<?php\n";
+
+			if($ns = $class->getNamespace()) {
+				$classInner .= "namespace {$class->getNamespace()};\n\n";
+			}
+
+			$classInner .= "class {$class->getShortName()} {\n";
+			$constantData = $reflector->getConstants();
+			foreach( $constantData as $key => $constants ) {
+				/** @var \phpDocumentor\Reflection\ClassReflector\ConstantReflector $constant */
+				$constant = reset($constants);
+				if( $constantBlock = $constant->getDocBlock() ) {
+					if( $this->shouldSkip($constantBlock) ) {
+						continue;
+					}
+					$classInner .= "\n\t/**\n\t * " . implode("\n\t * ", explode("\n", $constantBlock->getText())) . "\n\t */\n";
+				}
+				$classInner .= "\tconst {$constant->getName()} = {$constant->getValue()};\n";
+			}
+			$classInner .= '}';
+
+			if( $constantData ) {
+				$document->appendChild(new CodeBlock($classInner, 'php'));
+			}
+
+			$methodData = $reflector->getMethods();
 
 			$i = 0;
 			foreach( $methodData as $methods ) {
@@ -82,16 +111,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					 * @var $block \phpDocumentor\Reflection\DocBlock
 					 */
 					if( $block ) {
-						if( $access = $block->getTagsByName('access') ) {
-							$access = reset($access);
-							/**
-							 * @var $access \phpDocumentor\Reflection\DocBlock\Tag
-							 */
-
-							if( $access->getContent() == 'private' ) {
-								continue;
-							}
-						} elseif( $block->getTagsByName('ignore') || $block->getTagsByName('private') ) {
+						if( $this->shouldSkip($block) ) {
 							continue;
 						}
 
@@ -116,12 +136,12 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						);
 
 						$subDocument->appendChild(
-							new CodeBlock( "function {$name}({$args})", 'php')
+							new CodeBlock("function {$name}({$args})", 'php')
 						);
 
 						if( $methodDescr = $block->getShortDescription() ) {
 							$subDocument->appendChild($this->descriptionFormat($block->getShortDescription(), $block->getLongDescription()->getContents()));
-//							$output .= PHP_EOL . PHP_EOL;
+							//							$output .= PHP_EOL . PHP_EOL;
 						}
 
 						if( $deprecatedBlocks = $block->getTagsByName('deprecated') ) {
@@ -179,7 +199,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 					} else {
 						$i++;
-//						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
+						//						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
 
 						$subDocument = new DocumentDepth();
 						$document->appendChild($subDocument);
@@ -193,6 +213,23 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		}
 
 		return $document;
+	}
+
+	private function shouldSkip( DocBlock $block){
+		if( $access = $block->getTagsByName('access') ) {
+			$access = reset($access);
+			/**
+			 * @var $access \phpDocumentor\Reflection\DocBlock\Tag
+			 */
+
+			if( $access->getContent() == 'private' ) {
+				return true;
+			}
+		} elseif( $block->getTagsByName('ignore') || $block->getTagsByName('private') ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	private function getArgumentString( MethodReflector $method ) {
