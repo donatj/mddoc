@@ -1,4 +1,5 @@
 <?php
+
 namespace donatj\MDDoc\Runner;
 
 use donatj\MDDoc\Autoloaders\NullLoader;
@@ -22,7 +23,7 @@ class ConfigParser {
 		}
 
 		$root = $dom->firstChild;
-		if(!$root instanceof \DOMElement) {
+		if( !$root instanceof \DOMElement ) {
 			throw new \RuntimeException('Needs a DOM element');
 		}
 
@@ -56,7 +57,7 @@ class ConfigParser {
 				default:
 					throw new ConfigException("Unrecognized autoloader: {$sel_loader}");
 			}
-		}elseif( !isset($tree_extra['autoloader']) ){
+		} elseif( !isset($tree_extra['autoloader']) ) {
 			$tree_extra['autoloader'] = new NullLoader();
 		}
 
@@ -103,6 +104,9 @@ class ConfigParser {
 					case 'badge-travis':
 						$childDoc = new Documentation\Badges\BadgeTravis($attributes, $child_attribute_tree);
 						break;
+					case 'badge-scrutinizer':
+						$childDoc = new Documentation\Badges\BadgeScrutinizer($attributes, $child_attribute_tree);
+						break;
 					default:
 						throw new ConfigException("Invalid XML Tag: {$child->nodeName}");
 				}
@@ -117,11 +121,8 @@ class ConfigParser {
 				if( $child->hasChildNodes() && $childDoc instanceof Documentation\AbstractNestedDoc ) {
 					$this->loadChildren($child, $childDoc, $tree_extra, $child_attribute_tree);
 				}
-
 			}
-
 		}
-
 	}
 
 	private function requireAttr( \DOMElement $node, $attribute ) {
@@ -144,6 +145,6 @@ class ConfigParser {
 	}
 
 	private function optionalAttr( \DOMElement $node, $attribute ) {
-		return $node->getAttribute($attribute) ? : null;
+		return $node->getAttribute($attribute) ?: null;
 	}
 }
