@@ -5,7 +5,6 @@ namespace donatj\MDDoc\Documentation;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
-use donatj\MDDom\Code;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\DocumentDepth;
 use donatj\MDDom\Header;
@@ -46,39 +45,75 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 				$document->appendChild(new Header('Class: ' . $class->getName() /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
 
 				if( $classBlock = $class->getDocBlock() ) {
-					if($this->shouldSkip($classBlock)) {
+					if( $this->shouldSkip($classBlock) ) {
 						return '';
 					}
 					$document->appendChild(new Paragraph($classBlock->getText()));
 				}
 			}
 
-			if($class->getParentInterfaces()) {
-				drop($class->getParentInterfaces());
-			}
+			$showClassPreview = false;
 
-			$classInner   = "<?php\n";
+			$classInner = "<?php\n";
 
-			if($ns = $class->getNamespace()) {
+			if( $ns = $class->getNamespace() ) {
 				$classInner .= "namespace {$class->getNamespace()};\n\n";
 			}
 
-			$classInner .= "class {$class->getShortName()} {\n";
+			$classInner   .= "class {$class->getShortName()} {\n";
 			$constantData = $reflector->getConstants();
-			foreach( $constantData as $key => $constants ) {
+			foreach( $constantData as $constants ) {
 				/** @var \phpDocumentor\Reflection\ClassReflector\ConstantReflector $constant */
 				$constant = reset($constants);
 				if( $constantBlock = $constant->getDocBlock() ) {
 					if( $this->shouldSkip($constantBlock) ) {
 						continue;
 					}
-					$classInner .= "\n\t/**\n\t * " . implode("\n\t * ", explode("\n", $constantBlock->getText())) . "\n\t */\n";
+					$classInner .= "\t/**\n\t * " . implode("\n\t * ", explode("\n", $constantBlock->getText())) . "\n\t */\n";
 				}
-				$classInner .= "\tconst {$constant->getName()} = {$constant->getValue()};\n";
+				$classInner       .= "\tconst {$constant->getName()} = {$constant->getValue()};\n";
+				$showClassPreview = true;
 			}
+
+			$propertyData = $reflector->getProperties();
+			foreach( $propertyData as $properties ) {
+				/** @var \phpDocumentor\Reflection\ClassReflector\PropertyReflector $property */
+				$property = reset($properties);
+				if( $property->getVisibility() == 'public' ) {
+					if( $propertyBlock = $property->getDocBlock() ) {
+						if( $this->shouldSkip($propertyBlock) ) {
+							continue;
+						}
+
+						if( $propertyBlock->getText() ) {
+							$classInner .= "\t/**\n\t * " . implode("\n\t * ", explode("\n", $propertyBlock->getText()));
+						} else {
+							$classInner .= "\t/**";
+						}
+
+						if( $vars = $propertyBlock->getTagsByName('var') ) {
+							/** @var \phpDocumentor\Reflection\DocBlock\Tag $var */
+							$var        = reset($vars);
+							$classInner .= "\n\t * @var {$var->getContent()}";
+						}
+
+						$classInner .= "\n\t */\n";
+					}
+					$static     = $property->isStatic() ? 'static ' : '';
+					$classInner .= "\tpublic {$static}{$property->getName()}";
+					if( $property->getDefault() ) {
+						$classInner .= " = {$property->getDefault()}";
+					}
+					$classInner .= ";\n";
+
+					$showClassPreview = true;
+				}
+			}
+
+
 			$classInner .= '}';
 
-			if( $constantData ) {
+			if( $showClassPreview ) {
 				$document->appendChild(new CodeBlock($classInner, 'php'));
 			}
 
@@ -132,7 +167,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 
 						$subDocument->appendChild(
-							new Header('Method: ', new Code($class->getShortName() . "{$operator}{$name}"))
+							new Header("Method: {$class->getShortName()}{$operator}{$name}")
 						);
 
 						$subDocument->appendChild(
@@ -179,7 +214,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							}
 
 							$paramDoc->appendChild($output);
-
 							$output .= PHP_EOL . PHP_EOL;
 						}
 
@@ -215,14 +249,13 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return $document;
 	}
 
-	private function shouldSkip( DocBlock $block){
+	private function shouldSkip( DocBlock $block ) {
 		if( $access = $block->getTagsByName('access') ) {
 			$access = reset($access);
 			/**
 			 * @var $access \phpDocumentor\Reflection\DocBlock\Tag
 			 */
-
-			if( $access->getContent() == 'private' ) {
+			if( $access->getContent() != 'public' ) {
 				return true;
 			}
 		} elseif( $block->getTagsByName('ignore') || $block->getTagsByName('private') ) {
