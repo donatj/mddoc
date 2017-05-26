@@ -9,25 +9,9 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ## Documentation Example (WIP)
 
-### Class: AutoloaderInterface \[ `\donatj\MDDoc\Autoloaders\Interfaces` \]
+### Class: \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
 
-#### Method: `AutoloaderInterface->__invoke`
-
-```php
-function __invoke($className)
-```
-
-##### Parameters:
-
-- ***mixed*** `$className`
-
-##### Returns:
-
-- ***string*** | ***null***
-
-### Class: NullLoader \[ `\donatj\MDDoc\Autoloaders` \]
-
-#### Method: `NullLoader->__invoke`
+#### Method: AutoloaderInterface->__invoke
 
 ```php
 function __invoke($className)
@@ -41,11 +25,27 @@ function __invoke($className)
 
 - ***string*** | ***null***
 
-### Class: Psr0 \[ `\donatj\MDDoc\Autoloaders` \]
+### Class: \donatj\MDDoc\Autoloaders\NullLoader
+
+#### Method: NullLoader->__invoke
+
+```php
+function __invoke($className)
+```
+
+##### Parameters:
+
+- ***mixed*** `$className`
+
+##### Returns:
+
+- ***string*** | ***null***
+
+### Class: \donatj\MDDoc\Autoloaders\Psr0
 
 Class Psr0
 
-#### Method: `Psr0->__construct`
+#### Method: Psr0->__construct
 
 ```php
 function __construct($path)
@@ -57,7 +57,7 @@ function __construct($path)
 
 ---
 
-#### Method: `Psr0->__invoke`
+#### Method: Psr0->__invoke
 
 ```php
 function __invoke($class)
@@ -71,11 +71,11 @@ function __invoke($class)
 
 - ***bool*** | ***string***
 
-### Class: Psr4 \[ `\donatj\MDDoc\Autoloaders` \]
+### Class: \donatj\MDDoc\Autoloaders\Psr4
 
 Class Psr4
 
-#### Method: `Psr4->__construct`
+#### Method: Psr4->__construct
 
 ```php
 function __construct($root_namespace, $path)
@@ -88,7 +88,7 @@ function __construct($root_namespace, $path)
 
 ---
 
-#### Method: `Psr4->__invoke`
+#### Method: Psr4->__invoke
 
 ```php
 function __invoke($class)
@@ -102,7 +102,7 @@ function __invoke($class)
 
 - ***bool*** | ***null***
 
-### Class: AbstractDocPart \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\AbstractDocPart
 
 
 
@@ -114,7 +114,7 @@ function __invoke($class)
 
 ---
 
-#### Method: `AbstractDocPart->setOptionDefault`
+#### Method: AbstractDocPart->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -127,7 +127,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `AbstractDocPart->getOption`
+#### Method: AbstractDocPart->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -144,7 +144,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `AbstractDocPart->setParent`
+#### Method: AbstractDocPart->setParent
 
 ```php
 function setParent($parent)
@@ -156,7 +156,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `AbstractDocPart->getParent`
+#### Method: AbstractDocPart->getParent
 
 ```php
 function getParent()
@@ -168,7 +168,7 @@ function getParent()
 
 ---
 
-#### Method: `AbstractDocPart->output`
+#### Method: AbstractDocPart->output
 
 ```php
 function output($depth)
@@ -182,9 +182,9 @@ function output($depth)
 
 - ***string***
 
-### Class: AbstractNestedDoc \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\AbstractNestedDoc
 
-#### Method: `AbstractNestedDoc->getChildren`
+#### Method: AbstractNestedDoc->getChildren
 
 ```php
 function getChildren()
@@ -196,7 +196,7 @@ function getChildren()
 
 ---
 
-#### Method: `AbstractNestedDoc->setChildren`
+#### Method: AbstractNestedDoc->setChildren
 
 ```php
 function setChildren($children)
@@ -208,7 +208,7 @@ function setChildren($children)
 
 ---
 
-#### Method: `AbstractNestedDoc->addChild`
+#### Method: AbstractNestedDoc->addChild
 
 ```php
 function addChild($child)
@@ -228,7 +228,7 @@ function addChild($child)
 
 ---
 
-#### Method: `AbstractNestedDoc->setOptionDefault`
+#### Method: AbstractNestedDoc->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -241,7 +241,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `AbstractNestedDoc->getOption`
+#### Method: AbstractNestedDoc->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -258,7 +258,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `AbstractNestedDoc->setParent`
+#### Method: AbstractNestedDoc->setParent
 
 ```php
 function setParent($parent)
@@ -270,7 +270,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `AbstractNestedDoc->getParent`
+#### Method: AbstractNestedDoc->getParent
 
 ```php
 function getParent()
@@ -282,7 +282,7 @@ function getParent()
 
 ---
 
-#### Method: `AbstractNestedDoc->output`
+#### Method: AbstractNestedDoc->output
 
 ```php
 function output($depth)
@@ -296,9 +296,21 @@ function output($depth)
 
 - ***string***
 
-### Class: Badge \[ `\donatj\MDDoc\Documentation\Badges` \]
+### Class: \donatj\MDDoc\Documentation\Badges\Badge
 
-#### Method: `Badge->output`
+```php
+<?php
+namespace donatj\MDDoc\Documentation\Badges;
+
+class Badge {
+	const OPT_ALT = 'alt';
+	const OPT_SRC = 'src';
+	const OPT_HREF = 'href';
+	const OPT_TITLE = 'title';
+}
+```
+
+#### Method: Badge->output
 
 ```php
 function output($depth)
@@ -322,7 +334,7 @@ function output($depth)
 
 ---
 
-#### Method: `Badge->setOptionDefault`
+#### Method: Badge->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -335,7 +347,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `Badge->getOption`
+#### Method: Badge->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -352,7 +364,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `Badge->setParent`
+#### Method: Badge->setParent
 
 ```php
 function setParent($parent)
@@ -364,7 +376,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `Badge->getParent`
+#### Method: Badge->getParent
 
 ```php
 function getParent()
@@ -374,9 +386,24 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: BadgePoser \[ `\donatj\MDDoc\Documentation\Badges` \]
+### Class: \donatj\MDDoc\Documentation\Badges\BadgePoser
 
-#### Method: `BadgePoser->output`
+```php
+<?php
+namespace donatj\MDDoc\Documentation\Badges;
+
+class BadgePoser {
+	const URL_POSER_BASE = 'https://poser.pugx.org/';
+	const URL_PACKAGIST_BASE = 'https://packagist.org/packages/';
+	const OPT_SUFFIX = 'suffix';
+	const OPT_ALT = 'alt';
+	const OPT_SRC = 'src';
+	const OPT_HREF = 'href';
+	const OPT_TITLE = 'title';
+}
+```
+
+#### Method: BadgePoser->output
 
 ```php
 function output($depth)
@@ -400,7 +427,7 @@ function output($depth)
 
 ---
 
-#### Method: `BadgePoser->setOptionDefault`
+#### Method: BadgePoser->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -413,7 +440,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `BadgePoser->getOption`
+#### Method: BadgePoser->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -430,7 +457,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `BadgePoser->setParent`
+#### Method: BadgePoser->setParent
 
 ```php
 function setParent($parent)
@@ -442,7 +469,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `BadgePoser->getParent`
+#### Method: BadgePoser->getParent
 
 ```php
 function getParent()
@@ -452,9 +479,24 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: BadgeScrutinizer \[ `\donatj\MDDoc\Documentation\Badges` \]
+### Class: \donatj\MDDoc\Documentation\Badges\BadgeScrutinizer
 
-#### Method: `BadgeScrutinizer->output`
+```php
+<?php
+namespace donatj\MDDoc\Documentation\Badges;
+
+class BadgeScrutinizer {
+	const URL_SCRUTINIZER_BASE = 'https://scrutinizer-ci.com/g/';
+	const OPT_SUFFIX = 'suffix';
+	const OPT_BRANCH = 'branch';
+	const OPT_ALT = 'alt';
+	const OPT_SRC = 'src';
+	const OPT_HREF = 'href';
+	const OPT_TITLE = 'title';
+}
+```
+
+#### Method: BadgeScrutinizer->output
 
 ```php
 function output($depth)
@@ -478,7 +520,7 @@ function output($depth)
 
 ---
 
-#### Method: `BadgeScrutinizer->setOptionDefault`
+#### Method: BadgeScrutinizer->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -491,7 +533,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `BadgeScrutinizer->getOption`
+#### Method: BadgeScrutinizer->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -508,7 +550,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `BadgeScrutinizer->setParent`
+#### Method: BadgeScrutinizer->setParent
 
 ```php
 function setParent($parent)
@@ -520,7 +562,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `BadgeScrutinizer->getParent`
+#### Method: BadgeScrutinizer->getParent
 
 ```php
 function getParent()
@@ -530,9 +572,23 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: BadgeTravis \[ `\donatj\MDDoc\Documentation\Badges` \]
+### Class: \donatj\MDDoc\Documentation\Badges\BadgeTravis
 
-#### Method: `BadgeTravis->output`
+```php
+<?php
+namespace donatj\MDDoc\Documentation\Badges;
+
+class BadgeTravis {
+	const URL_TRAVIS_BASE = 'https://travis-ci.org/';
+	const OPT_BRANCH = 'branch';
+	const OPT_ALT = 'alt';
+	const OPT_SRC = 'src';
+	const OPT_HREF = 'href';
+	const OPT_TITLE = 'title';
+}
+```
+
+#### Method: BadgeTravis->output
 
 ```php
 function output($depth)
@@ -556,7 +612,7 @@ function output($depth)
 
 ---
 
-#### Method: `BadgeTravis->setOptionDefault`
+#### Method: BadgeTravis->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -569,7 +625,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `BadgeTravis->getOption`
+#### Method: BadgeTravis->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -586,7 +642,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `BadgeTravis->setParent`
+#### Method: BadgeTravis->setParent
 
 ```php
 function setParent($parent)
@@ -598,7 +654,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `BadgeTravis->getParent`
+#### Method: BadgeTravis->getParent
 
 ```php
 function getParent()
@@ -608,9 +664,9 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: ClassFile \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\ClassFile
 
-#### Method: `ClassFile->output`
+#### Method: ClassFile->output
 
 ```php
 function output($depth)
@@ -638,7 +694,7 @@ function output($depth)
 
 ---
 
-#### Method: `ClassFile->setOptionDefault`
+#### Method: ClassFile->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -651,7 +707,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `ClassFile->getOption`
+#### Method: ClassFile->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -668,7 +724,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `ClassFile->setParent`
+#### Method: ClassFile->setParent
 
 ```php
 function setParent($parent)
@@ -680,7 +736,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `ClassFile->getParent`
+#### Method: ClassFile->getParent
 
 ```php
 function getParent()
@@ -690,9 +746,9 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: ComposerInstall \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\ComposerInstall
 
-#### Method: `ComposerInstall->output`
+#### Method: ComposerInstall->output
 
 ```php
 function output($depth)
@@ -716,7 +772,7 @@ function output($depth)
 
 ---
 
-#### Method: `ComposerInstall->setOptionDefault`
+#### Method: ComposerInstall->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -729,7 +785,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `ComposerInstall->getOption`
+#### Method: ComposerInstall->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -746,7 +802,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `ComposerInstall->setParent`
+#### Method: ComposerInstall->setParent
 
 ```php
 function setParent($parent)
@@ -758,7 +814,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `ComposerInstall->getParent`
+#### Method: ComposerInstall->getParent
 
 ```php
 function getParent()
@@ -768,9 +824,9 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: ComposerRequires \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\ComposerRequires
 
-#### Method: `ComposerRequires->output`
+#### Method: ComposerRequires->output
 
 ```php
 function output($depth)
@@ -794,7 +850,7 @@ function output($depth)
 
 ---
 
-#### Method: `ComposerRequires->setOptionDefault`
+#### Method: ComposerRequires->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -807,7 +863,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `ComposerRequires->getOption`
+#### Method: ComposerRequires->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -824,7 +880,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `ComposerRequires->setParent`
+#### Method: ComposerRequires->setParent
 
 ```php
 function setParent($parent)
@@ -836,7 +892,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `ComposerRequires->getParent`
+#### Method: ComposerRequires->getParent
 
 ```php
 function getParent()
@@ -846,9 +902,9 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: DocPage \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\DocPage
 
-#### Method: `DocPage->output`
+#### Method: DocPage->output
 
 ```php
 function output($depth)
@@ -864,7 +920,7 @@ function output($depth)
 
 ---
 
-#### Method: `DocPage->getChildren`
+#### Method: DocPage->getChildren
 
 ```php
 function getChildren()
@@ -876,7 +932,7 @@ function getChildren()
 
 ---
 
-#### Method: `DocPage->setChildren`
+#### Method: DocPage->setChildren
 
 ```php
 function setChildren($children)
@@ -888,7 +944,7 @@ function setChildren($children)
 
 ---
 
-#### Method: `DocPage->addChild`
+#### Method: DocPage->addChild
 
 ```php
 function addChild($child)
@@ -908,7 +964,7 @@ function addChild($child)
 
 ---
 
-#### Method: `DocPage->setOptionDefault`
+#### Method: DocPage->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -921,7 +977,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `DocPage->getOption`
+#### Method: DocPage->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -938,7 +994,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `DocPage->setParent`
+#### Method: DocPage->setParent
 
 ```php
 function setParent($parent)
@@ -950,7 +1006,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `DocPage->getParent`
+#### Method: DocPage->getParent
 
 ```php
 function getParent()
@@ -960,9 +1016,9 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: DocRoot \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\DocRoot
 
-#### Method: `DocRoot->output`
+#### Method: DocRoot->output
 
 ```php
 function output($depth)
@@ -978,7 +1034,7 @@ function output($depth)
 
 ---
 
-#### Method: `DocRoot->getChildren`
+#### Method: DocRoot->getChildren
 
 ```php
 function getChildren()
@@ -990,7 +1046,7 @@ function getChildren()
 
 ---
 
-#### Method: `DocRoot->setChildren`
+#### Method: DocRoot->setChildren
 
 ```php
 function setChildren($children)
@@ -1002,7 +1058,7 @@ function setChildren($children)
 
 ---
 
-#### Method: `DocRoot->addChild`
+#### Method: DocRoot->addChild
 
 ```php
 function addChild($child)
@@ -1022,7 +1078,7 @@ function addChild($child)
 
 ---
 
-#### Method: `DocRoot->setOptionDefault`
+#### Method: DocRoot->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -1035,7 +1091,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `DocRoot->getOption`
+#### Method: DocRoot->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -1052,7 +1108,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `DocRoot->setParent`
+#### Method: DocRoot->setParent
 
 ```php
 function setParent($parent)
@@ -1064,7 +1120,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `DocRoot->getParent`
+#### Method: DocRoot->getParent
 
 ```php
 function getParent()
@@ -1074,9 +1130,9 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: IncludeFile \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\IncludeFile
 
-#### Method: `IncludeFile->output`
+#### Method: IncludeFile->output
 
 ```php
 function output($depth)
@@ -1100,7 +1156,7 @@ function output($depth)
 
 ---
 
-#### Method: `IncludeFile->setOptionDefault`
+#### Method: IncludeFile->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -1113,7 +1169,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `IncludeFile->getOption`
+#### Method: IncludeFile->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -1130,7 +1186,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `IncludeFile->setParent`
+#### Method: IncludeFile->setParent
 
 ```php
 function setParent($parent)
@@ -1142,7 +1198,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `IncludeFile->getParent`
+#### Method: IncludeFile->getParent
 
 ```php
 function getParent()
@@ -1152,13 +1208,13 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: AutoloaderAware \[ `\donatj\MDDoc\Documentation\Interfaces` \]
+### Class: \donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
 
 
 
 #### Undocumented Method: `AutoloaderAware->setAutoloader($autoloader)`
 
-### Class: DocumentationInterface \[ `\donatj\MDDoc\Documentation\Interfaces` \]
+### Class: \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
 
 
 
@@ -1166,7 +1222,7 @@ function getParent()
 
 ---
 
-#### Method: `DocumentationInterface->output`
+#### Method: DocumentationInterface->output
 
 ```php
 function output($depth)
@@ -1180,7 +1236,7 @@ function output($depth)
 
 - ***string***
 
-### Class: RecursiveDirectory \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\RecursiveDirectory
 
 
 
@@ -1188,7 +1244,7 @@ function output($depth)
 
 ---
 
-#### Method: `RecursiveDirectory->output`
+#### Method: RecursiveDirectory->output
 
 ```php
 function output($depth)
@@ -1204,7 +1260,7 @@ function output($depth)
 
 ---
 
-#### Method: `RecursiveDirectory->getChildren`
+#### Method: RecursiveDirectory->getChildren
 
 ```php
 function getChildren()
@@ -1216,7 +1272,7 @@ function getChildren()
 
 ---
 
-#### Method: `RecursiveDirectory->setChildren`
+#### Method: RecursiveDirectory->setChildren
 
 ```php
 function setChildren($children)
@@ -1228,7 +1284,7 @@ function setChildren($children)
 
 ---
 
-#### Method: `RecursiveDirectory->addChild`
+#### Method: RecursiveDirectory->addChild
 
 ```php
 function addChild($child)
@@ -1248,7 +1304,7 @@ function addChild($child)
 
 ---
 
-#### Method: `RecursiveDirectory->setOptionDefault`
+#### Method: RecursiveDirectory->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -1261,7 +1317,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `RecursiveDirectory->getOption`
+#### Method: RecursiveDirectory->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -1278,7 +1334,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `RecursiveDirectory->setParent`
+#### Method: RecursiveDirectory->setParent
 
 ```php
 function setParent($parent)
@@ -1290,7 +1346,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `RecursiveDirectory->getParent`
+#### Method: RecursiveDirectory->getParent
 
 ```php
 function getParent()
@@ -1300,9 +1356,9 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: Section \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\Section
 
-#### Method: `Section->output`
+#### Method: Section->output
 
 ```php
 function output($depth)
@@ -1318,7 +1374,7 @@ function output($depth)
 
 ---
 
-#### Method: `Section->getChildren`
+#### Method: Section->getChildren
 
 ```php
 function getChildren()
@@ -1330,7 +1386,7 @@ function getChildren()
 
 ---
 
-#### Method: `Section->setChildren`
+#### Method: Section->setChildren
 
 ```php
 function setChildren($children)
@@ -1342,7 +1398,7 @@ function setChildren($children)
 
 ---
 
-#### Method: `Section->addChild`
+#### Method: Section->addChild
 
 ```php
 function addChild($child)
@@ -1362,7 +1418,7 @@ function addChild($child)
 
 ---
 
-#### Method: `Section->setOptionDefault`
+#### Method: Section->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -1375,7 +1431,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `Section->getOption`
+#### Method: Section->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -1392,7 +1448,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `Section->setParent`
+#### Method: Section->setParent
 
 ```php
 function setParent($parent)
@@ -1404,7 +1460,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `Section->getParent`
+#### Method: Section->getParent
 
 ```php
 function getParent()
@@ -1414,11 +1470,11 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: Source \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\Source
 
 Class Source
 
-#### Method: `Source->output`
+#### Method: Source->output
 
 ```php
 function output($depth)
@@ -1442,7 +1498,7 @@ function output($depth)
 
 ---
 
-#### Method: `Source->setOptionDefault`
+#### Method: Source->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -1455,7 +1511,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `Source->getOption`
+#### Method: Source->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -1472,7 +1528,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `Source->setParent`
+#### Method: Source->setParent
 
 ```php
 function setParent($parent)
@@ -1484,7 +1540,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `Source->getParent`
+#### Method: Source->getParent
 
 ```php
 function getParent()
@@ -1494,7 +1550,7 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: Text \[ `\donatj\MDDoc\Documentation` \]
+### Class: \donatj\MDDoc\Documentation\Text
 
 Class Text
 
@@ -1504,7 +1560,7 @@ Class Text
 
 ---
 
-#### Method: `Text->output`
+#### Method: Text->output
 
 ```php
 function output($depth)
@@ -1524,7 +1580,7 @@ function output($depth)
 
 ---
 
-#### Method: `Text->setOptionDefault`
+#### Method: Text->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -1537,7 +1593,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: `Text->getOption`
+#### Method: Text->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -1554,7 +1610,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: `Text->setParent`
+#### Method: Text->setParent
 
 ```php
 function setParent($parent)
@@ -1566,7 +1622,7 @@ function setParent($parent)
 
 ---
 
-#### Method: `Text->getParent`
+#### Method: Text->getParent
 
 ```php
 function getParent()
@@ -1576,7 +1632,7 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: ClassNotReadableException \[ `\donatj\MDDoc\Exceptions` \]
+### Class: \donatj\MDDoc\Exceptions\ClassNotReadableException
 
 
 
@@ -1584,7 +1640,7 @@ function getParent()
 
 ---
 
-#### Method: `ClassNotReadableException->getPath`
+#### Method: ClassNotReadableException->getPath
 
 ```php
 function getPath()
@@ -1594,9 +1650,9 @@ function getPath()
 
 - ***mixed***
 
-### Class: ConfigException \[ `\donatj\MDDoc\Exceptions` \]
+### Class: \donatj\MDDoc\Exceptions\ConfigException
 
-### Class: PathNotReadableException \[ `\donatj\MDDoc\Exceptions` \]
+### Class: \donatj\MDDoc\Exceptions\PathNotReadableException
 
 
 
@@ -1604,7 +1660,7 @@ function getPath()
 
 ---
 
-#### Method: `PathNotReadableException->getPath`
+#### Method: PathNotReadableException->getPath
 
 ```php
 function getPath()
@@ -1614,19 +1670,29 @@ function getPath()
 
 - ***mixed***
 
-### Class: TargetNotWritableException \[ `\donatj\MDDoc\Exceptions` \]
+### Class: \donatj\MDDoc\Exceptions\TargetNotWritableException
 
-### Class: MDDoc \[ `\donatj\MDDoc` \]
+### Class: \donatj\MDDoc\MDDoc
 
 Application MDDoc
+
+```php
+<?php
+namespace donatj\MDDoc;
+
+class MDDoc {
+	const VERSION = "0.0.1a";
+	const CONFIG_FILE = "mddoc.xml";
+}
+```
 
 
 
 #### Undocumented Method: `MDDoc->__construct($args)`
 
-### Class: TaxonomyReflector \[ `\donatj\MDDoc\Reflectors` \]
+### Class: \donatj\MDDoc\Reflectors\TaxonomyReflector
 
-#### Method: `TaxonomyReflector->__construct`
+#### Method: TaxonomyReflector->__construct
 
 ```php
 function __construct($filename, $autoLoader, $parserFactory)
@@ -1640,7 +1706,7 @@ function __construct($filename, $autoLoader, $parserFactory)
 
 ---
 
-#### Method: `TaxonomyReflector->getData`
+#### Method: TaxonomyReflector->getData
 
 ```php
 function getData()
@@ -1652,7 +1718,7 @@ function getData()
 
 ---
 
-#### Method: `TaxonomyReflector->getReflector`
+#### Method: TaxonomyReflector->getReflector
 
 ```php
 function getReflector()
@@ -1664,7 +1730,7 @@ function getReflector()
 
 ---
 
-#### Method: `TaxonomyReflector->getMethods`
+#### Method: TaxonomyReflector->getMethods
 
 ```php
 function getMethods()
@@ -1674,9 +1740,33 @@ function getMethods()
 
 - ***\phpDocumentor\Reflection\ClassReflector\MethodReflector[][]***
 
-### Class: TaxonomyReflectorFactory \[ `\donatj\MDDoc\Reflectors` \]
+---
 
-#### Method: `TaxonomyReflectorFactory->newInstance`
+#### Method: TaxonomyReflector->getConstants
+
+```php
+function getConstants()
+```
+
+##### Returns:
+
+- ***\phpDocumentor\Reflection\ClassReflector\ConstantReflector[][]***
+
+---
+
+#### Method: TaxonomyReflector->getProperties
+
+```php
+function getProperties()
+```
+
+##### Returns:
+
+- ***\phpDocumentor\Reflection\ClassReflector\PropertyReflector[][]***
+
+### Class: \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory
+
+#### Method: TaxonomyReflectorFactory->newInstance
 
 ```php
 function newInstance($filename, $autoLoader)
@@ -1691,13 +1781,13 @@ function newInstance($filename, $autoLoader)
 
 - ***\donatj\MDDoc\Reflectors\TaxonomyReflector***
 
-### Class: ConfigParser \[ `\donatj\MDDoc\Runner` \]
+### Class: \donatj\MDDoc\Runner\ConfigParser
 
 
 
 #### Undocumented Method: `ConfigParser->__construct($filename)`
 
-### Class: UserInterface \[ `\donatj\MDDoc\Runner` \]
+### Class: \donatj\MDDoc\Runner\UserInterface
 
 
 
