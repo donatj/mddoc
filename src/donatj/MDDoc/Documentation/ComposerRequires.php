@@ -19,7 +19,7 @@ class ComposerRequires extends AbstractDocPart {
 
 		$para = new Paragraph();
 		foreach( $parsed['require'] as $field => $version ) {
-			$para->appendChild(new \donatj\MDDom\Text("- **$field**: $version"));
+			$para->appendChild(new \donatj\MDDom\Text("- **$field**: $version\n"));
 		}
 
 		return $para;

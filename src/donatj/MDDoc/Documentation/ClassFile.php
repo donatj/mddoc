@@ -70,9 +70,9 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						continue;
 					}
 					$constParts = explode("\n", trim($constantBlock->getText()));
-					if(count($constParts) > 1) {
+					if( count($constParts) > 1 ) {
 						$classInner .= "\t/**\n\t * " . implode("\n\t * ", explode("\n", $constantBlock->getText())) . "\n\t */\n";
-					}elseif(count($constParts) == 1) {
+					} elseif( count($constParts) == 1 ) {
 						$classInner .= "\t/** " . reset($constParts) . " */\n";
 					}
 				}
