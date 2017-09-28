@@ -136,22 +136,22 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					$name = $method->getShortName();
 					$args = $this->getArgumentString($method);
 
-					$block = false;
+					/** @var \phpDocumentor\Reflection\DocBlock[] $blocks */
+					$blocks = [];
 
 					/**
 					 * @var $subMethod \phpDocumentor\Reflection\ClassReflector\MethodReflector
 					 */
 					foreach( $methods as $subMethod ) {
 						if( $block = $subMethod->getDocBlock() ) {
-							break;
+							$blocks[] = $block;
 						}
 					}
 
-					/**
-					 * @var $block \phpDocumentor\Reflection\DocBlock
-					 */
-					if( $block ) {
-						if( $this->shouldSkip($block) ) {
+					$firstBlock = reset($blocks);
+
+					if( $firstBlock ) {
+						if( $this->shouldSkip($firstBlock) ) {
 							continue;
 						}
 
@@ -179,12 +179,13 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							new CodeBlock("function {$name}({$args})", 'php')
 						);
 
-						if( $methodDescr = $block->getShortDescription() ) {
-							$subDocument->appendChild($this->descriptionFormat($block->getShortDescription(), $block->getLongDescription()->getContents()));
-							//							$output .= PHP_EOL . PHP_EOL;
+						foreach( $blocks as $block ) {
+							if( $block->getShortDescription() ) {
+								$subDocument->appendChild($this->descriptionFormat($block->getShortDescription(), $block->getLongDescription()->getContents()));
+							}
 						}
 
-						if( $deprecatedBlocks = $block->getTagsByName('deprecated') ) {
+						if( $deprecatedBlocks = $firstBlock->getTagsByName('deprecated') ) {
 							$deprecatedDoc = new DocumentDepth();
 							$subDocument->appendChild($deprecatedDoc);
 
@@ -199,7 +200,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						/**
 						 * @var $tag \phpDocumentor\Reflection\DocBlock\Tag\ParamTag
 						 */
-						if( $methodParams = $block->getTagsByName('param') ) {
+						if( $methodParams = $firstBlock->getTagsByName('param') ) {
 
 							$paramDoc = new DocumentDepth();
 							$subDocument->appendChild($paramDoc);
@@ -207,7 +208,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							$paramDoc->appendChild(new Header('Parameters:'));
 
 							$output = '';
-							foreach( $block->getTagsByName('param') as $tag ) {
+							foreach( $firstBlock->getTagsByName('param') as $tag ) {
 
 								$output .= '- ' . $this->formatType($tag->getType()) . ' `' . $tag->getVariableName() . '`';
 
@@ -227,7 +228,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						 * @var $return \phpDocumentor\Reflection\DocBlock\Tag\ReturnTag
 						 */
 						if( !$this->getOption('skip-method-returns', true) ) {
-							if( $return = current($block->getTagsByName('return')) ) {
+							if( $return = current($firstBlock->getTagsByName('return')) ) {
 								$returnDoc = new DocumentDepth();
 								$subDocument->appendChild($returnDoc);
 
