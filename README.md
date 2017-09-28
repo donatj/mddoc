@@ -1,5 +1,11 @@
 # MDDoc
 
+[![Latest Stable Version](https://poser.pugx.org/donatj/mddoc/version)](https://packagist.org/packages/donatj/mddoc)
+[![Total Downloads](https://poser.pugx.org/donatj/mddoc/downloads)](https://packagist.org/packages/donatj/mddoc)
+[![License](https://poser.pugx.org/donatj/mddoc/license)](https://packagist.org/packages/donatj/mddoc)
+[![Build Status](https://travis-ci.org/donatj/Pushover-PHP.svg?branch=master)](https://travis-ci.org/donatj/Pushover-PHP)
+
+
 A simple, directed phpDoc => Markdown generator.
 
 This is a work in progress and not ready for use.
@@ -9,98 +15,215 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ## Documentation Example (WIP)
 
-### Class: \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
+### Class: \donatj\MDDoc\MDDoc
 
-#### Method: AutoloaderInterface->__invoke
+Application MDDoc
 
 ```php
-function __invoke($className)
+<?php
+namespace donatj\MDDoc;
+
+class MDDoc {
+	const VERSION = "0.0.1a";
+	const CONFIG_FILE = "mddoc.xml";
+}
+```
+
+
+
+#### Undocumented Method: `MDDoc->__construct($args)`
+
+### Class: \donatj\MDDoc\Documentation\DocPage
+
+#### Method: DocPage->output
+
+```php
+function output($depth)
 ```
 
 ##### Parameters:
 
-- ***mixed*** `$className`
+- ***int*** `$depth`
 
 ##### Returns:
 
-- ***string*** | ***null***
-
-### Class: \donatj\MDDoc\Autoloaders\NullLoader
-
-#### Method: NullLoader->__invoke
-
-```php
-function __invoke($className)
-```
-
-##### Parameters:
-
-- ***mixed*** `$className`
-
-##### Returns:
-
-- ***string*** | ***null***
-
-### Class: \donatj\MDDoc\Autoloaders\Psr0
-
-Class Psr0
-
-#### Method: Psr0->__construct
-
-```php
-function __construct($path)
-```
-
-##### Parameters:
-
-- ***string*** `$path` - Root path
+- ***string***
 
 ---
 
-#### Method: Psr0->__invoke
+#### Method: DocPage->getChildren
 
 ```php
-function __invoke($class)
+function getChildren()
 ```
-
-##### Parameters:
-
-- ***mixed*** `$class`
 
 ##### Returns:
 
-- ***bool*** | ***string***
-
-### Class: \donatj\MDDoc\Autoloaders\Psr4
-
-Class Psr4
-
-#### Method: Psr4->__construct
-
-```php
-function __construct($root_namespace, $path)
-```
-
-##### Parameters:
-
-- ***string*** `$root_namespace` - Namespace prefix
-- ***string*** `$path` - Root path
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
 ---
 
-#### Method: Psr4->__invoke
+#### Method: DocPage->setChildren
 
 ```php
-function __invoke($class)
+function setChildren($children)
 ```
 
 ##### Parameters:
 
-- ***mixed*** `$class`
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
+
+---
+
+#### Method: DocPage->addChild
+
+```php
+function addChild($child)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+
+
+
+#### Undocumented Method: `DocPage->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `DocPage->setOptions($options, $tree_options)`
+
+---
+
+#### Method: DocPage->setOptionDefault
+
+```php
+function setOptionDefault($key, $value)
+```
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: DocPage->getOption
+
+```php
+function getOption($key [, $tree = false])
+```
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
 
 ##### Returns:
 
-- ***bool*** | ***null***
+- ***null*** | ***string***
+
+---
+
+#### Method: DocPage->setParent
+
+```php
+function setParent($parent)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: DocPage->getParent
+
+```php
+function getParent()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: \donatj\MDDoc\Documentation\ComposerInstall
+
+#### Method: ComposerInstall->output
+
+```php
+function output($depth)
+```
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+
+
+#### Undocumented Method: `ComposerInstall->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `ComposerInstall->setOptions($options, $tree_options)`
+
+---
+
+#### Method: ComposerInstall->setOptionDefault
+
+```php
+function setOptionDefault($key, $value)
+```
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: ComposerInstall->getOption
+
+```php
+function getOption($key [, $tree = false])
+```
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: ComposerInstall->setParent
+
+```php
+function setParent($parent)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: ComposerInstall->getParent
+
+```php
+function getParent()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ### Class: \donatj\MDDoc\Documentation\AbstractDocPart
 
@@ -181,6 +304,354 @@ function output($depth)
 ##### Returns:
 
 - ***string***
+
+### Class: \donatj\MDDoc\Documentation\DocRoot
+
+#### Method: DocRoot->output
+
+```php
+function output($depth)
+```
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+---
+
+#### Method: DocRoot->getChildren
+
+```php
+function getChildren()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+---
+
+#### Method: DocRoot->setChildren
+
+```php
+function setChildren($children)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
+
+---
+
+#### Method: DocRoot->addChild
+
+```php
+function addChild($child)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+
+
+
+#### Undocumented Method: `DocRoot->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `DocRoot->setOptions($options, $tree_options)`
+
+---
+
+#### Method: DocRoot->setOptionDefault
+
+```php
+function setOptionDefault($key, $value)
+```
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: DocRoot->getOption
+
+```php
+function getOption($key [, $tree = false])
+```
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: DocRoot->setParent
+
+```php
+function setParent($parent)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: DocRoot->getParent
+
+```php
+function getParent()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: \donatj\MDDoc\Documentation\Section
+
+#### Method: Section->output
+
+```php
+function output($depth)
+```
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+---
+
+#### Method: Section->getChildren
+
+```php
+function getChildren()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+---
+
+#### Method: Section->setChildren
+
+```php
+function setChildren($children)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
+
+---
+
+#### Method: Section->addChild
+
+```php
+function addChild($child)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+
+
+
+#### Undocumented Method: `Section->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `Section->setOptions($options, $tree_options)`
+
+---
+
+#### Method: Section->setOptionDefault
+
+```php
+function setOptionDefault($key, $value)
+```
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: Section->getOption
+
+```php
+function getOption($key [, $tree = false])
+```
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: Section->setParent
+
+```php
+function setParent($parent)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: Section->getParent
+
+```php
+function getParent()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: \donatj\MDDoc\Documentation\RecursiveDirectory
+
+
+
+#### Undocumented Method: `RecursiveDirectory->setAutoloader($autoloader)`
+
+---
+
+#### Method: RecursiveDirectory->output
+
+```php
+function output($depth)
+```
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+---
+
+#### Method: RecursiveDirectory->getChildren
+
+```php
+function getChildren()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+---
+
+#### Method: RecursiveDirectory->setChildren
+
+```php
+function setChildren($children)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
+
+---
+
+#### Method: RecursiveDirectory->addChild
+
+```php
+function addChild($child)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+
+
+
+#### Undocumented Method: `RecursiveDirectory->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `RecursiveDirectory->setOptions($options, $tree_options)`
+
+---
+
+#### Method: RecursiveDirectory->setOptionDefault
+
+```php
+function setOptionDefault($key, $value)
+```
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: RecursiveDirectory->getOption
+
+```php
+function getOption($key [, $tree = false])
+```
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: RecursiveDirectory->setParent
+
+```php
+function setParent($parent)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: RecursiveDirectory->getParent
+
+```php
+function getParent()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ### Class: \donatj\MDDoc\Documentation\AbstractNestedDoc
 
@@ -296,21 +767,9 @@ function output($depth)
 
 - ***string***
 
-### Class: \donatj\MDDoc\Documentation\Badges\Badge
+### Class: \donatj\MDDoc\Documentation\ComposerRequires
 
-```php
-<?php
-namespace donatj\MDDoc\Documentation\Badges;
-
-class Badge {
-	const OPT_ALT = 'alt';
-	const OPT_SRC = 'src';
-	const OPT_HREF = 'href';
-	const OPT_TITLE = 'title';
-}
-```
-
-#### Method: Badge->output
+#### Method: ComposerRequires->output
 
 ```php
 function output($depth)
@@ -326,15 +785,15 @@ function output($depth)
 
 
 
-#### Undocumented Method: `Badge->__construct($options, $tree_options)`
+#### Undocumented Method: `ComposerRequires->__construct($options, $tree_options)`
 
 
 
-#### Undocumented Method: `Badge->setOptions($options, $tree_options)`
+#### Undocumented Method: `ComposerRequires->setOptions($options, $tree_options)`
 
 ---
 
-#### Method: Badge->setOptionDefault
+#### Method: ComposerRequires->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -347,7 +806,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: Badge->getOption
+#### Method: ComposerRequires->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -364,7 +823,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: Badge->setParent
+#### Method: ComposerRequires->setParent
 
 ```php
 function setParent($parent)
@@ -376,7 +835,7 @@ function setParent($parent)
 
 ---
 
-#### Method: Badge->getParent
+#### Method: ComposerRequires->getParent
 
 ```php
 function getParent()
@@ -386,24 +845,11 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: \donatj\MDDoc\Documentation\Badges\BadgePoser
+### Class: \donatj\MDDoc\Documentation\Source
 
-```php
-<?php
-namespace donatj\MDDoc\Documentation\Badges;
+Class Source
 
-class BadgePoser {
-	const URL_POSER_BASE = 'https://poser.pugx.org/';
-	const URL_PACKAGIST_BASE = 'https://packagist.org/packages/';
-	const OPT_SUFFIX = 'suffix';
-	const OPT_ALT = 'alt';
-	const OPT_SRC = 'src';
-	const OPT_HREF = 'href';
-	const OPT_TITLE = 'title';
-}
-```
-
-#### Method: BadgePoser->output
+#### Method: Source->output
 
 ```php
 function output($depth)
@@ -419,15 +865,15 @@ function output($depth)
 
 
 
-#### Undocumented Method: `BadgePoser->__construct($options, $tree_options)`
+#### Undocumented Method: `Source->__construct($options, $tree_options [, $text = ''])`
 
 
 
-#### Undocumented Method: `BadgePoser->setOptions($options, $tree_options)`
+#### Undocumented Method: `Source->setOptions($options, $tree_options)`
 
 ---
 
-#### Method: BadgePoser->setOptionDefault
+#### Method: Source->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -440,7 +886,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: BadgePoser->getOption
+#### Method: Source->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -457,7 +903,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: BadgePoser->setParent
+#### Method: Source->setParent
 
 ```php
 function setParent($parent)
@@ -469,7 +915,85 @@ function setParent($parent)
 
 ---
 
-#### Method: BadgePoser->getParent
+#### Method: Source->getParent
+
+```php
+function getParent()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: \donatj\MDDoc\Documentation\IncludeFile
+
+#### Method: IncludeFile->output
+
+```php
+function output($depth)
+```
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***\donatj\MDDom\Paragraph***
+
+
+
+#### Undocumented Method: `IncludeFile->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `IncludeFile->setOptions($options, $tree_options)`
+
+---
+
+#### Method: IncludeFile->setOptionDefault
+
+```php
+function setOptionDefault($key, $value)
+```
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: IncludeFile->getOption
+
+```php
+function getOption($key [, $tree = false])
+```
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: IncludeFile->setParent
+
+```php
+function setParent($parent)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: IncludeFile->getParent
 
 ```php
 function getParent()
@@ -664,9 +1188,24 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: \donatj\MDDoc\Documentation\ClassFile
+### Class: \donatj\MDDoc\Documentation\Badges\BadgePoser
 
-#### Method: ClassFile->output
+```php
+<?php
+namespace donatj\MDDoc\Documentation\Badges;
+
+class BadgePoser {
+	const URL_POSER_BASE = 'https://poser.pugx.org/';
+	const URL_PACKAGIST_BASE = 'https://packagist.org/packages/';
+	const OPT_SUFFIX = 'suffix';
+	const OPT_ALT = 'alt';
+	const OPT_SRC = 'src';
+	const OPT_HREF = 'href';
+	const OPT_TITLE = 'title';
+}
+```
+
+#### Method: BadgePoser->output
 
 ```php
 function output($depth)
@@ -682,19 +1221,15 @@ function output($depth)
 
 
 
-#### Undocumented Method: `ClassFile->setAutoloader($autoloader)`
+#### Undocumented Method: `BadgePoser->__construct($options, $tree_options)`
 
 
 
-#### Undocumented Method: `ClassFile->__construct($options, $tree_options)`
-
-
-
-#### Undocumented Method: `ClassFile->setOptions($options, $tree_options)`
+#### Undocumented Method: `BadgePoser->setOptions($options, $tree_options)`
 
 ---
 
-#### Method: ClassFile->setOptionDefault
+#### Method: BadgePoser->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -707,7 +1242,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: ClassFile->getOption
+#### Method: BadgePoser->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -724,7 +1259,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: ClassFile->setParent
+#### Method: BadgePoser->setParent
 
 ```php
 function setParent($parent)
@@ -736,7 +1271,7 @@ function setParent($parent)
 
 ---
 
-#### Method: ClassFile->getParent
+#### Method: BadgePoser->getParent
 
 ```php
 function getParent()
@@ -746,9 +1281,21 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
-### Class: \donatj\MDDoc\Documentation\ComposerInstall
+### Class: \donatj\MDDoc\Documentation\Badges\Badge
 
-#### Method: ComposerInstall->output
+```php
+<?php
+namespace donatj\MDDoc\Documentation\Badges;
+
+class Badge {
+	const OPT_ALT = 'alt';
+	const OPT_SRC = 'src';
+	const OPT_HREF = 'href';
+	const OPT_TITLE = 'title';
+}
+```
+
+#### Method: Badge->output
 
 ```php
 function output($depth)
@@ -764,15 +1311,15 @@ function output($depth)
 
 
 
-#### Undocumented Method: `ComposerInstall->__construct($options, $tree_options)`
+#### Undocumented Method: `Badge->__construct($options, $tree_options)`
 
 
 
-#### Undocumented Method: `ComposerInstall->setOptions($options, $tree_options)`
+#### Undocumented Method: `Badge->setOptions($options, $tree_options)`
 
 ---
 
-#### Method: ComposerInstall->setOptionDefault
+#### Method: Badge->setOptionDefault
 
 ```php
 function setOptionDefault($key, $value)
@@ -785,7 +1332,7 @@ function setOptionDefault($key, $value)
 
 ---
 
-#### Method: ComposerInstall->getOption
+#### Method: Badge->getOption
 
 ```php
 function getOption($key [, $tree = false])
@@ -802,7 +1349,7 @@ function getOption($key [, $tree = false])
 
 ---
 
-#### Method: ComposerInstall->setParent
+#### Method: Badge->setParent
 
 ```php
 function setParent($parent)
@@ -814,733 +1361,7 @@ function setParent($parent)
 
 ---
 
-#### Method: ComposerInstall->getParent
-
-```php
-function getParent()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
-
-### Class: \donatj\MDDoc\Documentation\ComposerRequires
-
-#### Method: ComposerRequires->output
-
-```php
-function output($depth)
-```
-
-##### Parameters:
-
-- ***int*** `$depth`
-
-##### Returns:
-
-- ***string***
-
-
-
-#### Undocumented Method: `ComposerRequires->__construct($options, $tree_options)`
-
-
-
-#### Undocumented Method: `ComposerRequires->setOptions($options, $tree_options)`
-
----
-
-#### Method: ComposerRequires->setOptionDefault
-
-```php
-function setOptionDefault($key, $value)
-```
-
-##### Parameters:
-
-- ***mixed*** `$key` - string
-- ***mixed*** `$value` - mixed
-
----
-
-#### Method: ComposerRequires->getOption
-
-```php
-function getOption($key [, $tree = false])
-```
-
-##### Parameters:
-
-- ***string*** `$key`
-- ***bool*** `$tree`
-
-##### Returns:
-
-- ***null*** | ***string***
-
----
-
-#### Method: ComposerRequires->setParent
-
-```php
-function setParent($parent)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
-
----
-
-#### Method: ComposerRequires->getParent
-
-```php
-function getParent()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
-
-### Class: \donatj\MDDoc\Documentation\DocPage
-
-#### Method: DocPage->output
-
-```php
-function output($depth)
-```
-
-##### Parameters:
-
-- ***int*** `$depth`
-
-##### Returns:
-
-- ***string***
-
----
-
-#### Method: DocPage->getChildren
-
-```php
-function getChildren()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
-
----
-
-#### Method: DocPage->setChildren
-
-```php
-function setChildren($children)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
----
-
-#### Method: DocPage->addChild
-
-```php
-function addChild($child)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
-
-
-
-#### Undocumented Method: `DocPage->__construct($options, $tree_options)`
-
-
-
-#### Undocumented Method: `DocPage->setOptions($options, $tree_options)`
-
----
-
-#### Method: DocPage->setOptionDefault
-
-```php
-function setOptionDefault($key, $value)
-```
-
-##### Parameters:
-
-- ***mixed*** `$key` - string
-- ***mixed*** `$value` - mixed
-
----
-
-#### Method: DocPage->getOption
-
-```php
-function getOption($key [, $tree = false])
-```
-
-##### Parameters:
-
-- ***string*** `$key`
-- ***bool*** `$tree`
-
-##### Returns:
-
-- ***null*** | ***string***
-
----
-
-#### Method: DocPage->setParent
-
-```php
-function setParent($parent)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
-
----
-
-#### Method: DocPage->getParent
-
-```php
-function getParent()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
-
-### Class: \donatj\MDDoc\Documentation\DocRoot
-
-#### Method: DocRoot->output
-
-```php
-function output($depth)
-```
-
-##### Parameters:
-
-- ***int*** `$depth`
-
-##### Returns:
-
-- ***string***
-
----
-
-#### Method: DocRoot->getChildren
-
-```php
-function getChildren()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
-
----
-
-#### Method: DocRoot->setChildren
-
-```php
-function setChildren($children)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
----
-
-#### Method: DocRoot->addChild
-
-```php
-function addChild($child)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
-
-
-
-#### Undocumented Method: `DocRoot->__construct($options, $tree_options)`
-
-
-
-#### Undocumented Method: `DocRoot->setOptions($options, $tree_options)`
-
----
-
-#### Method: DocRoot->setOptionDefault
-
-```php
-function setOptionDefault($key, $value)
-```
-
-##### Parameters:
-
-- ***mixed*** `$key` - string
-- ***mixed*** `$value` - mixed
-
----
-
-#### Method: DocRoot->getOption
-
-```php
-function getOption($key [, $tree = false])
-```
-
-##### Parameters:
-
-- ***string*** `$key`
-- ***bool*** `$tree`
-
-##### Returns:
-
-- ***null*** | ***string***
-
----
-
-#### Method: DocRoot->setParent
-
-```php
-function setParent($parent)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
-
----
-
-#### Method: DocRoot->getParent
-
-```php
-function getParent()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
-
-### Class: \donatj\MDDoc\Documentation\IncludeFile
-
-#### Method: IncludeFile->output
-
-```php
-function output($depth)
-```
-
-##### Parameters:
-
-- ***int*** `$depth`
-
-##### Returns:
-
-- ***\donatj\MDDom\Paragraph***
-
-
-
-#### Undocumented Method: `IncludeFile->__construct($options, $tree_options)`
-
-
-
-#### Undocumented Method: `IncludeFile->setOptions($options, $tree_options)`
-
----
-
-#### Method: IncludeFile->setOptionDefault
-
-```php
-function setOptionDefault($key, $value)
-```
-
-##### Parameters:
-
-- ***mixed*** `$key` - string
-- ***mixed*** `$value` - mixed
-
----
-
-#### Method: IncludeFile->getOption
-
-```php
-function getOption($key [, $tree = false])
-```
-
-##### Parameters:
-
-- ***string*** `$key`
-- ***bool*** `$tree`
-
-##### Returns:
-
-- ***null*** | ***string***
-
----
-
-#### Method: IncludeFile->setParent
-
-```php
-function setParent($parent)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
-
----
-
-#### Method: IncludeFile->getParent
-
-```php
-function getParent()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
-
-### Class: \donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
-
-
-
-#### Undocumented Method: `AutoloaderAware->setAutoloader($autoloader)`
-
-### Class: \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
-
-
-
-#### Undocumented Method: `DocumentationInterface->__construct($options, $tree_options)`
-
----
-
-#### Method: DocumentationInterface->output
-
-```php
-function output($depth)
-```
-
-##### Parameters:
-
-- ***int*** `$depth`
-
-##### Returns:
-
-- ***string***
-
-### Class: \donatj\MDDoc\Documentation\RecursiveDirectory
-
-
-
-#### Undocumented Method: `RecursiveDirectory->setAutoloader($autoloader)`
-
----
-
-#### Method: RecursiveDirectory->output
-
-```php
-function output($depth)
-```
-
-##### Parameters:
-
-- ***int*** `$depth`
-
-##### Returns:
-
-- ***string***
-
----
-
-#### Method: RecursiveDirectory->getChildren
-
-```php
-function getChildren()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
-
----
-
-#### Method: RecursiveDirectory->setChildren
-
-```php
-function setChildren($children)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
----
-
-#### Method: RecursiveDirectory->addChild
-
-```php
-function addChild($child)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
-
-
-
-#### Undocumented Method: `RecursiveDirectory->__construct($options, $tree_options)`
-
-
-
-#### Undocumented Method: `RecursiveDirectory->setOptions($options, $tree_options)`
-
----
-
-#### Method: RecursiveDirectory->setOptionDefault
-
-```php
-function setOptionDefault($key, $value)
-```
-
-##### Parameters:
-
-- ***mixed*** `$key` - string
-- ***mixed*** `$value` - mixed
-
----
-
-#### Method: RecursiveDirectory->getOption
-
-```php
-function getOption($key [, $tree = false])
-```
-
-##### Parameters:
-
-- ***string*** `$key`
-- ***bool*** `$tree`
-
-##### Returns:
-
-- ***null*** | ***string***
-
----
-
-#### Method: RecursiveDirectory->setParent
-
-```php
-function setParent($parent)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
-
----
-
-#### Method: RecursiveDirectory->getParent
-
-```php
-function getParent()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
-
-### Class: \donatj\MDDoc\Documentation\Section
-
-#### Method: Section->output
-
-```php
-function output($depth)
-```
-
-##### Parameters:
-
-- ***int*** `$depth`
-
-##### Returns:
-
-- ***string***
-
----
-
-#### Method: Section->getChildren
-
-```php
-function getChildren()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
-
----
-
-#### Method: Section->setChildren
-
-```php
-function setChildren($children)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
----
-
-#### Method: Section->addChild
-
-```php
-function addChild($child)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
-
-
-
-#### Undocumented Method: `Section->__construct($options, $tree_options)`
-
-
-
-#### Undocumented Method: `Section->setOptions($options, $tree_options)`
-
----
-
-#### Method: Section->setOptionDefault
-
-```php
-function setOptionDefault($key, $value)
-```
-
-##### Parameters:
-
-- ***mixed*** `$key` - string
-- ***mixed*** `$value` - mixed
-
----
-
-#### Method: Section->getOption
-
-```php
-function getOption($key [, $tree = false])
-```
-
-##### Parameters:
-
-- ***string*** `$key`
-- ***bool*** `$tree`
-
-##### Returns:
-
-- ***null*** | ***string***
-
----
-
-#### Method: Section->setParent
-
-```php
-function setParent($parent)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
-
----
-
-#### Method: Section->getParent
-
-```php
-function getParent()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
-
-### Class: \donatj\MDDoc\Documentation\Source
-
-Class Source
-
-#### Method: Source->output
-
-```php
-function output($depth)
-```
-
-##### Parameters:
-
-- ***int*** `$depth`
-
-##### Returns:
-
-- ***string***
-
-
-
-#### Undocumented Method: `Source->__construct($options, $tree_options [, $text = ''])`
-
-
-
-#### Undocumented Method: `Source->setOptions($options, $tree_options)`
-
----
-
-#### Method: Source->setOptionDefault
-
-```php
-function setOptionDefault($key, $value)
-```
-
-##### Parameters:
-
-- ***mixed*** `$key` - string
-- ***mixed*** `$value` - mixed
-
----
-
-#### Method: Source->getOption
-
-```php
-function getOption($key [, $tree = false])
-```
-
-##### Parameters:
-
-- ***string*** `$key`
-- ***bool*** `$tree`
-
-##### Returns:
-
-- ***null*** | ***string***
-
----
-
-#### Method: Source->setParent
-
-```php
-function setParent($parent)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
-
----
-
-#### Method: Source->getParent
+#### Method: Badge->getParent
 
 ```php
 function getParent()
@@ -1632,6 +1453,160 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
+### Class: \donatj\MDDoc\Documentation\ClassFile
+
+#### Method: ClassFile->output
+
+```php
+function output($depth)
+```
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+
+
+#### Undocumented Method: `ClassFile->setAutoloader($autoloader)`
+
+
+
+#### Undocumented Method: `ClassFile->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `ClassFile->setOptions($options, $tree_options)`
+
+---
+
+#### Method: ClassFile->setOptionDefault
+
+```php
+function setOptionDefault($key, $value)
+```
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: ClassFile->getOption
+
+```php
+function getOption($key [, $tree = false])
+```
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: ClassFile->setParent
+
+```php
+function setParent($parent)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: ClassFile->getParent
+
+```php
+function getParent()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
+### Class: \donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
+
+
+
+#### Undocumented Method: `AutoloaderAware->setAutoloader($autoloader)`
+
+### Class: \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
+
+
+
+#### Undocumented Method: `DocumentationInterface->__construct($options, $tree_options)`
+
+---
+
+#### Method: DocumentationInterface->output
+
+```php
+function output($depth)
+```
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+### Class: \donatj\MDDoc\Runner\UserInterface
+
+
+
+#### Undocumented Method: `UserInterface->__construct($STDOUT, $STDERR)`
+
+
+
+#### Undocumented Method: `UserInterface->dumpOptions($additional)`
+
+
+
+#### Undocumented Method: `UserInterface->dropError($text [, $code = 1 [, $additional = false]])`
+
+
+
+#### Undocumented Method: `UserInterface->outputMsg($text)`
+
+### Class: \donatj\MDDoc\Runner\ConfigParser
+
+
+
+#### Undocumented Method: `ConfigParser->__construct($filename)`
+
+### Class: \donatj\MDDoc\Exceptions\TargetNotWritableException
+
+### Class: \donatj\MDDoc\Exceptions\PathNotReadableException
+
+
+
+#### Undocumented Method: `PathNotReadableException->__construct($message, $path [, $previous_exception = null])`
+
+---
+
+#### Method: PathNotReadableException->getPath
+
+```php
+function getPath()
+```
+
+##### Returns:
+
+- ***mixed***
+
 ### Class: \donatj\MDDoc\Exceptions\ClassNotReadableException
 
 
@@ -1652,43 +1627,98 @@ function getPath()
 
 ### Class: \donatj\MDDoc\Exceptions\ConfigException
 
-### Class: \donatj\MDDoc\Exceptions\PathNotReadableException
+### Class: \donatj\MDDoc\Autoloaders\Psr0
 
+Class Psr0
 
+#### Method: Psr0->__construct
 
-#### Undocumented Method: `PathNotReadableException->__construct($message, $path [, $previous_exception = null])`
+```php
+function __construct($path)
+```
+
+##### Parameters:
+
+- ***string*** `$path` - Root path
 
 ---
 
-#### Method: PathNotReadableException->getPath
+#### Method: Psr0->__invoke
 
 ```php
-function getPath()
+function __invoke($class)
 ```
+
+##### Parameters:
+
+- ***mixed*** `$class`
 
 ##### Returns:
 
-- ***mixed***
+- ***bool*** | ***string***
 
-### Class: \donatj\MDDoc\Exceptions\TargetNotWritableException
+### Class: \donatj\MDDoc\Autoloaders\NullLoader
 
-### Class: \donatj\MDDoc\MDDoc
-
-Application MDDoc
+#### Method: NullLoader->__invoke
 
 ```php
-<?php
-namespace donatj\MDDoc;
-
-class MDDoc {
-	const VERSION = "0.0.1a";
-	const CONFIG_FILE = "mddoc.xml";
-}
+function __invoke($className)
 ```
 
+##### Parameters:
 
+- ***mixed*** `$className`
 
-#### Undocumented Method: `MDDoc->__construct($args)`
+##### Returns:
+
+- ***string*** | ***null***
+
+### Class: \donatj\MDDoc\Autoloaders\Psr4
+
+Class Psr4
+
+#### Method: Psr4->__construct
+
+```php
+function __construct($root_namespace, $path)
+```
+
+##### Parameters:
+
+- ***string*** `$root_namespace` - Namespace prefix
+- ***string*** `$path` - Root path
+
+---
+
+#### Method: Psr4->__invoke
+
+```php
+function __invoke($class)
+```
+
+##### Parameters:
+
+- ***mixed*** `$class`
+
+##### Returns:
+
+- ***bool*** | ***null***
+
+### Class: \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
+
+#### Method: AutoloaderInterface->__invoke
+
+```php
+function __invoke($className)
+```
+
+##### Parameters:
+
+- ***mixed*** `$className`
+
+##### Returns:
+
+- ***string*** | ***null***
 
 ### Class: \donatj\MDDoc\Reflectors\TaxonomyReflector
 
@@ -1780,27 +1810,3 @@ function newInstance($filename, $autoLoader)
 ##### Returns:
 
 - ***\donatj\MDDoc\Reflectors\TaxonomyReflector***
-
-### Class: \donatj\MDDoc\Runner\ConfigParser
-
-
-
-#### Undocumented Method: `ConfigParser->__construct($filename)`
-
-### Class: \donatj\MDDoc\Runner\UserInterface
-
-
-
-#### Undocumented Method: `UserInterface->__construct($STDOUT, $STDERR)`
-
-
-
-#### Undocumented Method: `UserInterface->dumpOptions($additional)`
-
-
-
-#### Undocumented Method: `UserInterface->dropError($text [, $code = 1 [, $additional = false]])`
-
-
-
-#### Undocumented Method: `UserInterface->outputMsg($text)`
