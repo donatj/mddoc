@@ -38,7 +38,7 @@ class TaxonomyReflector {
 			$this->fileReflector = new FileReflector($filename);
 			$this->fileReflector->process();
 			$this->fileReflector->scanForMarkers();
-		} catch(\Exception $e) {
+		} catch( \Exception $e ) {
 			throw new ClassNotReadableException('Class not readable', $filename, $e);
 		}
 
@@ -53,7 +53,7 @@ class TaxonomyReflector {
 		foreach( $this->fileReflector->getTraits() as $trait ) {
 			$this->registerReflectors($trait);
 		}
-//		$this->fileReflector->getClasses();  -- I don't think this did anything.
+		//		$this->fileReflector->getClasses();  -- I don't think this did anything.
 	}
 
 	private function registerReflectors( InterfaceReflector $reflector ) {
@@ -80,6 +80,8 @@ class TaxonomyReflector {
 			$this->data['properties'][$property->getShortName()][] = $property;
 		}
 
+
+
 		if( $reflector instanceof ClassReflector || $reflector instanceof TraitReflector ) {
 			if( $parent = $reflector->getParentClass() ) {
 				$filename = $loader($parent);
@@ -96,6 +98,16 @@ class TaxonomyReflector {
 						$parser     = $this->parserFactory->newInstance($filename, $loader);
 						$this->data = array_merge_recursive($this->data, $parser->getData());
 					}
+				}
+			}
+		}
+
+		if($reflector instanceof InterfaceReflector) {
+			foreach( $reflector->getParentInterfaces() as $interface ) {
+				$filename = $loader($interface);
+				if( is_readable($filename) ) {
+					$parser     = $this->parserFactory->newInstance($filename, $loader);
+					$this->data = array_merge_recursive($this->data, $parser->getData());
 				}
 			}
 		}
@@ -135,14 +147,14 @@ class TaxonomyReflector {
 	/**
 	 * @return \phpDocumentor\Reflection\ClassReflector\ConstantReflector[][]
 	 */
-	public function getConstants(){
+	public function getConstants() {
 		return isset($this->data['constants']) ? $this->data['constants'] : array();
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\ClassReflector\PropertyReflector[][]
 	 */
-	public function getProperties(){
+	public function getProperties() {
 		return isset($this->data['properties']) ? $this->data['properties'] : array();
 	}
 }
