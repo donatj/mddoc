@@ -1,11 +1,12 @@
 {
 	"name"       : "donatj/mddoc",
 	"require"    : {
+		"php"                     : ">=5.4",
 		"ext-dom"                 : "*",
 		"phpdocumentor/reflection": "3.*",
 		"donatj/flags"            : "1.*",
 		"donatj/cli-toolkit"      : "0.*",
-		"donatj/mddom"            : "dev-master"
+		"donatj/mddom"            : "~v0.0.2"
 	},
 	"require-dev": {
 		"donatj/drop": "*"

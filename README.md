@@ -1136,6 +1136,98 @@ function getParent()
 
 - ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
+### Class: \donatj\MDDoc\Documentation\Exceptions\ExecutionException
+
+### Class: \donatj\MDDoc\Documentation\ExecOutput
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class ExecOutput {
+	const FORMAT_DEFAULT = 'default';
+	const FORMAT_RAW = 'raw';
+	const FORMAT_CODE = 'code';
+	const FORMAT_CODE_BLOCK = 'code-block';
+}
+```
+
+#### Method: ExecOutput->output
+
+```php
+function output($depth)
+```
+
+##### Parameters:
+
+- ***int*** `$depth`
+
+##### Returns:
+
+- ***string***
+
+
+
+#### Undocumented Method: `ExecOutput->__construct($options, $tree_options)`
+
+
+
+#### Undocumented Method: `ExecOutput->setOptions($options, $tree_options)`
+
+---
+
+#### Method: ExecOutput->setOptionDefault
+
+```php
+function setOptionDefault($key, $value)
+```
+
+##### Parameters:
+
+- ***mixed*** `$key` - string
+- ***mixed*** `$value` - mixed
+
+---
+
+#### Method: ExecOutput->getOption
+
+```php
+function getOption($key [, $tree = false])
+```
+
+##### Parameters:
+
+- ***string*** `$key`
+- ***bool*** `$tree`
+
+##### Returns:
+
+- ***null*** | ***string***
+
+---
+
+#### Method: ExecOutput->setParent
+
+```php
+function setParent($parent)
+```
+
+##### Parameters:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+
+---
+
+#### Method: ExecOutput->getParent
+
+```php
+function getParent()
+```
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
+
 ### Class: \donatj\MDDoc\Documentation\IncludeFile
 
 #### Method: IncludeFile->output
@@ -1657,6 +1749,8 @@ function getPath()
 - ***mixed***
 
 ### Class: \donatj\MDDoc\Exceptions\ConfigException
+
+### Class: \donatj\MDDoc\Exceptions\MDDocException
 
 ### Class: \donatj\MDDoc\Exceptions\PathNotReadableException
 
