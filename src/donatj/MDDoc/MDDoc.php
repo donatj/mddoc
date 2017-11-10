@@ -19,7 +19,7 @@ class MDDoc {
 	const VERSION     = "0.0.1a";
 	const CONFIG_FILE = "mddoc.xml";
 
-	function __construct( $args ) {
+	public function __construct( array $args ) {
 		$ui = new UserInterface(STDOUT, STDERR);
 
 		$config = $this->init($args, $ui);
@@ -43,7 +43,7 @@ class MDDoc {
 		$ui->outputMsg("[{$currMen}]{$peakMem}mb peak memory use");
 	}
 
-	private function init( $args, UserInterface $ui ) {
+	private function init( array $args, UserInterface $ui ) {
 
 		$flags          = new Flags();
 		$displayHelp    = &$flags->bool('help', false, 'Display this help message.');
