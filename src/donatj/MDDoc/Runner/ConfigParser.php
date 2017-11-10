@@ -147,7 +147,4 @@ class ConfigParser {
 		return $attributes;
 	}
 
-	private function optionalAttr( \DOMElement $node, $attribute ) {
-		return $node->getAttribute($attribute) ?: null;
-	}
 }
