@@ -2,8 +2,8 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Documentation\Exceptions\ExecutionException;
 use donatj\MDDoc\Exceptions\ConfigException;
-use donatj\MDDoc\Exceptions\ExecutionException;
 use donatj\MDDom\Code;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\Paragraph;
@@ -34,7 +34,7 @@ class ExecOutput extends AbstractDocPart {
 		exec($cmd, $output, $return);
 
 		if( $return !== 0 ) {
-			throw new ExecutionException("Cmd `{$cmd}` returned exit code: {$return}", $return);
+			throw new ExecutionException("Command `{$cmd}` returned exit code: {$return}", $return);
 		}
 
 		if( $format == self::FORMAT_DEFAULT ) {
