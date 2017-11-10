@@ -107,6 +107,9 @@ class ConfigParser {
 					case 'badge-scrutinizer':
 						$childDoc = new Documentation\Badges\BadgeScrutinizer($attributes, $child_attribute_tree);
 						break;
+					case 'exec':
+						$childDoc = new Documentation\ExecOutput($attributes, $child_attribute_tree);
+						break;
 					default:
 						throw new ConfigException("Invalid XML Tag: {$child->nodeName}");
 				}
