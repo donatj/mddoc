@@ -16,8 +16,10 @@ use donatj\MDDoc\Runner\UserInterface;
  */
 class MDDoc {
 
-	const VERSION     = "0.0.1a";
-	const CONFIG_FILE = "mddoc.xml";
+	const VERSION = "0.0.1a";
+
+	const CONFIG_FILE     = "mddoc.xml";
+	const CONFIG_FILE_ALT = ".mddoc.xml";
 
 	public function __construct( array $args ) {
 		$ui = new UserInterface(STDOUT, STDERR);
@@ -68,7 +70,12 @@ class MDDoc {
 				break;
 		}
 
-		return $flags->args() ? current($flags->args()) : self::CONFIG_FILE;
+		$configFile = self::CONFIG_FILE;
+		if( file_exists(self::CONFIG_FILE_ALT) ) {
+			$configFile = self::CONFIG_FILE_ALT;
+		}
+
+		return $flags->args() ? current($flags->args()) : $configFile;
 	}
 
 	private static function versionMarker( UserInterface $ui ) {
