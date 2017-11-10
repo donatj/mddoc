@@ -41,18 +41,17 @@ class MDDoc {
 
 		$ui->outputMsg(PHP_EOL);
 		$ui->outputMsg("[{$currMen}]{$peakMem}mb peak memory use");
-
 	}
 
 	private function init( $args, UserInterface $ui ) {
 
 		$flags          = new Flags();
-		$displayHelp    = & $flags->bool('help', false, 'Display this help message.');
-		$displayVersion = & $flags->bool('version', false, 'Display this applications version.');
+		$displayHelp    = &$flags->bool('help', false, 'Display this help message.');
+		$displayVersion = &$flags->bool('version', false, 'Display this applications version.');
 
 		try {
 			$flags->parse($args);
-		} catch(\Exception $e) {
+		} catch( \Exception $e ) {
 			$ui->dropError($e->getMessage(), 1, $flags->getDefaults());
 			drop($e->getMessage(), 1, $flags->getDefaults());
 		}
