@@ -2,7 +2,7 @@
 
 namespace donatj\MDDoc\Exceptions;
 
-class PathNotReadableException extends \Exception {
+class PathNotReadableException extends MDDocException {
 
 	protected $path;
 

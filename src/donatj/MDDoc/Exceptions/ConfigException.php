@@ -2,6 +2,6 @@
 
 namespace donatj\MDDoc\Exceptions;
 
-class ConfigException extends \Exception{
+class ConfigException extends MDDocException {
 
 }
