@@ -301,7 +301,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		while( ($part = current($parts)) !== false ) {
 
 			$part = rtrim($part);
-			$next = next($parts);
+			next($parts);
 
 			$lastPart = strrev($part);
 			if( $lastPart ) {

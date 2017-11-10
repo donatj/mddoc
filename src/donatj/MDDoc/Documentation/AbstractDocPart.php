@@ -57,7 +57,7 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	 */
 	protected function requireOptions( $options, $tree = false ) {
 
-		$data = $tree ? $this->treeOptions : $this->options;
+		$tree ? $this->treeOptions : $this->options;
 
 		$options = (array)$options;
 		foreach( $options as $key ) {
