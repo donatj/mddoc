@@ -126,6 +126,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 			$i = 0;
 			foreach( $methodData as $methods ) {
+				/** @var MethodReflector $method */
 				$method = reset($methods);
 
 				if( $method->getVisibility() == 'public' ) {
@@ -148,13 +149,15 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 					}
 
+					foreach( $blocks as $block ) {
+						if( $this->shouldSkip($block) ) {
+							continue 2;
+						}
+					}
+
 					$firstBlock = reset($blocks);
 
 					if( $firstBlock ) {
-						if( $this->shouldSkip($firstBlock) ) {
-							continue;
-						}
-
 						$operator            = ($method->isStatic() ? '::' : '->');
 						$canonicalMethodName = $class->getName() . $operator . "$name($args)";
 
