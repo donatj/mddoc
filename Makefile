@@ -1,4 +1,4 @@
-SRC_FILES = $(shell find example src -type f -name '*.php')
+SRC_FILES = $(shell find src -type f -name '*.php')
 
 README.md: $(SRC_FILES)
 	composer/bin/mddoc
