@@ -1164,7 +1164,7 @@ function output($depth)
 
 ##### Returns:
 
-- ***string***
+- ***\donatj\MDDom\Code*** | ***\donatj\MDDom\CodeBlock*** | ***\donatj\MDDom\Paragraph*** | ***string***
 
 
 
@@ -1783,6 +1783,7 @@ namespace donatj\MDDoc;
 class MDDoc {
 	const VERSION = "0.0.1a";
 	const CONFIG_FILE = "mddoc.xml";
+	const CONFIG_FILE_ALT = ".mddoc.xml";
 }
 ```
 
