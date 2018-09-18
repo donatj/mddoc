@@ -199,30 +199,33 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							}
 						}
 
-						/**
-						 * @var $tag \phpDocumentor\Reflection\DocBlock\Tag\ParamTag
-						 */
-						if( $methodParams = $firstBlock->getTagsByName('param') ) {
+						foreach( $blocks as $block ) {
+							/**
+							 * @var $tag \phpDocumentor\Reflection\DocBlock\Tag\ParamTag
+							 */
+							if( $methodParams = $block->getTagsByName('param') ) {
 
-							$paramDoc = new DocumentDepth();
-							$subDocument->appendChild($paramDoc);
+								$paramDoc = new DocumentDepth();
+								$subDocument->appendChild($paramDoc);
 
-							$paramDoc->appendChild(new Header('Parameters:'));
+								$paramDoc->appendChild(new Header('Parameters:'));
 
-							$output = '';
-							foreach( $firstBlock->getTagsByName('param') as $tag ) {
+								$output = '';
+								foreach( $block->getTagsByName('param') as $tag ) {
 
-								$output .= '- ' . $this->formatType($tag->getType()) . ' `' . $tag->getVariableName() . '`';
+									$output .= '- ' . $this->formatType($tag->getType()) . ' `' . $tag->getVariableName() . '`';
 
-								if( $tagDescr = $tag->getDescription() ) {
-									$output .= ' - ' . $tagDescr;
+									if( $tagDescr = $tag->getDescription() ) {
+										$output .= ' - ' . $tagDescr;
+									}
+
+									$output .= PHP_EOL;
 								}
 
-								$output .= PHP_EOL;
+								$paramDoc->appendChild($output);
+								$output .= PHP_EOL . PHP_EOL;
+								break;
 							}
-
-							$paramDoc->appendChild($output);
-							$output .= PHP_EOL . PHP_EOL;
 						}
 
 						/**

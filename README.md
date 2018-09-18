@@ -145,7 +145,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -211,17 +211,9 @@ function setChildren($children)
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
 
----
 
-#### Method: AbstractNestedDoc->addChild
 
-```php
-function addChild($child)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+#### Undocumented Method: `AbstractNestedDoc->addChild($child)`
 
 
 
@@ -259,7 +251,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -365,7 +357,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -458,7 +450,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -551,7 +543,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -643,7 +635,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -725,7 +717,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -803,7 +795,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -881,7 +873,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -947,17 +939,9 @@ function setChildren($children)
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
 
----
 
-#### Method: DocPage->addChild
 
-```php
-function addChild($child)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+#### Undocumented Method: `DocPage->addChild($child)`
 
 
 
@@ -995,7 +979,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -1061,17 +1045,9 @@ function setChildren($children)
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
 
----
 
-#### Method: DocRoot->addChild
 
-```php
-function addChild($child)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+#### Undocumented Method: `DocRoot->addChild($child)`
 
 
 
@@ -1109,7 +1085,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -1201,7 +1177,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -1279,7 +1255,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -1379,17 +1355,9 @@ function setChildren($children)
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
 
----
 
-#### Method: RecursiveDirectory->addChild
 
-```php
-function addChild($child)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+#### Undocumented Method: `RecursiveDirectory->addChild($child)`
 
 
 
@@ -1427,7 +1395,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -1493,17 +1461,9 @@ function setChildren($children)
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
 
----
 
-#### Method: Section->addChild
 
-```php
-function addChild($child)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface*** `$child`
+#### Undocumented Method: `Section->addChild($child)`
 
 
 
@@ -1541,7 +1501,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -1621,7 +1581,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -1703,7 +1663,7 @@ function getOption($key [, $tree = false])
 
 ##### Returns:
 
-- ***null*** | ***string***
+- ***string*** | ***null***
 
 ---
 
@@ -1735,17 +1695,9 @@ function getParent()
 
 #### Undocumented Method: `ClassNotReadableException->__construct($message, $path [, $previous_exception = null])`
 
----
 
-#### Method: ClassNotReadableException->getPath
 
-```php
-function getPath()
-```
-
-##### Returns:
-
-- ***mixed***
+#### Undocumented Method: `ClassNotReadableException->getPath()`
 
 ### Class: \donatj\MDDoc\Exceptions\ConfigException
 
@@ -1757,17 +1709,9 @@ function getPath()
 
 #### Undocumented Method: `PathNotReadableException->__construct($message, $path [, $previous_exception = null])`
 
----
 
-#### Method: PathNotReadableException->getPath
 
-```php
-function getPath()
-```
-
-##### Returns:
-
-- ***mixed***
+#### Undocumented Method: `PathNotReadableException->getPath()`
 
 ### Class: \donatj\MDDoc\Exceptions\TargetNotWritableException
 
@@ -1801,20 +1745,10 @@ function __construct($filename, $autoLoader, $parserFactory)
 ##### Parameters:
 
 - ***string*** `$filename`
-- ***\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface*** `$autoLoader`
-- ***\donatj\MDDoc\Reflectors\TaxonomyReflectorFactory*** `$parserFactory`
 
----
 
-#### Method: TaxonomyReflector->getData
 
-```php
-function getData()
-```
-
-##### Returns:
-
-- ***mixed***
+#### Undocumented Method: `TaxonomyReflector->getData()`
 
 ---
 
@@ -1826,7 +1760,7 @@ function getReflector()
 
 ##### Returns:
 
-- ***null*** | ***\phpDocumentor\Reflection\InterfaceReflector***
+- ***\phpDocumentor\Reflection\InterfaceReflector*** | ***null***
 
 ---
 
@@ -1874,8 +1808,7 @@ function newInstance($filename, $autoLoader)
 
 ##### Parameters:
 
-- ***mixed*** `$filename`
-- ***\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface*** `$autoLoader`
+- ***mixed*** `$filename` - string
 
 ##### Returns:
 
