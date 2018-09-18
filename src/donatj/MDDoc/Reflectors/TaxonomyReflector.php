@@ -35,7 +35,7 @@ class TaxonomyReflector {
 		$this->data          = array();
 
 		try {
-			$this->fileReflector = new FileReflector($filename);
+			$this->fileReflector = new FileReflector($filename, true);
 			$this->fileReflector->process();
 			$this->fileReflector->scanForMarkers();
 		} catch( \Exception $e ) {
@@ -53,7 +53,7 @@ class TaxonomyReflector {
 		foreach( $this->fileReflector->getTraits() as $trait ) {
 			$this->registerReflectors($trait);
 		}
-		//		$this->fileReflector->getClasses();  -- I don't think this did anything.
+		//		$this->fileReflector->getClasses(); // -- I don't think this did anything.
 	}
 
 	private function registerReflectors( InterfaceReflector $reflector ) {
@@ -81,7 +81,6 @@ class TaxonomyReflector {
 		}
 
 
-
 		if( $reflector instanceof ClassReflector || $reflector instanceof TraitReflector ) {
 			if( $parent = $reflector->getParentClass() ) {
 				$filename = $loader($parent);
@@ -102,7 +101,7 @@ class TaxonomyReflector {
 			}
 		}
 
-		if($reflector instanceof InterfaceReflector) {
+		if( $reflector instanceof InterfaceReflector ) {
 			foreach( $reflector->getParentInterfaces() as $interface ) {
 				$filename = $loader($interface);
 				if( is_readable($filename) ) {
