@@ -23,6 +23,12 @@ class ExecOutput extends AbstractDocPart {
 	];
 
 
+	/**
+	 * @param int $depth
+	 * @return \donatj\MDDom\Code|\donatj\MDDom\CodeBlock|\donatj\MDDom\Paragraph|string
+	 * @throws \donatj\MDDoc\Documentation\Exceptions\ExecutionException
+	 * @throws \donatj\MDDoc\Exceptions\ConfigException
+	 */
 	public function output( $depth ) {
 		$cmd    = $this->getOption('cmd');
 		$format = $this->getOption('format');
