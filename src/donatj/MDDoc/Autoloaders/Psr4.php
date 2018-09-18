@@ -35,7 +35,7 @@ class Psr4 implements AutoloaderInterface {
 	 * @param string $path
 	 * @return string
 	 */
-	protected final function trimSlashes( $path ) {
+	final protected function trimSlashes( $path ) {
 		return trim($path, ' /\\');
 	}
 
@@ -71,4 +71,3 @@ class Psr4 implements AutoloaderInterface {
 	}
 
 }
- 

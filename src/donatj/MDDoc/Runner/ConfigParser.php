@@ -11,7 +11,7 @@ use donatj\MDDoc\Exceptions\ConfigException;
 
 class ConfigParser {
 
-	function __construct( $filename ) {
+	public function __construct( $filename ) {
 
 		if( !is_readable($filename) ) {
 			throw new ConfigException("Config file '{$filename}' not readable");
@@ -27,21 +27,22 @@ class ConfigParser {
 			throw new \RuntimeException('Needs a DOM element');
 		}
 
-		$docRoot = new Documentation\DocRoot(array(), array());
+		$docRoot = new Documentation\DocRoot([], []);
 		if( $root->nodeName == 'mddoc' ) {
 			$this->loadChildren($root, $docRoot);
 		} else {
 			if( $root->nodeName ) {
 				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid.");
-			} else {
-				throw new ConfigException("Error parsing {$filename}");
 			}
+  
+				throw new ConfigException("Error parsing {$filename}");
+
 		}
 
 		$docRoot->output();
 	}
 
-	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc &$parent, array $tree_extra = array(), $attribute_tree = array() ) {
+	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc &$parent, array $tree_extra = [], $attribute_tree = [] ) {
 
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
 			switch( strtolower($sel_loader) ) {
@@ -71,13 +72,13 @@ class ConfigParser {
 					case 'section':
 						$childDoc = new Documentation\Section($attributes, $child_attribute_tree);
 						break;
-					case 'docpage';
+					case 'docpage':
 						$childDoc = new Documentation\DocPage($attributes, $child_attribute_tree);
 						break;
 					case 'text':
 						$childDoc = new Documentation\Text($attributes, $child_attribute_tree, $child->textContent);
 						break;
-					case 'file';
+					case 'file':
 						$childDoc = new Documentation\ClassFile($attributes, $child_attribute_tree);
 						break;
 					case 'recursivedirectory':
@@ -137,7 +138,7 @@ class ConfigParser {
 	}
 
 	private function nodeAttr( \DOMElement $node ) {
-		$attributes = array();
+		$attributes = [];
 		if( $node->hasAttributes() ) {
 			foreach( $node->attributes as $attr ) {
 				$attributes[strtolower($attr->nodeName)] = $attr->nodeValue;

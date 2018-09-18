@@ -9,7 +9,7 @@ abstract class AbstractNestedDoc extends AbstractDocPart {
 	/**
 	 * @var \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]
 	 */
-	private $children = array();
+	private $children = [];
 
 	/**
 	 * @return \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]
@@ -27,11 +27,8 @@ abstract class AbstractNestedDoc extends AbstractDocPart {
 		}
 	}
 
-	/**
-	 * @param \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface $child
-	 */
 	public function addChild( DocumentationInterface $child ) {
 		$this->children[] = $child;
 	}
 
-} 
+}

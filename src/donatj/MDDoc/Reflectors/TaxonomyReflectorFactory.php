@@ -6,14 +6,13 @@ use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 
 class TaxonomyReflectorFactory {
 
-	private $parsers = array();
+	private $parsers = [];
 
 	/**
 	 * @param                     $filename
-	 * @param AutoloaderInterface $autoLoader
 	 * @return TaxonomyReflector
 	 */
-	function newInstance( $filename, AutoloaderInterface $autoLoader ) {
+	public function newInstance( $filename, AutoloaderInterface $autoLoader ) {
 		if( !isset($this->parsers[$filename]) ) {
 			$this->parsers[$filename] = new TaxonomyReflector($filename, $autoLoader, $this);
 		}

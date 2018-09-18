@@ -24,15 +24,13 @@ class TaxonomyReflector {
 
 	/**
 	 * @param string                   $filename
-	 * @param AutoloaderInterface      $autoLoader
-	 * @param TaxonomyReflectorFactory $parserFactory
 	 * @throws ClassNotReadableException
 	 */
 	public function __construct( $filename, AutoloaderInterface $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
 		$this->fileName      = $filename;
 		$this->autoLoader    = $autoLoader;
 		$this->parserFactory = $parserFactory;
-		$this->data          = array();
+		$this->data          = [];
 
 		try {
 			$this->fileReflector = new FileReflector($filename, true);
@@ -80,7 +78,6 @@ class TaxonomyReflector {
 			$this->data['properties'][$property->getShortName()][] = $property;
 		}
 
-
 		if( $reflector instanceof ClassReflector || $reflector instanceof TraitReflector ) {
 			if( $parent = $reflector->getParentClass() ) {
 				$filename = $loader($parent);
@@ -122,15 +119,12 @@ class TaxonomyReflector {
 		}
 	}
 
-	/**
-	 * @return mixed
-	 */
 	public function getData() {
 		return $this->data;
 	}
 
 	/**
-	 * @return null|InterfaceReflector
+	 * @return InterfaceReflector|null
 	 */
 	public function getReflector() {
 		return $this->reflector;
@@ -140,20 +134,20 @@ class TaxonomyReflector {
 	 * @return \phpDocumentor\Reflection\ClassReflector\MethodReflector[][]
 	 */
 	public function getMethods() {
-		return isset($this->data['methods']) ? $this->data['methods'] : array();
+		return isset($this->data['methods']) ? $this->data['methods'] : [];
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\ClassReflector\ConstantReflector[][]
 	 */
 	public function getConstants() {
-		return isset($this->data['constants']) ? $this->data['constants'] : array();
+		return isset($this->data['constants']) ? $this->data['constants'] : [];
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\ClassReflector\PropertyReflector[][]
 	 */
 	public function getProperties() {
-		return isset($this->data['properties']) ? $this->data['properties'] : array();
+		return isset($this->data['properties']) ? $this->data['properties'] : [];
 	}
 }

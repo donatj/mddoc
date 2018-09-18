@@ -22,7 +22,6 @@ class ExecOutput extends AbstractDocPart {
 		self::FORMAT_CODE_BLOCK,
 	];
 
-
 	/**
 	 * @param int $depth
 	 * @return \donatj\MDDom\Code|\donatj\MDDom\CodeBlock|\donatj\MDDom\Paragraph|string
@@ -48,7 +47,6 @@ class ExecOutput extends AbstractDocPart {
 		} else {
 			$md = implode($output, "\n");
 		}
-
 
 		switch( $format ) {
 			case self::FORMAT_DEFAULT:

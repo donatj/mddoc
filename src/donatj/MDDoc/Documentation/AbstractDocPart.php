@@ -40,18 +40,17 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	/**
 	 * @param string $key
 	 * @param bool   $tree
-	 * @return null|string
+	 * @return string|null
 	 */
 	public function getOption( $key, $tree = false ) {
 		$data = $tree ? $this->treeOptions : $this->options;
-		$val  = isset($data[$key]) ? $data[$key] :
-			(isset($this->defaults[$key]) ? $this->defaults[$key] : null);
 
-		return $val;
+		return $data[$key] ??
+			(isset($this->defaults[$key]) ? $this->defaults[$key] : null);
 	}
 
 	/**
-	 * @param string|array $options
+	 * @param array|string $options
 	 * @param bool         $tree
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */

@@ -115,7 +115,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 				}
 			}
 
-
 			$classInner .= '}';
 
 			if( $showClassPreview ) {
@@ -226,7 +225,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							$output .= PHP_EOL . PHP_EOL;
 						}
 
-
 						/**
 						 * @var $return \phpDocumentor\Reflection\DocBlock\Tag\ReturnTag
 						 */
@@ -277,8 +275,8 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	}
 
 	private function getArgumentString( MethodReflector $method ) {
-		$req_args = array();
-		$opt_args = array();
+		$req_args = [];
+		$opt_args = [];
 		foreach( $method->getArguments() as $argument ) {
 			if( $optDefault = $argument->getDefault() ) {
 				$opt_args[] = $argument->getName() . ' = ' . $optDefault;
@@ -287,13 +285,10 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			}
 		}
 
-		$args = implode(', ', $req_args) . ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') . implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
-
-		return $args;
+		return implode(', ', $req_args) . ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') . implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 	}
 
 	/**
-	 * @param string $args,...
 	 * @return \donatj\MDDom\DocumentDepth
 	 */
 	private function descriptionFormat( $args ) {
@@ -335,7 +330,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		$types = array_filter(explode('|', $type));
 
 		if( !$types ) {
-			$types = array( $default );
+			$types = [ $default ];
 		}
 
 		$output = '';

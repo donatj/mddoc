@@ -12,4 +12,4 @@ interface DocumentationInterface {
 	 */
 	public function output( $depth );
 
-} 
+}

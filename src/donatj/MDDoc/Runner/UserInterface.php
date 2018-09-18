@@ -27,6 +27,7 @@ EOT;
 
 	public function dropError( $text, $code = 1, $additional = false ) {
 		Output::string($this->getScript() . ": " . Style::red($text) . PHP_EOL . ($additional ? $additional . PHP_EOL : ''));
+
 		die($code);
 	}
 

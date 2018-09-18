@@ -10,4 +10,4 @@ interface AutoloaderInterface {
 	 */
 	public function __invoke($className);
 
-} 
+}

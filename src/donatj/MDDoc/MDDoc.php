@@ -61,11 +61,13 @@ class MDDoc {
 		switch( true ) {
 			case $displayVersion:
 				self::versionMarker($ui);
+
 				die(0);
 				break;
 			case $displayHelp:
 			case count($flags->args()) > 1:
 				$ui->dumpOptions($flags->getDefaults());
+
 				die(1);
 				break;
 		}

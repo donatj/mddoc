@@ -15,7 +15,6 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 		$this->autoloader = $autoloader;
 	}
 
-
 	public function output( $depth ) {
 		$document = new Document();
 		$name     = $this->getOption('name');
@@ -27,7 +26,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 				}
 			}
 
-			$class = new ClassFile(array( 'name' => (string)$file ), $this->treeOptions);
+			$class = new ClassFile([ 'name' => (string)$file ], $this->treeOptions);
 			$this->addChild($class);
 		}
 
@@ -64,8 +63,9 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 			});
 
 			return new \ArrayIterator($fileArray);
-		} elseif( is_readable($path) ) {
-			return new \ArrayIterator(array( $path ));
+		}
+		if( is_readable($path) ) {
+			return new \ArrayIterator([ $path ]);
 		}
 
 		throw new PathNotReadableException("Path not readable", $path);
