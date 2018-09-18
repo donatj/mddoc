@@ -1,29 +1,30 @@
 {
-	"name"       : "donatj/mddoc",
-	"require"    : {
-		"php"                     : ">=5.4",
-		"ext-dom"                 : "*",
+	"name": "donatj/mddoc",
+	"description": "Powerful, User Directed Markdown Generator",
+	"require": {
+		"php": ">=5.4",
+		"ext-dom": "*",
 		"phpdocumentor/reflection": "3.*",
-		"donatj/flags"            : "1.*",
-		"donatj/cli-toolkit"      : "0.*",
-		"donatj/mddom"            : "~v0.0.2"
+		"donatj/flags": "1.*",
+		"donatj/cli-toolkit": "0.*",
+		"donatj/mddom": "~v0.0.2",
+		"donatj/drop": "^1.0"
 	},
 	"require-dev": {
-		"donatj/drop": "*"
 	},
-	"license"    : "MIT",
-	"authors"    : [
+	"license": "MIT",
+	"authors": [
 		{
-			"name" : "Jesse Donat",
+			"name": "Jesse Donat",
 			"email": "donatj@gmail.com"
 		}
 	],
-	"autoload"   : {
+	"autoload": {
 		"psr-0": {
 			"donatj": "src/"
 		}
 	},
-	"bin"        : [
+	"bin": [
 		"composer/bin/mddoc"
 	]
 }
