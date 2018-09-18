@@ -3,7 +3,6 @@
 [![Latest Stable Version](https://poser.pugx.org/donatj/mddoc/version)](https://packagist.org/packages/donatj/mddoc)
 [![Total Downloads](https://poser.pugx.org/donatj/mddoc/downloads)](https://packagist.org/packages/donatj/mddoc)
 [![License](https://poser.pugx.org/donatj/mddoc/license)](https://packagist.org/packages/donatj/mddoc)
-[![Build Status](https://travis-ci.org/donatj/Pushover-PHP.svg?branch=master)](https://travis-ci.org/donatj/Pushover-PHP)
 
 
 A simple, directed phpDoc => Markdown generator.
