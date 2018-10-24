@@ -29,7 +29,10 @@ class MDDoc {
 		self::versionMarker($ui);
 
 		try {
-			new ConfigParser($config);
+			$parser = new ConfigParser();
+			$doc    = $parser->parse($config);
+
+			$doc->output();
 		} catch( ConfigException $e ) {
 			$ui->dropError("Configuration error; " . $e->getMessage());
 		} catch( PathNotReadableException $e ) {

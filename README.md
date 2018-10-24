@@ -107,8 +107,6 @@ function __invoke($class)
 
 - ***bool*** | ***null***
 
-
-
 ### Class: \donatj\MDDoc\Documentation\AbstractDocPart
 
 
@@ -530,9 +528,19 @@ function newInstance($filename, $autoLoader)
 
 ### Class: \donatj\MDDoc\Runner\ConfigParser
 
+#### Method: ConfigParser->parse
 
+```php
+function parse($filename)
+```
 
-#### Undocumented Method: `ConfigParser->__construct($filename)`
+##### Parameters:
+
+- ***mixed*** `$filename`
+
+##### Returns:
+
+- ***\donatj\MDDoc\Documentation\DocRoot***
 
 ### Class: \donatj\MDDoc\Runner\UserInterface
 

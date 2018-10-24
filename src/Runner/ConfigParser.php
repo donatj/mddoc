@@ -11,37 +11,13 @@ use donatj\MDDoc\Exceptions\ConfigException;
 
 class ConfigParser {
 
-	public function __construct( $filename ) {
-
-		if( !is_readable($filename) ) {
-			throw new ConfigException("Config file '{$filename}' not readable");
-		}
-
-		$dom = new \DOMDocument();
-		if( @$dom->load($filename) === false ) {
-			throw new ConfigException("Error parsing {$filename}");
-		}
-
-		$root = $dom->firstChild;
-		if( !$root instanceof \DOMElement ) {
-			throw new \RuntimeException('Needs a DOM element');
-		}
-
-		$docRoot = new Documentation\DocRoot([], []);
-		if( $root->nodeName == 'mddoc' ) {
-			$this->loadChildren($root, $docRoot);
-		} else {
-			if( $root->nodeName ) {
-				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid.");
-			}
-  
-				throw new ConfigException("Error parsing {$filename}");
-
-		}
-
-		$docRoot->output();
-	}
-
+	/**
+	 * @param \DOMElement                     $node
+	 * @param Documentation\AbstractNestedDoc $parent
+	 * @param array                           $tree_extra
+	 * @param array                           $attribute_tree
+	 * @throws ConfigException
+	 */
 	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc &$parent, array $tree_extra = [], $attribute_tree = [] ) {
 
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
@@ -129,6 +105,12 @@ class ConfigParser {
 		}
 	}
 
+	/**
+	 * @param \DOMElement $node
+	 * @param  string     $attribute
+	 * @return string
+	 * @throws ConfigException
+	 */
 	private function requireAttr( \DOMElement $node, $attribute ) {
 		if( !$value = $node->getAttribute($attribute) ) {
 			throw new ConfigException("Element `{$node->nodeName}` missing required attribute: {$attribute}");
@@ -146,6 +128,42 @@ class ConfigParser {
 		}
 
 		return $attributes;
+	}
+
+	/**
+	 * Parse a config file
+	 *
+	 * @param string $filename
+	 * @return \donatj\MDDoc\Documentation\DocRoot
+	 * @throws \donatj\MDDoc\Exceptions\ConfigException
+	 */
+	public function parse( $filename ) {
+		if( !is_readable($filename) ) {
+			throw new ConfigException("Config file '{$filename}' not readable");
+		}
+
+		$dom = new \DOMDocument();
+		if( @$dom->load($filename) === false ) {
+			throw new ConfigException("Error parsing {$filename}");
+		}
+
+		$root = $dom->firstChild;
+		if( !$root instanceof \DOMElement ) {
+			throw new \RuntimeException('Needs a DOM element');
+		}
+
+		$docRoot = new Documentation\DocRoot([], []);
+		if( $root->nodeName == 'mddoc' ) {
+			$this->loadChildren($root, $docRoot);
+		} else {
+			if( $root->nodeName ) {
+				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid.");
+			}
+
+			throw new ConfigException("Error parsing {$filename}");
+		}
+
+		return $docRoot;
 	}
 
 }
