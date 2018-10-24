@@ -55,7 +55,8 @@ class ExecOutput extends AbstractDocPart {
 			case self::FORMAT_CODE:
 				return new Code($md);
 			case self::FORMAT_CODE_BLOCK:
-				return new CodeBlock($md, $this->getOption('language'));
+				see($this->getOption('lang'));
+				return new CodeBlock($md, $this->getOption('lang'));
 			default:
 				throw new \RuntimeException("unhandled format '$format'");
 		}
