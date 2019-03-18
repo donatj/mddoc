@@ -13,4 +13,5 @@ foreach( $files as $file ) {
 	}
 }
 
+
 new \donatj\MDDoc\MDDoc($argv);

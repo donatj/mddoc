@@ -22,7 +22,7 @@ class Source extends Text {
 		$lang = $this->getOption('lang');
 
 		if( $name && !is_readable($name) ) {
-			throw new PathNotReadableException("Path not readable.", $name);
+			throw new PathNotReadableException('Path not readable.', $name);
 		}
 
 		$text = ($name ? file_get_contents($name) : $this->text);
