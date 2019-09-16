@@ -8,7 +8,6 @@ use donatj\MDDom\Paragraph;
 class IncludeFile extends AbstractDocPart {
 
 	/**
-	 * @param int $depth
 	 * @return Paragraph
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
 	 */

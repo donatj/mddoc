@@ -33,16 +33,11 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	 * @param $key string
 	 * @param $value mixed
 	 */
-	public function setOptionDefault( $key, $value ) {
+	public function setOptionDefault( string $key, $value ) {
 		$this->defaults[$key] = $value;
 	}
 
-	/**
-	 * @param string $key
-	 * @param bool   $tree
-	 * @return string|null
-	 */
-	public function getOption( $key, $tree = false ) {
+	public function getOption( string $key, bool $tree = false ) : ?string {
 		$data = $tree ? $this->treeOptions : $this->options;
 
 		return $data[$key] ??
@@ -51,10 +46,9 @@ abstract class AbstractDocPart implements DocumentationInterface {
 
 	/**
 	 * @param array|string $options
-	 * @param bool         $tree
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
-	protected function requireOptions( $options, $tree = false ) {
+	protected function requireOptions( $options, bool $tree = false ) : void {
 
 		$tree ? $this->treeOptions : $this->options;
 
@@ -69,14 +63,11 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	/**
 	 * @param \donatj\MDDoc\Documentation\AbstractDocPart $parent
 	 */
-	public function setParent( AbstractDocPart $parent ) {
+	public function setParent( AbstractDocPart $parent ) : void {
 		$this->parent = $parent;
 	}
 
-	/**
-	 * @return AbstractDocPart|null
-	 */
-	public function getParent() {
+	public function getParent() : ?AbstractDocPart {
 		return $this->parent;
 	}
 

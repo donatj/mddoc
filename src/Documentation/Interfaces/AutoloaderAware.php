@@ -6,6 +6,6 @@ use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 
 interface AutoloaderAware {
 
-	public function setAutoloader( AutoloaderInterface $autoloader );
+	public function setAutoloader( AutoloaderInterface $autoloader ) : void;
 
 }

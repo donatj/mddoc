@@ -12,9 +12,6 @@ use donatj\MDDoc\Exceptions\ConfigException;
 class ConfigParser {
 
 	/**
-	 * @param \DOMElement                     $node
-	 * @param Documentation\AbstractNestedDoc $parent
-	 * @param array                           $tree_extra
 	 * @param array                           $attribute_tree
 	 * @throws ConfigException
 	 */
@@ -106,7 +103,6 @@ class ConfigParser {
 	}
 
 	/**
-	 * @param \DOMElement $node
 	 * @param  string     $attribute
 	 * @return string
 	 * @throws ConfigException

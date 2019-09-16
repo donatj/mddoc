@@ -20,7 +20,7 @@ class Psr0 implements AutoloaderInterface {
 	/**
 	 * @param string $path Root path
 	 */
-	public function __construct( $path ) {
+	public function __construct( string $path ) {
 		$this->path = rtrim($path, DIRECTORY_SEPARATOR);
 	}
 

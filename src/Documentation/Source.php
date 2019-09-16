@@ -13,7 +13,6 @@ use donatj\MDDom\CodeBlock;
 class Source extends Text {
 
 	/**
-	 * @param int $depth
 	 * @return string
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
 	 */

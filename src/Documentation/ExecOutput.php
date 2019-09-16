@@ -23,7 +23,6 @@ class ExecOutput extends AbstractDocPart {
 	];
 
 	/**
-	 * @param int $depth
 	 * @return \donatj\MDDom\Code|\donatj\MDDom\CodeBlock|\donatj\MDDom\Paragraph|string
 	 * @throws \donatj\MDDoc\Documentation\Exceptions\ExecutionException
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
@@ -56,6 +55,7 @@ class ExecOutput extends AbstractDocPart {
 				return new Code($md);
 			case self::FORMAT_CODE_BLOCK:
 				see($this->getOption('lang'));
+
 				return new CodeBlock($md, $this->getOption('lang'));
 			default:
 				throw new \RuntimeException("unhandled format '$format'");
