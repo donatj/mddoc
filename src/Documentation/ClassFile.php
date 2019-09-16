@@ -18,7 +18,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 	private $autoloader;
 
-	public function output( $depth ) {
+	public function output( int $depth ) {
 		return $this->scanClassFile($this->getOption('name'), $depth);
 	}
 

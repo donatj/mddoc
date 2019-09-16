@@ -32,7 +32,7 @@ class MDDoc {
 			$parser = new ConfigParser();
 			$doc    = $parser->parse($config);
 
-			$doc->output();
+			$doc->output(0);
 		} catch( ConfigException $e ) {
 			$ui->dropError("Configuration error; " . $e->getMessage());
 		} catch( PathNotReadableException $e ) {

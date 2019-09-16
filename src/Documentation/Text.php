@@ -18,7 +18,7 @@ class Text extends AbstractDocPart {
 		parent::__construct($options, $tree_options);
 	}
 
-	public function output( $depth ) {
+	public function output( int $depth ) {
 		return new Paragraph($this->text);
 	}
 

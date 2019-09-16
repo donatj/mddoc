@@ -17,7 +17,7 @@ class Source extends Text {
 	 * @return string
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
 	 */
-	public function output( $depth ) {
+	public function output( int $depth ) {
 		$name = $this->getOption('name');
 		$lang = $this->getOption('lang');
 

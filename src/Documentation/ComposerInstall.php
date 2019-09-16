@@ -8,7 +8,7 @@ use donatj\MDDom\Paragraph;
 
 class ComposerInstall extends AbstractDocPart {
 
-	public function output( $depth ) {
+	public function output( int $depth ) {
 		$file = realpath('composer.json');
 
 		if( !is_readable($file) ) {

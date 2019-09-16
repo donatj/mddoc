@@ -28,7 +28,7 @@ class ExecOutput extends AbstractDocPart {
 	 * @throws \donatj\MDDoc\Documentation\Exceptions\ExecutionException
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
-	public function output( $depth ) {
+	public function output( int $depth ) {
 		$cmd    = $this->getOption('cmd');
 		$format = $this->getOption('format');
 

@@ -7,7 +7,7 @@ use donatj\MDDom\Document;
 
 class DocPage extends AbstractNestedDoc {
 
-	public function output( $depth ) {
+	public function output( int $depth ) {
 
 		$document = new Document();
 

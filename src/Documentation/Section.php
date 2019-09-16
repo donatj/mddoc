@@ -8,7 +8,7 @@ use donatj\MDDom\Header;
 
 class Section extends AbstractNestedDoc {
 
-	public function output( $depth ) {
+	public function output( int $depth ) {
 		$title = $this->getOption('title');
 
 		if( $this->getParent() instanceof DocPage ) {

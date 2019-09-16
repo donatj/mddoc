@@ -8,8 +8,8 @@ interface DocumentationInterface {
 
 	/**
 	 * @param int $depth
-	 * @return string
+	 * @return string Cannot be annotated as also accepts __toString-able objects
 	 */
-	public function output( $depth );
+	public function output( int $depth );
 
 }
