@@ -72,7 +72,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					$constParts = explode("\n", trim($constantBlock->getText()));
 					if( count($constParts) > 1 ) {
 						$classInner .= "\t/**\n\t * " . implode("\n\t * ", explode("\n", $constantBlock->getText())) . "\n\t */\n";
-					} elseif( count($constParts) == 1 ) {
+					} elseif( count($constParts) === 1 ) {
 						$classInner .= "\t/** " . reset($constParts) . " */\n";
 					}
 				}
@@ -84,7 +84,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			foreach( $propertyData as $properties ) {
 				/** @var \phpDocumentor\Reflection\ClassReflector\PropertyReflector $property */
 				$property = reset($properties);
-				if( $property->getVisibility() == 'public' ) {
+				if( $property->getVisibility() === 'public' ) {
 					if( $propertyBlock = $property->getDocBlock() ) {
 						if( $this->shouldSkip($propertyBlock) ) {
 							continue;
@@ -128,7 +128,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 				/** @var MethodReflector $method */
 				$method = reset($methods);
 
-				if( $method->getVisibility() == 'public' ) {
+				if( $method->getVisibility() === 'public' ) {
 
 					$subDocument = new DocumentDepth();
 					$document->appendChild($subDocument);
@@ -265,12 +265,12 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			/**
 			 * @var $access \phpDocumentor\Reflection\DocBlock\Tag
 			 */
-			if( $access->getContent() != 'public' ) {
+			if( $access->getContent() !== 'public' ) {
 				return true;
 			}
 		} elseif( $block->getTagsByName('ignore')
-				  || $block->getTagsByName('private')
-				  || $block->getTagsByName('internal') ) {
+			|| $block->getTagsByName('private')
+			|| $block->getTagsByName('internal') ) {
 			return true;
 		}
 
@@ -281,10 +281,15 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		$req_args = [];
 		$opt_args = [];
 		foreach( $method->getArguments() as $argument ) {
+			$prefix = '';
+			if( $argument->getType() ) {
+				$prefix = "{$argument->getType()} ";
+			}
+
 			if( $optDefault = $argument->getDefault() ) {
-				$opt_args[] = $argument->getName() . ' = ' . $optDefault;
+				$opt_args[] = $prefix . $argument->getName() . ' = ' . $optDefault;
 			} else {
-				$req_args[] = $argument->getName();
+				$req_args[] = $prefix . $argument->getName();
 			}
 		}
 
