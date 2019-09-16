@@ -12,8 +12,6 @@ use phpDocumentor\Reflection\TraitReflector;
 
 class TaxonomyReflector {
 
-	private $fileReflector;
-	private $fileName;
 	/**
 	 * @var callable
 	 */
@@ -23,32 +21,30 @@ class TaxonomyReflector {
 	private $reflector = null;
 
 	/**
-	 * @param string                   $filename
 	 * @throws ClassNotReadableException
 	 */
-	public function __construct( $filename, AutoloaderInterface $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
-		$this->fileName      = $filename;
+	public function __construct( string $filename, AutoloaderInterface $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
 		$this->autoLoader    = $autoLoader;
 		$this->parserFactory = $parserFactory;
 		$this->data          = [];
 
 		try {
-			$this->fileReflector = new FileReflector($filename, true);
-			$this->fileReflector->process();
-			$this->fileReflector->scanForMarkers();
+			$fileReflector = new FileReflector($filename, true);
+			$fileReflector->process();
+			$fileReflector->scanForMarkers();
 		} catch( \Exception $e ) {
 			throw new ClassNotReadableException('Class not readable', $filename, $e);
 		}
 
-		foreach( $this->fileReflector->getInterfaces() as $interfaces ) {
+		foreach( $fileReflector->getInterfaces() as $interfaces ) {
 			$this->registerReflectors($interfaces);
 		}
 
-		foreach( $this->fileReflector->getClasses() as $class ) {
+		foreach( $fileReflector->getClasses() as $class ) {
 			$this->registerReflectors($class);
 		}
 
-		foreach( $this->fileReflector->getTraits() as $trait ) {
+		foreach( $fileReflector->getTraits() as $trait ) {
 			$this->registerReflectors($trait);
 		}
 		//		$this->fileReflector->getClasses(); // -- I don't think this did anything.
@@ -134,20 +130,20 @@ class TaxonomyReflector {
 	 * @return \phpDocumentor\Reflection\ClassReflector\MethodReflector[][]
 	 */
 	public function getMethods() {
-		return isset($this->data['methods']) ? $this->data['methods'] : [];
+		return $this->data['methods'] ?? [];
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\ClassReflector\ConstantReflector[][]
 	 */
 	public function getConstants() {
-		return isset($this->data['constants']) ? $this->data['constants'] : [];
+		return $this->data['constants'] ?? [];
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\ClassReflector\PropertyReflector[][]
 	 */
 	public function getProperties() {
-		return isset($this->data['properties']) ? $this->data['properties'] : [];
+		return $this->data['properties'] ?? [];
 	}
 }
