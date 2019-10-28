@@ -53,7 +53,7 @@ Class Psr0
 #### Method: Psr0->__construct
 
 ```php
-function __construct($path)
+function __construct(\donatj\MDDoc\Autoloaders\string $path)
 ```
 
 ##### Parameters:
@@ -83,7 +83,7 @@ Class Psr4
 #### Method: Psr4->__construct
 
 ```php
-function __construct($root_namespace, $path)
+function __construct(\donatj\MDDoc\Autoloaders\string $root_namespace, \donatj\MDDoc\Autoloaders\string $path)
 ```
 
 ##### Parameters:
@@ -107,69 +107,7 @@ function __invoke($class)
 
 - ***bool*** | ***null***
 
-### Class: \donatj\MDDoc\Documentation\AbstractDocPart
 
-
-
-#### Undocumented Method: `AbstractDocPart->__construct($options, $tree_options)`
-
-
-
-#### Undocumented Method: `AbstractDocPart->setOptions($options, $tree_options)`
-
----
-
-#### Method: AbstractDocPart->setOptionDefault
-
-```php
-function setOptionDefault($key, $value)
-```
-
-##### Parameters:
-
-- ***mixed*** `$key` - string
-- ***mixed*** `$value` - mixed
-
----
-
-#### Method: AbstractDocPart->getOption
-
-```php
-function getOption($key [, $tree = false])
-```
-
-##### Parameters:
-
-- ***string*** `$key`
-- ***bool*** `$tree`
-
-##### Returns:
-
-- ***string*** | ***null***
-
----
-
-#### Method: AbstractDocPart->setParent
-
-```php
-function setParent($parent)
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
-
----
-
-#### Method: AbstractDocPart->getParent
-
-```php
-function getParent()
-```
-
-##### Returns:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** | ***null***
 
 ### Class: \donatj\MDDoc\Documentation\AbstractNestedDoc
 
@@ -197,7 +135,7 @@ function setChildren($children)
 
 
 
-#### Undocumented Method: `AbstractNestedDoc->addChild($child)`
+#### Undocumented Method: `AbstractNestedDoc->addChild(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface $child)`
 
 ### Class: \donatj\MDDoc\Documentation\Badges\Badge
 
@@ -215,7 +153,7 @@ class Badge {
 
 
 
-#### Undocumented Method: `Badge->output($depth)`
+#### Undocumented Method: `Badge->output(\donatj\MDDoc\Documentation\Badges\int $depth)`
 
 ### Class: \donatj\MDDoc\Documentation\Badges\BadgePoser
 
@@ -259,35 +197,35 @@ class BadgeTravis {
 
 
 
-#### Undocumented Method: `ClassFile->output($depth)`
+#### Undocumented Method: `ClassFile->output(\donatj\MDDoc\Documentation\int $depth)`
 
 
 
-#### Undocumented Method: `ClassFile->setAutoloader($autoloader)`
+#### Undocumented Method: `ClassFile->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
 
 ### Class: \donatj\MDDoc\Documentation\ComposerInstall
 
 
 
-#### Undocumented Method: `ComposerInstall->output($depth)`
+#### Undocumented Method: `ComposerInstall->output(\donatj\MDDoc\Documentation\int $depth)`
 
 ### Class: \donatj\MDDoc\Documentation\ComposerRequires
 
 
 
-#### Undocumented Method: `ComposerRequires->output($depth)`
+#### Undocumented Method: `ComposerRequires->output(\donatj\MDDoc\Documentation\int $depth)`
 
 ### Class: \donatj\MDDoc\Documentation\DocPage
 
 
 
-#### Undocumented Method: `DocPage->output($depth)`
+#### Undocumented Method: `DocPage->output(\donatj\MDDoc\Documentation\int $depth)`
 
 ### Class: \donatj\MDDoc\Documentation\DocRoot
 
 
 
-#### Undocumented Method: `DocRoot->output($depth)`
+#### Undocumented Method: `DocRoot->output(\donatj\MDDoc\Documentation\int $depth)`
 
 ### Class: \donatj\MDDoc\Documentation\Exceptions\ExecutionException
 
@@ -308,12 +246,8 @@ class ExecOutput {
 #### Method: ExecOutput->output
 
 ```php
-function output($depth)
+function output(\donatj\MDDoc\Documentation\int $depth)
 ```
-
-##### Parameters:
-
-- ***int*** `$depth`
 
 ##### Returns:
 
@@ -324,12 +258,8 @@ function output($depth)
 #### Method: IncludeFile->output
 
 ```php
-function output($depth)
+function output(\donatj\MDDoc\Documentation\int $depth)
 ```
-
-##### Parameters:
-
-- ***int*** `$depth`
 
 ##### Returns:
 
@@ -339,45 +269,41 @@ function output($depth)
 
 
 
-#### Undocumented Method: `AutoloaderAware->setAutoloader($autoloader)`
+#### Undocumented Method: `AutoloaderAware->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
 
 ### Class: \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
 
 
 
-#### Undocumented Method: `DocumentationInterface->__construct($options, $tree_options)`
+#### Undocumented Method: `DocumentationInterface->__construct(array $options, array $tree_options)`
 
 ---
 
 #### Method: DocumentationInterface->output
 
 ```php
-function output($depth)
+function output(\donatj\MDDoc\Documentation\Interfaces\int $depth)
 ```
-
-##### Parameters:
-
-- ***int*** `$depth`
 
 ##### Returns:
 
-- ***string***
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
 
 ### Class: \donatj\MDDoc\Documentation\RecursiveDirectory
 
 
 
-#### Undocumented Method: `RecursiveDirectory->setAutoloader($autoloader)`
+#### Undocumented Method: `RecursiveDirectory->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
 
 
 
-#### Undocumented Method: `RecursiveDirectory->output($depth)`
+#### Undocumented Method: `RecursiveDirectory->output(\donatj\MDDoc\Documentation\int $depth)`
 
 ### Class: \donatj\MDDoc\Documentation\Section
 
 
 
-#### Undocumented Method: `Section->output($depth)`
+#### Undocumented Method: `Section->output(\donatj\MDDoc\Documentation\int $depth)`
 
 ### Class: \donatj\MDDoc\Documentation\Source
 
@@ -386,12 +312,8 @@ Class Source
 #### Method: Source->output
 
 ```php
-function output($depth)
+function output(\donatj\MDDoc\Documentation\int $depth)
 ```
-
-##### Parameters:
-
-- ***int*** `$depth`
 
 ##### Returns:
 
@@ -403,11 +325,11 @@ Class Text
 
 
 
-#### Undocumented Method: `Text->__construct($options, $tree_options [, $text = ''])`
+#### Undocumented Method: `Text->__construct(array $options, array $tree_options [, $text = ''])`
 
 
 
-#### Undocumented Method: `Text->output($depth)`
+#### Undocumented Method: `Text->output(\donatj\MDDoc\Documentation\int $depth)`
 
 ### Class: \donatj\MDDoc\Exceptions\ClassNotReadableException
 
@@ -419,7 +341,7 @@ Class Text
 
 
 
-#### Undocumented Method: `PathNotReadableException->__construct($message, $path [, $previous_exception = null])`
+#### Undocumented Method: `PathNotReadableException->__construct($message, $path [, \Exception $previous_exception = null])`
 
 
 
@@ -444,19 +366,15 @@ class MDDoc {
 
 
 
-#### Undocumented Method: `MDDoc->__construct($args)`
+#### Undocumented Method: `MDDoc->__construct(array $args)`
 
 ### Class: \donatj\MDDoc\Reflectors\TaxonomyReflector
 
 #### Method: TaxonomyReflector->__construct
 
 ```php
-function __construct($filename, $autoLoader, $parserFactory)
+function __construct(\donatj\MDDoc\Reflectors\string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader, \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory $parserFactory)
 ```
-
-##### Parameters:
-
-- ***string*** `$filename`
 
 
 
@@ -515,7 +433,7 @@ function getProperties()
 #### Method: TaxonomyReflectorFactory->newInstance
 
 ```php
-function newInstance($filename, $autoLoader)
+function newInstance($filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader)
 ```
 
 ##### Parameters:
@@ -534,9 +452,11 @@ function newInstance($filename, $autoLoader)
 function parse($filename)
 ```
 
+Parse a config file
+
 ##### Parameters:
 
-- ***mixed*** `$filename`
+- ***string*** `$filename`
 
 ##### Returns:
 

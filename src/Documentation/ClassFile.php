@@ -353,7 +353,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return preg_replace('/^\s*\n|\n\s*$/s', '', $data);
 	}
 
-	public function setAutoloader( AutoloaderInterface $autoloader ) {
+	public function setAutoloader( AutoloaderInterface $autoloader ) : void {
 		$this->autoloader = $autoloader;
 	}
 }
