@@ -1,6 +1,7 @@
 {
 	"name": "donatj/mddoc",
 	"description": "Powerful, User Directed Markdown Generator",
+	"minimum-stability": "alpha",
 	"require": {
 		"php": ">=7.1",
 		"ext-dom": "*",
@@ -8,7 +9,7 @@
 		"donatj/cli-toolkit": "0.*",
 		"donatj/mddom": "~v0.0.2",
 		"donatj/drop": "^1.0",
-		"phpdocumentor/reflection": "dev-master#v4.0.0-beta"
+		"phpdocumentor/reflection": "dev-develop"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^2.13"

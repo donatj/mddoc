@@ -7,6 +7,13 @@ use donatj\MDDoc\Exceptions\ConfigException;
 
 abstract class AbstractDocPart implements DocumentationInterface {
 
+	/**
+	 * This variable is the funk
+	 *
+	 * @var bool
+	 */
+	public $removeMe = true;
+
 	protected $defaults = [];
 	protected $options;
 	protected $treeOptions;
