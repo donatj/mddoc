@@ -7,7 +7,7 @@
 		"ext-dom": "*",
 		"donatj/flags": "1.*",
 		"donatj/cli-toolkit": "0.*",
-		"donatj/mddom": "~v0.0.2",
+		"donatj/mddom": "~0.1.0",
 		"donatj/drop": "^1.0",
 		"phpdocumentor/reflection": "dev-develop"
 	},
