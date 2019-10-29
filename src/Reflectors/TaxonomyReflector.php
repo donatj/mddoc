@@ -37,7 +37,6 @@ class TaxonomyReflector {
 		/** @var \phpDocumentor\Reflection\Php\File $fileReflector */
 		$fileReflector = $project->getFiles()[$filename];
 
-
 		foreach( $fileReflector->getInterfaces() as $interfaces ) {
 			$this->registerReflectors($interfaces);
 		}
@@ -63,8 +62,6 @@ class TaxonomyReflector {
 
 		$loader = $this->autoLoader;
 
-
-
 		foreach( $reflector->getMethods() as $method ) {
 			$this->data['methods'][$method->getName()][] = $method;
 		}
@@ -78,8 +75,6 @@ class TaxonomyReflector {
 				$this->data['properties'][$property->getName()][] = $property;
 			}
 		}
-
-
 
 		if( $reflector instanceof Class_ || $reflector instanceof Trait_ ) {
 			if( $parent = $reflector->getParent() ) {
