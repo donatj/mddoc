@@ -209,6 +209,19 @@ class Badge {
 
 #### Undocumented Method: `Badge->output(int $depth)`
 
+### Class: \donatj\MDDoc\Documentation\Badges\BadgeGitHubActions
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation\Badges;
+
+class BadgeGitHubActions {
+	const URL_GITHUB_BASE = 'https://github.com/';
+	const OPT_BRANCH = 'branch';
+	const OPT_EVENT = 'event';
+}
+```
+
 ### Class: \donatj\MDDoc\Documentation\Badges\BadgePoser
 
 ```php
