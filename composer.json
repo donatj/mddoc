@@ -9,7 +9,8 @@
 		"donatj/cli-toolkit": "0.*",
 		"donatj/mddom": "~0.1.0",
 		"donatj/drop": "^1.0",
-		"phpdocumentor/reflection": "dev-develop"
+		"phpdocumentor/reflection": "~4.0",
+		"phpdocumentor/type-resolver": "*"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^2.13"

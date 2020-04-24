@@ -178,7 +178,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					$subDocument = new DocumentDepth();
 					$document->appendChild($subDocument);
 
-
 					$firstBlock = reset($blocks);
 
 					if( $firstBlock ) {
@@ -221,7 +220,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 							$deprecatedDoc->appendChild(new Header('DEPRECATED'));
 							foreach( $deprecatedBlocks as $deprecatedBlock ) {
-								if( $content = trim($deprecatedBlock->getContent()) ) {
+								if( $content = trim($deprecatedBlock->getDescription()) ) {
 									$deprecatedDoc->appendChild(new MdText($content));
 								}
 							}
@@ -312,7 +311,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			// @todo: the types are currently borked on default parameters.
 			$optDefault = $argument->getDefault();
 			if( $optDefault !== null ) {
-				$opt_args[] = $prefix . '$' . $argument->getName() . ' = ' . var_export($optDefault, true);
+				$opt_args[] = $prefix . '$' . $argument->getName() . ' = ' . $this->temporaryValueNameFormatter($optDefault);
 			} else {
 				$req_args[] = $prefix . '$' . $argument->getName();
 			}
@@ -321,6 +320,15 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return implode(', ', $req_args) .
 			($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
 			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
+	}
+
+	private function temporaryValueNameFormatter( string $value ) : string {
+		$lower = strtolower($value);
+		if( in_array($lower, [ 'true', 'false', 'null', '[]' ]) || ctype_digit($value) ) {
+			return $value;
+		}
+
+		return var_export($value, true);
 	}
 
 	/**
@@ -406,6 +414,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	}
 
 	private function getConstantValueString( Constant $constant ) : string {
-		return var_export(constant((string)$constant->getFqsen()), true);
+		return $this->temporaryValueNameFormatter($constant->getValue());
 	}
 }

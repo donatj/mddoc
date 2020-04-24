@@ -118,7 +118,7 @@ class AbstractDocPart {
 	 * This variable is the funk
 	 * @var bool  
 	 */
-	public removeMe = true;
+	public $removeMe = true;
 }
 ```
 
@@ -145,14 +145,14 @@ function setOptionDefault(string $key, $value)
 
 
 
-#### Undocumented Method: `AbstractDocPart->getOption(string $key [, bool $tree = 'false'])`
+#### Undocumented Method: `AbstractDocPart->getOption(string $key [, bool $tree = false])`
 
 ---
 
 #### Method: AbstractDocPart->setParent
 
 ```php
-function setParent(\donatj\MDDoc\Documentation\AbstractDocPart $parent)
+function setParent(\donatj\MDDoc\Documentation\AbstractDocPart $parent) : void
 ```
 
 ##### Parameters:
@@ -412,7 +412,7 @@ Class Text
 
 
 
-#### Undocumented Method: `PathNotReadableException->__construct($message, $path [, \Exception $previous_exception = 'null'])`
+#### Undocumented Method: `PathNotReadableException->__construct($message, $path [, \Exception $previous_exception = null])`
 
 
 
@@ -545,7 +545,7 @@ Parse a config file
 
 
 
-#### Undocumented Method: `UserInterface->dropError($text [, $code = '1' [, $additional = 'false']])`
+#### Undocumented Method: `UserInterface->dropError($text [, $code = 1 [, $additional = false]])`
 
 
 
