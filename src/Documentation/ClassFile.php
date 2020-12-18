@@ -11,8 +11,9 @@ use donatj\MDDom\Header;
 use donatj\MDDom\HorizontalRule;
 use donatj\MDDom\Paragraph;
 use donatj\MDDom\Text as MdText;
-use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\Php\Constant;
+use phpDocumentor\Reflection\Php\Method;
 
 class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
@@ -42,13 +43,14 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		if( $class = $reflector->getReflector() ) {
 
 			if( !$this->getOption('skip-class-header', true) ) {
-				$document->appendChild(new Header('Class: ' . $class->getName() /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
+				$document->appendChild(new Header('Class: ' . $class->getFqsen() /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
 
 				if( $classBlock = $class->getDocBlock() ) {
 					if( $this->shouldSkip($classBlock) ) {
 						return '';
 					}
-					$document->appendChild(new Paragraph($classBlock->getText()));
+
+					$document->appendChild(new Paragraph($classBlock->getSummary()));
 				}
 			}
 
@@ -56,56 +58,76 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 			$classInner = "<?php\n";
 
-			if( $ns = $class->getNamespace() ) {
-				$classInner .= "namespace {$class->getNamespace()};\n\n";
+			// @todo figure some stuff out
+			if( $ns = $class->getLocation() ) {
+				$classInner .= sprintf("namespace %s;\n\n",
+					trim(substr((string)$class->getFqsen(), 0, 0 - strlen($class->getName())), '\\')
+				);
 			}
 
-			$classInner   .= "class {$class->getShortName()} {\n";
+			$classInner   .= "class {$class->getName()} {\n";
 			$constantData = $reflector->getConstants();
 			foreach( $constantData as $constants ) {
-				/** @var \phpDocumentor\Reflection\ClassReflector\ConstantReflector $constant */
 				$constant = reset($constants);
 				if( $constantBlock = $constant->getDocBlock() ) {
 					if( $this->shouldSkip($constantBlock) ) {
 						continue;
 					}
-					$constParts = explode("\n", trim($constantBlock->getText()));
+
+					$constParts = explode("\n",
+						$this->descriptionFormat(
+							$this->getDocStr($constantBlock)
+						)->exportMarkdown()
+					);
+
+					if( $vars = $constantBlock->getTagsByName('var') ) {
+						/** @var \phpDocumentor\Reflection\DocBlock\Tags\Var_ $var */
+						$var          = reset($vars);
+						$constParts[] = '@var ' . (string)$var;
+					}
+
+					$constParts = $this->arrayTrim($constParts);
+
 					if( count($constParts) > 1 ) {
-						$classInner .= "\t/**\n\t * " . implode("\n\t * ", explode("\n", $constantBlock->getText())) . "\n\t */\n";
+						$classInner .= "\t/**\n\t * " . implode("\n\t * ", $constParts) . "\n\t */\n";
 					} elseif( count($constParts) === 1 ) {
 						$classInner .= "\t/** " . reset($constParts) . " */\n";
 					}
 				}
-				$classInner       .= "\tconst {$constant->getName()} = {$constant->getValue()};\n";
+				$classInner       .= sprintf("\tconst %s = %s;\n",
+					$constant->getName(),
+					$this->getConstantValueString($constant)
+				);
 				$showClassPreview = true;
 			}
 
 			$propertyData = $reflector->getProperties();
 			foreach( $propertyData as $properties ) {
-				/** @var \phpDocumentor\Reflection\ClassReflector\PropertyReflector $property */
+
 				$property = reset($properties);
-				if( $property->getVisibility() === 'public' ) {
+				if( (string)$property->getVisibility() === 'public' ) {
+					/** @var DocBlock $propertyBlock */
 					if( $propertyBlock = $property->getDocBlock() ) {
 						if( $this->shouldSkip($propertyBlock) ) {
 							continue;
 						}
 
-						if( $propertyBlock->getText() ) {
-							$classInner .= "\t/**\n\t * " . implode("\n\t * ", explode("\n", $propertyBlock->getText()));
+						if( $propertyBlock->getSummary() ) {
+							$classInner .= "\t/**\n\t * " . implode("\n\t * ", explode("\n", $this->getDocStr($propertyBlock)));
 						} else {
 							$classInner .= "\t/**";
 						}
 
 						if( $vars = $propertyBlock->getTagsByName('var') ) {
-							/** @var \phpDocumentor\Reflection\DocBlock\Tag $var */
+							/** @var \phpDocumentor\Reflection\DocBlock\Tags\Var_ $var */
 							$var        = reset($vars);
-							$classInner .= "\n\t * @var {$var->getContent()}";
+							$classInner .= "\n\t * @var " . (string)$var;
 						}
 
 						$classInner .= "\n\t */\n";
 					}
 					$static     = $property->isStatic() ? 'static ' : '';
-					$classInner .= "\tpublic {$static}{$property->getName()}";
+					$classInner .= "\tpublic {$static}\${$property->getName()}";
 					if( $property->getDefault() ) {
 						$classInner .= " = {$property->getDefault()}";
 					}
@@ -125,23 +147,22 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 			$i = 0;
 			foreach( $methodData as $methods ) {
-				/** @var MethodReflector $method */
 				$method = reset($methods);
 
-				if( $method->getVisibility() === 'public' ) {
+				if( (string)$method->getVisibility() === 'public' ) {
 
-					$subDocument = new DocumentDepth();
-					$document->appendChild($subDocument);
-
-					$name = $method->getShortName();
+					$name = $method->getName();
 					$args = $this->getArgumentString($method);
+
+					$fReturnS = '';
+					$fReturn  = (string)$method->getReturnType();
+					if( $fReturn !== 'mixed' ) {
+						$fReturnS = " : {$fReturn}";
+					}
 
 					/** @var \phpDocumentor\Reflection\DocBlock[] $blocks */
 					$blocks = [];
 
-					/**
-					 * @var $subMethod \phpDocumentor\Reflection\ClassReflector\MethodReflector
-					 */
 					foreach( $methods as $subMethod ) {
 						if( $block = $subMethod->getDocBlock() ) {
 							$blocks[] = $block;
@@ -154,6 +175,9 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 					}
 
+					$subDocument = new DocumentDepth();
+					$document->appendChild($subDocument);
+
 					$firstBlock = reset($blocks);
 
 					if( $firstBlock ) {
@@ -161,7 +185,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						$canonicalMethodName = $class->getName() . $operator . "$name($args)";
 
 						if( $methodFilter = $this->getOption('method-filter') ) {
-
 							if( !preg_match($methodFilter, $canonicalMethodName) ) {
 								continue;
 							}
@@ -174,16 +197,20 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 
 						$subDocument->appendChild(
-							new Header("Method: {$class->getShortName()}{$operator}{$name}")
+							new Header("Method: {$class->getName()}{$operator}{$name}")
 						);
 
 						$subDocument->appendChild(
-							new CodeBlock("function {$name}({$args})", 'php')
+							new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
 						);
 
 						foreach( $blocks as $block ) {
-							if( $block->getShortDescription() ) {
-								$subDocument->appendChild($this->descriptionFormat($block->getShortDescription(), $block->getLongDescription()->getContents()));
+							if( $block->getSummary() ) {
+								$subDocument->appendChild(
+									$this->descriptionFormat(
+										$this->getDocStr($block)
+									)
+								);
 							}
 						}
 
@@ -193,16 +220,14 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 							$deprecatedDoc->appendChild(new Header('DEPRECATED'));
 							foreach( $deprecatedBlocks as $deprecatedBlock ) {
-								if( $content = trim($deprecatedBlock->getContent()) ) {
+								if( $content = trim($deprecatedBlock->getDescription()) ) {
 									$deprecatedDoc->appendChild(new MdText($content));
 								}
 							}
 						}
 
 						foreach( $blocks as $block ) {
-							/**
-							 * @var $tag \phpDocumentor\Reflection\DocBlock\Tag\ParamTag
-							 */
+
 							if( $methodParams = $block->getTagsByName('param') ) {
 
 								$paramDoc = new DocumentDepth();
@@ -213,9 +238,9 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 								$output = '';
 								foreach( $block->getTagsByName('param') as $tag ) {
 
-									$output .= '- ' . $this->formatType($tag->getType()) . ' `' . $tag->getVariableName() . '`';
+									$output .= sprintf('- %s `$%s`', $this->formatType($tag->getType()), $tag->getVariableName());
 
-									if( $tagDescr = $tag->getDescription() ) {
+									if( $tagDescr = (string)$tag->getDescription() ) {
 										$output .= ' - ' . $tagDescr;
 									}
 
@@ -228,9 +253,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							}
 						}
 
-						/**
-						 * @var $return \phpDocumentor\Reflection\DocBlock\Tag\ReturnTag
-						 */
 						if( !$this->getOption('skip-method-returns', true) ) {
 							if( $return = current($firstBlock->getTagsByName('return')) ) {
 								$returnDoc = new DocumentDepth();
@@ -238,7 +260,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 								$returnDoc->appendChild(new Header('Returns:'));
 
-								$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = $return->getDescription()) ? ' - ' . $returnDescr : '')));
+								$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
 							}
 						}
 					} else {
@@ -248,7 +270,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						$subDocument = new DocumentDepth();
 						$document->appendChild($subDocument);
 
-						$subDocument->appendChild(new Header("Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`"));
+						$subDocument->appendChild(new Header("Undocumented Method: `" . $class->getName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`"));
 					}
 
 					$output .= PHP_EOL;
@@ -262,10 +284,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	private function shouldSkip( DocBlock $block ) {
 		if( $access = $block->getTagsByName('access') ) {
 			$access = reset($access);
-			/**
-			 * @var $access \phpDocumentor\Reflection\DocBlock\Tag
-			 */
-			if( $access->getContent() !== 'public' ) {
+			if( (string)$access->getDescription() !== 'public' ) {
 				return true;
 			}
 		} elseif( $block->getTagsByName('ignore')
@@ -277,27 +296,43 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return false;
 	}
 
-	private function getArgumentString( MethodReflector $method ) {
+	private function getArgumentString( Method $method ) {
 		$req_args = [];
 		$opt_args = [];
 		foreach( $method->getArguments() as $argument ) {
 			$prefix = '';
-			if( $argument->getType() ) {
+			if( (string)$argument->getType() !== 'mixed' ) {
 				$prefix = "{$argument->getType()} ";
+				if( $argument->isVariadic() ) {
+					$prefix .= '...';
+				}
 			}
 
-			if( $optDefault = $argument->getDefault() ) {
-				$opt_args[] = $prefix . $argument->getName() . ' = ' . $optDefault;
+			// @todo: the types are currently borked on default parameters.
+			$optDefault = $argument->getDefault();
+			if( $optDefault !== null ) {
+				$opt_args[] = $prefix . '$' . $argument->getName() . ' = ' . $this->temporaryValueNameFormatter($optDefault);
 			} else {
-				$req_args[] = $prefix . $argument->getName();
+				$req_args[] = $prefix . '$' . $argument->getName();
 			}
 		}
 
-		return implode(', ', $req_args) . ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') . implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
+		return implode(', ', $req_args) .
+			($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
+			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
+	}
+
+	private function temporaryValueNameFormatter( string $value ) : string {
+		$lower = strtolower($value);
+		if( in_array($lower, [ 'true', 'false', 'null', '[]' ]) || ctype_digit($value) ) {
+			return $value;
+		}
+
+		return var_export($value, true);
 	}
 
 	/**
-	 * @return \donatj\MDDom\DocumentDepth
+	 * @return DocumentDepth
 	 */
 	private function descriptionFormat( $args ) {
 		$string = implode(PHP_EOL, func_get_args());
@@ -305,7 +340,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 		$document = new DocumentDepth;
 
-		$runningText = "";
+		$runningText = '';
 		while( ($part = current($parts)) !== false ) {
 
 			$part = rtrim($part);
@@ -316,10 +351,10 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 				$lastPart = $lastPart[0];
 			}
 
-			if( $lastPart == ':' ) {
+			if( $lastPart === ':' ) {
 				if( trim($runningText) ) {
 					$document->appendChild(new MdText($this->smartLineTrim($runningText)));
-					$runningText = "";
+					$runningText = '';
 				}
 				$document->appendChild(new Header(substr($part, 0, -1)));
 			} else {
@@ -350,10 +385,35 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	}
 
 	private function smartLineTrim( $data ) {
-		return preg_replace('/^\s*\n|\n\s*$/s', '', $data);
+		return preg_replace('/^\s*\n|\n\s*$/', '', $data);
 	}
 
 	public function setAutoloader( AutoloaderInterface $autoloader ) : void {
 		$this->autoloader = $autoloader;
+	}
+
+	public function getDocStr( DocBlock $block ) : string {
+		return trim(
+			trim((string)$block->getSummary()) .
+			"\n\n" .
+			trim((string)$block->getDescription())
+		);
+	}
+
+	private function arrayTrim( $sv ) : array {
+		$s   = 0;
+		$svn = null;
+		$c   = count($sv);
+		for( $i = 0; $i < $c; $i++ ) {
+			if( !empty($sv[$i]) ) {
+				$svn[$s++] = trim($sv[$i]);
+			}
+		}
+
+		return $svn;
+	}
+
+	private function getConstantValueString( Constant $constant ) : string {
+		return $this->temporaryValueNameFormatter($constant->getValue());
 	}
 }

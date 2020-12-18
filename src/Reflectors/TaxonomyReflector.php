@@ -8,6 +8,10 @@ use phpDocumentor\Reflection\ClassReflector;
 use phpDocumentor\Reflection\ClassReflector\MethodReflector;
 use phpDocumentor\Reflection\FileReflector;
 use phpDocumentor\Reflection\InterfaceReflector;
+use phpDocumentor\Reflection\Php\Class_;
+use phpDocumentor\Reflection\Php\Interface_;
+use phpDocumentor\Reflection\Php\ProjectFactory;
+use phpDocumentor\Reflection\Php\Trait_;
 use phpDocumentor\Reflection\TraitReflector;
 
 class TaxonomyReflector {
@@ -28,13 +32,10 @@ class TaxonomyReflector {
 		$this->parserFactory = $parserFactory;
 		$this->data          = [];
 
-		try {
-			$fileReflector = new FileReflector($filename, true);
-			$fileReflector->process();
-			$fileReflector->scanForMarkers();
-		} catch( \Exception $e ) {
-			throw new ClassNotReadableException('Class not readable', $filename, $e);
-		}
+		$projectFiles = [ new \phpDocumentor\Reflection\File\LocalFile($filename) ];
+		$project      = (ProjectFactory::createInstance())->create('My Project', $projectFiles);
+		/** @var \phpDocumentor\Reflection\Php\File $fileReflector */
+		$fileReflector = $project->getFiles()[$filename];
 
 		foreach( $fileReflector->getInterfaces() as $interfaces ) {
 			$this->registerReflectors($interfaces);
@@ -50,7 +51,10 @@ class TaxonomyReflector {
 		//		$this->fileReflector->getClasses(); // -- I don't think this did anything.
 	}
 
-	private function registerReflectors( InterfaceReflector $reflector ) {
+	/**
+	 * @param Class_|Interface_|Trait_ $reflector
+	 */
+	private function registerReflectors( $reflector ) {
 
 		if( !$this->reflector ) {
 			$this->reflector = $reflector;
@@ -58,24 +62,22 @@ class TaxonomyReflector {
 
 		$loader = $this->autoLoader;
 
-		/**
-		 * @var $method MethodReflector
-		 */
-		$reflector->getName();
 		foreach( $reflector->getMethods() as $method ) {
-			$this->data['methods'][$method->getShortName()][] = $method;
+			$this->data['methods'][$method->getName()][] = $method;
 		}
 
 		foreach( $reflector->getConstants() as $constant ) {
-			$this->data['constants'][$constant->getShortName()][] = $constant;
+			$this->data['constants'][$constant->getName()][] = $constant;
 		}
 
-		foreach( $reflector->getProperties() as $property ) {
-			$this->data['properties'][$property->getShortName()][] = $property;
+		if( method_exists($reflector, 'getProperties') ) {
+			foreach( $reflector->getProperties() as $property ) {
+				$this->data['properties'][$property->getName()][] = $property;
+			}
 		}
 
-		if( $reflector instanceof ClassReflector || $reflector instanceof TraitReflector ) {
-			if( $parent = $reflector->getParentClass() ) {
+		if( $reflector instanceof Class_ || $reflector instanceof Trait_ ) {
+			if( $parent = $reflector->getParent() ) {
 				$filename = $loader($parent);
 				if( is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
@@ -83,7 +85,7 @@ class TaxonomyReflector {
 				}
 			}
 
-			if( $traits = $reflector->getTraits() ) {
+			if( $traits = $reflector->getUsedTraits() ) {
 				foreach( $traits as $trait ) {
 					$filename = $loader($trait);
 					if( is_readable($filename) ) {
@@ -94,8 +96,8 @@ class TaxonomyReflector {
 			}
 		}
 
-		if( $reflector instanceof InterfaceReflector ) {
-			foreach( $reflector->getParentInterfaces() as $interface ) {
+		if( $reflector instanceof Interface_ ) {
+			foreach( $reflector->getParents() as $interface ) {
 				$filename = $loader($interface);
 				if( is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
@@ -120,28 +122,28 @@ class TaxonomyReflector {
 	}
 
 	/**
-	 * @return InterfaceReflector|null
+	 * @return Interface_|null
 	 */
 	public function getReflector() {
 		return $this->reflector;
 	}
 
 	/**
-	 * @return \phpDocumentor\Reflection\ClassReflector\MethodReflector[][]
+	 * @return \phpDocumentor\Reflection\Php\Method[][]
 	 */
 	public function getMethods() {
 		return $this->data['methods'] ?? [];
 	}
 
 	/**
-	 * @return \phpDocumentor\Reflection\ClassReflector\ConstantReflector[][]
+	 * @return \phpDocumentor\Reflection\Php\Constant[][]
 	 */
 	public function getConstants() {
 		return $this->data['constants'] ?? [];
 	}
 
 	/**
-	 * @return \phpDocumentor\Reflection\ClassReflector\PropertyReflector[][]
+	 * @return \PhpParser\Builder\Property[][]
 	 */
 	public function getProperties() {
 		return $this->data['properties'] ?? [];

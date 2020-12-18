@@ -42,9 +42,9 @@ class ExecOutput extends AbstractDocPart {
 		}
 
 		if( $format == self::FORMAT_DEFAULT ) {
-			$md = implode($output, "  \n");
+			$md = implode("  \n", $output);
 		} else {
-			$md = implode($output, "\n");
+			$md = implode("\n", $output);
 		}
 
 		switch( $format ) {
@@ -54,8 +54,6 @@ class ExecOutput extends AbstractDocPart {
 			case self::FORMAT_CODE:
 				return new Code($md);
 			case self::FORMAT_CODE_BLOCK:
-				see($this->getOption('lang'));
-
 				return new CodeBlock($md, $this->getOption('lang'));
 			default:
 				throw new \RuntimeException("unhandled format '$format'");
