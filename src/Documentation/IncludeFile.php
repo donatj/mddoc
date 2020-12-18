@@ -21,7 +21,7 @@ class IncludeFile extends AbstractDocPart {
 		return new Paragraph(file_get_contents($name));
 	}
 
-	protected function init() {
+	protected function init() : void {
 		$this->requireOptions('name');
 	}
 

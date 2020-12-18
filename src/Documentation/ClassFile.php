@@ -22,7 +22,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return $this->scanClassFile($this->getOption('name'), $depth);
 	}
 
-	protected function init() {
+	protected function init() : void {
 		$this->requireOptions('name');
 	}
 
@@ -283,7 +283,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return $document;
 	}
 
-	private function shouldSkip( DocBlock $block ) {
+	private function shouldSkip( DocBlock $block ) : bool {
 		if( $access = $block->getTagsByName('access') ) {
 			$access = reset($access);
 			if( (string)$access->getDescription() !== 'public' ) {

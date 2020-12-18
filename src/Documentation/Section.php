@@ -26,7 +26,7 @@ class Section extends AbstractNestedDoc {
 		return $document;
 	}
 
-	protected function init() {
+	protected function init() : void {
 		$this->requireOptions('title');
 	}
 

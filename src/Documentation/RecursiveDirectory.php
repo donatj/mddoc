@@ -41,7 +41,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 		return $document;
 	}
 
-	protected function init() {
+	protected function init() : void {
 		$this->requireOptions('name');
 	}
 

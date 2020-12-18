@@ -42,7 +42,7 @@ class BadgePoser extends Badge {
 		],
 	];
 
-	protected function init() {
+	protected function init() : void {
 		$this->requireOptions('type');
 
 		$type = $this->getOption('type');

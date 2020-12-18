@@ -9,7 +9,7 @@ class BadgeGitHubActions extends Badge {
 	const OPT_BRANCH = 'branch';
 	const OPT_EVENT  = 'event';
 
-	protected function init() {
+	protected function init() : void {
 		$this->setOptionDefault(self::OPT_BRANCH, '');
 		$this->setOptionDefault(self::OPT_EVENT, '');
 		$this->setOptionDefault(self::OPT_ALT, 'Build Status');

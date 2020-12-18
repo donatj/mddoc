@@ -23,6 +23,6 @@ class Text extends AbstractDocPart {
 		return new Paragraph($this->text);
 	}
 
-	protected function init() { }
+	protected function init() : void { }
 
 }

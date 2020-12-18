@@ -36,6 +36,6 @@ class ComposerInstall extends AbstractDocPart {
 		return $para;
 	}
 
-	protected function init() { }
+	protected function init() : void { }
 
 }

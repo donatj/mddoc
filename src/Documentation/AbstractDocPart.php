@@ -29,14 +29,14 @@ abstract class AbstractDocPart implements DocumentationInterface {
 		$this->init();
 	}
 
-	abstract protected function init();
+	abstract protected function init() : void;
 
-	public function setOptions( array $options, array $tree_options ) {
+	public function setOptions( array $options, array $tree_options ) : void {
 		$this->options     = $options;
 		$this->treeOptions = $tree_options;
 	}
 
-	public function setOptionDefault( string $key, $value ) {
+	public function setOptionDefault( string $key, $value ) : void {
 		$this->defaults[$key] = $value;
 	}
 

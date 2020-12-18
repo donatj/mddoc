@@ -27,7 +27,7 @@ class BadgeScrutinizer extends Badge {
 		],
 	];
 
-	protected function init() {
+	protected function init() : void {
 		$this->setOptionDefault(self::OPT_BRANCH, 'master');
 
 		$this->requireOptions('type');

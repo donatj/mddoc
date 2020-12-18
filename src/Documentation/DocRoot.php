@@ -13,7 +13,7 @@ class DocRoot extends AbstractNestedDoc {
 		see(trim($output));
 	}
 
-	protected function init() {
+	protected function init() : void {
 
 	}
 

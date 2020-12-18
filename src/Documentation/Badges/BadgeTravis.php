@@ -8,7 +8,7 @@ class BadgeTravis extends Badge {
 
 	const OPT_BRANCH = 'branch';
 
-	protected function init() {
+	protected function init() : void {
 		$this->setOptionDefault(self::OPT_BRANCH, 'master');
 		$this->setOptionDefault(self::OPT_ALT, 'Build Status');
 

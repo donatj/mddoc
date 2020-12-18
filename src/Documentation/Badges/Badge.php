@@ -27,7 +27,7 @@ class Badge extends AbstractDocPart {
 		return $out->exportMarkdown() . "\n";
 	}
 
-	protected function init() {
+	protected function init() : void {
 		$this->requireOptions(self::OPT_SRC);
 		$this->requireOptions(self::OPT_ALT);
 	}
