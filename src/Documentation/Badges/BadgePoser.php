@@ -6,12 +6,12 @@ use donatj\MDDoc\Exceptions\ConfigException;
 
 class BadgePoser extends Badge {
 
-	const URL_POSER_BASE     = 'https://poser.pugx.org/';
-	const URL_PACKAGIST_BASE = 'https://packagist.org/packages/';
+	private const URL_POSER_BASE     = 'https://poser.pugx.org/';
+	private const URL_PACKAGIST_BASE = 'https://packagist.org/packages/';
 
-	const OPT_SUFFIX = 'suffix';
+	public const OPT_SUFFIX = 'suffix';
 
-	protected $badges = [
+	private const BADGES = [
 		'version'      => [
 			self::OPT_ALT    => 'Latest Stable Version',
 			self::OPT_SUFFIX => '/version',
@@ -46,7 +46,7 @@ class BadgePoser extends Badge {
 		$this->requireOptions('type');
 
 		$type = $this->getOption('type');
-		if( empty($this->badges[$type]) ) {
+		if( empty(self::BADGES[$type]) ) {
 			throw new ConfigException('Invalid Poser badge type');
 		}
 
@@ -66,9 +66,9 @@ class BadgePoser extends Badge {
 
 		$this->requireOptions('name');
 
-		$this->setOptionDefault(self::OPT_SRC, self::URL_POSER_BASE . $name . $this->badges[$type][self::OPT_SUFFIX]);
+		$this->setOptionDefault(self::OPT_SRC, self::URL_POSER_BASE . $name . self::BADGES[$type][self::OPT_SUFFIX]);
 		$this->setOptionDefault(self::OPT_HREF, self::URL_PACKAGIST_BASE . $name);
-		$this->setOptionDefault(self::OPT_ALT, $this->badges[$type][self::OPT_ALT]);
+		$this->setOptionDefault(self::OPT_ALT, self::BADGES[$type][self::OPT_ALT]);
 
 		parent::init();
 	}

@@ -8,10 +8,10 @@ use donatj\MDDom\Image;
 
 class Badge extends AbstractDocPart {
 
-	const OPT_ALT   = 'alt';
-	const OPT_SRC   = 'src';
-	const OPT_HREF  = 'href';
-	const OPT_TITLE = 'title';
+	public const OPT_ALT   = 'alt';
+	public const OPT_SRC   = 'src';
+	public const OPT_HREF  = 'href';
+	public const OPT_TITLE = 'title';
 
 	public function output( int $depth ) {
 		$img = new Image($this->getOption(self::OPT_SRC), $this->getOption(self::OPT_ALT));

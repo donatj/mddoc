@@ -4,9 +4,9 @@ namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeTravis extends Badge {
 
-	const URL_TRAVIS_BASE = 'https://travis-ci.org/';
+	private const URL_TRAVIS_BASE = 'https://travis-ci.org/';
 
-	const OPT_BRANCH = 'branch';
+	public const OPT_BRANCH = 'branch';
 
 	protected function init() : void {
 		$this->setOptionDefault(self::OPT_BRANCH, 'master');

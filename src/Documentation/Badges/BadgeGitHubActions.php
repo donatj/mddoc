@@ -4,10 +4,10 @@ namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeGitHubActions extends Badge {
 
-	const URL_GITHUB_BASE = 'https://github.com/';
+	private const URL_GITHUB_BASE = 'https://github.com/';
 
-	const OPT_BRANCH = 'branch';
-	const OPT_EVENT  = 'event';
+	public const OPT_BRANCH = 'branch';
+	public const OPT_EVENT  = 'event';
 
 	protected function init() : void {
 		$this->setOptionDefault(self::OPT_BRANCH, '');

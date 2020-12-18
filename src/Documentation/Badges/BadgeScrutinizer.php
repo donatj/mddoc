@@ -7,12 +7,12 @@ use donatj\MDDoc\Exceptions\ConfigException;
 class BadgeScrutinizer extends Badge {
 
 	// @todo /g/ should be a configurable option - g = github
-	const URL_SCRUTINIZER_BASE = 'https://scrutinizer-ci.com/g/';
+	private const URL_SCRUTINIZER_BASE = 'https://scrutinizer-ci.com/g/';
 
-	const OPT_SUFFIX = 'suffix';
-	const OPT_BRANCH = 'branch';
+	public const OPT_SUFFIX = 'suffix';
+	public const OPT_BRANCH = 'branch';
 
-	protected $badges = [
+	private const BADGES = [
 		'quality'      => [
 			self::OPT_ALT    => 'Scrutinizer Code Quality',
 			self::OPT_SUFFIX => '/badges/quality-score.png',
@@ -33,16 +33,16 @@ class BadgeScrutinizer extends Badge {
 		$this->requireOptions('type');
 
 		$type = $this->getOption('type');
-		if( empty($this->badges[$type]) ) {
+		if( empty(self::BADGES[$type]) ) {
 			throw new ConfigException('Invalid Scrutinizer badge type');
 		}
 
 		$this->requireOptions('name');
 		$name = $this->getOption('name');
 
-		$this->setOptionDefault(self::OPT_SRC, self::URL_SCRUTINIZER_BASE . $name . $this->badges[$type][self::OPT_SUFFIX] . '?b=' . $this->getOption(self::OPT_BRANCH));
+		$this->setOptionDefault(self::OPT_SRC, self::URL_SCRUTINIZER_BASE . $name . self::BADGES[$type][self::OPT_SUFFIX] . '?b=' . $this->getOption(self::OPT_BRANCH));
 		$this->setOptionDefault(self::OPT_HREF, self::URL_SCRUTINIZER_BASE . $name);
-		$this->setOptionDefault(self::OPT_ALT, $this->badges[$type][self::OPT_ALT]);
+		$this->setOptionDefault(self::OPT_ALT, self::BADGES[$type][self::OPT_ALT]);
 
 		parent::init();
 	}
