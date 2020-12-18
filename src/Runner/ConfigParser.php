@@ -16,56 +16,52 @@ class ConfigParser {
 	 */
 	private $documentationFactory;
 
-	/**
-	 * ConfigParser constructor.
-	 */
 	public function __construct( ?Documentation\DocumentationFactory $documentationFactory = null ) {
 		$this->documentationFactory = $documentationFactory ?? new Documentation\DocumentationFactory;
 	}
 
 	/**
-	 * @param array $attribute_tree
+	 * @param array $attributeTree
 	 * @throws ConfigException
 	 */
-	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc $parent, array $tree_extra = [], $attribute_tree = [] ) : void {
+	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc $parent, array $treeExtra = [], $attributeTree = [] ) : void {
 
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
 			switch( strtolower($sel_loader) ) {
 				case 'psr0':
-					$root                     = $this->requireAttr($node, 'autoloader-root');
-					$tree_extra['autoloader'] = new Psr0($root);
+					$root                    = $this->requireAttr($node, 'autoloader-root');
+					$treeExtra['autoloader'] = new Psr0($root);
 					break;
 				case 'psr4':
-					$root_namespace           = $this->requireAttr($node, 'autoloader-root-namespace');
-					$root                     = $this->requireAttr($node, 'autoloader-root');
-					$tree_extra['autoloader'] = new Psr4($root_namespace, $root);
+					$root_namespace          = $this->requireAttr($node, 'autoloader-root-namespace');
+					$root                    = $this->requireAttr($node, 'autoloader-root');
+					$treeExtra['autoloader'] = new Psr4($root_namespace, $root);
 					break;
 				default:
 					throw new ConfigException("Unrecognized autoloader: {$sel_loader}");
 			}
-		} elseif( !isset($tree_extra['autoloader']) ) {
-			$tree_extra['autoloader'] = new NullLoader;
+		} elseif( !isset($treeExtra['autoloader']) ) {
+			$treeExtra['autoloader'] = new NullLoader;
 		}
 
 		foreach( $node->childNodes as $child ) {
 			if( $child instanceof \DOMElement ) {
-
-				$attributes           = $this->nodeAttr($child);
-				$child_attribute_tree = array_merge($attribute_tree, $attributes);
+				$attributes         = $this->nodeAttr($child);
+				$childAttributeTree = array_merge($attributeTree, $attributes);
 
 				$childDoc = $this->documentationFactory->makeFromTag(
-					$child->nodeName, $attributes, $child_attribute_tree, $child->textContent
+					$child->nodeName, $attributes, $childAttributeTree, $child->textContent
 				);
 
 				$parent->addChild($childDoc);
 				$childDoc->setParent($parent);
 
-				if( $childDoc instanceof AutoloaderAware && isset($tree_extra['autoloader']) ) {
-					$childDoc->setAutoloader($tree_extra['autoloader']);
+				if( $childDoc instanceof AutoloaderAware && isset($treeExtra['autoloader']) ) {
+					$childDoc->setAutoloader($treeExtra['autoloader']);
 				}
 
 				if( $child->hasChildNodes() && $childDoc instanceof Documentation\AbstractNestedDoc ) {
-					$this->loadChildren($child, $childDoc, $tree_extra, $child_attribute_tree);
+					$this->loadChildren($child, $childDoc, $treeExtra, $childAttributeTree);
 				}
 			}
 		}
@@ -75,7 +71,7 @@ class ConfigParser {
 	 * @param string $attribute
 	 * @throws ConfigException
 	 */
-	private function requireAttr( \DOMElement $node, $attribute ) : string {
+	private function requireAttr( \DOMElement $node, string $attribute ) : string {
 		if( !$value = $node->getAttribute($attribute) ) {
 			throw new ConfigException("Element `{$node->nodeName}` missing required attribute: {$attribute}");
 		}
@@ -120,7 +116,7 @@ class ConfigParser {
 			$this->loadChildren($root, $docRoot);
 		} else {
 			if( $root->nodeName ) {
-				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid.");
+				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid. Expected mddoc.");
 			}
 
 			throw new ConfigException("Error parsing {$filename}");
