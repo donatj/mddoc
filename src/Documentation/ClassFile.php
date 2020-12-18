@@ -12,7 +12,6 @@ use donatj\MDDom\HorizontalRule;
 use donatj\MDDom\Paragraph;
 use donatj\MDDom\Text as MdText;
 use phpDocumentor\Reflection\DocBlock;
-use phpDocumentor\Reflection\Php\Constant;
 use phpDocumentor\Reflection\Php\Method;
 
 class ClassFile extends AbstractDocPart implements AutoloaderAware {
@@ -96,7 +95,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 				}
 				$classInner       .= sprintf("\tconst %s = %s;\n",
 					$constant->getName(),
-					$this->getConstantValueString($constant)
+					$constant->getValue()
 				);
 				$showClassPreview = true;
 			}
@@ -288,8 +287,8 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 				return true;
 			}
 		} elseif( $block->getTagsByName('ignore')
-			|| $block->getTagsByName('private')
-			|| $block->getTagsByName('internal') ) {
+				  || $block->getTagsByName('private')
+				  || $block->getTagsByName('internal') ) {
 			return true;
 		}
 
@@ -311,24 +310,15 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			// @todo: the types are currently borked on default parameters.
 			$optDefault = $argument->getDefault();
 			if( $optDefault !== null ) {
-				$opt_args[] = $prefix . '$' . $argument->getName() . ' = ' . $this->temporaryValueNameFormatter($optDefault);
+				$opt_args[] = $prefix . '$' . $argument->getName() . ' = ' . $optDefault;
 			} else {
 				$req_args[] = $prefix . '$' . $argument->getName();
 			}
 		}
 
 		return implode(', ', $req_args) .
-			($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
-			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
-	}
-
-	private function temporaryValueNameFormatter( string $value ) : string {
-		$lower = strtolower($value);
-		if( in_array($lower, [ 'true', 'false', 'null', '[]' ]) || ctype_digit($value) ) {
-			return $value;
-		}
-
-		return var_export($value, true);
+			   ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
+			   implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 	}
 
 	/**
@@ -413,7 +403,4 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return $svn;
 	}
 
-	private function getConstantValueString( Constant $constant ) : string {
-		return $this->temporaryValueNameFormatter($constant->getValue());
-	}
 }
