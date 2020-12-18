@@ -136,7 +136,7 @@ class ConfigParser {
 	 * @return \donatj\MDDoc\Documentation\DocRoot
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
-	public function parse( $filename ) {
+	public function parse( string $filename ) {
 		if( !is_readable($filename) ) {
 			throw new ConfigException("Config file '{$filename}' not readable");
 		}
