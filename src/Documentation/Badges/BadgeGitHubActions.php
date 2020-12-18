@@ -36,4 +36,5 @@ class BadgeGitHubActions extends Badge {
 
 		parent::init();
 	}
+
 }

@@ -32,7 +32,7 @@ class ConfigParser {
 					throw new ConfigException("Unrecognized autoloader: {$sel_loader}");
 			}
 		} elseif( !isset($tree_extra['autoloader']) ) {
-			$tree_extra['autoloader'] = new NullLoader();
+			$tree_extra['autoloader'] = new NullLoader;
 		}
 
 		foreach( $node->childNodes as $child ) {
@@ -132,7 +132,6 @@ class ConfigParser {
 	/**
 	 * Parse a config file
 	 *
-	 * @param string $filename
 	 * @return \donatj\MDDoc\Documentation\DocRoot
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
@@ -141,7 +140,7 @@ class ConfigParser {
 			throw new ConfigException("Config file '{$filename}' not readable");
 		}
 
-		$dom = new \DOMDocument();
+		$dom = new \DOMDocument;
 		if( @$dom->load($filename) === false ) {
 			throw new ConfigException("Error parsing {$filename}");
 		}

@@ -9,7 +9,7 @@ class DocPage extends AbstractNestedDoc {
 
 	public function output( int $depth ) {
 
-		$document = new Document();
+		$document = new Document;
 
 		$target         = $this->getOption('target');
 		$link           = $this->getOption('link') ?: $target;
@@ -49,7 +49,9 @@ class DocPage extends AbstractNestedDoc {
 			$path .= '/' . $dir;
 			if( !is_dir($path) ) {
 				see($path);
-				if( !mkdir($path) ) return false;
+				if( !mkdir($path) ) {
+					return false;
+				}
 			}
 		}
 
@@ -59,4 +61,5 @@ class DocPage extends AbstractNestedDoc {
 	protected function init() {
 		$this->requireOptions('target');
 	}
+
 }

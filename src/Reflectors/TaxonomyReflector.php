@@ -4,15 +4,10 @@ namespace donatj\MDDoc\Reflectors;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Exceptions\ClassNotReadableException;
-use phpDocumentor\Reflection\ClassReflector;
-use phpDocumentor\Reflection\ClassReflector\MethodReflector;
-use phpDocumentor\Reflection\FileReflector;
-use phpDocumentor\Reflection\InterfaceReflector;
 use phpDocumentor\Reflection\Php\Class_;
 use phpDocumentor\Reflection\Php\Interface_;
 use phpDocumentor\Reflection\Php\ProjectFactory;
 use phpDocumentor\Reflection\Php\Trait_;
-use phpDocumentor\Reflection\TraitReflector;
 
 class TaxonomyReflector {
 
@@ -149,4 +144,5 @@ class TaxonomyReflector {
 	public function getProperties() {
 		return $this->data['properties'] ?? [];
 	}
+
 }

@@ -12,9 +12,9 @@ class Section extends AbstractNestedDoc {
 		$title = $this->getOption('title');
 
 		if( $this->getParent() instanceof DocPage ) {
-			$document = new Document();
+			$document = new Document;
 		} else {
-			$document = new DocumentDepth();
+			$document = new DocumentDepth;
 		}
 
 		$document->appendChild(new Header($title));

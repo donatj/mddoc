@@ -34,9 +34,9 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	private function scanClassFile( $filename, $depth ) {
 		$output = '';
 
-		$document = new DocumentDepth();
+		$document = new DocumentDepth;
 
-		$factory = new TaxonomyReflectorFactory();
+		$factory = new TaxonomyReflectorFactory;
 
 		$reflector = $factory->newInstance($filename, $this->autoloader);
 		if( $class = $reflector->getReflector() ) {
@@ -177,7 +177,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 					}
 
-					$subDocument = new DocumentDepth();
+					$subDocument = new DocumentDepth;
 					$document->appendChild($subDocument);
 
 					$firstBlock = reset($blocks);
@@ -217,7 +217,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 
 						if( $deprecatedBlocks = $firstBlock->getTagsByName('deprecated') ) {
-							$deprecatedDoc = new DocumentDepth();
+							$deprecatedDoc = new DocumentDepth;
 							$subDocument->appendChild($deprecatedDoc);
 
 							$deprecatedDoc->appendChild(new Header('DEPRECATED'));
@@ -232,7 +232,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 							if( $methodParams = $block->getTagsByName('param') ) {
 
-								$paramDoc = new DocumentDepth();
+								$paramDoc = new DocumentDepth;
 								$subDocument->appendChild($paramDoc);
 
 								$paramDoc->appendChild(new Header('Parameters:'));
@@ -257,7 +257,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 						if( !$this->getOption('skip-method-returns', true) ) {
 							if( $return = current($firstBlock->getTagsByName('return')) ) {
-								$returnDoc = new DocumentDepth();
+								$returnDoc = new DocumentDepth;
 								$subDocument->appendChild($returnDoc);
 
 								$returnDoc->appendChild(new Header('Returns:'));
@@ -269,7 +269,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						$i++;
 						//						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
 
-						$subDocument = new DocumentDepth();
+						$subDocument = new DocumentDepth;
 						$document->appendChild($subDocument);
 
 						$subDocument->appendChild(new Header("Undocumented Method: `" . $class->getName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`"));

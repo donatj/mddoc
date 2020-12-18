@@ -6,7 +6,7 @@ class PathNotReadableException extends MDDocException {
 
 	protected $path;
 
-	public function __construct( $message, $path, \Exception $previous_exception = null ) {
+	public function __construct( $message, $path, ?\Exception $previous_exception = null ) {
 		parent::__construct($message, 0, $previous_exception);
 
 		$this->path = $path;

@@ -18,7 +18,7 @@ class ComposerInstall extends AbstractDocPart {
 		$data   = file_get_contents($file);
 		$parsed = @json_decode($data, true);
 
-		$para = new Paragraph();
+		$para = new Paragraph;
 		$para->appendChild(new \donatj\MDDom\Text($this->getOption('text') ?: 'Install the latest version with:'));
 		$install = 'composer ';
 		if( $this->getOption('global') == 'true' ) {

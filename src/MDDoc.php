@@ -29,7 +29,7 @@ class MDDoc {
 		self::versionMarker($ui);
 
 		try {
-			$parser = new ConfigParser();
+			$parser = new ConfigParser;
 			$doc    = $parser->parse($config);
 
 			$doc->output(0);
@@ -50,7 +50,7 @@ class MDDoc {
 
 	private function init( array $args, UserInterface $ui ) {
 
-		$flags          = new Flags();
+		$flags          = new Flags;
 		$displayHelp    = &$flags->bool('help', false, 'Display this help message.');
 		$displayVersion = &$flags->bool('version', false, 'Display this applications version.');
 
@@ -86,4 +86,5 @@ class MDDoc {
 	private static function versionMarker( UserInterface $ui ) {
 		$ui->outputMsg("MDDoc " . self::VERSION . " by Jesse G. Donat" . PHP_EOL);
 	}
+
 }

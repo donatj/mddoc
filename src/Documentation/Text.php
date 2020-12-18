@@ -15,6 +15,7 @@ class Text extends AbstractDocPart {
 
 	public function __construct( array $options, array $tree_options, $text = '' ) {
 		$this->text = $text;
+
 		parent::__construct($options, $tree_options);
 	}
 
