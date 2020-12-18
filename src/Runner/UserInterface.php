@@ -7,11 +7,17 @@ use CLI\Style;
 
 class UserInterface {
 
+	/**
+	 * UserInterface constructor.
+	 *
+	 * @param resource $STDOUT
+	 * @param resource $STDERR
+	 */
 	public function __construct( $STDOUT, $STDERR ) {
 		Output::$stream = $STDOUT;
 	}
 
-	public function dumpOptions( $additional ) {
+	public function dumpOptions( string $additional ) : void {
 		$fname = $this->getScript();
 
 		$options = <<<EOT
@@ -25,17 +31,17 @@ EOT;
 		Output::string(PHP_EOL);
 	}
 
-	public function dropError( $text, $code = 1, $additional = false ) {
+	public function dropError( string $text, int $code = 1, ?string $additional = null ) : void {
 		Output::string($this->getScript() . ": " . Style::red($text) . PHP_EOL . ($additional ? $additional . PHP_EOL : ''));
 
 		die($code);
 	}
 
-	public function outputMsg( $text ) {
+	public function outputMsg( string $text ) : void {
 		Output::string($text . PHP_EOL);
 	}
 
-	private function getScript() {
+	private function getScript() : string {
 		global $argv;
 		$pathinfo = pathinfo(realpath($argv[0]));
 

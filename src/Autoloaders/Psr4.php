@@ -31,24 +31,16 @@ class Psr4 implements AutoloaderInterface {
 		$this->path      = rtrim($path, DIRECTORY_SEPARATOR);
 	}
 
-	/**
-	 * @param string $path
-	 * @return string
-	 */
-	final protected function trimSlashes( $path ) {
+	final protected function trimSlashes( string $path ) : string {
 		return trim($path, ' /\\');
 	}
 
-	/**
-	 * @param $class
-	 * @return bool|null
-	 */
-	public function __invoke( $class ) {
-		$class    = $this->trimSlashes($class);
-		$ns_count = count(explode('\\', $this->namespace));
+	public function __invoke( string $className ) : ?string {
+		$className = $this->trimSlashes($className);
+		$ns_count  = count(explode('\\', $this->namespace));
 
-		if( $this->isOfNamespace($class) ) {
-			$class_parts = explode('\\', $class);
+		if( $this->isOfNamespace($className) ) {
+			$class_parts = explode('\\', $className);
 			$class_parts = array_slice($class_parts, $ns_count);
 
 			$filename = $this->path . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $class_parts) . ".php";
@@ -62,12 +54,8 @@ class Psr4 implements AutoloaderInterface {
 		return null;
 	}
 
-	/**
-	 * @param $class_name
-	 * @return bool
-	 */
-	protected function isOfNamespace( $class_name ) {
-		return stripos($class_name, $this->namespace . '\\') === 0;
+	protected function isOfNamespace( string $className ) : bool {
+		return stripos($className, $this->namespace . '\\') === 0;
 	}
 
 }

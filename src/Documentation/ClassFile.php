@@ -27,8 +27,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	}
 
 	/**
-	 * @param string $filename
-	 * @param int    $depth
 	 * @return string
 	 */
 	private function scanClassFile( string $filename, int $depth ) {

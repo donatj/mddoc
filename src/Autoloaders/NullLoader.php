@@ -6,11 +6,7 @@ use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 
 class NullLoader implements AutoloaderInterface {
 
-	/**
-	 * @param $className
-	 * @return string|null
-	 */
-	public function __invoke( $className ) {
+	public function __invoke( string $className ) : ?string {
 		return null;
 	}
 

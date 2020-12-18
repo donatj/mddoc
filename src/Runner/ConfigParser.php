@@ -15,7 +15,7 @@ class ConfigParser {
 	 * @param array                           $attribute_tree
 	 * @throws ConfigException
 	 */
-	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc &$parent, array $tree_extra = [], $attribute_tree = [] ) {
+	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc $parent, array $tree_extra = [], $attribute_tree = [] ) : void {
 
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
 			switch( strtolower($sel_loader) ) {
@@ -110,7 +110,7 @@ class ConfigParser {
 	 * @return string
 	 * @throws ConfigException
 	 */
-	private function requireAttr( \DOMElement $node, $attribute ) {
+	private function requireAttr( \DOMElement $node, $attribute ) : string {
 		if( !$value = $node->getAttribute($attribute) ) {
 			throw new ConfigException("Element `{$node->nodeName}` missing required attribute: {$attribute}");
 		}
@@ -118,7 +118,7 @@ class ConfigParser {
 		return $value;
 	}
 
-	private function nodeAttr( \DOMElement $node ) {
+	private function nodeAttr( \DOMElement $node ) : array {
 		$attributes = [];
 		if( $node->hasAttributes() ) {
 			foreach( $node->attributes as $attr ) {
@@ -135,7 +135,7 @@ class ConfigParser {
 	 * @return \donatj\MDDoc\Documentation\DocRoot
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
-	public function parse( string $filename ) {
+	public function parse( string $filename ) : Documentation\DocRoot {
 		if( !is_readable($filename) ) {
 			throw new ConfigException("Config file '{$filename}' not readable");
 		}
@@ -151,7 +151,7 @@ class ConfigParser {
 		}
 
 		$docRoot = new Documentation\DocRoot([], []);
-		if( $root->nodeName == 'mddoc' ) {
+		if( $root->nodeName === 'mddoc' ) {
 			$this->loadChildren($root, $docRoot);
 		} else {
 			if( $root->nodeName ) {

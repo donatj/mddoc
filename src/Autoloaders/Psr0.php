@@ -24,21 +24,13 @@ class Psr0 implements AutoloaderInterface {
 		$this->path = rtrim($path, DIRECTORY_SEPARATOR);
 	}
 
-	/**
-	 * @param string $path
-	 * @return string
-	 */
-	final protected function trimSlashes( $path ) {
+	final protected function trimSlashes( string $path ) : string {
 		return trim($path, ' /\\');
 	}
 
-	/**
-	 * @param $class
-	 * @return bool|string
-	 */
-	public function __invoke( $class ) {
-		$class       = $this->trimSlashes($class);
-		$class_parts = explode('\\', $class);
+	public function __invoke( string $className ) : ?string {
+		$className   = $this->trimSlashes($className);
+		$class_parts = explode('\\', $className);
 
 		$filename = $this->path . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $class_parts) . ".php";
 

@@ -16,35 +16,15 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ### Class: \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
 
-#### Method: AutoloaderInterface->__invoke
 
-```php
-function __invoke($className)
-```
 
-##### Parameters:
-
-- ***mixed*** `$className`
-
-##### Returns:
-
-- ***string*** | ***null***
+#### Undocumented Method: `AutoloaderInterface->__invoke(string $className)`
 
 ### Class: \donatj\MDDoc\Autoloaders\NullLoader
 
-#### Method: NullLoader->__invoke
 
-```php
-function __invoke($className)
-```
 
-##### Parameters:
-
-- ***mixed*** `$className`
-
-##### Returns:
-
-- ***string*** | ***null***
+#### Undocumented Method: `NullLoader->__invoke(string $className)`
 
 ### Class: \donatj\MDDoc\Autoloaders\Psr0
 
@@ -60,21 +40,9 @@ function __construct(string $path)
 
 - ***string*** `$path` - Root path
 
----
 
-#### Method: Psr0->__invoke
 
-```php
-function __invoke($class)
-```
-
-##### Parameters:
-
-- ***mixed*** `$class`
-
-##### Returns:
-
-- ***bool*** | ***string***
+#### Undocumented Method: `Psr0->__invoke(string $className)`
 
 ### Class: \donatj\MDDoc\Autoloaders\Psr4
 
@@ -91,21 +59,9 @@ function __construct(string $root_namespace, string $path)
 - ***string*** `$root_namespace` - Namespace prefix
 - ***string*** `$path` - Root path
 
----
 
-#### Method: Psr4->__invoke
 
-```php
-function __invoke($class)
-```
-
-##### Parameters:
-
-- ***mixed*** `$class`
-
-##### Returns:
-
-- ***bool*** | ***null***
+#### Undocumented Method: `Psr4->__invoke(string $className)`
 
 ### Class: \donatj\MDDoc\Documentation\AbstractDocPart
 
@@ -130,34 +86,17 @@ class AbstractDocPart {
 
 #### Undocumented Method: `AbstractDocPart->setOptions(array $options, array $tree_options)`
 
----
 
-#### Method: AbstractDocPart->setOptionDefault
 
-```php
-function setOptionDefault(string $key, $value)
-```
-
-##### Parameters:
-
-- ***mixed*** `$key` - string
-- ***mixed*** `$value` - mixed
+#### Undocumented Method: `AbstractDocPart->setOptionDefault(string $key, $value)`
 
 
 
 #### Undocumented Method: `AbstractDocPart->getOption(string $key [, bool $tree = false])`
 
----
 
-#### Method: AbstractDocPart->setParent
 
-```php
-function setParent(\donatj\MDDoc\Documentation\AbstractDocPart $parent) : void
-```
-
-##### Parameters:
-
-- ***\donatj\MDDoc\Documentation\AbstractDocPart*** `$parent`
+#### Undocumented Method: `AbstractDocPart->setParent(\donatj\MDDoc\Documentation\AbstractDocPart $parent)`
 
 
 
@@ -168,7 +107,7 @@ function setParent(\donatj\MDDoc\Documentation\AbstractDocPart $parent) : void
 #### Method: AbstractNestedDoc->getChildren
 
 ```php
-function getChildren()
+function getChildren() : array
 ```
 
 ##### Returns:
@@ -198,10 +137,10 @@ function setChildren($children)
 namespace donatj\MDDoc\Documentation\Badges;
 
 class Badge {
-	const OPT_ALT = 'alt';
-	const OPT_SRC = 'src';
-	const OPT_HREF = 'href';
-	const OPT_TITLE = 'title';
+	public const OPT_ALT = 'alt';
+	public const OPT_SRC = 'src';
+	public const OPT_HREF = 'href';
+	public const OPT_TITLE = 'title';
 }
 ```
 
@@ -216,9 +155,8 @@ class Badge {
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeGitHubActions {
-	const URL_GITHUB_BASE = 'https://github.com/';
-	const OPT_BRANCH = 'branch';
-	const OPT_EVENT = 'event';
+	public const OPT_BRANCH = 'branch';
+	public const OPT_EVENT = 'event';
 }
 ```
 
@@ -229,9 +167,7 @@ class BadgeGitHubActions {
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgePoser {
-	const URL_POSER_BASE = 'https://poser.pugx.org/';
-	const URL_PACKAGIST_BASE = 'https://packagist.org/packages/';
-	const OPT_SUFFIX = 'suffix';
+	public const OPT_SUFFIX = 'suffix';
 }
 ```
 
@@ -242,9 +178,8 @@ class BadgePoser {
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeScrutinizer {
-	const URL_SCRUTINIZER_BASE = 'https://scrutinizer-ci.com/g/';
-	const OPT_SUFFIX = 'suffix';
-	const OPT_BRANCH = 'branch';
+	public const OPT_SUFFIX = 'suffix';
+	public const OPT_BRANCH = 'branch';
 }
 ```
 
@@ -255,8 +190,7 @@ class BadgeScrutinizer {
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeTravis {
-	const URL_TRAVIS_BASE = 'https://travis-ci.org/';
-	const OPT_BRANCH = 'branch';
+	public const OPT_BRANCH = 'branch';
 }
 ```
 
@@ -276,15 +210,19 @@ class BadgeTravis {
 
 ### Class: \donatj\MDDoc\Documentation\ComposerInstall
 
+#### Method: ComposerInstall->output
 
-
-#### Undocumented Method: `ComposerInstall->output(int $depth)`
+```php
+function output(int $depth)
+```
 
 ### Class: \donatj\MDDoc\Documentation\ComposerRequires
 
+#### Method: ComposerRequires->output
 
-
-#### Undocumented Method: `ComposerRequires->output(int $depth)`
+```php
+function output(int $depth)
+```
 
 ### Class: \donatj\MDDoc\Documentation\DocPage
 
@@ -307,10 +245,10 @@ class BadgeTravis {
 namespace donatj\MDDoc\Documentation;
 
 class ExecOutput {
-	const FORMAT_DEFAULT = 'default';
-	const FORMAT_RAW = 'raw';
-	const FORMAT_CODE = 'code';
-	const FORMAT_CODE_BLOCK = 'code-block';
+	public const FORMAT_DEFAULT = 'default';
+	public const FORMAT_RAW = 'raw';
+	public const FORMAT_CODE = 'code';
+	public const FORMAT_CODE_BLOCK = 'code-block';
 }
 ```
 
@@ -412,7 +350,7 @@ Class Text
 
 
 
-#### Undocumented Method: `PathNotReadableException->__construct($message, $path [, \Exception $previous_exception = null])`
+#### Undocumented Method: `PathNotReadableException->__construct(string $message, string $path [, ?\Exception $previous_exception = null])`
 
 
 
@@ -429,9 +367,7 @@ Application MDDoc
 namespace donatj\MDDoc;
 
 class MDDoc {
-	const VERSION = "0.0.1a";
-	const CONFIG_FILE = "mddoc.xml";
-	const CONFIG_FILE_ALT = ".mddoc.xml";
+	public const VERSION = "0.0.1a";
 }
 ```
 
@@ -520,14 +456,10 @@ function newInstance($filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderI
 #### Method: ConfigParser->parse
 
 ```php
-function parse($filename)
+function parse(string $filename) : \donatj\MDDoc\Documentation\DocRoot
 ```
 
 Parse a config file
-
-##### Parameters:
-
-- ***string*** `$filename`
 
 ##### Returns:
 
@@ -535,18 +467,27 @@ Parse a config file
 
 ### Class: \donatj\MDDoc\Runner\UserInterface
 
+#### Method: UserInterface->__construct
+
+```php
+function __construct($STDOUT, $STDERR)
+```
+
+UserInterface constructor.
+
+##### Parameters:
+
+- ***resource*** `$STDOUT`
+- ***resource*** `$STDERR`
 
 
-#### Undocumented Method: `UserInterface->__construct($STDOUT, $STDERR)`
+
+#### Undocumented Method: `UserInterface->dumpOptions(string $additional)`
 
 
 
-#### Undocumented Method: `UserInterface->dumpOptions($additional)`
+#### Undocumented Method: `UserInterface->dropError(string $text [, int $code = 1 [, string $additional = null]])`
 
 
 
-#### Undocumented Method: `UserInterface->dropError($text [, $code = 1 [, $additional = false]])`
-
-
-
-#### Undocumented Method: `UserInterface->outputMsg($text)`
+#### Undocumented Method: `UserInterface->outputMsg(string $text)`
