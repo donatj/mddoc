@@ -112,38 +112,40 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			foreach( $propertyData as $properties ) {
 
 				$property = reset($properties);
-				if( (string)$property->getVisibility() === 'public' ) {
-					/** @var DocBlock $propertyBlock */
-					if( $propertyBlock = $property->getDocBlock() ) {
-						if( $this->shouldSkip($propertyBlock) ) {
-							continue;
-						}
-
-						if( $propertyBlock->getSummary() ) {
-							$classInner .= "\t/**\n\t * " . implode("\n\t * ", explode("\n", $this->getDocStr($propertyBlock)));
-						} else {
-							$classInner .= "\t/**";
-						}
-
-						if( $vars = $propertyBlock->getTagsByName('var') ) {
-							/** @var \phpDocumentor\Reflection\DocBlock\Tags\Var_ $var */
-							$var        = reset($vars);
-							$classInner .= "\n\t * @var " . (string)$var;
-						}
-
-						$classInner .= "\n\t */\n";
-					}
-
-					$static     = $property->isStatic() ? 'static ' : '';
-					$classInner .= "\tpublic {$static}\${$property->getName()}";
-					if( $property->getDefault() ) {
-						$classInner .= " = {$property->getDefault()}";
-					}
-
-					$classInner .= ";\n";
-
-					$showClassPreview = true;
+				if( (string)$property->getVisibility() !== 'public' ) {
+					continue;
 				}
+
+				/** @var DocBlock $propertyBlock */
+				if( $propertyBlock = $property->getDocBlock() ) {
+					if( $this->shouldSkip($propertyBlock) ) {
+						continue;
+					}
+
+					if( $propertyBlock->getSummary() ) {
+						$classInner .= "\t/**\n\t * " . implode("\n\t * ", explode("\n", $this->getDocStr($propertyBlock)));
+					} else {
+						$classInner .= "\t/**";
+					}
+
+					if( $vars = $propertyBlock->getTagsByName('var') ) {
+						/** @var \phpDocumentor\Reflection\DocBlock\Tags\Var_ $var */
+						$var        = reset($vars);
+						$classInner .= "\n\t * @var " . (string)$var;
+					}
+
+					$classInner .= "\n\t */\n";
+				}
+
+				$static     = $property->isStatic() ? 'static ' : '';
+				$classInner .= "\tpublic {$static}\${$property->getName()}";
+				if( $property->getDefault() ) {
+					$classInner .= " = {$property->getDefault()}";
+				}
+
+				$classInner .= ";\n";
+
+				$showClassPreview = true;
 			}
 
 			$classInner .= '}';
@@ -158,132 +160,133 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			foreach( $methodData as $methods ) {
 				$method = reset($methods);
 
-				if( (string)$method->getVisibility() === 'public' ) {
+				if( (string)$method->getVisibility() !== 'public' ) {
+					continue;
+				}
 
-					$name = $method->getName();
-					$args = $this->getArgumentString($method);
+				$name = $method->getName();
+				$args = $this->getArgumentString($method);
 
-					$fReturnS = '';
-					$fReturn  = (string)$method->getReturnType();
-					if( $fReturn !== 'mixed' ) {
-						$fReturnS = " : {$fReturn}";
+				$fReturnS = '';
+				$fReturn  = (string)$method->getReturnType();
+				if( $fReturn !== 'mixed' ) {
+					$fReturnS = " : {$fReturn}";
+				}
+
+				/** @var \phpDocumentor\Reflection\DocBlock[] $blocks */
+				$blocks = [];
+
+				foreach( $methods as $subMethod ) {
+					if( $block = $subMethod->getDocBlock() ) {
+						$blocks[] = $block;
+					}
+				}
+
+				foreach( $blocks as $block ) {
+					if( $this->shouldSkip($block) ) {
+						continue 2;
+					}
+				}
+
+				$subDocument = new DocumentDepth;
+				$document->appendChild($subDocument);
+
+				$firstBlock = reset($blocks);
+
+				if( $firstBlock ) {
+					$operator            = ($method->isStatic() ? '::' : '->');
+					$canonicalMethodName = $class->getName() . $operator . "$name($args)";
+
+					if( $methodFilter = $this->getOption('method-filter') ) {
+						if( !preg_match($methodFilter, $canonicalMethodName) ) {
+							continue;
+						}
 					}
 
-					/** @var \phpDocumentor\Reflection\DocBlock[] $blocks */
-					$blocks = [];
+					$i++;
 
-					foreach( $methods as $subMethod ) {
-						if( $block = $subMethod->getDocBlock() ) {
-							$blocks[] = $block;
+					if( $i > 1 ) {
+						$subDocument->appendChild(new HorizontalRule);
+					}
+
+					$subDocument->appendChild(
+						new Header("Method: {$class->getName()}{$operator}{$name}")
+					);
+
+					$subDocument->appendChild(
+						new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
+					);
+
+					foreach( $blocks as $block ) {
+						if( $block->getSummary() ) {
+							$subDocument->appendChild(
+								$this->descriptionFormat(
+									$this->getDocStr($block)
+								)
+							);
+						}
+					}
+
+					if( $deprecatedBlocks = $firstBlock->getTagsByName('deprecated') ) {
+						$deprecatedDoc = new DocumentDepth;
+						$subDocument->appendChild($deprecatedDoc);
+
+						$deprecatedDoc->appendChild(new Header('DEPRECATED'));
+						foreach( $deprecatedBlocks as $deprecatedBlock ) {
+							if( $content = trim($deprecatedBlock->getDescription()) ) {
+								$deprecatedDoc->appendChild(new MdText($content));
+							}
 						}
 					}
 
 					foreach( $blocks as $block ) {
-						if( $this->shouldSkip($block) ) {
-							continue 2;
+
+						if( $methodParams = $block->getTagsByName('param') ) {
+
+							$paramDoc = new DocumentDepth;
+							$subDocument->appendChild($paramDoc);
+
+							$paramDoc->appendChild(new Header('Parameters:'));
+
+							$output = '';
+							foreach( $block->getTagsByName('param') as $tag ) {
+
+								$output .= sprintf('- %s `$%s`', $this->formatType($tag->getType()), $tag->getVariableName());
+
+								if( $tagDescr = (string)$tag->getDescription() ) {
+									$output .= ' - ' . $tagDescr;
+								}
+
+								$output .= PHP_EOL;
+							}
+
+							$paramDoc->appendChild($output);
+							$output .= PHP_EOL . PHP_EOL;
+							break;
 						}
 					}
+
+					if( !$this->getOption('skip-method-returns', true) ) {
+						if( $return = current($firstBlock->getTagsByName('return')) ) {
+							$returnDoc = new DocumentDepth;
+							$subDocument->appendChild($returnDoc);
+
+							$returnDoc->appendChild(new Header('Returns:'));
+
+							$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
+						}
+					}
+				} else {
+					$i++;
+					//						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
 
 					$subDocument = new DocumentDepth;
 					$document->appendChild($subDocument);
 
-					$firstBlock = reset($blocks);
-
-					if( $firstBlock ) {
-						$operator            = ($method->isStatic() ? '::' : '->');
-						$canonicalMethodName = $class->getName() . $operator . "$name($args)";
-
-						if( $methodFilter = $this->getOption('method-filter') ) {
-							if( !preg_match($methodFilter, $canonicalMethodName) ) {
-								continue;
-							}
-						}
-
-						$i++;
-
-						if( $i > 1 ) {
-							$subDocument->appendChild(new HorizontalRule);
-						}
-
-						$subDocument->appendChild(
-							new Header("Method: {$class->getName()}{$operator}{$name}")
-						);
-
-						$subDocument->appendChild(
-							new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
-						);
-
-						foreach( $blocks as $block ) {
-							if( $block->getSummary() ) {
-								$subDocument->appendChild(
-									$this->descriptionFormat(
-										$this->getDocStr($block)
-									)
-								);
-							}
-						}
-
-						if( $deprecatedBlocks = $firstBlock->getTagsByName('deprecated') ) {
-							$deprecatedDoc = new DocumentDepth;
-							$subDocument->appendChild($deprecatedDoc);
-
-							$deprecatedDoc->appendChild(new Header('DEPRECATED'));
-							foreach( $deprecatedBlocks as $deprecatedBlock ) {
-								if( $content = trim($deprecatedBlock->getDescription()) ) {
-									$deprecatedDoc->appendChild(new MdText($content));
-								}
-							}
-						}
-
-						foreach( $blocks as $block ) {
-
-							if( $methodParams = $block->getTagsByName('param') ) {
-
-								$paramDoc = new DocumentDepth;
-								$subDocument->appendChild($paramDoc);
-
-								$paramDoc->appendChild(new Header('Parameters:'));
-
-								$output = '';
-								foreach( $block->getTagsByName('param') as $tag ) {
-
-									$output .= sprintf('- %s `$%s`', $this->formatType($tag->getType()), $tag->getVariableName());
-
-									if( $tagDescr = (string)$tag->getDescription() ) {
-										$output .= ' - ' . $tagDescr;
-									}
-
-									$output .= PHP_EOL;
-								}
-
-								$paramDoc->appendChild($output);
-								$output .= PHP_EOL . PHP_EOL;
-								break;
-							}
-						}
-
-						if( !$this->getOption('skip-method-returns', true) ) {
-							if( $return = current($firstBlock->getTagsByName('return')) ) {
-								$returnDoc = new DocumentDepth;
-								$subDocument->appendChild($returnDoc);
-
-								$returnDoc->appendChild(new Header('Returns:'));
-
-								$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
-							}
-						}
-					} else {
-						$i++;
-						//						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
-
-						$subDocument = new DocumentDepth;
-						$document->appendChild($subDocument);
-
-						$subDocument->appendChild(new Header("Undocumented Method: `" . $class->getName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`"));
-					}
-
-					$output .= PHP_EOL;
+					$subDocument->appendChild(new Header("Undocumented Method: `" . $class->getName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`"));
 				}
+
+				$output .= PHP_EOL;
 			}
 		}
 
