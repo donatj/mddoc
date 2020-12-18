@@ -31,7 +31,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	 * @param int    $depth
 	 * @return string
 	 */
-	private function scanClassFile( $filename, $depth ) {
+	private function scanClassFile( string $filename, int $depth ) {
 		$output = '';
 
 		$document = new DocumentDepth;
@@ -305,7 +305,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return false;
 	}
 
-	private function getArgumentString( Method $method ) {
+	private function getArgumentString( Method $method ) : string {
 		$req_args = [];
 		$opt_args = [];
 		foreach( $method->getArguments() as $argument ) {
@@ -331,10 +331,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			   implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 	}
 
-	/**
-	 * @return DocumentDepth
-	 */
-	private function descriptionFormat( $args ) {
+	private function descriptionFormat( $args ) : DocumentDepth {
 		$string = implode(PHP_EOL, func_get_args());
 		$parts  = explode(PHP_EOL, $string);
 
@@ -370,7 +367,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return $document;
 	}
 
-	private function formatType( $type, $default = 'mixed' ) {
+	private function formatType( ?string $type, string $default = 'mixed' ) : string {
 		$types = array_filter(explode('|', $type));
 
 		if( !$types ) {
@@ -385,7 +382,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return trim($output, ' |');
 	}
 
-	private function smartLineTrim( $data ) {
+	private function smartLineTrim( string $data ) : string {
 		return preg_replace('/^\s*\n|\n\s*$/', '', $data);
 	}
 
@@ -401,7 +398,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		);
 	}
 
-	private function arrayTrim( $sv ) : array {
+	private function arrayTrim( array $sv ) : array {
 		$s   = 0;
 		$svn = null;
 		$c   = count($sv);

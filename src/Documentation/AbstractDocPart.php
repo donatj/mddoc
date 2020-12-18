@@ -21,7 +21,7 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	/**
 	 * @var AbstractDocPart
 	 */
-	protected $parent = null;
+	protected $parent;
 
 	public function __construct( array $options, array $tree_options ) {
 		$this->setOptions($options, $tree_options);

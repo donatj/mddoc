@@ -10,12 +10,12 @@ use donatj\MDDom\Paragraph;
 
 class ExecOutput extends AbstractDocPart {
 
-	const FORMAT_DEFAULT    = 'default';
-	const FORMAT_RAW        = 'raw';
-	const FORMAT_CODE       = 'code';
-	const FORMAT_CODE_BLOCK = 'code-block';
+	public const FORMAT_DEFAULT    = 'default';
+	public const FORMAT_RAW        = 'raw';
+	public const FORMAT_CODE       = 'code';
+	public const FORMAT_CODE_BLOCK = 'code-block';
 
-	private $formats = [
+	private const FORMATS = [
 		self::FORMAT_DEFAULT,
 		self::FORMAT_RAW,
 		self::FORMAT_CODE,
@@ -31,8 +31,8 @@ class ExecOutput extends AbstractDocPart {
 		$cmd    = $this->getOption('cmd');
 		$format = $this->getOption('format');
 
-		if( !in_array($format, $this->formats) ) {
-			throw new ConfigException("Invalid exec format '{$format}', expected to be in: " . implode(', ', $this->formats));
+		if( !in_array($format, self::FORMATS) ) {
+			throw new ConfigException("Invalid exec format '{$format}', expected to be in: " . implode(', ', self::FORMATS));
 		}
 
 		exec($cmd, $output, $return);

@@ -50,7 +50,7 @@ class TaxonomyReflector {
 	/**
 	 * @param Class_|Interface_|Trait_ $reflector
 	 */
-	private function registerReflectors( $reflector ) {
+	private function registerReflectors( $reflector ) : void {
 
 		if( !$this->reflector ) {
 			$this->reflector = $reflector;

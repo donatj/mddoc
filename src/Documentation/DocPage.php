@@ -36,7 +36,7 @@ class DocPage extends AbstractNestedDoc {
 			$time = time();
 		}
 
-		if( $new[0] != '/' && $new[0] != '.' ) {
+		if( $new[0] !== '/' && $new[0] !== '.' ) {
 			$new = realpath('.') . '/' . $new;
 		}
 
@@ -49,7 +49,7 @@ class DocPage extends AbstractNestedDoc {
 			$path .= '/' . $dir;
 			if( !is_dir($path) ) {
 				see($path);
-				if( !mkdir($path) ) {
+				if( !mkdir($path) && !is_dir($path) ) {
 					return false;
 				}
 			}

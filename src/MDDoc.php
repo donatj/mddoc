@@ -16,19 +16,22 @@ use donatj\MDDoc\Runner\UserInterface;
  */
 class MDDoc {
 
-	const VERSION = "0.0.1a";
+	public const VERSION = "0.0.1a";
 
-	const CONFIG_FILE     = "mddoc.xml";
-	const CONFIG_FILE_ALT = ".mddoc.xml";
+	private const CONFIG_FILES = [
+		"mddoc.xml",
+		".mddoc.xml",
+		"mddoc.xml.dist",
+		".mddoc.xml.dist",
+	];
 
 	public function __construct( array $args ) {
 		$ui = new UserInterface(STDOUT, STDERR);
 
-		$config = $this->init($args, $ui);
-
 		self::versionMarker($ui);
 
 		try {
+			$config = $this->init($args, $ui);
 			$parser = new ConfigParser;
 			$doc    = $parser->parse($config);
 
@@ -48,7 +51,7 @@ class MDDoc {
 		$ui->outputMsg("[{$currMen}]{$peakMem}mb peak memory use");
 	}
 
-	private function init( array $args, UserInterface $ui ) {
+	private function init( array $args, UserInterface $ui ) : string {
 
 		$flags          = new Flags;
 		$displayHelp    = &$flags->bool('help', false, 'Display this help message.');
@@ -75,15 +78,20 @@ class MDDoc {
 				break;
 		}
 
-		$configFile = self::CONFIG_FILE;
-		if( file_exists(self::CONFIG_FILE_ALT) ) {
-			$configFile = self::CONFIG_FILE_ALT;
+		if( $flags->args() ) {
+			return current($flags->args());
 		}
 
-		return $flags->args() ? current($flags->args()) : $configFile;
+		foreach( self::CONFIG_FILES as $configFile ) {
+			if( file_exists($configFile) ) {
+				return $configFile;
+			}
+		}
+
+		throw new ConfigException('No config file found');
 	}
 
-	private static function versionMarker( UserInterface $ui ) {
+	private static function versionMarker( UserInterface $ui ) : void {
 		$ui->outputMsg("MDDoc " . self::VERSION . " by Jesse G. Donat" . PHP_EOL);
 	}
 
