@@ -19,10 +19,9 @@ class ConfigParser {
 	/**
 	 * ConfigParser constructor.
 	 */
-	public function __construct( Documentation\DocumentationFactory $documentationFactory = null ) {
+	public function __construct( ?Documentation\DocumentationFactory $documentationFactory = null ) {
 		$this->documentationFactory = $documentationFactory ?? new Documentation\DocumentationFactory;
 	}
-
 
 	/**
 	 * @param array $attribute_tree
@@ -74,7 +73,6 @@ class ConfigParser {
 
 	/**
 	 * @param string $attribute
-	 * @return string
 	 * @throws ConfigException
 	 */
 	private function requireAttr( \DOMElement $node, $attribute ) : string {
