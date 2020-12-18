@@ -64,6 +64,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 
 			return new \ArrayIterator($fileArray);
 		}
+
 		if( is_readable($path) ) {
 			return new \ArrayIterator([ $path ]);
 		}

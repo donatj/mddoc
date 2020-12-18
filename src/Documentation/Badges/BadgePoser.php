@@ -59,6 +59,7 @@ class BadgePoser extends Badge {
 				$name = $parsed['name'];
 			}
 		}
+
 		if( $name ) {
 			$this->setOptionDefault('name', $name);
 		}

@@ -29,6 +29,7 @@ class ComposerInstall extends AbstractDocPart {
 		if( $this->getOption('dev') == 'true' ) {
 			$install .= '--dev ';
 		}
+
 		$install .= escapeshellarg($parsed['name']);
 		$para->appendChild(new CodeBlock($install, 'bash'));
 

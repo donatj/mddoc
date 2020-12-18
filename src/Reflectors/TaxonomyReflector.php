@@ -48,6 +48,7 @@ class TaxonomyReflector {
 		foreach( $fileReflector->getTraits() as $trait ) {
 			$this->registerReflectors($trait);
 		}
+
 		//		$this->fileReflector->getClasses(); // -- I don't think this did anything.
 	}
 

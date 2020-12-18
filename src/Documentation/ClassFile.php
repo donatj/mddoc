@@ -93,6 +93,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						$classInner .= "\t/** " . reset($constParts) . " */\n";
 					}
 				}
+
 				$classInner       .= sprintf("\tconst %s = %s;\n",
 					$constant->getName(),
 					$constant->getValue()
@@ -125,11 +126,13 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 						$classInner .= "\n\t */\n";
 					}
+
 					$static     = $property->isStatic() ? 'static ' : '';
 					$classInner .= "\tpublic {$static}\${$property->getName()}";
 					if( $property->getDefault() ) {
 						$classInner .= " = {$property->getDefault()}";
 					}
+
 					$classInner .= ";\n";
 
 					$showClassPreview = true;
@@ -346,6 +349,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					$document->appendChild(new MdText($this->smartLineTrim($runningText)));
 					$runningText = '';
 				}
+
 				$document->appendChild(new Header(substr($part, 0, -1)));
 			} else {
 				$runningText .= "  \n" . $part; // @todo this is gross... fix this.

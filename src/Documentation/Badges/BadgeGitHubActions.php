@@ -24,6 +24,7 @@ class BadgeGitHubActions extends Badge {
 		if( $branch = $this->getOption('branch') ) {
 			$src = 'branch=' . urlencode($branch) . '&';
 		}
+
 		if( $event = $this->getOption('event') ) {
 			$src = 'branch=' . urlencode($event) . '&';
 		}
