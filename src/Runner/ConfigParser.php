@@ -12,7 +12,20 @@ use donatj\MDDoc\Exceptions\ConfigException;
 class ConfigParser {
 
 	/**
-	 * @param array                           $attribute_tree
+	 * @var \donatj\MDDoc\Documentation\DocumentationFactory
+	 */
+	private $documentationFactory;
+
+	/**
+	 * ConfigParser constructor.
+	 */
+	public function __construct( Documentation\DocumentationFactory $documentationFactory = null ) {
+		$this->documentationFactory = $documentationFactory ?? new Documentation\DocumentationFactory;
+	}
+
+
+	/**
+	 * @param array $attribute_tree
 	 * @throws ConfigException
 	 */
 	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc $parent, array $tree_extra = [], $attribute_tree = [] ) : void {
@@ -41,55 +54,9 @@ class ConfigParser {
 				$attributes           = $this->nodeAttr($child);
 				$child_attribute_tree = array_merge($attribute_tree, $attributes);
 
-				switch( strtolower($child->nodeName) ) {
-					case 'section':
-						$childDoc = new Documentation\Section($attributes, $child_attribute_tree);
-						break;
-					case 'docpage':
-						$childDoc = new Documentation\DocPage($attributes, $child_attribute_tree);
-						break;
-					case 'text':
-						$childDoc = new Documentation\Text($attributes, $child_attribute_tree, $child->textContent);
-						break;
-					case 'file':
-						$childDoc = new Documentation\ClassFile($attributes, $child_attribute_tree);
-						break;
-					case 'recursivedirectory':
-						$childDoc = new Documentation\RecursiveDirectory($attributes, $child_attribute_tree);
-						break;
-					case 'include':
-						$childDoc = new Documentation\IncludeFile($attributes, $child_attribute_tree);
-						break;
-					case 'source':
-						$childDoc = new Documentation\Source($attributes, $child_attribute_tree, $child->textContent);
-						break;
-					case 'composer-install':
-						$childDoc = new Documentation\ComposerInstall($attributes, $child_attribute_tree);
-						break;
-					case 'composer-requires':
-						$childDoc = new Documentation\ComposerRequires($attributes, $child_attribute_tree);
-						break;
-					case 'badge':
-						$childDoc = new Documentation\Badges\Badge($attributes, $child_attribute_tree);
-						break;
-					case 'badge-poser':
-						$childDoc = new Documentation\Badges\BadgePoser($attributes, $child_attribute_tree);
-						break;
-					case 'badge-travis':
-						$childDoc = new Documentation\Badges\BadgeTravis($attributes, $child_attribute_tree);
-						break;
-					case 'badge-scrutinizer':
-						$childDoc = new Documentation\Badges\BadgeScrutinizer($attributes, $child_attribute_tree);
-						break;
-					case 'badge-github-action':
-						$childDoc = new Documentation\Badges\BadgeGitHubActions($attributes, $child_attribute_tree);
-						break;
-					case 'exec':
-						$childDoc = new Documentation\ExecOutput($attributes, $child_attribute_tree);
-						break;
-					default:
-						throw new ConfigException("Invalid XML Tag: {$child->nodeName}");
-				}
+				$childDoc = $this->documentationFactory->makeFromTag(
+					$child->nodeName, $attributes, $child_attribute_tree, $child->textContent
+				);
 
 				$parent->addChild($childDoc);
 				$childDoc->setParent($parent);
@@ -106,7 +73,7 @@ class ConfigParser {
 	}
 
 	/**
-	 * @param  string     $attribute
+	 * @param string $attribute
 	 * @return string
 	 * @throws ConfigException
 	 */
