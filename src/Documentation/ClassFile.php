@@ -68,6 +68,12 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			$constantData = $reflector->getConstants();
 			foreach( $constantData as $constants ) {
 				$constant = reset($constants);
+
+				$visibility = (string)$constant->getVisibility();
+				if( $visibility === 'private' ) {
+					continue;
+				}
+
 				if( $constantBlock = $constant->getDocBlock() ) {
 					if( $this->shouldSkip($constantBlock) ) {
 						continue;
@@ -94,7 +100,8 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					}
 				}
 
-				$classInner       .= sprintf("\tconst %s = %s;\n",
+				$classInner       .= sprintf("\t%s const %s = %s;\n",
+					$visibility,
 					$constant->getName(),
 					$constant->getValue()
 				);
