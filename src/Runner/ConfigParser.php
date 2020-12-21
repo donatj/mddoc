@@ -24,12 +24,9 @@ class ConfigParser {
 	}
 
 	/**
-	 * @param array $attributeTree
-	 * @throws ConfigException
+	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
-	private function loadChildren( DOMElement $node, Documentation\AbstractNestedDoc $parent, array $treeExtra = [], $attributeTree = [], ?ImmutableAttributeTree $newAttributeTree = null ) : void {
-		$newAttributeTree = $newAttributeTree ?? new ImmutableAttributeTree;
-
+	private function loadChildren( DOMElement $node, Documentation\AbstractNestedDoc $parent, ImmutableAttributeTree $newAttributeTree, array $treeExtra = [] ) : void {
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
 			switch( strtolower($sel_loader) ) {
 				case 'psr0':
@@ -52,8 +49,7 @@ class ConfigParser {
 			if( $child instanceof DOMElement ) {
 				$attributes = $this->nodeAttr($child);
 
-				$newAttributes      = $newAttributeTree->withAttr($attributes);
-				$childAttributeTree = array_merge($attributeTree, $attributes);
+				$newAttributes = $newAttributeTree->withAttr($attributes);
 
 				$childDoc = $this->documentationFactory->makeFromTag(
 					$child->nodeName, $newAttributes, $child->textContent
@@ -66,8 +62,8 @@ class ConfigParser {
 					$childDoc->setAutoloader($treeExtra['autoloader']);
 				}
 
-				if( $child->hasChildNodes() && $childDoc instanceof Documentation\AbstractNestedDoc ) {
-					$this->loadChildren($child, $childDoc, $treeExtra, $childAttributeTree, $newAttributes);
+				if( $childDoc instanceof Documentation\AbstractNestedDoc && $child->hasChildNodes() ) {
+					$this->loadChildren($child, $childDoc, $newAttributes, $treeExtra);
 				}
 			}
 		}
@@ -116,9 +112,11 @@ class ConfigParser {
 			throw new RuntimeException('Needs a DOM element');
 		}
 
-		$docRoot = new Documentation\DocRoot(new ImmutableAttributeTree);
+		$attributeTree = new ImmutableAttributeTree;
+
+		$docRoot = new Documentation\DocRoot($attributeTree);
 		if( $root->nodeName === 'mddoc' ) {
-			$this->loadChildren($root, $docRoot);
+			$this->loadChildren($root, $docRoot, $attributeTree);
 		} else {
 			if( $root->nodeName ) {
 				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid. Expected mddoc.");
