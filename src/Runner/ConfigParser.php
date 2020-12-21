@@ -52,7 +52,7 @@ class ConfigParser {
 			if( $child instanceof DOMElement ) {
 				$attributes = $this->nodeAttr($child);
 
-				$newAttributes      = $newAttributeTree->withAttr($child->tagName, $attributes);
+				$newAttributes      = $newAttributeTree->withAttr($attributes);
 				$childAttributeTree = array_merge($attributeTree, $attributes);
 
 				$childDoc = $this->documentationFactory->makeFromTag(
