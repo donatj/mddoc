@@ -26,7 +26,7 @@ class DocumentationFactory {
 			case 'docpage':
 				return new Documentation\DocPage($attributeTree);
 			case 'text':
-				return new Documentation\Text($attributeTree);
+				return new Documentation\Text($attributeTree, $textContent);
 			case 'file':
 				return new Documentation\ClassFile($attributeTree);
 			case 'recursivedirectory': // Deprecated tag name
@@ -35,7 +35,7 @@ class DocumentationFactory {
 			case 'include':
 				return new Documentation\IncludeFile($attributeTree);
 			case 'source':
-				return new Documentation\Source($attributeTree,$attributes,  $childAttributeTree, $textContent);
+				return new Documentation\Source($attributeTree, $textContent);
 			case 'composer-install':
 				return new Documentation\ComposerInstall($attributeTree);
 			case 'composer-requires':
