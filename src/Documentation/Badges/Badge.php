@@ -28,8 +28,8 @@ class Badge extends AbstractDocPart {
 	}
 
 	protected function init() : void {
-		$this->requireOptions(self::OPT_SRC);
-		$this->requireOptions(self::OPT_ALT);
+		$this->requireOption(self::OPT_SRC);
+		$this->requireOption(self::OPT_ALT);
 	}
 
 }

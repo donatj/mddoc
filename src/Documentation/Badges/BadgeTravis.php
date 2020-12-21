@@ -12,7 +12,7 @@ class BadgeTravis extends Badge {
 		$this->setOptionDefault(self::OPT_BRANCH, 'master');
 		$this->setOptionDefault(self::OPT_ALT, 'Build Status');
 
-		$this->requireOptions('name');
+		$this->requireOption('name');
 		$name = $this->getOption('name');
 
 		$this->setOptionDefault(self::OPT_SRC, self::URL_TRAVIS_BASE . $name . '.svg?branch=' . $this->getOption('branch'));

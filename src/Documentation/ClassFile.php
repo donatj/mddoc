@@ -23,7 +23,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	}
 
 	protected function init() : void {
-		$this->requireOptions('name');
+		$this->requireOption('name');
 	}
 
 	/**

@@ -43,7 +43,7 @@ class BadgePoser extends Badge {
 	];
 
 	protected function init() : void {
-		$this->requireOptions('type');
+		$this->requireOption('type');
 
 		$type = $this->getOption('type');
 		if( empty(self::BADGES[$type]) ) {
@@ -64,7 +64,7 @@ class BadgePoser extends Badge {
 			$this->setOptionDefault('name', $name);
 		}
 
-		$this->requireOptions('name');
+		$this->requireOption('name');
 
 		$this->setOptionDefault(self::OPT_SRC, self::URL_POSER_BASE . $name . self::BADGES[$type][self::OPT_SUFFIX]);
 		$this->setOptionDefault(self::OPT_HREF, self::URL_PACKAGIST_BASE . $name);

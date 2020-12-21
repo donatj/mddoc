@@ -30,14 +30,14 @@ class BadgeScrutinizer extends Badge {
 	protected function init() : void {
 		$this->setOptionDefault(self::OPT_BRANCH, 'master');
 
-		$this->requireOptions('type');
+		$this->requireOption('type');
 
 		$type = $this->getOption('type');
 		if( empty(self::BADGES[$type]) ) {
 			throw new ConfigException('Invalid Scrutinizer badge type');
 		}
 
-		$this->requireOptions('name');
+		$this->requireOption('name');
 		$name = $this->getOption('name');
 
 		$this->setOptionDefault(self::OPT_SRC, self::URL_SCRUTINIZER_BASE . $name . self::BADGES[$type][self::OPT_SUFFIX] . '?b=' . $this->getOption(self::OPT_BRANCH));

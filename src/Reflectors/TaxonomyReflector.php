@@ -4,6 +4,7 @@ namespace donatj\MDDoc\Reflectors;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Exceptions\ClassNotReadableException;
+use phpDocumentor\Reflection\File\LocalFile;
 use phpDocumentor\Reflection\Php\Class_;
 use phpDocumentor\Reflection\Php\Interface_;
 use phpDocumentor\Reflection\Php\ProjectFactory;
@@ -27,7 +28,7 @@ class TaxonomyReflector {
 		$this->parserFactory = $parserFactory;
 		$this->data          = [];
 
-		$projectFiles = [ new \phpDocumentor\Reflection\File\LocalFile($filename) ];
+		$projectFiles = [ new LocalFile($filename) ];
 		$project      = (ProjectFactory::createInstance())->create('My Project', $projectFiles);
 		/** @var \phpDocumentor\Reflection\Php\File $fileReflector */
 		$fileReflector = $project->getFiles()[$filename];

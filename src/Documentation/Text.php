@@ -2,6 +2,7 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Runner\ImmutableAttributeTree;
 use donatj\MDDom\Paragraph;
 
 /**
@@ -13,10 +14,10 @@ class Text extends AbstractDocPart {
 
 	protected $text;
 
-	public function __construct( array $options, array $tree_options, $text = '' ) {
+	public function __construct( ImmutableAttributeTree $attributeTree, string $text = '' ) {
 		$this->text = $text;
 
-		parent::__construct($options, $tree_options);
+		parent::__construct($attributeTree);
 	}
 
 	public function output( int $depth ) {

@@ -59,7 +59,7 @@ class DocPage extends AbstractNestedDoc {
 	}
 
 	protected function init() : void {
-		$this->requireOptions('target');
+		$this->requireOption('target');
 	}
 
 }
