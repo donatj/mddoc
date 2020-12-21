@@ -12,6 +12,18 @@ This is a work in progress and not ready for use.
 This projects goal is to be able to define a set of directions for *how* to document a set of PHP files as well as markdown and other text to include, and output the final documentation in a jekyll or other markdown site builder ready form.
 
 
+## Requirements
+
+- **php**: >=7.1
+- **ext-dom**: *
+- **ext-json**: *
+- **donatj/flags**: 1.*
+- **donatj/cli-toolkit**: 0.*
+- **donatj/mddom**: ~v0.1
+- **donatj/drop**: ^1.0
+- **phpdocumentor/reflection**: ~4.0
+- **phpdocumentor/type-resolver**: *
+
 ## Documentation Example (WIP)
 
 ### Class: \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
