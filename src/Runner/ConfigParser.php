@@ -56,7 +56,7 @@ class ConfigParser {
 				$childAttributeTree = array_merge($attributeTree, $attributes);
 
 				$childDoc = $this->documentationFactory->makeFromTag(
-					$child->nodeName, $newAttributes, $attributes, $childAttributeTree, $child->textContent
+					$child->nodeName, $newAttributes, $child->textContent
 				);
 
 				$parent->addChild($childDoc);
