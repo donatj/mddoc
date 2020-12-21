@@ -9,6 +9,11 @@ class ImmutableAttributeTree {
 
 	private $attributeCollection = [];
 
+	/**
+	 * Returns a clone of this ImmutableAttributeTree with another depth of attributes appended.
+	 *
+	 * @return $this Clone of current ImmutableAttributeTree
+	 */
 	public function withAttr( array $attributes ) : self {
 		$tree = clone $this;
 

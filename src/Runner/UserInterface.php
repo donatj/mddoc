@@ -31,6 +31,13 @@ EOT;
 		Output::string(PHP_EOL);
 	}
 
+	/**
+	 * Output an Error before exiting with given error code
+	 *
+	 * @param string      $text Primary error log details
+	 * @param int         $code Status code to exit with (0-255)
+	 * @param string|null $additional Optional - will print on a second line following the log
+	 */
 	public function dropError( string $text, int $code = 1, ?string $additional = null ) : void {
 		Output::string($this->getScript() . ": " . Style::red($text) . PHP_EOL . ($additional ? $additional . PHP_EOL : ''));
 
