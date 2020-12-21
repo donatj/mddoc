@@ -22,7 +22,7 @@ class IncludeFile extends AbstractDocPart {
 	}
 
 	protected function init() : void {
-		$this->requireOptions('name');
+		$this->requireOption('name');
 	}
 
 }

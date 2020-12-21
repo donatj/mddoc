@@ -61,7 +61,7 @@ class ExecOutput extends AbstractDocPart {
 	}
 
 	protected function init() : void {
-		$this->requireOptions('cmd');
+		$this->requireOption('cmd');
 		$this->setOptionDefault('format', self::FORMAT_DEFAULT);
 	}
 

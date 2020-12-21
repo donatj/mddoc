@@ -2,12 +2,15 @@
 
 namespace donatj\MDDoc\Runner;
 
+use DOMDocument;
+use DOMElement;
 use donatj\MDDoc\Autoloaders\NullLoader;
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Autoloaders\Psr4;
 use donatj\MDDoc\Documentation;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Exceptions\ConfigException;
+use RuntimeException;
 
 class ConfigParser {
 
@@ -24,7 +27,7 @@ class ConfigParser {
 	 * @param array $attributeTree
 	 * @throws ConfigException
 	 */
-	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc $parent, array $treeExtra = [], $attributeTree = [], ?ImmutableAttributeTree $newAttributeTree = null ) : void {
+	private function loadChildren( DOMElement $node, Documentation\AbstractNestedDoc $parent, array $treeExtra = [], $attributeTree = [], ?ImmutableAttributeTree $newAttributeTree = null ) : void {
 		$newAttributeTree = $newAttributeTree ?? new ImmutableAttributeTree;
 
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
@@ -46,7 +49,7 @@ class ConfigParser {
 		}
 
 		foreach( $node->childNodes as $child ) {
-			if( $child instanceof \DOMElement ) {
+			if( $child instanceof DOMElement ) {
 				$attributes = $this->nodeAttr($child);
 
 				$newAttributes      = $newAttributeTree->withAttr($child->tagName, $attributes);
@@ -73,7 +76,7 @@ class ConfigParser {
 	/**
 	 * @throws ConfigException
 	 */
-	private function requireAttr( \DOMElement $node, string $attribute ) : string {
+	private function requireAttr( DOMElement $node, string $attribute ) : string {
 		if( !$value = $node->getAttribute($attribute) ) {
 			throw new ConfigException("Element `{$node->nodeName}` missing required attribute: {$attribute}");
 		}
@@ -81,7 +84,7 @@ class ConfigParser {
 		return $value;
 	}
 
-	private function nodeAttr( \DOMElement $node ) : array {
+	private function nodeAttr( DOMElement $node ) : array {
 		$attributes = [];
 		if( $node->hasAttributes() ) {
 			foreach( $node->attributes as $attr ) {
@@ -103,17 +106,17 @@ class ConfigParser {
 			throw new ConfigException("Config file '{$filename}' not readable");
 		}
 
-		$dom = new \DOMDocument;
+		$dom = new DOMDocument;
 		if( @$dom->load($filename) === false ) {
 			throw new ConfigException("Error parsing {$filename}");
 		}
 
 		$root = $dom->firstChild;
-		if( !$root instanceof \DOMElement ) {
-			throw new \RuntimeException('Needs a DOM element');
+		if( !$root instanceof DOMElement ) {
+			throw new RuntimeException('Needs a DOM element');
 		}
 
-		$docRoot = new Documentation\DocRoot(new ImmutableAttributeTree, [], []);
+		$docRoot = new Documentation\DocRoot(new ImmutableAttributeTree);
 		if( $root->nodeName === 'mddoc' ) {
 			$this->loadChildren($root, $docRoot);
 		} else {

@@ -14,10 +14,10 @@ class Text extends AbstractDocPart {
 
 	protected $text;
 
-	public function __construct( ImmutableAttributeTree $attributeTree, array $options, array $tree_options, ?string $text = '' ) {
+	public function __construct( ImmutableAttributeTree $attributeTree, string $text = '' ) {
 		$this->text = $text;
 
-		parent::__construct($attributeTree, $options, $tree_options);
+		parent::__construct($attributeTree);
 	}
 
 	public function output( int $depth ) {

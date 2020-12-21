@@ -16,49 +16,42 @@ class DocumentationFactory {
 
 	/**
 	 * Return a populated DocumentationInterface of the corresponding tagName
-	 *
-	 * @param string                                      $tagName
-	 * @param \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree
-	 * @param array                                       $attributes
-	 * @param array                                       $childAttributeTree
-	 * @param string                                      $textContent
-	 * @return \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
 	 */
 	public function makeFromTag( string $tagName, ImmutableAttributeTree $attributeTree, array $attributes, array $childAttributeTree, string $textContent ) : DocumentationInterface {
 		$tagName = strtolower($tagName);
 
 		switch( $tagName ) {
 			case 'section':
-				return new Documentation\Section($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\Section($attributeTree);
 			case 'docpage':
-				return new Documentation\DocPage($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\DocPage($attributeTree);
 			case 'text':
-				return new Documentation\Text($attributeTree, $attributes, $childAttributeTree, $textContent);
+				return new Documentation\Text($attributeTree);
 			case 'file':
-				return new Documentation\ClassFile($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\ClassFile($attributeTree);
 			case 'recursivedirectory': // Deprecated tag name
 			case 'recursive-directory':
-				return new Documentation\RecursiveDirectory($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\RecursiveDirectory($attributeTree);
 			case 'include':
-				return new Documentation\IncludeFile($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\IncludeFile($attributeTree);
 			case 'source':
 				return new Documentation\Source($attributeTree,$attributes,  $childAttributeTree, $textContent);
 			case 'composer-install':
-				return new Documentation\ComposerInstall($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\ComposerInstall($attributeTree);
 			case 'composer-requires':
-				return new Documentation\ComposerRequires($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\ComposerRequires($attributeTree);
 			case 'badge':
-				return new Documentation\Badges\Badge($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\Badges\Badge($attributeTree);
 			case 'badge-poser':
-				return new Documentation\Badges\BadgePoser($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\Badges\BadgePoser($attributeTree);
 			case 'badge-travis':
-				return new Documentation\Badges\BadgeTravis($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\Badges\BadgeTravis($attributeTree);
 			case 'badge-scrutinizer':
-				return new Documentation\Badges\BadgeScrutinizer($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\Badges\BadgeScrutinizer($attributeTree);
 			case 'badge-github-action':
-				return new Documentation\Badges\BadgeGitHubActions($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\Badges\BadgeGitHubActions($attributeTree);
 			case 'exec':
-				return new Documentation\ExecOutput($attributeTree, $attributes, $childAttributeTree);
+				return new Documentation\ExecOutput($attributeTree);
 		}
 
 		throw new ConfigException("Unhandled XML Tag: {$tagName}");

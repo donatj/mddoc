@@ -14,10 +14,10 @@ class BadgeGitHubActions extends Badge {
 		$this->setOptionDefault(self::OPT_EVENT, '');
 		$this->setOptionDefault(self::OPT_ALT, 'Build Status');
 
-		$this->requireOptions('name');
+		$this->requireOption('name');
 		$name = $this->getOption('name');
 
-		$this->requireOptions('workflow');
+		$this->requireOption('workflow');
 		$workflow = $this->getOption('workflow');
 
 		$src = sprintf('%s%s/workflows/%s/badge.svg?', self::URL_GITHUB_BASE, $name, $workflow);

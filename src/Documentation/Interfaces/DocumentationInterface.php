@@ -7,7 +7,7 @@ use donatj\MDDom\AbstractElement;
 
 interface DocumentationInterface {
 
-	public function __construct( ImmutableAttributeTree $attributeTree, array $options, array $tree_options );
+	public function __construct( ImmutableAttributeTree $attributeTree );
 
 	/**
 	 * @return AbstractElement|string Cannot be annotated as also accepts __toString-able objects
