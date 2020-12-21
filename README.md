@@ -40,7 +40,7 @@ function __construct(string $path)
 
 - ***string*** `$path` - Root path
 
-
+---
 
 #### Undocumented Method: `Psr0->__invoke(string $className)`
 
@@ -59,46 +59,29 @@ function __construct(string $root_namespace, string $path)
 - ***string*** `$root_namespace` - Namespace prefix
 - ***string*** `$path` - Root path
 
-
+---
 
 #### Undocumented Method: `Psr4->__invoke(string $className)`
 
 ### Class: \donatj\MDDoc\Documentation\AbstractDocPart
 
-```php
-<?php
-namespace donatj\MDDoc\Documentation;
-
-class AbstractDocPart {
-	/**
-	 * This variable is the funk
-	 * @var bool
-	 */
-	public $removeMe = true;
-}
-```
 
 
+#### Undocumented Method: `AbstractDocPart->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
 
-#### Undocumented Method: `AbstractDocPart->__construct(array $options, array $tree_options)`
+---
 
+#### Undocumented Method: `AbstractDocPart->setOptionDefault(string $key, ?string $value)`
 
-
-#### Undocumented Method: `AbstractDocPart->setOptions(array $options, array $tree_options)`
-
-
-
-#### Undocumented Method: `AbstractDocPart->setOptionDefault(string $key, $value)`
-
-
+---
 
 #### Undocumented Method: `AbstractDocPart->getOption(string $key [, bool $tree = false])`
 
-
+---
 
 #### Undocumented Method: `AbstractDocPart->setParent(\donatj\MDDoc\Documentation\AbstractDocPart $parent)`
 
-
+---
 
 #### Undocumented Method: `AbstractDocPart->getParent()`
 
@@ -126,7 +109,7 @@ function setChildren($children)
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
 
-
+---
 
 #### Undocumented Method: `AbstractNestedDoc->addChild(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface $child)`
 
@@ -200,11 +183,11 @@ class BadgeTravis {
 
 #### Undocumented Method: `ClassFile->output(int $depth)`
 
-
+---
 
 #### Undocumented Method: `ClassFile->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
 
-
+---
 
 #### Undocumented Method: `ClassFile->getDocStr(\phpDocumentor\Reflection\DocBlock $block)`
 
@@ -236,7 +219,21 @@ function output(int $depth)
 
 #### Undocumented Method: `DocRoot->output(int $depth)`
 
+### Class: \donatj\MDDoc\Documentation\DocumentationFactory
+
+Links XML Tags to their Given Documentation Generator
+
+#### Method: DocumentationFactory->makeFromTag
+
+```php
+function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent) : \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
+```
+
+Return a populated DocumentationInterface of the corresponding tagName
+
 ### Class: \donatj\MDDoc\Documentation\Exceptions\ExecutionException
+
+### Class: \donatj\MDDoc\Documentation\Exceptions\UnhandledConfigTagException
 
 ### Class: \donatj\MDDoc\Documentation\ExecOutput
 
@@ -284,7 +281,7 @@ function output(int $depth)
 
 
 
-#### Undocumented Method: `DocumentationInterface->__construct(array $options, array $tree_options)`
+#### Undocumented Method: `DocumentationInterface->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
 
 ---
 
@@ -304,7 +301,7 @@ function output(int $depth)
 
 #### Undocumented Method: `RecursiveDirectory->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
 
-
+---
 
 #### Undocumented Method: `RecursiveDirectory->output(int $depth)`
 
@@ -334,9 +331,9 @@ Class Text
 
 
 
-#### Undocumented Method: `Text->__construct(array $options, array $tree_options [, $text = ''])`
+#### Undocumented Method: `Text->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $text = ''])`
 
-
+---
 
 #### Undocumented Method: `Text->output(int $depth)`
 
@@ -352,7 +349,7 @@ Class Text
 
 #### Undocumented Method: `PathNotReadableException->__construct(string $message, string $path [, ?\Exception $previous_exception = null])`
 
-
+---
 
 #### Undocumented Method: `PathNotReadableException->getPath()`
 
@@ -383,28 +380,24 @@ class MDDoc {
 function __construct(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader, \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory $parserFactory)
 ```
 
-
-
-#### Undocumented Method: `TaxonomyReflector->getData()`
-
 ---
 
 #### Method: TaxonomyReflector->getReflector
 
 ```php
-function getReflector()
+function getReflector() : \phpDocumentor\Reflection\Element
 ```
 
 ##### Returns:
 
-- ***\phpDocumentor\Reflection\Php\Interface_*** | ***null***
+- ***\phpDocumentor\Reflection\Php\Class_*** | ***\phpDocumentor\Reflection\Php\Interface_*** | ***\phpDocumentor\Reflection\Php\Trait_*** | ***null***
 
 ---
 
 #### Method: TaxonomyReflector->getMethods
 
 ```php
-function getMethods()
+function getMethods() : array
 ```
 
 ##### Returns:
@@ -416,7 +409,7 @@ function getMethods()
 #### Method: TaxonomyReflector->getConstants
 
 ```php
-function getConstants()
+function getConstants() : array
 ```
 
 ##### Returns:
@@ -428,12 +421,12 @@ function getConstants()
 #### Method: TaxonomyReflector->getProperties
 
 ```php
-function getProperties()
+function getProperties() : array
 ```
 
 ##### Returns:
 
-- ***\PhpParser\Builder\Property[][]***
+- ***\phpDocumentor\Reflection\Php\Property[][]***
 
 ### Class: \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory
 
@@ -453,6 +446,12 @@ function newInstance($filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderI
 
 ### Class: \donatj\MDDoc\Runner\ConfigParser
 
+
+
+#### Undocumented Method: `ConfigParser->__construct([ ?\donatj\MDDoc\Documentation\DocumentationFactory $documentationFactory = null])`
+
+---
+
 #### Method: ConfigParser->parse
 
 ```php
@@ -464,6 +463,50 @@ Parse a config file
 ##### Returns:
 
 - ***\donatj\MDDoc\Documentation\DocRoot***
+
+### Class: \donatj\MDDoc\Runner\ImmutableAttributeTree
+
+ImmutableAttributeTree is a helper for reading XML Attributes
+
+#### Method: ImmutableAttributeTree->withAttr
+
+```php
+function withAttr(array $attributes) : self
+```
+
+Returns a clone of this ImmutableAttributeTree with another depth of attributes appended.
+
+##### Returns:
+
+- ***$this*** - Clone of current ImmutableAttributeTree
+
+---
+
+#### Method: ImmutableAttributeTree->shallowValue
+
+```php
+function shallowValue(string $attr) : ?string
+```
+
+Fetch an attribute value by key from the top-most element.
+
+##### Returns:
+
+- ***string*** | ***null*** - Returns null on not found.
+
+---
+
+#### Method: ImmutableAttributeTree->deepValue
+
+```php
+function deepValue(string $attr) : ?string
+```
+
+Fetch the first attribute value by key from the starting with the top-most element and working up to the root.
+
+##### Returns:
+
+- ***string*** | ***null*** - Returns null on not found.
 
 ### Class: \donatj\MDDoc\Runner\UserInterface
 
@@ -480,14 +523,26 @@ UserInterface constructor.
 - ***resource*** `$STDOUT`
 - ***resource*** `$STDERR`
 
-
+---
 
 #### Undocumented Method: `UserInterface->dumpOptions(string $additional)`
 
+---
 
+#### Method: UserInterface->dropError
 
-#### Undocumented Method: `UserInterface->dropError(string $text [, int $code = 1 [, string $additional = null]])`
+```php
+function dropError(string $text [, int $code = 1 [, ?string $additional = null]]) : void
+```
 
+Output an Error before exiting with given error code
 
+##### Parameters:
+
+- ***string*** `$text` - Primary error log details
+- ***int*** `$code` - Status code to exit with (0-255)
+- ***string*** | ***null*** `$additional` - Optional - will print on a second line following the log
+
+---
 
 #### Undocumented Method: `UserInterface->outputMsg(string $text)`
