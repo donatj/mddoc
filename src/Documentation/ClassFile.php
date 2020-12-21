@@ -114,7 +114,6 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					continue;
 				}
 
-				/** @var DocBlock $propertyBlock */
 				if( $propertyBlock = $property->getDocBlock() ) {
 					if( $this->shouldSkip($propertyBlock) ) {
 						continue;
@@ -156,6 +155,8 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 			$i = 0;
 			foreach( $methodData as $methods ) {
+				$i++;
+
 				$method = reset($methods);
 
 				if( (string)$method->getVisibility() !== 'public' ) {
@@ -191,22 +192,21 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 				$firstBlock = reset($blocks);
 
+				$operator = ($method->isStatic() ? '::' : '->');
+
+				$canonicalMethodName = $class->getName() . $operator . "$name($args)";
+
+				if( $methodFilter = $this->getOption('method-filter') ) {
+					if( !preg_match($methodFilter, $canonicalMethodName) ) {
+						continue;
+					}
+				}
+
+				if( $i > 1 ) {
+					$subDocument->appendChild(new HorizontalRule);
+				}
+
 				if( $firstBlock ) {
-					$operator            = ($method->isStatic() ? '::' : '->');
-					$canonicalMethodName = $class->getName() . $operator . "$name($args)";
-
-					if( $methodFilter = $this->getOption('method-filter') ) {
-						if( !preg_match($methodFilter, $canonicalMethodName) ) {
-							continue;
-						}
-					}
-
-					$i++;
-
-					if( $i > 1 ) {
-						$subDocument->appendChild(new HorizontalRule);
-					}
-
 					$subDocument->appendChild(
 						new Header("Method: {$class->getName()}{$operator}{$name}")
 					);
@@ -275,13 +275,10 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						}
 					}
 				} else {
-					$i++;
-					//						$output .= str_repeat('#', $depth + 2) . " Undocumented Method: `" . $class->getShortName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`";
-
 					$subDocument = new DocumentDepth;
 					$document->appendChild($subDocument);
 
-					$subDocument->appendChild(new Header("Undocumented Method: `" . $class->getName() . ($method->isStatic() ? '::' : '->') . "{$name}({$args})`"));
+					$subDocument->appendChild(new Header("Undocumented Method: `{$class->getName()}{$operator}{$name}({$args})`"));
 				}
 
 				$output .= PHP_EOL;
