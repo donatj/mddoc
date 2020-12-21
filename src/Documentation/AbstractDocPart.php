@@ -4,15 +4,9 @@ namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDoc\Runner\ImmutableAttributeTree;
 
 abstract class AbstractDocPart implements DocumentationInterface {
-
-	/**
-	 * This variable is the funk
-	 *
-	 * @var bool
-	 */
-	public $removeMe = true;
 
 	protected $defaults = [];
 	protected $options;
@@ -22,19 +16,21 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	 * @var AbstractDocPart
 	 */
 	protected $parent;
+	/**
+	 * @var \donatj\MDDoc\Runner\ImmutableAttributeTree
+	 */
+	protected $attributeTree;
 
-	public function __construct( array $options, array $tree_options ) {
-		$this->setOptions($options, $tree_options);
+	public function __construct( ImmutableAttributeTree $attributeTree, array $options, array $tree_options ) {
+		$this->attributeTree = $attributeTree;
+		$this->options       = $options;
+		$this->treeOptions   = $tree_options;
 
 		$this->init();
 	}
 
 	abstract protected function init() : void;
 
-	public function setOptions( array $options, array $tree_options ) : void {
-		$this->options     = $options;
-		$this->treeOptions = $tree_options;
-	}
 
 	public function setOptionDefault( string $key, $value ) : void {
 		$this->defaults[$key] = $value;
@@ -44,7 +40,7 @@ abstract class AbstractDocPart implements DocumentationInterface {
 		$data = $tree ? $this->treeOptions : $this->options;
 
 		return $data[$key] ??
-			($this->defaults[$key] ?? null);
+			   ($this->defaults[$key] ?? null);
 	}
 
 	/**

@@ -24,7 +24,8 @@ class ConfigParser {
 	 * @param array $attributeTree
 	 * @throws ConfigException
 	 */
-	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc $parent, array $treeExtra = [], $attributeTree = [] ) : void {
+	private function loadChildren( \DOMElement $node, Documentation\AbstractNestedDoc $parent, array $treeExtra = [], $attributeTree = [], ?ImmutableAttributeTree $newAttributeTree = null ) : void {
+		$newAttributeTree = $newAttributeTree ?? new ImmutableAttributeTree;
 
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
 			switch( strtolower($sel_loader) ) {
@@ -46,11 +47,13 @@ class ConfigParser {
 
 		foreach( $node->childNodes as $child ) {
 			if( $child instanceof \DOMElement ) {
-				$attributes         = $this->nodeAttr($child);
+				$attributes = $this->nodeAttr($child);
+
+				$newAttributes      = $newAttributeTree->withAttr($child->tagName, $attributes);
 				$childAttributeTree = array_merge($attributeTree, $attributes);
 
 				$childDoc = $this->documentationFactory->makeFromTag(
-					$child->nodeName, $attributes, $childAttributeTree, $child->textContent
+					$child->nodeName, $newAttributes, $attributes, $childAttributeTree, $child->textContent
 				);
 
 				$parent->addChild($childDoc);
@@ -61,14 +64,13 @@ class ConfigParser {
 				}
 
 				if( $child->hasChildNodes() && $childDoc instanceof Documentation\AbstractNestedDoc ) {
-					$this->loadChildren($child, $childDoc, $treeExtra, $childAttributeTree);
+					$this->loadChildren($child, $childDoc, $treeExtra, $childAttributeTree, $newAttributes);
 				}
 			}
 		}
 	}
 
 	/**
-	 * @param string $attribute
 	 * @throws ConfigException
 	 */
 	private function requireAttr( \DOMElement $node, string $attribute ) : string {
@@ -111,7 +113,7 @@ class ConfigParser {
 			throw new \RuntimeException('Needs a DOM element');
 		}
 
-		$docRoot = new Documentation\DocRoot([], []);
+		$docRoot = new Documentation\DocRoot(new ImmutableAttributeTree, [], []);
 		if( $root->nodeName === 'mddoc' ) {
 			$this->loadChildren($root, $docRoot);
 		} else {
