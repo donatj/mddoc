@@ -4,6 +4,7 @@ namespace donatj\MDDoc\Reflectors;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Exceptions\ClassNotReadableException;
+use phpDocumentor\Reflection\Element;
 use phpDocumentor\Reflection\File\LocalFile;
 use phpDocumentor\Reflection\Php\Class_;
 use phpDocumentor\Reflection\Php\Interface_;
@@ -78,7 +79,7 @@ class TaxonomyReflector {
 				$filename = $loader($parent);
 				if( is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
-					$this->data = array_merge_recursive($this->data, $parser->getData());
+					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
 			}
 
@@ -87,7 +88,7 @@ class TaxonomyReflector {
 					$filename = $loader($trait);
 					if( is_readable($filename) ) {
 						$parser     = $this->parserFactory->newInstance($filename, $loader);
-						$this->data = array_merge_recursive($this->data, $parser->getData());
+						$this->data = array_merge_recursive($this->data, $parser->data);
 					}
 				}
 			}
@@ -98,7 +99,7 @@ class TaxonomyReflector {
 				$filename = $loader($interface);
 				if( is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
-					$this->data = array_merge_recursive($this->data, $parser->getData());
+					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
 			}
 		}
@@ -108,41 +109,37 @@ class TaxonomyReflector {
 				$filename = $loader($interface);
 				if( is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
-					$this->data = array_merge_recursive($this->data, $parser->getData());
+					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
 			}
 		}
 	}
 
-	public function getData() {
-		return $this->data;
-	}
-
 	/**
-	 * @return Interface_|null
+	 * @return Class_|Interface_|Trait_|null
 	 */
-	public function getReflector() {
+	public function getReflector() : Element {
 		return $this->reflector;
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\Php\Method[][]
 	 */
-	public function getMethods() {
+	public function getMethods() : array {
 		return $this->data['methods'] ?? [];
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\Php\Constant[][]
 	 */
-	public function getConstants() {
+	public function getConstants() : array {
 		return $this->data['constants'] ?? [];
 	}
 
 	/**
-	 * @return \PhpParser\Builder\Property[][]
+	 * @return \phpDocumentor\Reflection\Php\Property[][]
 	 */
-	public function getProperties() {
+	public function getProperties() : array {
 		return $this->data['properties'] ?? [];
 	}
 
