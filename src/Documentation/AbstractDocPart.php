@@ -43,8 +43,6 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	 */
 	protected function requireOption( string $key, bool $tree = false ) : void {
 		if( $this->getOption($key, $tree) === null ) {
-			drop($key, $tree, $this->attributeTree);
-
 			throw new ConfigException(get_called_class() . " requires {$key} attribute.");
 		}
 	}
