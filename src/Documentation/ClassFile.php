@@ -63,47 +63,50 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			}
 
 			$classInner   .= "class {$class->getName()} {\n";
-			$constantData = $reflector->getConstants();
-			foreach( $constantData as $constants ) {
-				$constant = reset($constants);
 
-				$visibility = (string)$constant->getVisibility();
-				if( $visibility === 'private' ) {
-					continue;
-				}
+			if( !$this->getOption('skip-class-constants', true) ) {
+				$constantData = $reflector->getConstants();
+				foreach( $constantData as $constants ) {
+					$constant = reset($constants);
 
-				if( $constantBlock = $constant->getDocBlock() ) {
-					if( $this->shouldSkip($constantBlock) ) {
+					$visibility = (string)$constant->getVisibility();
+					if( $visibility === 'private' ) {
 						continue;
 					}
 
-					$constParts = explode("\n",
-						$this->descriptionFormat(
-							$this->getDocStr($constantBlock)
-						)->exportMarkdown()
+					if( $constantBlock = $constant->getDocBlock() ) {
+						if( $this->shouldSkip($constantBlock) ) {
+							continue;
+						}
+
+						$constParts = explode("\n",
+							$this->descriptionFormat(
+								$this->getDocStr($constantBlock)
+							)->exportMarkdown()
+						);
+
+						if( $vars = $constantBlock->getTagsByName('var') ) {
+							/** @var \phpDocumentor\Reflection\DocBlock\Tags\Var_ $var */
+							$var          = reset($vars);
+							$constParts[] = '@var ' . (string)$var;
+						}
+
+						$constParts = $this->arrayTrim($constParts);
+
+						if( count($constParts) > 1 ) {
+							$classInner .= "\t/**\n\t * " . implode("\n\t * ", $constParts) . "\n\t */\n";
+						} elseif( count($constParts) === 1 ) {
+							$classInner .= "\t/** " . reset($constParts) . " */\n";
+						}
+					}
+
+					$classInner       .= sprintf("\t%s const %s = %s;\n",
+						$visibility,
+						$constant->getName(),
+						$constant->getValue()
 					);
-
-					if( $vars = $constantBlock->getTagsByName('var') ) {
-						/** @var \phpDocumentor\Reflection\DocBlock\Tags\Var_ $var */
-						$var          = reset($vars);
-						$constParts[] = '@var ' . (string)$var;
-					}
-
-					$constParts = $this->arrayTrim($constParts);
-
-					if( count($constParts) > 1 ) {
-						$classInner .= "\t/**\n\t * " . implode("\n\t * ", $constParts) . "\n\t */\n";
-					} elseif( count($constParts) === 1 ) {
-						$classInner .= "\t/** " . reset($constParts) . " */\n";
-					}
+					$showClassPreview = true;
 				}
-
-				$classInner       .= sprintf("\t%s const %s = %s;\n",
-					$visibility,
-					$constant->getName(),
-					$constant->getValue()
-				);
-				$showClassPreview = true;
 			}
 
 			$propertyData = $reflector->getProperties();
