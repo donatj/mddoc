@@ -196,7 +196,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 				$canonicalMethodName = $class->getName() . $operator . "$name($args)";
 
-				if( $methodFilter = $this->getOption('method-filter') ) {
+				if( $methodFilter = $this->getOption('method-filter', true) ) {
 					if( !preg_match($methodFilter, $canonicalMethodName) ) {
 						continue;
 					}
