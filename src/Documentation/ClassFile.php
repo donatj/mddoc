@@ -47,7 +47,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 						return '';
 					}
 
-					$document->appendChild(new Paragraph($classBlock->getSummary()));
+					$document->appendChild(new Paragraph($this->getDocStr($classBlock)));
 				}
 			}
 
