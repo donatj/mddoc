@@ -17,12 +17,11 @@ This projects goal is to be able to define a set of directions for *how* to docu
 - **php**: >=7.1
 - **ext-dom**: *
 - **ext-json**: *
-- **donatj/flags**: 1.*
-- **donatj/cli-toolkit**: 0.*
-- **donatj/mddom**: ~v0.1
-- **donatj/drop**: ^1.0
+- **donatj/flags**: ~1.4
+- **donatj/cli-toolkit**: ~0.2
+- **donatj/mddom**: ~0.1.0
+- **donatj/drop**: ~1.0
 - **phpdocumentor/reflection**: ~4.0
-- **phpdocumentor/type-resolver**: *
 
 ## Documentation Example (WIP)
 

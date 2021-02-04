@@ -61,7 +61,6 @@ class MDDoc {
 			$flags->parse($args);
 		} catch( \Exception $e ) {
 			$ui->dropError($e->getMessage(), 1, $flags->getDefaults());
-			drop($e->getMessage(), 1, $flags->getDefaults());
 		}
 
 		switch( true ) {
