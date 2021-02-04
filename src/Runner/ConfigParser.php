@@ -26,7 +26,12 @@ class ConfigParser {
 	/**
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
-	private function loadChildren( DOMElement $node, Documentation\AbstractNestedDoc $parent, ImmutableAttributeTree $newAttributeTree, array $treeExtra = [] ) : void {
+	private function loadChildren(
+		DOMElement $node,
+		Documentation\AbstractNestedDoc $parent,
+		ImmutableAttributeTree $newAttributeTree,
+		array $treeExtra = []
+	) : void {
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
 			switch( strtolower($sel_loader) ) {
 				case 'psr0':

@@ -17,7 +17,11 @@ class DocumentationFactory {
 	/**
 	 * Return a populated DocumentationInterface of the corresponding tagName
 	 */
-	public function makeFromTag( string $tagName, ImmutableAttributeTree $attributeTree, string $textContent ) : DocumentationInterface {
+	public function makeFromTag(
+		string $tagName,
+		ImmutableAttributeTree $attributeTree,
+		string $textContent
+	) : DocumentationInterface {
 		$tagName = strtolower($tagName);
 
 		switch( $tagName ) {
