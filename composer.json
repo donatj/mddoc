@@ -1,7 +1,6 @@
 {
 	"name": "donatj/mddoc",
 	"description": "Powerful, User Directed Markdown Generator",
-	"minimum-stability": "alpha",
 	"require": {
 		"php": ">=7.1",
 		"ext-dom": "*",
