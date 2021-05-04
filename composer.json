@@ -15,7 +15,7 @@
 		"donatj/drop": "~1.0",
 		"friendsofphp/php-cs-fixer": "^2.13",
 		"squizlabs/php_codesniffer": "^3.5",
-		"corpus/coding-standard": "^0.3.0"
+		"corpus/coding-standard": "^0.4.0"
 	},
 	"license": "MIT",
 	"authors": [
