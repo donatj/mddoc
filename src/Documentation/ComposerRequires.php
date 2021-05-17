@@ -21,7 +21,7 @@ class ComposerRequires extends AbstractDocPart {
 		$parsed = @json_decode($data, true);
 
 		$para = new Paragraph;
-		if( is_array($parsed['require']) ) {
+		if( isset($parsed['require']) && is_array($parsed['require']) ) {
 			foreach( $parsed['require'] as $field => $version ) {
 				$para->appendChild(new \donatj\MDDom\Text("- **$field**: $version\n"));
 			}
