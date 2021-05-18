@@ -14,7 +14,7 @@ This projects goal is to be able to define a set of directions for *how* to docu
 
 ## Requirements
 
-- **php**: >=7.1
+- **php**: >=7.2
 - **ext-dom**: *
 - **ext-json**: *
 - **donatj/flags**: ~1.4
