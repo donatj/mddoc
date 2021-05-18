@@ -12,7 +12,7 @@ class PathNotReadableException extends MDDocException {
 		$this->path = $path;
 	}
 
-	public function getPath() {
+	public function getPath() : string {
 		return $this->path;
 	}
 

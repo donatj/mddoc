@@ -13,7 +13,7 @@ class Badge extends AbstractDocPart {
 	public const OPT_HREF  = 'href';
 	public const OPT_TITLE = 'title';
 
-	public function output( int $depth ) {
+	public function output( int $depth ) : string {
 		$img = new Image($this->getOption(self::OPT_SRC), $this->getOption(self::OPT_ALT));
 
 		if( $href = $this->getOption(self::OPT_HREF) ) {

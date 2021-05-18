@@ -47,7 +47,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 		$this->requireOption('name');
 	}
 
-	private function getFileList( $path ) {
+	private function getFileList( $path ) : iterable {
 		if( $real = realpath($path) ) {
 			$path = $real;
 		}

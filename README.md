@@ -443,16 +443,8 @@ function getProperties() : array
 #### Method: TaxonomyReflectorFactory->newInstance
 
 ```php
-function newInstance($filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader)
+function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader) : \donatj\MDDoc\Reflectors\TaxonomyReflector
 ```
-
-##### Parameters:
-
-- ***mixed*** `$filename` - string
-
-##### Returns:
-
-- ***\donatj\MDDoc\Reflectors\TaxonomyReflector***
 
 ### Class: \donatj\MDDoc\Runner\ConfigParser
 

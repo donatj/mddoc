@@ -9,11 +9,9 @@ class TaxonomyReflectorFactory {
 	private $parsers = [];
 
 	/**
-	 * @param  $filename string
-	 * @return TaxonomyReflector
 	 * @throws \donatj\MDDoc\Exceptions\ClassNotReadableException
 	 */
-	public function newInstance( $filename, AutoloaderInterface $autoLoader ) {
+	public function newInstance( string $filename, AutoloaderInterface $autoLoader ) : TaxonomyReflector {
 		if( !isset($this->parsers[$filename]) ) {
 			$this->parsers[$filename] = new TaxonomyReflector($filename, $autoLoader, $this);
 		}
