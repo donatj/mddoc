@@ -3,6 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/donatj/mddoc/version)](https://packagist.org/packages/donatj/mddoc)
 [![Total Downloads](https://poser.pugx.org/donatj/mddoc/downloads)](https://packagist.org/packages/donatj/mddoc)
 [![License](https://poser.pugx.org/donatj/mddoc/license)](https://packagist.org/packages/donatj/mddoc)
+[![Build Status](https://github.com/donatj/mddoc/workflows/CI/badge.svg?)](https://github.com/donatj/mddoc/actions?query=workflow%3ACI)
 
 
 A simple, directed phpDoc => Markdown generator.

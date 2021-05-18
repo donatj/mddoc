@@ -6,6 +6,7 @@
 			<badge-poser type="version"/>
 			<badge-poser type="downloads"/>
 			<badge-poser type="license"/>
+			<badge-github-action name="donatj/mddoc" workflow="CI"/>
 
 			<text><![CDATA[
 A simple, directed phpDoc => Markdown generator.
