@@ -8,9 +8,6 @@ use donatj\MDDom\Paragraph;
 
 class ComposerInstall extends AbstractDocPart {
 
-	/**
-	 * @inheritDoc
-	 */
 	public function output( int $depth ) {
 		$file = realpath('composer.json');
 

@@ -7,8 +7,6 @@ use donatj\MDDom\Paragraph;
 
 /**
  * Class Text
- *
- * @package donatj\MDDoc\Documentation
  */
 class Text extends AbstractDocPart {
 

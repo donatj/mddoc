@@ -7,24 +7,19 @@ use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 /**
  * Class Psr4
  *
- * @link https://github.com/CorpusPHP/Autoloader
- * @package donatj\MDDoc\Autoloaders
+ * @see https://github.com/CorpusPHP/Autoloader
  */
 class Psr4 implements AutoloaderInterface {
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $namespace;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $path;
 
 	/**
 	 * @param string $root_namespace Namespace prefix
-	 * @param string $path Root path
+	 * @param string $path           Root path
 	 */
 	public function __construct( string $root_namespace, string $path ) {
 		$this->namespace = $this->trimSlashes($root_namespace);

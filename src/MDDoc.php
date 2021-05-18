@@ -11,8 +11,6 @@ use donatj\MDDoc\Runner\UserInterface;
 
 /**
  * Application MDDoc
- *
- * @package donatj\MDDoc
  */
 class MDDoc {
 

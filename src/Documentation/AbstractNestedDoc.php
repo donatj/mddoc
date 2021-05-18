@@ -6,9 +6,7 @@ use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 
 abstract class AbstractNestedDoc extends AbstractDocPart {
 
-	/**
-	 * @var \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]
-	 */
+	/** @var \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[] */
 	private $children = [];
 
 	/**

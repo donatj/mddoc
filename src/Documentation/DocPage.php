@@ -32,7 +32,7 @@ class DocPage extends AbstractNestedDoc {
 	}
 
 	private function recursiveTouch( $new, $time = null ) : bool {
-		if( is_null($time) ) {
+		if( $time === null ) {
 			$time = time();
 		}
 

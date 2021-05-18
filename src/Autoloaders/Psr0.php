@@ -7,14 +7,11 @@ use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 /**
  * Class Psr0
  *
- * @link https://github.com/CorpusPHP/Autoloader
- * @package donatj\MDDoc\Autoloaders
+ * @see https://github.com/CorpusPHP/Autoloader
  */
 class Psr0 implements AutoloaderInterface {
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	protected $path;
 
 	/**

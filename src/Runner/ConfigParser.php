@@ -14,9 +14,7 @@ use RuntimeException;
 
 class ConfigParser {
 
-	/**
-	 * @var \donatj\MDDoc\Documentation\DocumentationFactory
-	 */
+	/** @var \donatj\MDDoc\Documentation\DocumentationFactory */
 	private $documentationFactory;
 
 	public function __construct( ?Documentation\DocumentationFactory $documentationFactory = null ) {
@@ -27,7 +25,7 @@ class ConfigParser {
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
 	private function loadChildren(
-		DOMElement $node,
+		\DOMElement $node,
 		Documentation\AbstractNestedDoc $parent,
 		ImmutableAttributeTree $newAttributeTree,
 		array $treeExtra = []
@@ -51,7 +49,7 @@ class ConfigParser {
 		}
 
 		foreach( $node->childNodes as $child ) {
-			if( $child instanceof DOMElement ) {
+			if( $child instanceof \DOMElement ) {
 				$attributes = $this->nodeAttr($child);
 
 				$newAttributes = $newAttributeTree->withAttr($attributes);
@@ -77,7 +75,7 @@ class ConfigParser {
 	/**
 	 * @throws ConfigException
 	 */
-	private function requireAttr( DOMElement $node, string $attribute ) : string {
+	private function requireAttr( \DOMElement $node, string $attribute ) : string {
 		if( !$value = $node->getAttribute($attribute) ) {
 			throw new ConfigException("Element `{$node->nodeName}` missing required attribute: {$attribute}");
 		}
@@ -85,7 +83,7 @@ class ConfigParser {
 		return $value;
 	}
 
-	private function nodeAttr( DOMElement $node ) : array {
+	private function nodeAttr( \DOMElement $node ) : array {
 		$attributes = [];
 		if( $node->hasAttributes() ) {
 			foreach( $node->attributes as $attr ) {
@@ -99,22 +97,22 @@ class ConfigParser {
 	/**
 	 * Parse a config file
 	 *
-	 * @return \donatj\MDDoc\Documentation\DocRoot
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
+	 * @return \donatj\MDDoc\Documentation\DocRoot
 	 */
 	public function parse( string $filename ) : Documentation\DocRoot {
 		if( !is_readable($filename) ) {
 			throw new ConfigException("Config file '{$filename}' not readable");
 		}
 
-		$dom = new DOMDocument;
+		$dom = new \DOMDocument;
 		if( @$dom->load($filename) === false ) {
 			throw new ConfigException("Error parsing {$filename}");
 		}
 
 		$root = $dom->firstChild;
-		if( !$root instanceof DOMElement ) {
-			throw new RuntimeException('Needs a DOM element');
+		if( !$root instanceof \DOMElement ) {
+			throw new \RuntimeException('Needs a DOM element');
 		}
 
 		$attributeTree = new ImmutableAttributeTree;

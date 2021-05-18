@@ -9,8 +9,6 @@ use donatj\MDDoc\Runner\ImmutableAttributeTree;
 
 /**
  * Links XML Tags to their Given Documentation Generator
- *
- * @package donatj\MDDoc\Documentation
  */
 class DocumentationFactory {
 

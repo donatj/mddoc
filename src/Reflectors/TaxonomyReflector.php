@@ -13,13 +13,11 @@ use phpDocumentor\Reflection\Php\Trait_;
 
 class TaxonomyReflector {
 
-	/**
-	 * @var callable
-	 */
+	/** @var callable */
 	private $autoLoader;
 	private $data;
 	private $parserFactory;
-	private $reflector = null;
+	private $reflector;
 
 	/**
 	 * @throws ClassNotReadableException

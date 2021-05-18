@@ -10,13 +10,9 @@ abstract class AbstractDocPart implements DocumentationInterface {
 
 	protected $defaults = [];
 
-	/**
-	 * @var AbstractDocPart
-	 */
+	/** @var AbstractDocPart */
 	protected $parent;
-	/**
-	 * @var \donatj\MDDoc\Runner\ImmutableAttributeTree
-	 */
+	/** @var \donatj\MDDoc\Runner\ImmutableAttributeTree */
 	protected $attributeTree;
 
 	public function __construct( ImmutableAttributeTree $attributeTree ) {

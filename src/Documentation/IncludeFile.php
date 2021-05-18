@@ -8,8 +8,8 @@ use donatj\MDDom\Paragraph;
 class IncludeFile extends AbstractDocPart {
 
 	/**
-	 * @return Paragraph
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
+	 * @return Paragraph
 	 */
 	public function output( int $depth ) {
 		$name = $this->getOption('name');

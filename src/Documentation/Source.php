@@ -7,14 +7,12 @@ use donatj\MDDom\CodeBlock;
 
 /**
  * Class Source
- *
- * @package donatj\MDDoc\Documentation
  */
 class Source extends Text {
 
 	/**
-	 * @return string
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
+	 * @return string
 	 */
 	public function output( int $depth ) {
 		$name = $this->getOption('name');
