@@ -2,15 +2,12 @@
 
 namespace donatj\MDDoc\Runner;
 
-use DOMDocument;
-use DOMElement;
 use donatj\MDDoc\Autoloaders\NullLoader;
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Autoloaders\Psr4;
 use donatj\MDDoc\Documentation;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Exceptions\ConfigException;
-use RuntimeException;
 
 class ConfigParser {
 
