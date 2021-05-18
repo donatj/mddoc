@@ -3,6 +3,10 @@ SRC_FILES = $(shell find src -type f -name '*.php')
 README.md: $(SRC_FILES)
 	composer/bin/mddoc
 
+.PHONY: test
+test: cs
+	./vendor/bin/parallel-lint src
+
 .PHONY: cs
 cs:
 	./vendor/bin/phpcs
