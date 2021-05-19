@@ -8,10 +8,10 @@ use donatj\MDDoc\Runner\ImmutableAttributeTree;
 
 abstract class AbstractDocPart implements DocumentationInterface {
 
-	protected $defaults = [];
+	private $defaults = [];
 
 	/** @var AbstractDocPart */
-	protected $parent;
+	private $parent;
 	/** @var \donatj\MDDoc\Runner\ImmutableAttributeTree */
 	protected $attributeTree;
 
@@ -26,7 +26,7 @@ abstract class AbstractDocPart implements DocumentationInterface {
 		$this->defaults[$key] = $value;
 	}
 
-	public function getOption( string $key, bool $tree = false ) : ?string {
+	protected function getOption( string $key, bool $tree = false ) : ?string {
 		if( $tree ) {
 			return $this->attributeTree->deepValue($key) ?? $this->defaults[$key] ?? null;
 		}
@@ -43,6 +43,9 @@ abstract class AbstractDocPart implements DocumentationInterface {
 		}
 	}
 
+	/**
+	 * @internal
+	 */
 	public function setParent( AbstractDocPart $parent ) : void {
 		$this->parent = $parent;
 	}
