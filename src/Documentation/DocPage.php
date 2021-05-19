@@ -7,7 +7,7 @@ use donatj\MDDom\Document;
 
 class DocPage extends AbstractNestedDoc {
 
-	public function output( int $depth ) {
+	public function output( int $depth ) : string {
 
 		$document = new Document;
 
@@ -31,7 +31,7 @@ class DocPage extends AbstractNestedDoc {
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
 	}
 
-	private function recursiveTouch( $new, $time = null ) : bool {
+	private function recursiveTouch( $new, ?int $time = null ) : bool {
 		if( $time === null ) {
 			$time = time();
 		}

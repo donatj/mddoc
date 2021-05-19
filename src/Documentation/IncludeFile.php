@@ -9,9 +9,8 @@ class IncludeFile extends AbstractDocPart {
 
 	/**
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
-	 * @return Paragraph
 	 */
-	public function output( int $depth ) {
+	public function output( int $depth ) : Paragraph {
 		$name = $this->getOption('name');
 
 		if( !is_readable($name) ) {

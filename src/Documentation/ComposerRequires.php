@@ -7,7 +7,7 @@ use donatj\MDDom\Paragraph;
 
 class ComposerRequires extends AbstractDocPart {
 
-	public function output( int $depth ) {
+	public function output( int $depth ) : Paragraph {
 		$file = realpath('composer.json');
 
 		if( !is_readable($file) ) {

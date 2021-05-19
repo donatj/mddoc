@@ -3,6 +3,7 @@
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Exceptions\PathNotReadableException;
+use donatj\MDDom\AbstractElement;
 use donatj\MDDom\CodeBlock;
 
 /**
@@ -10,11 +11,7 @@ use donatj\MDDom\CodeBlock;
  */
 class Source extends Text {
 
-	/**
-	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
-	 * @return string
-	 */
-	public function output( int $depth ) {
+	public function output( int $depth ) : AbstractElement {
 		$name = $this->getOption('name');
 		$lang = $this->getOption('lang');
 

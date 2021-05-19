@@ -5,6 +5,7 @@ namespace donatj\MDDoc\Documentation;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
+use donatj\MDDom\AbstractElement;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\DocumentDepth;
 use donatj\MDDom\Header;
@@ -18,6 +19,9 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 	private $autoloader;
 
+	/**
+	 * @return AbstractElement|string
+	 */
 	public function output( int $depth ) {
 		return $this->scanClassFile($this->getOption('name'), $depth);
 	}
@@ -27,7 +31,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	}
 
 	/**
-	 * @return string
+	 * @return AbstractElement|string
 	 */
 	private function scanClassFile( string $filename, int $depth ) {
 		$output = '';
@@ -62,7 +66,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 				);
 			}
 
-			$classInner   .= "class {$class->getName()} {\n";
+			$classInner .= "class {$class->getName()} {\n";
 
 			if( !$this->getOption('skip-class-constants', true) ) {
 				$constantData = $reflector->getConstants();
@@ -391,11 +395,11 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		$this->autoloader = $autoloader;
 	}
 
-	public function getDocStr( DocBlock $block ) : string {
+	private function getDocStr( DocBlock $block ) : string {
 		return trim(
-			trim((string)$block->getSummary()) .
+			trim($block->getSummary()) .
 			"\n\n" .
-			trim((string)$block->getDescription())
+			trim($block->getDescription()->__toString())
 		);
 	}
 

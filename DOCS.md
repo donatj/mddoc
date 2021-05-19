@@ -85,19 +85,7 @@ function getChildren() : array
 
 ---
 
-### Method: AbstractNestedDoc->setChildren
-
-```php
-function setChildren($children)
-```
-
-#### Parameters:
-
-- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]*** `$children`
-
----
-
-### Undocumented Method: `AbstractNestedDoc->addChild(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface $child)`
+### Undocumented Method: `AbstractNestedDoc->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\Badge
 
@@ -173,10 +161,6 @@ class BadgeTravis {
 
 ### Undocumented Method: `ClassFile->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
 
----
-
-### Undocumented Method: `ClassFile->getDocStr(\phpDocumentor\Reflection\DocBlock $block)`
-
 ## Class: \donatj\MDDoc\Documentation\ComposerInstall
 
 
@@ -246,12 +230,8 @@ function output(int $depth)
 ### Method: IncludeFile->output
 
 ```php
-function output(int $depth)
+function output(int $depth) : \donatj\MDDom\Paragraph
 ```
-
-#### Returns:
-
-- ***\donatj\MDDom\Paragraph***
 
 ## Class: \donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
 
@@ -297,15 +277,9 @@ function output(int $depth)
 
 Class Source
 
-### Method: Source->output
 
-```php
-function output(int $depth)
-```
 
-#### Returns:
-
-- ***string***
+### Undocumented Method: `Source->output(int $depth)`
 
 ## Class: \donatj\MDDoc\Documentation\Text
 
