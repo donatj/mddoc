@@ -4,6 +4,7 @@ namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Documentation\Exceptions\ExecutionException;
 use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDom\AbstractElement;
 use donatj\MDDom\Code;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\Paragraph;
@@ -23,15 +24,14 @@ class ExecOutput extends AbstractDocPart {
 	];
 
 	/**
-	 * @throws \donatj\MDDoc\Documentation\Exceptions\ExecutionException
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
-	 * @return \donatj\MDDom\Code|\donatj\MDDom\CodeBlock|\donatj\MDDom\Paragraph|string
+	 * @throws \donatj\MDDoc\Documentation\Exceptions\ExecutionException
 	 */
-	public function output( int $depth ) {
+	public function output( int $depth ) : AbstractElement {
 		$cmd    = $this->getOption('cmd');
 		$format = $this->getOption('format');
 
-		if( !in_array($format, self::FORMATS) ) {
+		if( !in_array($format, self::FORMATS, true) ) {
 			throw new ConfigException("Invalid exec format '{$format}', expected to be in: " . implode(', ', self::FORMATS));
 		}
 
@@ -41,7 +41,7 @@ class ExecOutput extends AbstractDocPart {
 			throw new ExecutionException("Command `{$cmd}` returned exit code: {$return}", $return);
 		}
 
-		if( $format == self::FORMAT_DEFAULT ) {
+		if( $format === self::FORMAT_DEFAULT ) {
 			$md = implode("  \n", $output);
 		} else {
 			$md = implode("\n", $output);

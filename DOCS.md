@@ -534,12 +534,8 @@ class ExecOutput {
 ### Method: ExecOutput->output
 
 ```php
-function output(int $depth)
+function output(int $depth) : \donatj\MDDom\AbstractElement
 ```
-
-#### Returns:
-
-- ***\donatj\MDDom\Code*** | ***\donatj\MDDom\CodeBlock*** | ***\donatj\MDDom\Paragraph*** | ***string***
 
 ---
 
