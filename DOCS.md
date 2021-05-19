@@ -346,7 +346,7 @@ Application MDDoc
 namespace donatj\MDDoc;
 
 class MDDoc {
-	public const VERSION = "0.0.1a";
+	public const VERSION = "0.0.1";
 }
 ```
 

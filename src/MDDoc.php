@@ -14,7 +14,7 @@ use donatj\MDDoc\Runner\UserInterface;
  */
 class MDDoc {
 
-	public const VERSION = "0.0.1a";
+	public const VERSION = "0.0.1";
 
 	private const CONFIG_FILES = [
 		"mddoc.xml",
