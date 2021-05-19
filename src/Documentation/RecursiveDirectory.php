@@ -29,7 +29,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 			$class = new ClassFile(
 				$this->attributeTree->withAttr([ 'name' => (string)$file ])
 			);
-			$this->addChild($class);
+			$this->addChildren($class);
 		}
 
 		foreach( $this->getChildren() as $child ) {

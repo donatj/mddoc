@@ -55,7 +55,7 @@ class ConfigParser {
 					$child->nodeName, $newAttributes, $child->textContent
 				);
 
-				$parent->addChild($childDoc);
+				$parent->addChildren($childDoc);
 				$childDoc->setParent($parent);
 
 				if( $childDoc instanceof AutoloaderAware && isset($treeExtra['autoloader']) ) {
