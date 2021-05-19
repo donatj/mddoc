@@ -28,7 +28,13 @@ class TaxonomyReflector {
 		$this->data          = [];
 
 		$projectFiles = [ new LocalFile($filename) ];
-		$project      = (ProjectFactory::createInstance())->create('My Project', $projectFiles);
+
+		try {
+			$project = (ProjectFactory::createInstance())->create('My Project', $projectFiles);
+		} catch( \Exception $ex ) {
+			throw new ClassNotReadableException("failed to read class file", $filename, $ex);
+		}
+
 		/** @var \phpDocumentor\Reflection\Php\File $fileReflector */
 		$fileReflector = $project->getFiles()[$filename];
 
