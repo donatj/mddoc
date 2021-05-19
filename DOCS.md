@@ -2,15 +2,31 @@
 
 ## Class: \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
 
+### Method: AutoloaderInterface->__invoke
 
+```php
+function __invoke(string $className) : ?string
+```
 
-### Undocumented Method: `AutoloaderInterface->__invoke(string $className)`
+Locate the filename of a given class
+
+#### Returns:
+
+- ***string*** | ***null*** - filename on class found, null on not found
 
 ## Class: \donatj\MDDoc\Autoloaders\NullLoader
 
+### Method: NullLoader->__invoke
 
+```php
+function __invoke(string $className) : ?string
+```
 
-### Undocumented Method: `NullLoader->__invoke(string $className)`
+Locate the filename of a given class
+
+#### Returns:
+
+- ***string*** | ***null*** - filename on class found, null on not found
 
 ## Class: \donatj\MDDoc\Autoloaders\Psr0
 
@@ -28,7 +44,17 @@ function __construct(string $path)
 
 ---
 
-### Undocumented Method: `Psr0->__invoke(string $className)`
+### Method: Psr0->__invoke
+
+```php
+function __invoke(string $className) : ?string
+```
+
+Locate the filename of a given class
+
+#### Returns:
+
+- ***string*** | ***null*** - filename on class found, null on not found
 
 ## Class: \donatj\MDDoc\Autoloaders\Psr4
 
@@ -47,7 +73,17 @@ function __construct(string $root_namespace, string $path)
 
 ---
 
-### Undocumented Method: `Psr4->__invoke(string $className)`
+### Method: Psr4->__invoke
+
+```php
+function __invoke(string $className) : ?string
+```
+
+Locate the filename of a given class
+
+#### Returns:
+
+- ***string*** | ***null*** - filename on class found, null on not found
 
 ## Class: \donatj\MDDoc\Documentation\AbstractDocPart
 
@@ -61,15 +97,19 @@ function __construct(string $root_namespace, string $path)
 
 ---
 
-### Undocumented Method: `AbstractDocPart->getOption(string $key [, bool $tree = false])`
-
----
-
-### Undocumented Method: `AbstractDocPart->setParent(\donatj\MDDoc\Documentation\AbstractDocPart $parent)`
-
----
-
 ### Undocumented Method: `AbstractDocPart->getParent()`
+
+---
+
+### Method: AbstractDocPart->output
+
+```php
+function output(int $depth)
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
 
 ## Class: \donatj\MDDoc\Documentation\AbstractNestedDoc
 
@@ -87,6 +127,30 @@ function getChildren() : array
 
 ### Undocumented Method: `AbstractNestedDoc->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
 
+---
+
+### Undocumented Method: `AbstractNestedDoc->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `AbstractNestedDoc->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `AbstractNestedDoc->getParent()`
+
+---
+
+### Method: AbstractNestedDoc->output
+
+```php
+function output(int $depth)
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
 ## Class: \donatj\MDDoc\Documentation\Badges\Badge
 
 ```php
@@ -101,9 +165,27 @@ class Badge {
 }
 ```
 
+### Method: Badge->output
 
+```php
+function output(int $depth) : string
+```
 
-### Undocumented Method: `Badge->output(int $depth)`
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Undocumented Method: `Badge->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `Badge->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `Badge->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgeGitHubActions
 
@@ -114,8 +196,36 @@ namespace donatj\MDDoc\Documentation\Badges;
 class BadgeGitHubActions {
 	public const OPT_BRANCH = 'branch';
 	public const OPT_EVENT = 'event';
+	public const OPT_ALT = 'alt';
+	public const OPT_SRC = 'src';
+	public const OPT_HREF = 'href';
+	public const OPT_TITLE = 'title';
 }
 ```
+
+---
+
+### Method: BadgeGitHubActions->output
+
+```php
+function output(int $depth) : string
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Undocumented Method: `BadgeGitHubActions->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `BadgeGitHubActions->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `BadgeGitHubActions->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgePoser
 
@@ -125,8 +235,36 @@ namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgePoser {
 	public const OPT_SUFFIX = 'suffix';
+	public const OPT_ALT = 'alt';
+	public const OPT_SRC = 'src';
+	public const OPT_HREF = 'href';
+	public const OPT_TITLE = 'title';
 }
 ```
+
+---
+
+### Method: BadgePoser->output
+
+```php
+function output(int $depth) : string
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Undocumented Method: `BadgePoser->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `BadgePoser->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `BadgePoser->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgeScrutinizer
 
@@ -137,8 +275,36 @@ namespace donatj\MDDoc\Documentation\Badges;
 class BadgeScrutinizer {
 	public const OPT_SUFFIX = 'suffix';
 	public const OPT_BRANCH = 'branch';
+	public const OPT_ALT = 'alt';
+	public const OPT_SRC = 'src';
+	public const OPT_HREF = 'href';
+	public const OPT_TITLE = 'title';
 }
 ```
+
+---
+
+### Method: BadgeScrutinizer->output
+
+```php
+function output(int $depth) : string
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Undocumented Method: `BadgeScrutinizer->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `BadgeScrutinizer->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `BadgeScrutinizer->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgeTravis
 
@@ -148,42 +314,192 @@ namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeTravis {
 	public const OPT_BRANCH = 'branch';
+	public const OPT_ALT = 'alt';
+	public const OPT_SRC = 'src';
+	public const OPT_HREF = 'href';
+	public const OPT_TITLE = 'title';
 }
 ```
 
+---
+
+### Method: BadgeTravis->output
+
+```php
+function output(int $depth) : string
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Undocumented Method: `BadgeTravis->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `BadgeTravis->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `BadgeTravis->getParent()`
+
 ## Class: \donatj\MDDoc\Documentation\ClassFile
 
+### Method: ClassFile->output
 
+```php
+function output(int $depth)
+```
 
-### Undocumented Method: `ClassFile->output(int $depth)`
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string***
 
 ---
 
 ### Undocumented Method: `ClassFile->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
 
+---
+
+### Undocumented Method: `ClassFile->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `ClassFile->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `ClassFile->getParent()`
+
 ## Class: \donatj\MDDoc\Documentation\ComposerInstall
 
+### Method: ComposerInstall->output
 
+```php
+function output(int $depth) : \donatj\MDDom\Paragraph
+```
 
-### Undocumented Method: `ComposerInstall->output(int $depth)`
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Undocumented Method: `ComposerInstall->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `ComposerInstall->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `ComposerInstall->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\ComposerRequires
 
+### Method: ComposerRequires->output
 
+```php
+function output(int $depth) : \donatj\MDDom\Paragraph
+```
 
-### Undocumented Method: `ComposerRequires->output(int $depth)`
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Undocumented Method: `ComposerRequires->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `ComposerRequires->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `ComposerRequires->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\DocPage
 
+### Method: DocPage->output
 
+```php
+function output(int $depth) : string
+```
 
-### Undocumented Method: `DocPage->output(int $depth)`
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Method: DocPage->getChildren
+
+```php
+function getChildren() : array
+```
+
+#### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+---
+
+### Undocumented Method: `DocPage->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+
+---
+
+### Undocumented Method: `DocPage->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `DocPage->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `DocPage->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\DocRoot
 
+### Method: DocRoot->output
 
+```php
+function output(int $depth)
+```
 
-### Undocumented Method: `DocRoot->output(int $depth)`
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Method: DocRoot->getChildren
+
+```php
+function getChildren() : array
+```
+
+#### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+---
+
+### Undocumented Method: `DocRoot->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+
+---
+
+### Undocumented Method: `DocRoot->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `DocRoot->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `DocRoot->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\DocumentationFactory
 
@@ -225,6 +541,18 @@ function output(int $depth)
 
 - ***\donatj\MDDom\Code*** | ***\donatj\MDDom\CodeBlock*** | ***\donatj\MDDom\Paragraph*** | ***string***
 
+---
+
+### Undocumented Method: `ExecOutput->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `ExecOutput->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `ExecOutput->getParent()`
+
 ## Class: \donatj\MDDoc\Documentation\IncludeFile
 
 ### Method: IncludeFile->output
@@ -232,6 +560,18 @@ function output(int $depth)
 ```php
 function output(int $depth) : \donatj\MDDom\Paragraph
 ```
+
+---
+
+### Undocumented Method: `IncludeFile->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `IncludeFile->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `IncludeFile->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
 
@@ -265,21 +605,109 @@ function output(int $depth)
 
 ---
 
-### Undocumented Method: `RecursiveDirectory->output(int $depth)`
+### Method: RecursiveDirectory->output
+
+```php
+function output(int $depth) : \donatj\MDDom\Document
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Method: RecursiveDirectory->getChildren
+
+```php
+function getChildren() : array
+```
+
+#### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+---
+
+### Undocumented Method: `RecursiveDirectory->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+
+---
+
+### Undocumented Method: `RecursiveDirectory->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `RecursiveDirectory->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `RecursiveDirectory->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Section
 
+### Method: Section->output
 
+```php
+function output(int $depth)
+```
 
-### Undocumented Method: `Section->output(int $depth)`
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Method: Section->getChildren
+
+```php
+function getChildren() : array
+```
+
+#### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+---
+
+### Undocumented Method: `Section->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+
+---
+
+### Undocumented Method: `Section->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Undocumented Method: `Section->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `Section->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Source
 
 Class Source
 
+### Method: Source->output
 
+```php
+function output(int $depth) : \donatj\MDDom\AbstractElement
+```
 
-### Undocumented Method: `Source->output(int $depth)`
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Undocumented Method: `Source->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $text = ''])`
+
+---
+
+### Undocumented Method: `Source->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `Source->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Text
 
@@ -291,9 +719,33 @@ Class Text
 
 ---
 
-### Undocumented Method: `Text->output(int $depth)`
+### Method: Text->output
+
+```php
+function output(int $depth) : \donatj\MDDom\AbstractElement
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Undocumented Method: `Text->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Undocumented Method: `Text->getParent()`
 
 ## Class: \donatj\MDDoc\Exceptions\ClassNotReadableException
+
+
+
+### Undocumented Method: `ClassNotReadableException->__construct(string $message, string $path [, ?\Exception $previous_exception = null])`
+
+---
+
+### Undocumented Method: `ClassNotReadableException->getPath()`
 
 ## Class: \donatj\MDDoc\Exceptions\ConfigException
 
