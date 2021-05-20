@@ -246,6 +246,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 					foreach( $blocks as $block ) {
 
+						/** @var \phpDocumentor\Reflection\DocBlock\Tags\Param[] $methodParams */
 						if( $methodParams = $block->getTagsByName('param') ) {
 
 							$paramDoc = new DocumentDepth;
@@ -254,7 +255,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							$paramDoc->appendChild(new Header('Parameters:'));
 
 							$output = '';
-							foreach( $block->getTagsByName('param') as $tag ) {
+							foreach( $methodParams as $tag ) {
 
 								$output .= sprintf('- %s `$%s`', $this->formatType($tag->getType()), $tag->getVariableName());
 
