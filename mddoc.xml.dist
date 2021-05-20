@@ -49,7 +49,7 @@ This very REAMDME you are reading (also including [DOCS.md](DOCS.md)) is generat
 			<section title="Full API Docs (WIP)">
 				<docpage target="DOCS.md">
 					<section title="Full API Docs (WIP)">
-						<recursivedirectory name="src"/>
+						<recursivedirectory warn-undocumented="false" name="src"/>
 					</section>
 				</docpage>
 			</section>

@@ -286,7 +286,13 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					$subDocument = new DocumentDepth;
 					$document->appendChild($subDocument);
 
-					$subDocument->appendChild(new Header("Undocumented Method: `{$class->getName()}{$operator}{$name}({$args})`"));
+					// @todo Special rules for constructors and other "built ins"
+					$title = 'Undocumented Method';
+					if( $this->getOption('warn-undocumented', true) === 'false' ) {
+						$title = 'Method';
+					}
+
+					$subDocument->appendChild(new Header("{$title}: `{$class->getName()}{$operator}{$name}({$args})`"));
 				}
 
 				$output .= PHP_EOL;
