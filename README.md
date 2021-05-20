@@ -6,7 +6,7 @@
 [![Build Status](https://github.com/donatj/mddoc/workflows/CI/badge.svg?)](https://github.com/donatj/mddoc/actions?query=workflow%3ACI)
 
 
-A simple, directed phpDoc => Markdown generator.
+A simple, directed markdown documentation generator.
 
 Relatively early in development and very open to issues feature requests.
 
@@ -53,7 +53,7 @@ This very REAMDME you are reading (also including [DOCS.md](DOCS.md)) is generat
 			<badge-github-action name="donatj/mddoc" workflow="CI"/>
 
 			<text><![CDATA[
-A simple, directed phpDoc => Markdown generator.
+A simple, directed markdown documentation generator.
 
 Relatively early in development and very open to issues feature requests.
 

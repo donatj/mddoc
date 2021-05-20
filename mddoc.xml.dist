@@ -9,7 +9,7 @@
 			<badge-github-action name="donatj/mddoc" workflow="CI"/>
 
 			<text><![CDATA[
-A simple, directed phpDoc => Markdown generator.
+A simple, directed markdown documentation generator.
 
 Relatively early in development and very open to issues feature requests.
 
