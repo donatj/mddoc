@@ -3,11 +3,12 @@
 namespace donatj\MDDoc;
 
 use donatj\Flags;
+use donatj\MDDoc\Documentation\DocumentationFactory;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDoc\Runner\ConfigParser;
-use donatj\MDDoc\Runner\UserInterface;
+use donatj\MDDoc\Runner\TextUI;
 
 /**
  * Application MDDoc
@@ -24,14 +25,19 @@ class MDDoc {
 	];
 
 	public function __construct( array $args ) {
-		$ui = new UserInterface(STDOUT, STDERR);
+		$start = microtime(true);
+
+		$ui = new TextUI(STDOUT, STDERR);
 
 		self::versionMarker($ui);
 
 		try {
 			$config = $this->init($args, $ui);
-			$parser = new ConfigParser;
-			$doc    = $parser->parse($config);
+			$parser = new ConfigParser(
+				new DocumentationFactory($ui)
+			);
+
+			$doc = $parser->parse($config);
 
 			$doc->output(0);
 		} catch( ConfigException $e ) {
@@ -44,13 +50,13 @@ class MDDoc {
 
 		$currMen = number_format(memory_get_usage() / 1048576, 2);
 		$peakMem = number_format(memory_get_peak_usage() / 1048576, 2);
+		$time = number_format( microtime(true) - $start, 3);
 
-		$ui->outputMsg(PHP_EOL);
-		$ui->outputMsg("[{$currMen}]{$peakMem}mb peak memory use");
+		$ui->log('', false);
+		$ui->log("[{$currMen}mb]{$peakMem}mb peak mem - {$time}s exec time", false);
 	}
 
-	private function init( array $args, UserInterface $ui ) : string {
-
+	private function init( array $args, TextUI $ui ) : string {
 		$flags          = new Flags;
 		$displayHelp    = &$flags->bool('help', false, 'Display this help message.');
 		$displayVersion = &$flags->bool('version', false, 'Display this applications version.');
@@ -86,8 +92,8 @@ class MDDoc {
 		throw new ConfigException('No config file found');
 	}
 
-	private static function versionMarker( UserInterface $ui ) : void {
-		$ui->outputMsg("MDDoc " . self::VERSION . " by Jesse G. Donat" . PHP_EOL);
+	private static function versionMarker( TextUI $ui ) : void {
+		$ui->println("MDDoc " . self::VERSION . " by Jesse G. Donat" . PHP_EOL);
 	}
 
 }

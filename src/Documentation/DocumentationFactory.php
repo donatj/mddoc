@@ -6,11 +6,22 @@ use donatj\MDDoc\Documentation;
 use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Runner\ImmutableAttributeTree;
+use donatj\MDDoc\Runner\TextUI;
 
 /**
  * Links XML Tags to their Given Documentation Generator
  */
 class DocumentationFactory {
+
+	/** @var \donatj\MDDoc\Runner\TextUI */
+	private $ui;
+
+	/**
+	 * DocumentationFactory constructor.
+	 */
+	public function __construct( TextUI $ui ) {
+		$this->ui = $ui;
+	}
 
 	/**
 	 * Return a populated DocumentationInterface of the corresponding tagName
@@ -26,7 +37,10 @@ class DocumentationFactory {
 			case 'section':
 				return new Documentation\Section($attributeTree);
 			case 'docpage':
-				return new Documentation\DocPage($attributeTree);
+				$page = new Documentation\DocPage($attributeTree);
+				$page->setUI($this->ui);
+
+				return $page;
 			case 'text':
 				return new Documentation\Text($attributeTree, $textContent);
 			case 'file':

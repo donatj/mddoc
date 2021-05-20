@@ -14,8 +14,8 @@ class ConfigParser {
 	/** @var \donatj\MDDoc\Documentation\DocumentationFactory */
 	private $documentationFactory;
 
-	public function __construct( ?Documentation\DocumentationFactory $documentationFactory = null ) {
-		$this->documentationFactory = $documentationFactory ?? new Documentation\DocumentationFactory;
+	public function __construct( Documentation\DocumentationFactory $documentationFactory ) {
+		$this->documentationFactory = $documentationFactory;
 	}
 
 	/**

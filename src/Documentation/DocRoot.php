@@ -9,8 +9,6 @@ class DocRoot extends AbstractNestedDoc {
 		foreach( $this->getChildren() as $child ) {
 			$output .= $child->output($depth);
 		}
-
-		see(trim($output));
 	}
 
 	protected function init() : void {
