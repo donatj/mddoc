@@ -1,6 +1,6 @@
 SRC_FILES = $(shell find src -type f -name '*.php')
 
-README.md: $(SRC_FILES)
+README.md DOCS.md: $(SRC_FILES)
 	composer/bin/mddoc
 
 .PHONY: test
