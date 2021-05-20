@@ -15,7 +15,7 @@ use donatj\MDDoc\Runner\TextUI;
  */
 class MDDoc {
 
-	public const VERSION = "0.0.1";
+	public const VERSION = "0.1.0";
 
 	private const CONFIG_FILES = [
 		"mddoc.xml",
