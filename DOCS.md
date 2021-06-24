@@ -664,7 +664,7 @@ function getChildren() : array
 ### Method: Section->output
 
 ```php
-function output(int $depth)
+function output(int $depth) : \donatj\MDDom\DocumentDepth
 ```
 
 #### Returns:

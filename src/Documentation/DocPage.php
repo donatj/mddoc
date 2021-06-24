@@ -32,11 +32,11 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 			$document->appendChild($child->output(0));
 		}
 
-		if( @file_put_contents($target, $document->exportMarkdown()) === false ) {
+		if( @file_put_contents($target, $document->exportMarkdown(-1)) === false ) {
 			throw new TargetNotWritableException("failed to write to '{$target}'");
 		}
 
-		if($this->ui) {
+		if( $this->ui ) {
 			$this->ui->log("output '{$target}'");
 		}
 
