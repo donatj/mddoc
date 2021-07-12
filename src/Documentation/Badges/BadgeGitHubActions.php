@@ -10,15 +10,15 @@ class BadgeGitHubActions extends Badge {
 	public const OPT_EVENT  = 'event';
 
 	protected function init() : void {
-		$this->setOptionDefault(self::OPT_BRANCH, '');
-		$this->setOptionDefault(self::OPT_EVENT, '');
-		$this->setOptionDefault(self::OPT_ALT, 'Build Status');
-
 		$this->requireOption('name');
 		$name = $this->getOption('name');
 
 		$this->requireOption('workflow');
 		$workflow = $this->getOption('workflow');
+
+		$this->setOptionDefault(self::OPT_BRANCH, '');
+		$this->setOptionDefault(self::OPT_EVENT, '');
+		$this->setOptionDefault(self::OPT_ALT, $workflow);
 
 		$src = sprintf('%s%s/workflows/%s/badge.svg?', self::URL_GITHUB_BASE, $name, $workflow);
 		if( $branch = $this->getOption('branch') ) {
