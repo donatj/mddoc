@@ -94,17 +94,23 @@ class ConfigParser {
 	/**
 	 * Parse a config file
 	 *
-	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 * @return \donatj\MDDoc\Documentation\DocRoot
+	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
 	public function parse( string $filename ) : Documentation\DocRoot {
 		if( !is_readable($filename) ) {
 			throw new ConfigException("Config file '{$filename}' not readable");
 		}
 
+		libxml_use_internal_errors(true);
 		$dom = new \DOMDocument;
 		if( @$dom->load($filename) === false ) {
-			throw new ConfigException("Error parsing {$filename}");
+			$error = libxml_get_last_error();
+			if( $error ) {
+				throw new ConfigException("Unknown error parsing {$filename} - {$error->message}");
+			}
+
+			throw new ConfigException("Unknown error parsing {$filename}");
 		}
 
 		$root = $dom->firstChild;
