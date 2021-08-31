@@ -659,6 +659,57 @@ function getChildren() : array
 
 ### Method: `RecursiveDirectory->getParent()`
 
+## Class: \donatj\MDDoc\Documentation\Replace
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class Replace {
+	public const OPT_SEARCH = 'search';
+	public const OPT_REPLACE = 'replace';
+	public const OPT_REGEX = 'regex';
+}
+```
+
+### Method: Replace->output
+
+```php
+function output(int $depth) : string
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Method: Replace->getChildren
+
+```php
+function getChildren() : array
+```
+
+#### Returns:
+
+- ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
+
+---
+
+### Method: `Replace->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+
+---
+
+### Method: `Replace->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Method: `Replace->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Method: `Replace->getParent()`
+
 ## Class: \donatj\MDDoc\Documentation\Section
 
 ### Method: Section->output
@@ -815,6 +866,18 @@ function getReflector() : \phpDocumentor\Reflection\Element
 #### Returns:
 
 - ***\phpDocumentor\Reflection\Php\Class_*** | ***\phpDocumentor\Reflection\Php\Interface_*** | ***\phpDocumentor\Reflection\Php\Trait_*** | ***null***
+
+---
+
+### Method: TaxonomyReflector->getDocMethods
+
+```php
+function getDocMethods() : array
+```
+
+#### Returns:
+
+- ***\phpDocumentor\Reflection\DocBlock\Tags\Method[][]***
 
 ---
 
