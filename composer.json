@@ -10,7 +10,8 @@
 		"donatj/flags": "~1.4",
 		"donatj/cli-toolkit": "~0.2",
 		"donatj/mddom": "~0.1.0",
-		"phpdocumentor/reflection": "~4.0"
+		"phpdocumentor/reflection": "~4.0",
+		"symfony/polyfill-php80": "^1.23"
 	},
 	"require-dev": {
 		"donatj/drop": "~1.0",

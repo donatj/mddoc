@@ -36,6 +36,8 @@ class DocumentationFactory {
 		switch( $tagName ) {
 			case 'section':
 				return new Documentation\Section($attributeTree);
+			case 'replace':
+				return new Replace($attributeTree);
 			case 'docpage':
 				$page = new Documentation\DocPage($attributeTree);
 				$page->setUI($this->ui);
