@@ -22,8 +22,6 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 		$pre_link_text  = $this->getOption('link-pre-text') ?: '';
 		$post_link_text = $this->getOption('link-post-text') ?: '';
 
-		$target = realpath($target);
-
 		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
 			throw new TargetNotWritableException("Path '{$target}' not writable");
 		}
