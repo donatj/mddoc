@@ -30,3 +30,6 @@ jobs:
 
       - name: Run tests
         run: make test
+
+      - name: Run tool
+        run: ./composer/bin/mddoc
