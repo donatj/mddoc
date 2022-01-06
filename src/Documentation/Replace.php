@@ -3,7 +3,6 @@
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Exceptions\ConfigException;
-use donatj\MDDom\DocumentDepth;
 
 class Replace extends AbstractNestedDoc {
 
@@ -18,9 +17,9 @@ class Replace extends AbstractNestedDoc {
 		$output = '';
 		foreach( $this->getChildren() as $child ) {
 			$result = $child->output($depth);
-			if(is_string($result)) {
+			if( is_string($result) ) {
 				$output .= $result;
-			}else{
+			} else {
 				$output .= $result->exportMarkdown($depth);
 			}
 		}
@@ -30,7 +29,7 @@ class Replace extends AbstractNestedDoc {
 
 		if( $regex === 'true' ) {
 			$output = preg_replace($search, $replace, $output);
-			if (preg_last_error() !== PREG_NO_ERROR) {
+			if( preg_last_error() !== PREG_NO_ERROR ) {
 				throw new ConfigException("user regex error: " . preg_last_error_msg());
 			}
 
