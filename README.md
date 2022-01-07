@@ -35,7 +35,7 @@ This is done using a simple, expressive XML syntax. This includes:
 - **donatj/flags**: ~1.4
 - **donatj/cli-toolkit**: ~0.2
 - **donatj/mddom**: ~0.1.0
-- **phpdocumentor/reflection**: ~4.0
+- **phpdocumentor/reflection**: ~5.1
 - **symfony/polyfill-php80**: ^1.23
 
 ## Example
