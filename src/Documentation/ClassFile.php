@@ -324,9 +324,10 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			$prefix = '';
 			if( (string)$argument->getType() !== 'mixed' ) {
 				$prefix = "{$argument->getType()} ";
-				if( $argument->isVariadic() ) {
-					$prefix .= '...';
-				}
+			}
+
+			if( $argument->isVariadic() ) {
+				$prefix .= '...';
 			}
 
 			// @todo: the types are currently borked on default parameters.
