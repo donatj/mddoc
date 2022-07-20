@@ -36,6 +36,10 @@ class BadgePoser extends Badge {
 			self::OPT_ALT    => 'Daily Downloads',
 			self::OPT_SUFFIX => '/d/daily',
 		],
+		'phpversion'  => [
+			self::OPT_ALT    => 'PHP Version Require',
+			self::OPT_SUFFIX => '/require/php',
+		],
 		'composerlock' => [
 			self::OPT_ALT    => 'composer.lock available',
 			self::OPT_SUFFIX => '/composerlock',
