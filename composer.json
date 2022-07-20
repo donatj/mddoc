@@ -34,5 +34,10 @@
 	},
 	"bin": [
 		"composer/bin/mddoc"
-	]
+	],
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
 }
