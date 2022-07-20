@@ -28,7 +28,7 @@ class Replace extends AbstractNestedDoc {
 		$replace = $this->getOption(self::OPT_REPLACE);
 
 		if( $regex === 'true' ) {
-			$output = preg_replace($search, $replace, $output);
+			$output = @preg_replace($search, $replace, $output);
 			if( preg_last_error() !== PREG_NO_ERROR ) {
 				throw new ConfigException("user regex error: " . preg_last_error_msg());
 			}
