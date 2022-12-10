@@ -3,7 +3,6 @@
 namespace donatj\MDDoc;
 
 use donatj\Flags;
-use donatj\MDDoc\Documentation\DocumentationFactory;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Exceptions\PathNotReadableException;

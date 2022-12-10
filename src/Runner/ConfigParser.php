@@ -11,10 +11,10 @@ use donatj\MDDoc\Exceptions\ConfigException;
 
 class ConfigParser {
 
-	/** @var \donatj\MDDoc\Documentation\DocumentationFactory */
+	/** @var \donatj\MDDoc\DocumentationFactory */
 	private $documentationFactory;
 
-	public function __construct( Documentation\DocumentationFactory $documentationFactory ) {
+	public function __construct( \donatj\MDDoc\DocumentationFactory $documentationFactory ) {
 		$this->documentationFactory = $documentationFactory;
 	}
 

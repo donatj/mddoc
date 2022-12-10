@@ -71,7 +71,7 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 		$this->requireOption('target');
 	}
 
-	public function setUI( TextUI $ui ) {
+	public function setUI( TextUI $ui ) : void {
 		$this->ui = $ui;
 	}
 

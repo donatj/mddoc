@@ -19,6 +19,8 @@ class TaxonomyReflector {
 	private $parserFactory;
 	private $reflector;
 
+	private $functions = [];
+
 	/**
 	 * @throws ClassNotReadableException
 	 */
@@ -35,19 +37,22 @@ class TaxonomyReflector {
 			throw new ClassNotReadableException("failed to read class file", $filename, $ex);
 		}
 
-		/** @var \phpDocumentor\Reflection\Php\File $fileReflector */
 		$fileReflector = $project->getFiles()[$filename];
 
+		foreach( $fileReflector->getFunctions() as $function ) {
+			$this->functions[$function->getName()] = $function;
+		}
+
 		foreach( $fileReflector->getInterfaces() as $interfaces ) {
-			$this->registerReflectors($interfaces);
+			$this->registerClassReflectors($interfaces);
 		}
 
 		foreach( $fileReflector->getClasses() as $class ) {
-			$this->registerReflectors($class);
+			$this->registerClassReflectors($class);
 		}
 
 		foreach( $fileReflector->getTraits() as $trait ) {
-			$this->registerReflectors($trait);
+			$this->registerClassReflectors($trait);
 		}
 
 		//		$this->fileReflector->getClasses(); // -- I don't think this did anything.
@@ -56,7 +61,7 @@ class TaxonomyReflector {
 	/**
 	 * @param Class_|Interface_|Trait_ $reflector
 	 */
-	private function registerReflectors( $reflector ) : void {
+	private function registerClassReflectors( Element $reflector ) : void {
 
 		if( !$this->reflector ) {
 			$this->reflector = $reflector;
@@ -64,12 +69,23 @@ class TaxonomyReflector {
 
 		$loader = $this->autoLoader;
 
+		$docBlock = $reflector->getDocBlock();
+		if($docBlock) {
+			/** @var \phpDocumentor\Reflection\DocBlock\Tags\Method[] $docMethods */
+			$docMethods = $docBlock->getTagsByName('method');
+			foreach($docMethods as $docMethod) {
+				$this->data['docMethods'][$docMethod->getMethodName()][] = $docMethod;
+			}
+		}
+
 		foreach( $reflector->getMethods() as $method ) {
 			$this->data['methods'][$method->getName()][] = $method;
 		}
 
-		foreach( $reflector->getConstants() as $constant ) {
-			$this->data['constants'][$constant->getName()][] = $constant;
+		if( !$reflector instanceof Trait_ ) {
+			foreach( $reflector->getConstants() as $constant ) {
+				$this->data['constants'][$constant->getName()][] = $constant;
+			}
 		}
 
 		if( method_exists($reflector, 'getProperties') ) {
@@ -81,19 +97,25 @@ class TaxonomyReflector {
 		if( $reflector instanceof Class_ || $reflector instanceof Trait_ ) {
 			if( $parent = $reflector->getParent() ) {
 				$filename = $loader($parent);
-				if( is_readable($filename) ) {
+				if( $filename && is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
+
+				//					throw new ExecutionException("failed to locate '{$parent}'"); -- todo handle builtins
+
 			}
 
 			if( $traits = $reflector->getUsedTraits() ) {
 				foreach( $traits as $trait ) {
 					$filename = $loader($trait);
-					if( is_readable($filename) ) {
+					if( $filename && is_readable($filename) ) {
 						$parser     = $this->parserFactory->newInstance($filename, $loader);
 						$this->data = array_merge_recursive($this->data, $parser->data);
 					}
+
+					//						throw new ExecutionException("failed to locate '{$trait}'"); -- todo handle builtins
+
 				}
 			}
 		}
@@ -101,20 +123,26 @@ class TaxonomyReflector {
 		if( $reflector instanceof Interface_ ) {
 			foreach( $reflector->getParents() as $interface ) {
 				$filename = $loader($interface);
-				if( is_readable($filename) ) {
+				if( $filename && is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
+
+				//					throw new ExecutionException("failed to locate '{$interface}'"); -- todo handle builtins
+
 			}
 		}
 
 		if( method_exists($reflector, 'getInterfaces') ) {
 			foreach( $reflector->getInterfaces() as $interface ) {
 				$filename = $loader($interface);
-				if( is_readable($filename) ) {
+				if( $filename && is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
+
+				//					throw new ExecutionException("failed to locate '{$interface}'"); -- todo handle builtins
+
 			}
 		}
 	}
@@ -122,8 +150,15 @@ class TaxonomyReflector {
 	/**
 	 * @return Class_|Interface_|Trait_|null
 	 */
-	public function getReflector() : Element {
+	public function getReflector() : ?Element {
 		return $this->reflector;
+	}
+
+	/**
+	 * @return \phpDocumentor\Reflection\DocBlock\Tags\Method[][]
+	 */
+	public function getDocMethods() : array {
+		return $this->data['docMethods'] ?? [];
 	}
 
 	/**
@@ -145,6 +180,13 @@ class TaxonomyReflector {
 	 */
 	public function getProperties() : array {
 		return $this->data['properties'] ?? [];
+	}
+
+	/**
+	 * @return \phpDocumentor\Reflection\Php\Function_[]
+	 */
+	public function getFunctions() : array {
+		return $this->functions;
 	}
 
 }

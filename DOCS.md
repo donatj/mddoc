@@ -345,34 +345,6 @@ function output(int $depth) : string
 
 ### Method: `BadgeTravis->getParent()`
 
-## Class: \donatj\MDDoc\Documentation\ClassFile
-
-### Method: ClassFile->output
-
-```php
-function output(int $depth)
-```
-
-#### Returns:
-
-- ***\donatj\MDDom\AbstractElement*** | ***string***
-
----
-
-### Method: `ClassFile->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
-
----
-
-### Method: `ClassFile->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
-
----
-
-### Method: `ClassFile->setOptionDefault(string $key, ?string $value)`
-
----
-
-### Method: `ClassFile->getParent()`
-
 ## Class: \donatj\MDDoc\Documentation\ComposerInstall
 
 ### Method: ComposerInstall->output
@@ -505,28 +477,6 @@ function getChildren() : array
 
 ### Method: `DocRoot->getParent()`
 
-## Class: \donatj\MDDoc\Documentation\DocumentationFactory
-
-Links XML Tags to their Given Documentation Generator
-
-### Method: DocumentationFactory->__construct
-
-```php
-function __construct(\donatj\MDDoc\Runner\TextUI $ui)
-```
-
-DocumentationFactory constructor.
-
----
-
-### Method: DocumentationFactory->makeFromTag
-
-```php
-function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent) : \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
-```
-
-Return a populated DocumentationInterface of the corresponding tagName
-
 ## Class: \donatj\MDDoc\Documentation\Exceptions\ExecutionException
 
 ## Class: \donatj\MDDoc\Documentation\Exceptions\UnhandledConfigTagException
@@ -612,6 +562,34 @@ function output(int $depth)
 
 
 ### Method: `UIAwareDocumentationInterface->setUI(\donatj\MDDoc\Runner\TextUI $ui)`
+
+## Class: \donatj\MDDoc\Documentation\PhpFileDocs
+
+### Method: PhpFileDocs->output
+
+```php
+function output(int $depth)
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string***
+
+---
+
+### Method: `PhpFileDocs->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
+
+---
+
+### Method: `PhpFileDocs->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+
+---
+
+### Method: `PhpFileDocs->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Method: `PhpFileDocs->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\RecursiveDirectory
 
@@ -804,6 +782,28 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 ### Method: `Text->getParent()`
 
+## Class: \donatj\MDDoc\DocumentationFactory
+
+Links XML Tags to their Given Documentation Generator
+
+### Method: DocumentationFactory->__construct
+
+```php
+function __construct(\donatj\MDDoc\Runner\TextUI $ui)
+```
+
+DocumentationFactory constructor.
+
+---
+
+### Method: DocumentationFactory->makeFromTag
+
+```php
+function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent) : \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
+```
+
+Return a populated DocumentationInterface of the corresponding tagName
+
 ## Class: \donatj\MDDoc\Exceptions\ClassNotReadableException
 
 
@@ -860,7 +860,7 @@ function __construct(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\Auto
 ### Method: TaxonomyReflector->getReflector
 
 ```php
-function getReflector() : \phpDocumentor\Reflection\Element
+function getReflector() : ?\phpDocumentor\Reflection\Element
 ```
 
 #### Returns:
@@ -915,6 +915,18 @@ function getProperties() : array
 
 - ***\phpDocumentor\Reflection\Php\Property[][]***
 
+---
+
+### Method: TaxonomyReflector->getFunctions
+
+```php
+function getFunctions() : array
+```
+
+#### Returns:
+
+- ***\phpDocumentor\Reflection\Php\Function_[]***
+
 ## Class: \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory
 
 ### Method: TaxonomyReflectorFactory->newInstance
@@ -927,7 +939,7 @@ function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\Auto
 
 
 
-### Method: `ConfigParser->__construct(\donatj\MDDoc\Documentation\DocumentationFactory $documentationFactory)`
+### Method: `ConfigParser->__construct(\donatj\MDDoc\DocumentationFactory $documentationFactory)`
 
 ---
 

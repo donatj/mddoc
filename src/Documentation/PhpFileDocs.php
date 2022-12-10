@@ -13,9 +13,10 @@ use donatj\MDDom\HorizontalRule;
 use donatj\MDDom\Paragraph;
 use donatj\MDDom\Text as MdText;
 use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\Php\Function_;
 use phpDocumentor\Reflection\Php\Method;
 
-class ClassFile extends AbstractDocPart implements AutoloaderAware {
+class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 	private $autoloader;
 
@@ -23,7 +24,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	 * @return AbstractElement|string
 	 */
 	public function output( int $depth ) {
-		return $this->scanClassFile($this->getOption('name'), $depth);
+		return $this->scanSourceFile($this->getOption('name'), $depth);
 	}
 
 	protected function init() : void {
@@ -33,7 +34,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 	/**
 	 * @return AbstractElement|string
 	 */
-	private function scanClassFile( string $filename, int $depth ) {
+	private function scanSourceFile( string $filename, int $depth ) {
 		$output = '';
 
 		$document = new DocumentDepth;
@@ -41,6 +42,61 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		$factory = new TaxonomyReflectorFactory;
 
 		$reflector = $factory->newInstance($filename, $this->autoloader);
+
+		$functions = $reflector->getFunctions();
+		foreach( $functions as $func ) {
+			$name = $func->getName();
+			$fqfn = preg_replace('/\s*\(.*$/', '', (string)$func->getFqsen());
+			$args = $this->getArgumentString($func);
+
+			$fReturnS = '';
+			$fReturn  = (string)$func->getReturnType();
+			if( $fReturn !== 'mixed' ) {
+				$fReturnS = " : {$fReturn}";
+			}
+
+			//			$subDocument = new DocumentDepth;
+			//			$document->appendChild($subDocument);
+
+			$document->appendChild(
+				new Header("Function: {$fqfn}")
+			);
+
+			$document->appendChild(
+				new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
+			);
+
+			$block = $func->getDocBlock();
+
+			if( $block ) {
+				$subDocument = new DocumentDepth;
+				$document->appendChild($subDocument);
+
+				$document->appendChild(
+					$this->descriptionFormat(
+						$this->getDocStr($block)
+					)
+				);
+
+				$paramDoc = $this->getParamDocs($block);
+				if( $paramDoc ) {
+					$subDocument->appendChild($paramDoc);
+				}
+
+				$returnDoc = new DocumentDepth;
+				$subDocument->appendChild($returnDoc);
+
+				if( $return = current($block->getTagsByName('return')) ) {
+					$returnDoc->appendChild(new Header('Returns:'));
+					if( $return instanceof DocBlock\Tags\InvalidTag ) {
+						drop($filename);
+					}
+
+					$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
+				}
+			}
+		}
+
 		if( $class = $reflector->getReflector() ) {
 
 			if( !$this->getOption('skip-class-header', true) ) {
@@ -158,6 +214,60 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 				$document->appendChild(new CodeBlock($classInner, 'php'));
 			}
 
+			$docMethodData = $reflector->getDocMethods();
+			$i             = 0;
+			foreach( $docMethodData as $docMethods ) {
+				$i++;
+
+				$docMethod = reset($docMethods);
+
+				$name = $docMethod->getMethodName();
+
+				$fReturnS = '';
+				$fReturn  = (string)$docMethod->getReturnType();
+				if( $fReturn !== 'mixed' ) {
+					$fReturnS = " : {$fReturn}";
+				}
+
+				$subDocument = new DocumentDepth;
+				$document->appendChild($subDocument);
+
+				if( $i > 1 ) {
+					$subDocument->appendChild(new HorizontalRule);
+				}
+
+				$operator = $docMethod->isStatic() ? '::' : '->';
+
+				$subDocument->appendChild(
+					new Header("Magic Method: {$class->getName()}{$operator}{$name}")
+				);
+
+				$args     = '';
+				$argParts = $docMethod->getArguments();
+				foreach( $argParts as $argPart ) {
+					$prefix = '';
+					if( (string)$argPart['type'] !== 'mixed' ) {
+						$prefix = "{$argPart['type']} ";
+					}
+
+					$args .= $prefix . '$' . $argPart['name'] . ', ';
+				}
+
+				$args = rtrim($args, ', ');
+
+				$subDocument->appendChild(
+					new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
+				);
+
+				if( $docMethodDescr = $docMethod->getDescription() ) {
+					$subDocument->appendChild(
+						$this->descriptionFormat(
+							(string)$docMethodDescr
+						)
+					);
+				}
+			}
+
 			$methodData = $reflector->getMethods();
 
 			$i = 0;
@@ -199,7 +309,7 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 
 				$firstBlock = reset($blocks);
 
-				$operator = ($method->isStatic() ? '::' : '->');
+				$operator = $method->isStatic() ? '::' : '->';
 
 				$canonicalMethodName = $class->getName() . $operator . "$name($args)";
 
@@ -245,29 +355,9 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 					}
 
 					foreach( $blocks as $block ) {
-
-						/** @var \phpDocumentor\Reflection\DocBlock\Tags\Param[] $methodParams */
-						if( $methodParams = $block->getTagsByName('param') ) {
-
-							$paramDoc = new DocumentDepth;
+						$paramDoc = $this->getParamDocs($block);
+						if( $paramDoc ) {
 							$subDocument->appendChild($paramDoc);
-
-							$paramDoc->appendChild(new Header('Parameters:'));
-
-							$output = '';
-							foreach( $methodParams as $tag ) {
-
-								$output .= sprintf('- %s `$%s`', $this->formatType($tag->getType()), $tag->getVariableName());
-
-								if( $tagDescr = (string)$tag->getDescription() ) {
-									$output .= ' - ' . $tagDescr;
-								}
-
-								$output .= PHP_EOL;
-							}
-
-							$paramDoc->appendChild($output);
-							$output .= PHP_EOL . PHP_EOL;
 							break;
 						}
 					}
@@ -278,6 +368,9 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 							$subDocument->appendChild($returnDoc);
 
 							$returnDoc->appendChild(new Header('Returns:'));
+							if( $return instanceof DocBlock\Tags\InvalidTag ) {
+								drop($filename);
+							}
 
 							$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
 						}
@@ -317,7 +410,10 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		return false;
 	}
 
-	private function getArgumentString( Method $method ) : string {
+	/**
+	 * @param Function_|Method $method
+	 */
+	private function getArgumentString( $method ) : string {
 		$req_args = [];
 		$opt_args = [];
 		foreach( $method->getArguments() as $argument ) {
@@ -344,8 +440,8 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 			   implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 	}
 
-	private function descriptionFormat( $args ) : DocumentDepth {
-		$string = implode(PHP_EOL, func_get_args());
+	private function descriptionFormat( string ...$args ) : DocumentDepth {
+		$string = implode(PHP_EOL, $args);
 		$parts  = explode(PHP_EOL, $string);
 
 		$document = new DocumentDepth;
@@ -422,6 +518,33 @@ class ClassFile extends AbstractDocPart implements AutoloaderAware {
 		}
 
 		return $svn;
+	}
+
+	private function getParamDocs( DocBlock $block ) : ?DocumentDepth {
+		/** @var \phpDocumentor\Reflection\DocBlock\Tags\Param[] $methodParams */
+		if( $methodParams = $block->getTagsByName('param') ) {
+			$paramDoc = new DocumentDepth;
+
+			$paramDoc->appendChild(new Header('Parameters:'));
+
+			$output = '';
+			foreach( $methodParams as $tag ) {
+
+				$output .= sprintf('- %s `$%s`', $this->formatType($tag->getType()), $tag->getVariableName());
+
+				if( $tagDescr = (string)$tag->getDescription() ) {
+					$output .= ' - ' . $tagDescr;
+				}
+
+				$output .= PHP_EOL;
+			}
+
+			$paramDoc->appendChild($output);
+
+			return $paramDoc;
+		}
+
+		return null;
 	}
 
 }

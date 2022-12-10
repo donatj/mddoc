@@ -1,9 +1,9 @@
 <?php
 
-namespace donatj\MDDoc\Documentation;
+namespace donatj\MDDoc;
 
-use donatj\MDDoc\Documentation;
 use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
+use donatj\MDDoc\Documentation\Replace;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Runner\ImmutableAttributeTree;
 use donatj\MDDoc\Runner\TextUI;
@@ -46,7 +46,7 @@ class DocumentationFactory {
 			case 'text':
 				return new Documentation\Text($attributeTree, $textContent);
 			case 'file':
-				return new Documentation\ClassFile($attributeTree);
+				return new Documentation\PhpFileDocs($attributeTree);
 			case 'recursivedirectory': // Deprecated tag name
 			case 'recursive-directory':
 				return new Documentation\RecursiveDirectory($attributeTree);

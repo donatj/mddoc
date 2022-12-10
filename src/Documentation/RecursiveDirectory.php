@@ -26,7 +26,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 				}
 			}
 
-			$class = new ClassFile(
+			$class = new PhpFileDocs(
 				$this->attributeTree->withAttr([ 'name' => (string)$file ])
 			);
 			$this->addChildren($class);
