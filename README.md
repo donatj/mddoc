@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/donatj/mddoc/version)](https://packagist.org/packages/donatj/mddoc)
 [![Total Downloads](https://poser.pugx.org/donatj/mddoc/downloads)](https://packagist.org/packages/donatj/mddoc)
 [![License](https://poser.pugx.org/donatj/mddoc/license)](https://packagist.org/packages/donatj/mddoc)
-[![CI](https://github.com/donatj/mddoc/workflows/CI/badge.svg?)](https://github.com/donatj/mddoc/actions?query=workflow%3ACI)
+[![ci.yml](https://github.com/donatj/mddoc/actions/workflows/ci.yml/badge.svg?)](https://github.com/donatj/mddoc/actions/workflows/ci.yml)
 
 
 A simple, directed markdown documentation generator.
@@ -52,7 +52,7 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
       <badge-poser type="version"/>
       <badge-poser type="downloads"/>
       <badge-poser type="license"/>
-      <badge-github-action name="donatj/mddoc" workflow="CI"/>
+      <badge-github-action name="donatj/mddoc" workflow-file="ci.yml"/>
 
       <text><![CDATA[
 A simple, directed markdown documentation generator.
