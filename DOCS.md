@@ -501,6 +501,10 @@ class ExecOutput {
 function output(int $depth) : \donatj\MDDom\AbstractElement
 ```
 
+**Throws**: `\donatj\MDDoc\Exceptions\ConfigException`
+
+**Throws**: `\donatj\MDDoc\Documentation\Exceptions\ExecutionException`
+
 ---
 
 ### Method: `ExecOutput->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
@@ -520,6 +524,8 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 ```php
 function output(int $depth) : \donatj\MDDom\Paragraph
 ```
+
+**Throws**: `\donatj\MDDoc\Exceptions\PathNotReadableException`
 
 ---
 
@@ -855,6 +861,8 @@ class MDDoc {
 function __construct(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader, \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory $parserFactory)
 ```
 
+**Throws**: `\donatj\MDDoc\Exceptions\ClassNotReadableException`
+
 ---
 
 ### Method: TaxonomyReflector->getReflector
@@ -935,6 +943,8 @@ function getFunctions() : array
 function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader) : \donatj\MDDoc\Reflectors\TaxonomyReflector
 ```
 
+**Throws**: `\donatj\MDDoc\Exceptions\ClassNotReadableException`
+
 ## Class: \donatj\MDDoc\Runner\ConfigParser
 
 
@@ -950,6 +960,8 @@ function parse(string $filename) : \donatj\MDDoc\Documentation\DocRoot
 ```
 
 Parse a config file
+
+**Throws**: `\donatj\MDDoc\Exceptions\ConfigException`
 
 #### Returns:
 

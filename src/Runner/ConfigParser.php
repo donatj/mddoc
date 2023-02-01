@@ -94,8 +94,8 @@ class ConfigParser {
 	/**
 	 * Parse a config file
 	 *
-	 * @return \donatj\MDDoc\Documentation\DocRoot
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
+	 * @return \donatj\MDDoc\Documentation\DocRoot
 	 */
 	public function parse( string $filename ) : Documentation\DocRoot {
 		if( !is_readable($filename) ) {

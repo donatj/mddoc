@@ -368,7 +368,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 						/** @var \phpDocumentor\Reflection\DocBlock\Tags\Throws $throwsBlock */
 						foreach( $throwsBlocks as $throwsBlock ) {
 							$throwsParagraph = new Paragraph(
-								new MdText('Throws: '),
+								new MdText('**Throws**: '),
 								new Code($throwsBlock->getType())
 							);
 							$throwsDoc->appendChild($throwsParagraph);
