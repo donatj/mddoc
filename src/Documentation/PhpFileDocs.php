@@ -6,6 +6,7 @@ use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use donatj\MDDom\AbstractElement;
+use donatj\MDDom\Code;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\DocumentDepth;
 use donatj\MDDom\Header;
@@ -362,6 +363,24 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 						}
 					}
 
+					if( $throwsBlocks = $firstBlock->getTagsByName('throws') ) {
+						$throwsDoc = new DocumentDepth;
+						$subDocument->appendChild($throwsDoc);
+
+						/** @var \phpDocumentor\Reflection\DocBlock\Tags\Throws $throwsBlock */
+						foreach( $throwsBlocks as $throwsBlock ) {
+							$throwsParagraph = new Paragraph(
+								new MdText('Throws: '),
+								new Code($throwsBlock->getType())
+							);
+							$throwsDoc->appendChild($throwsParagraph);
+
+							if( $content = trim($throwsBlock->getDescription()) ) {
+								$throwsParagraph->appendChild(new MdText(' - ' . $content));
+							}
+						}
+					}
+
 					if( !$this->getOption('skip-method-returns', true) ) {
 						if( $return = current($firstBlock->getTagsByName('return')) ) {
 							$returnDoc = new DocumentDepth;
@@ -402,8 +421,9 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 				return true;
 			}
 		} elseif( $block->getTagsByName('ignore')
-				  || $block->getTagsByName('private')
-				  || $block->getTagsByName('internal') ) {
+			|| $block->getTagsByName('private')
+			|| $block->getTagsByName('internal')
+		) {
 			return true;
 		}
 
@@ -436,8 +456,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 		}
 
 		return implode(', ', $req_args) .
-			   ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
-			   implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
+			($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
+			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {
