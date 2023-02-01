@@ -36,11 +36,9 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 	 * @return AbstractElement|string
 	 */
 	private function scanSourceFile( string $filename, int $depth ) {
-		$output = '';
 
 		$document = new DocumentDepth;
-
-		$factory = new TaxonomyReflectorFactory;
+		$factory  = new TaxonomyReflectorFactory;
 
 		$reflector = $factory->newInstance($filename, $this->autoloader);
 
@@ -406,8 +404,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 					$subDocument->appendChild(new Header("{$title}: `{$class->getName()}{$operator}{$name}({$args})`"));
 				}
-
-				$output .= PHP_EOL;
 			}
 		}
 
