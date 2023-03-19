@@ -18,7 +18,7 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	/** @var string */
 	protected $workingDir;
 
-	public function __construct( ImmutableAttributeTree $attributeTree ) {
+	public function __construct( ImmutableAttributeTree $attributeTree, string $textContent = '' ) {
 		$this->attributeTree = $attributeTree;
 		$workingDir          = $this->getOption('working-dir', true);
 		if( $workingDir !== null ) {
@@ -68,7 +68,7 @@ abstract class AbstractDocPart implements DocumentationInterface {
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
 	 */
 	protected function getWorkingFilePath( string $calledPath ) : string {
-		if($calledPath[0] === '/' || $calledPath[1] === ':'){
+		if( $calledPath[0] === '/' || $calledPath[1] === ':' ) {
 			$path = realpath($calledPath);
 		} else {
 			$path = realpath($this->workingDir . '/' . $calledPath);

@@ -3,7 +3,7 @@
 namespace donatj\MDDoc;
 
 use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
-use donatj\MDDoc\Documentation\Replace;
+use donatj\MDDoc\Documentation\Interfaces\UIAwareDocumentationInterface;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Runner\ImmutableAttributeTree;
 use donatj\MDDoc\Runner\TextUI;
@@ -23,6 +23,25 @@ class DocumentationFactory {
 		$this->ui = $ui;
 	}
 
+	public const DEFAULT_DOCUMENTORS = [
+		Documentation\Section::class,
+		Documentation\Replace::class,
+		Documentation\DocPage::class,
+		Documentation\Text::class,
+		Documentation\PhpFileDocs::class,
+		Documentation\RecursiveDirectory::class,
+		Documentation\IncludeFile::class,
+		Documentation\Source::class,
+		Documentation\ComposerInstall::class,
+		Documentation\ComposerRequires::class,
+		Documentation\Badges\Badge::class,
+		Documentation\Badges\BadgePoser::class,
+		Documentation\Badges\BadgeTravis::class,
+		Documentation\Badges\BadgeScrutinizer::class,
+		Documentation\Badges\BadgeGitHubActions::class,
+		Documentation\ExecOutput::class,
+	];
+
 	/**
 	 * Return a populated DocumentationInterface of the corresponding tagName
 	 */
@@ -34,45 +53,28 @@ class DocumentationFactory {
 		$tagName = strtolower($tagName);
 
 		switch( $tagName ) {
-			case 'section':
-				return new Documentation\Section($attributeTree);
-			case 'replace':
-				return new Replace($attributeTree);
-			case 'docpage':
-				$page = new Documentation\DocPage($attributeTree);
-				$page->setUI($this->ui);
-
-				return $page;
-			case 'text':
-				return new Documentation\Text($attributeTree, $textContent);
-			case 'file':
-				return new Documentation\PhpFileDocs($attributeTree);
 			case 'recursivedirectory': // Deprecated tag name
-			case 'recursive-directory':
-				return new Documentation\RecursiveDirectory($attributeTree);
-			case 'include':
-				return new Documentation\IncludeFile($attributeTree);
-			case 'source':
-				return new Documentation\Source($attributeTree, $textContent);
-			case 'composer-install':
-				return new Documentation\ComposerInstall($attributeTree);
-			case 'composer-requires':
-				return new Documentation\ComposerRequires($attributeTree);
-			case 'badge':
-				return new Documentation\Badges\Badge($attributeTree);
-			case 'badge-poser':
-				return new Documentation\Badges\BadgePoser($attributeTree);
-			case 'badge-travis':
-				return new Documentation\Badges\BadgeTravis($attributeTree);
-			case 'badge-scrutinizer':
-				return new Documentation\Badges\BadgeScrutinizer($attributeTree);
-			case 'badge-github-action':
-				return new Documentation\Badges\BadgeGitHubActions($attributeTree);
-			case 'exec':
-				return new Documentation\ExecOutput($attributeTree);
+				$this->ui->warning(sprintf("The 'recursivedirectory' tag is deprecated, use '%s' instead.", Documentation\RecursiveDirectory::tagName()));
+				$tagName = Documentation\RecursiveDirectory::tagName();
+				break;
 		}
 
-		throw new ConfigException("Unhandled XML Tag: {$tagName}");
+		foreach( self::DEFAULT_DOCUMENTORS as $documentor ) {
+			if( !is_subclass_of($documentor, DocumentationInterface::class) ) {
+				throw new ConfigException("{$documentor} does not implement " . DocumentationInterface::class);
+			}
+
+			if( $documentor::tagName() === $tagName ) {
+				$element = new $documentor($attributeTree, $textContent);
+				if( $element instanceof UIAwareDocumentationInterface ) {
+					$element->setUI($this->ui);
+				}
+
+				return $element;
+			}
+		}
+
+		throw new ConfigException("Unhandled XML Tag: '{$tagName}'");
 	}
 
 }

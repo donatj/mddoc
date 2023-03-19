@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * Include a source code block either as a file or inline
+ *
+ * Example:
+ *
+ * ```xml
+ * <source name="path/to/file.php" lang="php" />
+ * <source lang="js">
+ * console.log('Hello World');
+ * </source>
+ * ```
+ */
+
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Exceptions\PathNotReadableException;
@@ -11,9 +24,14 @@ use donatj\MDDom\CodeBlock;
  */
 class Source extends Text {
 
+	/** filename of optional source file */
+	public const OPT_NAME = 'name';
+	/** Optional language name for the opening */
+	public const OPT_LANG = 'lang';
+
 	public function output( int $depth ) : AbstractElement {
-		$name = $this->getOption('name');
-		$lang = $this->getOption('lang');
+		$name = $this->getOption(self::OPT_NAME);
+		$lang = $this->getOption(self::OPT_LANG);
 
 		if( $name && !is_readable($name) ) {
 			throw new PathNotReadableException('Path not readable.', $name);

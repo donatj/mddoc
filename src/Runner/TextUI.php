@@ -49,6 +49,10 @@ EOT;
 		die($code);
 	}
 
+	public function warning( string $text ) : void {
+		fwrite($this->STDERR, $this->getScript() . ": " . Style::yellow($text) . PHP_EOL);
+	}
+
 	public function println( string $text = '' ) : void {
 		fwrite($this->STDOUT, $text . PHP_EOL);
 	}

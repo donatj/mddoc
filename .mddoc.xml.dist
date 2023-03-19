@@ -51,9 +51,13 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
 			<section title="Full API Docs (WIP)">
 				<docpage target="DOCS.md">
 					<section title="Full API Docs (WIP)">
-						<recursivedirectory warn-undocumented="false" name="src"/>
+						<recursive-directory warn-undocumented="false" name="src"/>
 					</section>
 				</docpage>
+			</section>
+
+			<section title="Configuration Syntax">
+				<exec cmd="./bin/document-tags.php"></exec>
 			</section>
 		</section>
 	</docpage>

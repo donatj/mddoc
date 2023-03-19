@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Include a badge "shield" image from Pugx Poser https://poser.pugx.org/
+ */
+
 namespace donatj\MDDoc\Documentation\Badges;
 
 use donatj\MDDoc\Exceptions\ConfigException;
@@ -9,6 +13,14 @@ class BadgePoser extends Badge {
 	private const URL_POSER_BASE     = 'https://poser.pugx.org/';
 	private const URL_PACKAGIST_BASE = 'https://packagist.org/packages/';
 
+	/**
+	 * The type of badge to display. One of: "version" "downloads" "unstable" "license" "monthly" "daily" "phpversion" "composerlock"
+	 * @mddoc-required
+	 */
+	public const OPT_TYPE = 'type';
+	/** The packagist name of the package. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present. */
+	public const OPT_NAME = 'name';
+	/** The poser endpoint to use. Defaults based on the type */
 	public const OPT_SUFFIX = 'suffix';
 
 	private const BADGES = [
@@ -36,7 +48,7 @@ class BadgePoser extends Badge {
 			self::OPT_ALT    => 'Daily Downloads',
 			self::OPT_SUFFIX => '/d/daily',
 		],
-		'phpversion'  => [
+		'phpversion'   => [
 			self::OPT_ALT    => 'PHP Version Require',
 			self::OPT_SUFFIX => '/require/php',
 		],
@@ -47,15 +59,15 @@ class BadgePoser extends Badge {
 	];
 
 	protected function init() : void {
-		$this->requireOption('type');
+		$this->requireOption(self::OPT_TYPE);
 
-		$type = $this->getOption('type');
+		$type = $this->getOption(self::OPT_TYPE);
 		if( empty(self::BADGES[$type]) ) {
 			throw new ConfigException('Invalid Poser badge type');
 		}
 
 		$file = 'composer.json';
-		$name = $this->getOption('name');
+		$name = $this->getOption(self::OPT_NAME);
 		if( !$name && is_readable($file) ) {
 			$data   = file_get_contents($file);
 			$parsed = @json_decode($data, true);
@@ -65,10 +77,10 @@ class BadgePoser extends Badge {
 		}
 
 		if( $name ) {
-			$this->setOptionDefault('name', $name);
+			$this->setOptionDefault(self::OPT_NAME, $name);
 		}
 
-		$this->requireOption('name');
+		$this->requireOption(self::OPT_NAME);
 
 		$this->setOptionDefault(self::OPT_SRC, self::URL_POSER_BASE . $name . self::BADGES[$type][self::OPT_SUFFIX]);
 		$this->setOptionDefault(self::OPT_HREF, self::URL_PACKAGIST_BASE . $name);

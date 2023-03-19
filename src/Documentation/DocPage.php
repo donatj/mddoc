@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Documentation page - stores the contents of child elements to a file
+ *
+ * Nesting docpages results in a link being added in the parent page to the child page
+ *
+ * Inherits all attributes from `<file>`
+ */
+
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Documentation\Interfaces\UIAwareDocumentationInterface;
@@ -12,15 +20,30 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 	/** @var \donatj\MDDoc\Runner\TextUI|null */
 	protected $ui;
 
+	/**
+	 * Filename to output
+	 *
+	 * @mddoc-required
+	 */
+	public const OPT_TARGET = 'target';
+	/** Optional custom link for parent documents */
+	public const OPT_LINK = 'link';
+	/** Optional custom text for the link in parent documents */
+	public const OPT_LINK_TEXT = 'link-text';
+	/** Optional custom text to precede the link in parent documents */
+	public const OPT_LINK_PRE_TEXT = 'link-pre-text';
+	/** Optional custom text to follow the link in parent documents */
+	public const OPT_LINK_POST_TEXT = 'link-post-text';
+
 	public function output( int $depth ) : string {
 
 		$document = new Document;
 
-		$target         = $this->getOption('target');
-		$link           = $this->getOption('link') ?: $target;
-		$link_text      = $this->getOption('link-text') ?: "See: {$link}";
-		$pre_link_text  = $this->getOption('link-pre-text') ?: '';
-		$post_link_text = $this->getOption('link-post-text') ?: '';
+		$target         = $this->getOption(self::OPT_TARGET);
+		$link           = $this->getOption(self::OPT_LINK) ?: $target;
+		$link_text      = $this->getOption(self::OPT_LINK_TEXT) ?: "See: {$link}";
+		$pre_link_text  = $this->getOption(self::OPT_LINK_PRE_TEXT) ?: '';
+		$post_link_text = $this->getOption(self::OPT_LINK_POST_TEXT) ?: '';
 
 		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
 			throw new TargetNotWritableException("Path '{$target}' not writable");
@@ -41,7 +64,7 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
 	}
 
-	private function recursiveTouch( $new, ?int $time = null ) : bool {
+	private function recursiveTouch( string $new, ?int $time = null ) : bool {
 		if( $time === null ) {
 			$time = time();
 		}
@@ -78,6 +101,5 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 	public static function tagName() : string {
 		return 'docpage';
 	}
-
 
 }

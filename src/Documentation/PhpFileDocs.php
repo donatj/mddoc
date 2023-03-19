@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Generate documentation for a single PHP file
+ */
+
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
@@ -19,20 +23,54 @@ use phpDocumentor\Reflection\Php\Method;
 
 class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
+	/**
+	 * The file to document
+	 *
+	 * @mddoc-required true
+	 */
+	public const OPT_NAME = 'name';
+
+	/**
+	 * Skip the class header line
+	 *
+	 * @mddoc-recurse true
+	 */
+	public const OPT_SKIP_CLASS_HEADER = 'skip-class-header';
+
+	/**
+	 * Skip the class constants section
+	 *
+	 * @mddoc-recurse true
+	 */
+	public const OPT_SKIP_CLASS_CONSTANTS = 'skip-class-constants';
+
+	/** Regex to filter methods by - specify methods to be matched */
+	public const OPT_METHOD_FILTER = 'method-filter';
+
+	/** Skip the method return section */
+	public const OPT_SKIP_METHOD_RETURNS = 'skip-method-returns';
+
+	/**
+	 * Generate warning for undocumented methods. Defaults to "true".
+	 *
+	 * @mddoc-recurse true
+	 */
+	public const OPT_WARN_UNDOCUMENTED = 'warn-undocumented';
+
 	private $autoloader;
 
 	/**
 	 * @return AbstractElement|string
 	 */
 	public function output( int $depth ) {
-		$file = $this->getOption('name');
+		$file = $this->getOption(self::OPT_NAME);
 		$path = $this->getWorkingFilePath($file);
 
 		return $this->scanSourceFile($path, $depth);
 	}
 
 	protected function init() : void {
-		$this->requireOption('name');
+		$this->requireOption(self::OPT_NAME);
 	}
 
 	/**
@@ -101,7 +139,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 		if( $class = $reflector->getReflector() ) {
 
-			if( !$this->getOption('skip-class-header', true) ) {
+			if( !$this->getOption(self::OPT_SKIP_CLASS_HEADER, true) ) {
 				$document->appendChild(new Header('Class: ' . $class->getFqsen() /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
 
 				if( $classBlock = $class->getDocBlock() ) {
@@ -126,7 +164,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 			$classInner .= "class {$class->getName()} {\n";
 
-			if( !$this->getOption('skip-class-constants', true) ) {
+			if( !$this->getOption(self::OPT_SKIP_CLASS_CONSTANTS, true) ) {
 				$constantData = $reflector->getConstants();
 				foreach( $constantData as $constants ) {
 					$constant = reset($constants);
@@ -315,7 +353,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 				$canonicalMethodName = $class->getName() . $operator . "$name($args)";
 
-				if( $methodFilter = $this->getOption('method-filter', true) ) {
+				if( $methodFilter = $this->getOption(self::OPT_METHOD_FILTER, true) ) {
 					if( !preg_match($methodFilter, $canonicalMethodName) ) {
 						continue;
 					}
@@ -382,7 +420,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 						}
 					}
 
-					if( !$this->getOption('skip-method-returns', true) ) {
+					if( !$this->getOption(self::OPT_SKIP_METHOD_RETURNS, true) ) {
 						if( $return = current($firstBlock->getTagsByName('return')) ) {
 							$returnDoc = new DocumentDepth;
 							$subDocument->appendChild($returnDoc);
@@ -401,7 +439,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 					// @todo Special rules for constructors and other "built ins"
 					$title = 'Undocumented Method';
-					if( $this->getOption('warn-undocumented', true) === 'false' ) {
+					if( $this->getOption(self::OPT_WARN_UNDOCUMENTED, true) === 'false' ) {
 						$title = 'Method';
 					}
 
