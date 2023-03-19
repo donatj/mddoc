@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Reads the current projects' composer.json file and outputs the required packages, versions and extensions
+ */
+
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDom\Paragraph;
@@ -23,5 +27,9 @@ class ComposerRequires extends AbstractDocPart {
 	}
 
 	protected function init() : void { }
+
+	public static function tagName() : string {
+		return 'composer-requires';
+	}
 
 }

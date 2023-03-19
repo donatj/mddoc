@@ -17,7 +17,7 @@ abstract class AbstractNestedDoc extends AbstractDocPart {
 	}
 
 	public function addChildren( DocumentationInterface ...$children ) : void {
-		foreach($children as $child) {
+		foreach( $children as $child ) {
 			$this->children[] = $child;
 		}
 	}

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Execute a command and include the standard output in the documentation
+ */
+
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Documentation\Exceptions\ExecutionException;
@@ -10,6 +14,14 @@ use donatj\MDDom\CodeBlock;
 use donatj\MDDom\Paragraph;
 
 class ExecOutput extends AbstractDocPart {
+
+	/**
+	 * The command to execute
+	 * @mddoc-required
+	 */
+	public const OPT_CMD = 'cmd';
+	/** The format to output the result in - options include "raw" "code" and "code-block" defaults to "raw" */
+	public const OPT_FORMAT = 'format';
 
 	public const FORMAT_DEFAULT    = 'default';
 	public const FORMAT_RAW        = 'raw';
@@ -28,8 +40,8 @@ class ExecOutput extends AbstractDocPart {
 	 * @throws \donatj\MDDoc\Documentation\Exceptions\ExecutionException
 	 */
 	public function output( int $depth ) : AbstractElement {
-		$cmd    = $this->getOption('cmd');
-		$format = $this->getOption('format');
+		$cmd    = $this->getOption(self::OPT_CMD);
+		$format = $this->getOption(self::OPT_FORMAT);
 
 		if( !in_array($format, self::FORMATS, true) ) {
 			throw new ConfigException("Invalid exec format '{$format}', expected to be in: " . implode(', ', self::FORMATS));
@@ -61,8 +73,12 @@ class ExecOutput extends AbstractDocPart {
 	}
 
 	protected function init() : void {
-		$this->requireOption('cmd');
-		$this->setOptionDefault('format', self::FORMAT_DEFAULT);
+		$this->requireOption(self::OPT_CMD);
+		$this->setOptionDefault(self::OPT_FORMAT, self::FORMAT_DEFAULT);
+	}
+
+	public static function tagName() : string {
+		return 'exec';
 	}
 
 }

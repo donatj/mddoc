@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Recursively search a directory for php files to generate documentation for
+ */
+
 namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
@@ -7,6 +11,15 @@ use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDom\Document;
 
 class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
+
+	/**
+	 * The directory to recursively search for files to document
+	 *
+	 * @mddoc-required
+	 */
+	public const OPT_NAME = 'name';
+	/** A regex to filter files by - specify files to be matched */
+	public const OPT_FILE_FILTER = 'file-filter';
 
 	private $autoloader;
 
@@ -16,17 +29,17 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 
 	public function output( int $depth ) : Document {
 		$document = new Document;
-		$name     = $this->getOption('name');
+		$name     = $this->getOption(self::OPT_NAME);
 
 		foreach( $this->getFileList($name) as $file ) {
-			if( $fileFilter = $this->getOption('file-filter') ) {
+			if( $fileFilter = $this->getOption(self::OPT_FILE_FILTER) ) {
 				if( !preg_match($fileFilter, (string)$file) ) {
 					continue;
 				}
 			}
 
 			$class = new PhpFileDocs(
-				$this->attributeTree->withAttr([ 'name' => (string)$file ])
+				$this->attributeTree->withAttr([ self::OPT_NAME => (string)$file ])
 			);
 			$this->addChildren($class);
 		}
@@ -43,7 +56,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 	}
 
 	protected function init() : void {
-		$this->requireOption('name');
+		$this->requireOption(self::OPT_NAME);
 	}
 
 	private function getFileList( $path ) : iterable {
@@ -67,6 +80,10 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 		}
 
 		return new \ArrayIterator([ $path ]);
+	}
+
+	public static function tagName() : string {
+		return 'recursive-directory';
 	}
 
 }

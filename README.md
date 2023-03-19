@@ -97,9 +97,13 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
       <section title="Full API Docs (WIP)">
         <docpage target="DOCS.md">
           <section title="Full API Docs (WIP)">
-            <recursivedirectory warn-undocumented="false" name="src"/>
+            <recursive-directory warn-undocumented="false" name="src"/>
           </section>
         </docpage>
+      </section>
+
+      <section title="Configuration Syntax">
+        <exec cmd="./bin/document-tags.php"></exec>
       </section>
     </section>
   </docpage>
@@ -115,3 +119,198 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
 ## Full API Docs (WIP)
 
 [See: DOCS.md](DOCS.md)
+
+## Configuration Syntax
+
+### `<section>…</section>`  
+  
+Define a logical section of the generated documentation  
+  
+Nesting sections results in the header level being increased (h1, h2, h3, etc)  
+  
+Example:  
+  
+```xml  
+<section title="This is an H1">  
+   <section title="This is an H2">  
+        <section title="This is an H3">  
+          <text>Some Text</text>  
+        </section>  
+   </section>  
+</section>  
+```  
+  
+Results in:  
+  
+```markdown  
+# This is an H1  
+  
+## This is an H2  
+  
+### This is an H3  
+  
+Some Text  
+```  
+  
+#### Attributes:  
+  
+- `title` **(required)** - The heading of the section  
+  
+### `<replace>…</replace>`  
+  
+Replace text in the wrapped content. Optionally use a preg_replace() regex.  
+  
+#### Attributes:  
+  
+- `search` **(required)** - The text to search for  
+- `replace` **(required)** - The text to replace with  
+- `regex` - Whether to use a regex or not - expects "true" or "false" - defaults to "false"  
+  
+### `<docpage>…</docpage>`  
+  
+Documentation page - stores the contents of child elements to a file  
+  
+Nesting docpages results in a link being added in the parent page to the child page  
+  
+Inherits all attributes from `<file>`  
+  
+#### Attributes:  
+  
+- `target` **(required)** - Filename to output  
+- `link` - Optional custom link for parent documents  
+- `link-text` - Optional custom text for the link in parent documents  
+- `link-pre-text` - Optional custom text to precede the link in parent documents  
+- `link-post-text` - Optional custom text to follow the link in parent documents  
+  
+### `<text />`  
+  
+Include either raw or cdata text content  
+  
+Example:  
+  
+```xml  
+<text>Some Text</text>  
+<text><![CDATA[Some Text]]></text>  
+```  
+  
+### `<file />`  
+  
+Generate documentation for a single PHP file  
+  
+#### Attributes:  
+  
+- `name` **(required)** - The file to document  
+- `skip-class-header` _[recursive]_ - Skip the class header line  
+- `skip-class-constants` _[recursive]_ - Skip the class constants section  
+- `method-filter` - Regex to filter methods by - specify methods to be matched  
+- `skip-method-returns` - Skip the method return section  
+- `warn-undocumented` _[recursive]_ - Generate warning for undocumented methods. Defaults to "true".  
+  
+### `<recursive-directory>…</recursive-directory>`  
+  
+Recursively search a directory for php files to generate documentation for  
+  
+#### Attributes:  
+  
+- `name` **(required)** - The directory to recursively search for files to document  
+- `file-filter` - A regex to filter files by - specify files to be matched  
+  
+### `<include />`  
+  
+Include the contents of a file  
+  
+#### Attributes:  
+  
+- `name` **(required)** - The poth of the file to include  
+  
+### `<source />`  
+  
+Include a source code block either as a file or inline  
+  
+Example:  
+  
+```xml  
+<source name="path/to/file.php" lang="php" />  
+<source lang="js">  
+console.log('Hello World');  
+</source>  
+```  
+  
+#### Attributes:  
+  
+- `name` - filename of optional source file  
+- `lang` - Optional language name for the opening  
+  
+### `<composer-install />`  
+  
+Reads the current projects' composer.json file and outputs the install command  
+  
+#### Attributes:  
+  
+- `text` - Text to display before the install command  
+- `global` - Whether to include global subcommand  
+- `dev` - Whether to include --dev flag  
+  
+### `<composer-requires />`  
+  
+Reads the current projects' composer.json file and outputs the required packages, versions and extensions  
+  
+### `<badge />`  
+  
+Include a badge "shield" image from a given url  
+  
+#### Attributes:  
+  
+- `src` - The image url **(required)**  
+- `alt` - The image alt text **(required)**  
+- `href` - The optional url to link to wrap the badge in  
+- `title` - The optional link title  
+  
+### `<badge-poser />`  
+  
+Include a badge "shield" image from Pugx Poser https://poser.pugx.org/  
+  
+#### Attributes:  
+  
+- `type` **(required)** - The type of badge to display. One of: "version" "downloads" "unstable" "license" "monthly" "daily" "phpversion" "composerlock"  
+- `name` - The packagist name of the package. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present.  
+- `suffix` - The poser endpoint to use. Defaults based on the type  
+  
+### `<badge-travis />`  
+  
+Include a badge "shield" image from Travis CI  
+  
+#### Attributes:  
+  
+- `name` **(required)** - The packagist name of the Travis Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present.  
+- `branch` - The branch to show. Defaults to "master"  
+  
+### `<badge-scrutinizer />`  
+  
+Include a badge "shield" image from Scrutinizer CI  
+  
+#### Attributes:  
+  
+- `name` **(required)** - The packagist name of the Scrutinizer Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present.  
+- `type` **(required)** - The type of badge to display. One of: "quality" "coverage" "build-status"  
+- `suffix` - The Scrutinizer endpoint to use. Defaults based on the type  
+- `branch` - The branch to show. Defaults to "master"  
+  
+### `<badge-github-action />`  
+  
+Include a badge "shield" image for a GitHub Actions workflow  
+  
+#### Attributes:  
+  
+- `name` **(required)** - The name of the `.yml` file in the `.github/workflows/` directory including the `.yml` extension  
+- `branch` - The name of the branch to show the badge for. Defaults to the default branch.  
+- `event`  
+  
+### `<exec />`  
+  
+Execute a command and include the standard output in the documentation  
+  
+#### Attributes:  
+  
+- `cmd` **(required)** - The command to execute  
+- `format` - The format to output the result in - options include "raw" "code" and "code-block" defaults to "raw"

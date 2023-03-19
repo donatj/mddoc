@@ -15,4 +15,8 @@ class DocRoot extends AbstractNestedDoc {
 
 	}
 
+	public static function tagName() : string {
+		return 'doc-root';
+	}
+
 }

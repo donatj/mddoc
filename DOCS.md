@@ -89,7 +89,7 @@ Locate the filename of a given class
 
 
 
-### Method: `AbstractDocPart->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `AbstractDocPart->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -129,7 +129,7 @@ function getChildren() : array
 
 ---
 
-### Method: `AbstractNestedDoc->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `AbstractNestedDoc->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -158,9 +158,13 @@ function output(int $depth)
 namespace donatj\MDDoc\Documentation\Badges;
 
 class Badge {
-	public const OPT_ALT = 'alt';
+	/** The image url **(required)** */
 	public const OPT_SRC = 'src';
+	/** The image alt text **(required)** */
+	public const OPT_ALT = 'alt';
+	/** The optional url to link to wrap the badge in */
 	public const OPT_HREF = 'href';
+	/** The optional link title */
 	public const OPT_TITLE = 'title';
 }
 ```
@@ -177,7 +181,7 @@ function output(int $depth) : string
 
 ---
 
-### Method: `Badge->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `Badge->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -194,11 +198,18 @@ function output(int $depth) : string
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeGitHubActions {
+	/** The name of the `.yml` file in the `.github/workflows/` directory including the `.yml` extension */
+	public const OPT_NAME = 'name';
+	/** The name of the branch to show the badge for. Defaults to the default branch. */
 	public const OPT_BRANCH = 'branch';
 	public const OPT_EVENT = 'event';
-	public const OPT_ALT = 'alt';
+	/** The image url **(required)** */
 	public const OPT_SRC = 'src';
+	/** The image alt text **(required)** */
+	public const OPT_ALT = 'alt';
+	/** The optional url to link to wrap the badge in */
 	public const OPT_HREF = 'href';
+	/** The optional link title */
 	public const OPT_TITLE = 'title';
 }
 ```
@@ -217,7 +228,7 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgeGitHubActions->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `BadgeGitHubActions->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -234,10 +245,19 @@ function output(int $depth) : string
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgePoser {
+	/** The type of badge to display. One of: "version" "downloads" "unstable" "license" "monthly" "daily" "phpversion" "composerlock" */
+	public const OPT_TYPE = 'type';
+	/** The packagist name of the package. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present. */
+	public const OPT_NAME = 'name';
+	/** The poser endpoint to use. Defaults based on the type */
 	public const OPT_SUFFIX = 'suffix';
-	public const OPT_ALT = 'alt';
+	/** The image url **(required)** */
 	public const OPT_SRC = 'src';
+	/** The image alt text **(required)** */
+	public const OPT_ALT = 'alt';
+	/** The optional url to link to wrap the badge in */
 	public const OPT_HREF = 'href';
+	/** The optional link title */
 	public const OPT_TITLE = 'title';
 }
 ```
@@ -256,7 +276,7 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgePoser->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `BadgePoser->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -273,11 +293,21 @@ function output(int $depth) : string
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeScrutinizer {
+	/** The packagist name of the Scrutinizer Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present. */
+	public const OPT_NAME = 'name';
+	/** The type of badge to display. One of: "quality" "coverage" "build-status" */
+	public const OPT_TYPE = 'type';
+	/** The Scrutinizer endpoint to use. Defaults based on the type */
 	public const OPT_SUFFIX = 'suffix';
+	/** The branch to show. Defaults to "master" */
 	public const OPT_BRANCH = 'branch';
-	public const OPT_ALT = 'alt';
+	/** The image url **(required)** */
 	public const OPT_SRC = 'src';
+	/** The image alt text **(required)** */
+	public const OPT_ALT = 'alt';
+	/** The optional url to link to wrap the badge in */
 	public const OPT_HREF = 'href';
+	/** The optional link title */
 	public const OPT_TITLE = 'title';
 }
 ```
@@ -296,7 +326,7 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgeScrutinizer->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `BadgeScrutinizer->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -313,10 +343,17 @@ function output(int $depth) : string
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeTravis {
+	/** The packagist name of the Travis Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present. */
+	public const OPT_NAME = 'name';
+	/** The branch to show. Defaults to "master" */
 	public const OPT_BRANCH = 'branch';
-	public const OPT_ALT = 'alt';
+	/** The image url **(required)** */
 	public const OPT_SRC = 'src';
+	/** The image alt text **(required)** */
+	public const OPT_ALT = 'alt';
+	/** The optional url to link to wrap the badge in */
 	public const OPT_HREF = 'href';
+	/** The optional link title */
 	public const OPT_TITLE = 'title';
 }
 ```
@@ -335,7 +372,7 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgeTravis->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `BadgeTravis->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -346,6 +383,20 @@ function output(int $depth) : string
 ### Method: `BadgeTravis->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\ComposerInstall
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class ComposerInstall {
+	/** Text to display before the install command */
+	public const OPT_TEXT = 'text';
+	/** Whether to include global subcommand */
+	public const OPT_GLOBAL = 'global';
+	/** Whether to include --dev flag */
+	public const OPT_DEV = 'dev';
+}
+```
 
 ### Method: ComposerInstall->output
 
@@ -359,7 +410,7 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 ---
 
-### Method: `ComposerInstall->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `ComposerInstall->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -383,7 +434,7 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 ---
 
-### Method: `ComposerRequires->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `ComposerRequires->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -394,6 +445,24 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 ### Method: `ComposerRequires->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\DocPage
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class DocPage {
+	/** Filename to output */
+	public const OPT_TARGET = 'target';
+	/** Optional custom link for parent documents */
+	public const OPT_LINK = 'link';
+	/** Optional custom text for the link in parent documents */
+	public const OPT_LINK_TEXT = 'link-text';
+	/** Optional custom text to precede the link in parent documents */
+	public const OPT_LINK_PRE_TEXT = 'link-pre-text';
+	/** Optional custom text to follow the link in parent documents */
+	public const OPT_LINK_POST_TEXT = 'link-post-text';
+}
+```
 
 ### Method: DocPage->output
 
@@ -427,7 +496,7 @@ function getChildren() : array
 
 ---
 
-### Method: `DocPage->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `DocPage->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -467,7 +536,7 @@ function getChildren() : array
 
 ---
 
-### Method: `DocRoot->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `DocRoot->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -488,6 +557,10 @@ function getChildren() : array
 namespace donatj\MDDoc\Documentation;
 
 class ExecOutput {
+	/** The command to execute */
+	public const OPT_CMD = 'cmd';
+	/** The format to output the result in - options include "raw" "code" and "code-block" defaults to "raw" */
+	public const OPT_FORMAT = 'format';
 	public const FORMAT_DEFAULT = 'default';
 	public const FORMAT_RAW = 'raw';
 	public const FORMAT_CODE = 'code';
@@ -507,7 +580,7 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: `ExecOutput->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `ExecOutput->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -519,6 +592,16 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 ## Class: \donatj\MDDoc\Documentation\IncludeFile
 
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class IncludeFile {
+	/** The poth of the file to include */
+	public const OPT_NAME = 'name';
+}
+```
+
 ### Method: IncludeFile->output
 
 ```php
@@ -529,7 +612,7 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 ---
 
-### Method: `IncludeFile->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `IncludeFile->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -549,7 +632,7 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 
 
-### Method: `DocumentationInterface->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `DocumentationInterface->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)`
 
 ---
 
@@ -571,6 +654,26 @@ function output(int $depth)
 
 ## Class: \donatj\MDDoc\Documentation\PhpFileDocs
 
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class PhpFileDocs {
+	/** The file to document */
+	public const OPT_NAME = 'name';
+	/** Skip the class header line */
+	public const OPT_SKIP_CLASS_HEADER = 'skip-class-header';
+	/** Skip the class constants section */
+	public const OPT_SKIP_CLASS_CONSTANTS = 'skip-class-constants';
+	/** Regex to filter methods by - specify methods to be matched */
+	public const OPT_METHOD_FILTER = 'method-filter';
+	/** Skip the method return section */
+	public const OPT_SKIP_METHOD_RETURNS = 'skip-method-returns';
+	/** Generate warning for undocumented methods. Defaults to "true". */
+	public const OPT_WARN_UNDOCUMENTED = 'warn-undocumented';
+}
+```
+
 ### Method: PhpFileDocs->output
 
 ```php
@@ -587,7 +690,7 @@ function output(int $depth)
 
 ---
 
-### Method: `PhpFileDocs->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `PhpFileDocs->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -598,6 +701,18 @@ function output(int $depth)
 ### Method: `PhpFileDocs->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\RecursiveDirectory
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class RecursiveDirectory {
+	/** The directory to recursively search for files to document */
+	public const OPT_NAME = 'name';
+	/** A regex to filter files by - specify files to be matched */
+	public const OPT_FILE_FILTER = 'file-filter';
+}
+```
 
 
 
@@ -633,7 +748,7 @@ function getChildren() : array
 
 ---
 
-### Method: `RecursiveDirectory->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `RecursiveDirectory->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -650,8 +765,11 @@ function getChildren() : array
 namespace donatj\MDDoc\Documentation;
 
 class Replace {
+	/** The text to search for */
 	public const OPT_SEARCH = 'search';
+	/** The text to replace with */
 	public const OPT_REPLACE = 'replace';
+	/** Whether to use a regex or not - expects "true" or "false" - defaults to "false" */
 	public const OPT_REGEX = 'regex';
 }
 ```
@@ -684,7 +802,7 @@ function getChildren() : array
 
 ---
 
-### Method: `Replace->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `Replace->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -695,6 +813,16 @@ function getChildren() : array
 ### Method: `Replace->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Section
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class Section {
+	/** The heading of the section */
+	public const OPT_TITLE = 'title';
+}
+```
 
 ### Method: Section->output
 
@@ -724,7 +852,7 @@ function getChildren() : array
 
 ---
 
-### Method: `Section->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree)`
+### Method: `Section->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -737,6 +865,18 @@ function getChildren() : array
 ## Class: \donatj\MDDoc\Documentation\Source
 
 Class Source
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class Source {
+	/** filename of optional source file */
+	public const OPT_NAME = 'name';
+	/** Optional language name for the opening */
+	public const OPT_LANG = 'lang';
+}
+```
 
 ### Method: Source->output
 
@@ -761,8 +901,6 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 ### Method: `Source->getParent()`
 
 ## Class: \donatj\MDDoc\Documentation\Text
-
-Class Text
 
 
 
@@ -791,6 +929,15 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 ## Class: \donatj\MDDoc\DocumentationFactory
 
 Links XML Tags to their Given Documentation Generator
+
+```php
+<?php
+namespace donatj\MDDoc;
+
+class DocumentationFactory {
+	public const DEFAULT_DOCUMENTORS = [\donatj\MDDoc\Documentation\Section::class, \donatj\MDDoc\Documentation\Replace::class, \donatj\MDDoc\Documentation\DocPage::class, \donatj\MDDoc\Documentation\Text::class, \donatj\MDDoc\Documentation\PhpFileDocs::class, \donatj\MDDoc\Documentation\RecursiveDirectory::class, \donatj\MDDoc\Documentation\IncludeFile::class, \donatj\MDDoc\Documentation\Source::class, \donatj\MDDoc\Documentation\ComposerInstall::class, \donatj\MDDoc\Documentation\ComposerRequires::class, \donatj\MDDoc\Documentation\Badges\Badge::class, \donatj\MDDoc\Documentation\Badges\BadgePoser::class, \donatj\MDDoc\Documentation\Badges\BadgeTravis::class, \donatj\MDDoc\Documentation\Badges\BadgeScrutinizer::class, \donatj\MDDoc\Documentation\Badges\BadgeGitHubActions::class, \donatj\MDDoc\Documentation\ExecOutput::class];
+}
+```
 
 ### Method: DocumentationFactory->__construct
 
@@ -1045,6 +1192,10 @@ Output an Error before exiting with given error code
 - ***string*** `$text` - Primary error log details
 - ***int*** `$code` - Status code to exit with (0-255)
 - ***string*** | ***null*** `$additional` - Optional - will print on a second line following the log
+
+---
+
+### Method: `TextUI->warning(string $text)`
 
 ---
 
