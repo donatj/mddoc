@@ -7,6 +7,7 @@ use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Autoloaders\Psr4;
 use donatj\MDDoc\Documentation;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
+use donatj\MDDoc\DocumentationFactory;
 use donatj\MDDoc\Exceptions\ConfigException;
 
 class ConfigParser {
@@ -14,7 +15,7 @@ class ConfigParser {
 	/** @var \donatj\MDDoc\DocumentationFactory */
 	private $documentationFactory;
 
-	public function __construct( \donatj\MDDoc\DocumentationFactory $documentationFactory ) {
+	public function __construct( DocumentationFactory $documentationFactory ) {
 		$this->documentationFactory = $documentationFactory;
 	}
 
@@ -118,7 +119,7 @@ class ConfigParser {
 			throw new \RuntimeException('Needs a DOM element');
 		}
 
-		$attributeTree = new ImmutableAttributeTree;
+		$attributeTree = (new ImmutableAttributeTree)->withAttr($this->nodeAttr($root));
 
 		$docRoot = new Documentation\DocRoot($attributeTree);
 		if( $root->nodeName === 'mddoc' ) {
