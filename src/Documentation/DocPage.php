@@ -75,4 +75,9 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 		$this->ui = $ui;
 	}
 
+	public static function tagName() : string {
+		return 'docpage';
+	}
+
+
 }

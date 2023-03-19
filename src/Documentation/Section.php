@@ -24,4 +24,7 @@ class Section extends AbstractNestedDoc {
 		$this->requireOption('title');
 	}
 
+	public static function tagName() : string {
+		return 'section';
+	}
 }

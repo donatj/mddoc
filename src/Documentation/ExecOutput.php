@@ -65,4 +65,8 @@ class ExecOutput extends AbstractDocPart {
 		$this->setOptionDefault('format', self::FORMAT_DEFAULT);
 	}
 
+	public static function tagName() : string {
+		return 'exec';
+	}
+
 }

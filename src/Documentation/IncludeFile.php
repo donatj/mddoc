@@ -20,4 +20,8 @@ class IncludeFile extends AbstractDocPart {
 		$this->requireOption('name');
 	}
 
+	public static function tagName() : string {
+		return 'include';
+	}
+
 }

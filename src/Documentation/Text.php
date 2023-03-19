@@ -25,4 +25,8 @@ class Text extends AbstractDocPart {
 
 	protected function init() : void { }
 
+	public static function tagName() : string {
+		return 'text';
+	}
+
 }

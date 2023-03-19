@@ -77,4 +77,8 @@ class BadgePoser extends Badge {
 		parent::init();
 	}
 
+	public static function tagName() : string {
+		return 'badge-poser';
+	}
+
 }

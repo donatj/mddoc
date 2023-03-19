@@ -24,4 +24,7 @@ class ComposerRequires extends AbstractDocPart {
 
 	protected function init() : void { }
 
+	public static function tagName() : string {
+		return 'composer-requires';
+	}
 }

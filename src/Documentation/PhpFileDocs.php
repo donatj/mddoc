@@ -566,4 +566,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 		return null;
 	}
 
+	public static function tagName() : string {
+		return 'file';
+	}
+
 }

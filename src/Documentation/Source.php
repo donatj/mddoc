@@ -24,4 +24,8 @@ class Source extends Text {
 		return new CodeBlock($text, $lang);
 	}
 
+	public static function tagName() : string {
+		return 'source';
+	}
+
 }

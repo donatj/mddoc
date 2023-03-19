@@ -37,4 +37,8 @@ class BadgeGitHubActions extends Badge {
 		parent::init();
 	}
 
+	public static function tagName() : string {
+		return 'badge-github-actions';
+	}
+
 }

@@ -46,4 +46,8 @@ class Replace extends AbstractNestedDoc {
 		$this->setOptionDefault(self::OPT_REGEX, 'false');
 	}
 
+	public static function tagName() : string {
+		return 'replace';
+	}
+
 }

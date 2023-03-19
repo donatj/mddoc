@@ -14,4 +14,10 @@ interface DocumentationInterface {
 	 */
 	public function output( int $depth );
 
+	/**
+	 * Get the canonical xml tag name for this documentor
+	 * @internal
+	 */
+	public static function tagName() : string;
+
 }

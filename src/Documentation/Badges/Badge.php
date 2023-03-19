@@ -32,4 +32,8 @@ class Badge extends AbstractDocPart {
 		$this->requireOption(self::OPT_ALT);
 	}
 
+	public static function tagName() : string {
+		return 'badge';
+	}
+
 }
