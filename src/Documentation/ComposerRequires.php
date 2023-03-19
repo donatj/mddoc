@@ -2,17 +2,12 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDom\Paragraph;
 
 class ComposerRequires extends AbstractDocPart {
 
 	public function output( int $depth ) : Paragraph {
-		$file = realpath('composer.json');
-
-		if( !is_readable($file) ) {
-			throw new PathNotReadableException("Path not readable.", $file);
-		}
+		$file = $this->getWorkingFilePath('composer.json');
 
 		$data   = file_get_contents($file);
 		$parsed = @json_decode($data, true);

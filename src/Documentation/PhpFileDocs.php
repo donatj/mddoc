@@ -25,7 +25,10 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 	 * @return AbstractElement|string
 	 */
 	public function output( int $depth ) {
-		return $this->scanSourceFile($this->getOption('name'), $depth);
+		$file = $this->getOption('name');
+		$path = $this->getWorkingFilePath($file);
+
+		return $this->scanSourceFile($path, $depth);
 	}
 
 	protected function init() : void {

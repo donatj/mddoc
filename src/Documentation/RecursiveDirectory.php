@@ -4,7 +4,6 @@ namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
-use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDom\Document;
 
 class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
@@ -48,7 +47,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 	}
 
 	private function getFileList( $path ) : iterable {
-		if( $real = realpath($path) ) {
+		if( $real = $this->getWorkingFilePath($path) ) {
 			$path = $real;
 		}
 
@@ -67,11 +66,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 			return new \ArrayIterator($fileArray);
 		}
 
-		if( is_readable($path) ) {
-			return new \ArrayIterator([ $path ]);
-		}
-
-		throw new PathNotReadableException("Path not readable", $path);
+		return new \ArrayIterator([ $path ]);
 	}
 
 }

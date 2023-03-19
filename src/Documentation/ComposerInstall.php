@@ -2,24 +2,23 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\Paragraph;
 
 class ComposerInstall extends AbstractDocPart {
 
 	public function output( int $depth ) : Paragraph {
-		$file = realpath('composer.json');
-
-		if( !is_readable($file) ) {
-			throw new PathNotReadableException("Path not readable.", $file);
-		}
+		$file = $this->getWorkingFilePath('composer.json');
 
 		$data   = file_get_contents($file);
 		$parsed = @json_decode($data, true);
 
 		$para = new Paragraph;
-		$para->appendChild(new \donatj\MDDom\Text($this->getOption('text') ?: 'Install the latest version with:'));
+		$text = $this->getOption('text') ?? 'Install the latest version with:';
+		if( $text ) {
+			$para->appendChild($text);
+		}
+
 		$install = 'composer ';
 		if( $this->getOption('global') == 'true' ) {
 			$install .= 'global ';
