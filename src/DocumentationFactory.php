@@ -38,6 +38,7 @@ class DocumentationFactory {
 		Documentation\Badges\BadgePoser::class,
 		Documentation\Badges\BadgeTravis::class,
 		Documentation\Badges\BadgeScrutinizer::class,
+		Documentation\Badges\BadgeShielded::class,
 		Documentation\Badges\BadgeGitHubActions::class,
 		Documentation\ExecOutput::class,
 	];

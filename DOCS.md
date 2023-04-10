@@ -336,6 +336,54 @@ function output(int $depth) : string
 
 ### Method: `BadgeScrutinizer->getParent()`
 
+## Class: \donatj\MDDoc\Documentation\Badges\BadgeShielded
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation\Badges;
+
+class BadgeShielded {
+	/** The ID of the badge to display when displaying a dynamic badge. */
+	public const OPT_ID = 'id';
+	/** The color of the badge when displaying a static badge. */
+	public const OPT_COLOR = 'color';
+	/** The title of the badge when displaying a static badge. */
+	public const OPT_TITLE = 'title';
+	/** The text of the badge when displaying a static badge. */
+	public const OPT_TEXT = 'text';
+	/** The image url **(required)** */
+	public const OPT_SRC = 'src';
+	/** The image alt text **(required)** */
+	public const OPT_ALT = 'alt';
+	/** The optional url to link to wrap the badge in */
+	public const OPT_HREF = 'href';
+}
+```
+
+---
+
+### Method: BadgeShielded->output
+
+```php
+function output(int $depth) : string
+```
+
+#### Returns:
+
+- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Method: `BadgeShielded->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+
+---
+
+### Method: `BadgeShielded->setOptionDefault(string $key, ?string $value)`
+
+---
+
+### Method: `BadgeShielded->getParent()`
+
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgeTravis
 
 ```php
@@ -935,7 +983,7 @@ Links XML Tags to their Given Documentation Generator
 namespace donatj\MDDoc;
 
 class DocumentationFactory {
-	public const DEFAULT_DOCUMENTORS = [\donatj\MDDoc\Documentation\Section::class, \donatj\MDDoc\Documentation\Replace::class, \donatj\MDDoc\Documentation\DocPage::class, \donatj\MDDoc\Documentation\Text::class, \donatj\MDDoc\Documentation\PhpFileDocs::class, \donatj\MDDoc\Documentation\RecursiveDirectory::class, \donatj\MDDoc\Documentation\IncludeFile::class, \donatj\MDDoc\Documentation\Source::class, \donatj\MDDoc\Documentation\ComposerInstall::class, \donatj\MDDoc\Documentation\ComposerRequires::class, \donatj\MDDoc\Documentation\Badges\Badge::class, \donatj\MDDoc\Documentation\Badges\BadgePoser::class, \donatj\MDDoc\Documentation\Badges\BadgeTravis::class, \donatj\MDDoc\Documentation\Badges\BadgeScrutinizer::class, \donatj\MDDoc\Documentation\Badges\BadgeGitHubActions::class, \donatj\MDDoc\Documentation\ExecOutput::class];
+	public const DEFAULT_DOCUMENTORS = [\donatj\MDDoc\Documentation\Section::class, \donatj\MDDoc\Documentation\Replace::class, \donatj\MDDoc\Documentation\DocPage::class, \donatj\MDDoc\Documentation\Text::class, \donatj\MDDoc\Documentation\PhpFileDocs::class, \donatj\MDDoc\Documentation\RecursiveDirectory::class, \donatj\MDDoc\Documentation\IncludeFile::class, \donatj\MDDoc\Documentation\Source::class, \donatj\MDDoc\Documentation\ComposerInstall::class, \donatj\MDDoc\Documentation\ComposerRequires::class, \donatj\MDDoc\Documentation\Badges\Badge::class, \donatj\MDDoc\Documentation\Badges\BadgePoser::class, \donatj\MDDoc\Documentation\Badges\BadgeTravis::class, \donatj\MDDoc\Documentation\Badges\BadgeScrutinizer::class, \donatj\MDDoc\Documentation\Badges\BadgeShielded::class, \donatj\MDDoc\Documentation\Badges\BadgeGitHubActions::class, \donatj\MDDoc\Documentation\ExecOutput::class];
 }
 ```
 

@@ -290,6 +290,19 @@ Include a badge "shield" image from Scrutinizer CI
 - `suffix` - The Scrutinizer endpoint to use. Defaults based on the type  
 - `branch` - The branch to show. Defaults to "master"  
   
+### `<badge-shielded />`  
+  
+Include a badge "shield" image from Shielded.dev  
+  
+Either the id or the color, title, and text options must be provided.  
+  
+#### Attributes:  
+  
+- `id` - The ID of the badge to display when displaying a dynamic badge.  
+- `color` - The color of the badge when displaying a static badge.  
+- `title` - The title of the badge when displaying a static badge.  
+- `text` - The text of the badge when displaying a static badge.  
+  
 ### `<badge-github-action />`  
   
 Include a badge "shield" image for a GitHub Actions workflow  
