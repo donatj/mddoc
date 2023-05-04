@@ -94,18 +94,19 @@ class TaxonomyReflector {
 			}
 		}
 
-		if( $reflector instanceof Class_ || $reflector instanceof Trait_ ) {
+		if( $reflector instanceof Class_ ) {
 			if( $parent = $reflector->getParent() ) {
 				$filename = $loader($parent);
 				if( $filename && is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
-
 				//					throw new ExecutionException("failed to locate '{$parent}'"); -- todo handle builtins
 
 			}
+		}
 
+		if( $reflector instanceof Class_ || $reflector instanceof Trait_ ) {
 			if( $traits = $reflector->getUsedTraits() ) {
 				foreach( $traits as $trait ) {
 					$filename = $loader($trait);
