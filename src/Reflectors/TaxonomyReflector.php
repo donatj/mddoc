@@ -101,6 +101,7 @@ class TaxonomyReflector {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
+
 				//					throw new ExecutionException("failed to locate '{$parent}'"); -- todo handle builtins
 
 			}
