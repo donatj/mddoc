@@ -260,6 +260,17 @@ Include a badge "shield" image from a given url
 - `href` - The optional url to link to wrap the badge in  
 - `title` - The optional link title  
   
+### `<badge-coveralls />`  
+  
+Include a coverage badge from BadgeCoveralls.io  
+  
+#### Attributes:  
+  
+- `name` - The BadgeCoveralls name of the Project. Required.  
+  
+This includes the service name, e.g. "github/donatj/php-dnf-solver"  
+- `branch` - The branch to show. Defaults to empty which shows the default branch  
+  
 ### `<badge-poser />`  
   
 Include a badge "shield" image from Pugx Poser https://poser.pugx.org/  

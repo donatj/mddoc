@@ -35,6 +35,7 @@ class DocumentationFactory {
 		Documentation\ComposerInstall::class,
 		Documentation\ComposerRequires::class,
 		Documentation\Badges\Badge::class,
+		Documentation\Badges\BadgeCoveralls::class,
 		Documentation\Badges\BadgePoser::class,
 		Documentation\Badges\BadgeTravis::class,
 		Documentation\Badges\BadgeScrutinizer::class,
