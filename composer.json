@@ -1,6 +1,6 @@
 {
 	"name": "donatj/mddoc",
-	"description": "Powerful, User Directed Markdown Generator",
+	"description": "Powerful, User Directed Markdown Documentation Generator",
 	"require": {
 		"php": ">=7.2",
 		"ext-dom": "*",
