@@ -264,6 +264,7 @@ Reads the current projects' composer.json file and outputs the install command
 - `text` - Text to display before the install command  
 - `global` - Whether to include global subcommand  
 - `dev` - Whether to include --dev flag  
+- `package-names` - Package name override. Comma delimited. Defaults to `name` key of composer.json  
   
 ### `<composer-requires />`  
   

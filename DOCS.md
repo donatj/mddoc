@@ -589,6 +589,8 @@ class ComposerInstall {
 	public const OPT_GLOBAL = 'global';
 	/** Whether to include --dev flag */
 	public const OPT_DEV = 'dev';
+	/** Package name override. Comma delimited. Defaults to `name` key of composer.json */
+	public const OPT_PACKAGE_NAMES = 'package-names';
 }
 ```
 
