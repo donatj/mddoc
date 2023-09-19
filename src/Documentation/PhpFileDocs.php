@@ -534,7 +534,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 	}
 
 	private function formatType( ?string $type, string $default = 'mixed' ) : string {
-		$types = array_filter(explode('|', $type));
+		$types = array_filter(explode('|', $type ?? ''));
 
 		if( !$types ) {
 			$types = [ $default ];

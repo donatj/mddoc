@@ -49,7 +49,7 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 			throw new TargetNotWritableException("Path '{$target}' not writable");
 		}
 
-		foreach( $this->getChildren() as $child ) {
+		foreach( $this->getDocumentationChildren() as $child ) {
 			$document->appendChild($child->output(0));
 		}
 

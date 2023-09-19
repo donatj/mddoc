@@ -33,7 +33,7 @@ class MDDoc {
 		try {
 			$config = $this->init($args, $ui);
 			$parser = new ConfigParser(
-				new DocumentationFactory($ui)
+				new ElementFactory($ui), $ui
 			);
 
 			$doc = $parser->parse($config);

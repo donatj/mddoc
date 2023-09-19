@@ -30,7 +30,7 @@ class Replace extends AbstractNestedDoc {
 		$regex = strtolower($regex);
 
 		$output = '';
-		foreach( $this->getChildren() as $child ) {
+		foreach( $this->getDocumentationChildren() as $child ) {
 			$result = $child->output($depth);
 			if( is_string($result) ) {
 				$output .= $result;

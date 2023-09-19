@@ -48,8 +48,8 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
 
 ```xml
 <mddoc>
-
-  <docpage target="README.md" autoloader="psr4" autoloader-root="src" autoloader-root-namespace="donatj\MDDoc">
+  <autoloader type="psr4" root="src" namespace="donatj\MDDoc"/>
+  <docpage target="README.md">
 
     <section title="MDDoc">
       <badge-poser type="version"/>
@@ -116,6 +116,26 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
 
 ## Configuration Syntax
 
+### `<autoloader />`  
+  
+Specifies an PHP autoloader to use for the documentation generation  
+  
+This autoloader is used at the current documentation level and inherited by  
+all children  
+  
+Multiple autoloaders can be specified, and they will be checked in the order  
+they are specified  
+  
+These are necessary to specify by hand because the composer autoloaders  
+do not provide a method to locate a class by name without loading it,  
+which is necessary for documentation generation without code execution.  
+  
+#### Attributes:  
+  
+- `type` **(required)** - The type of autoloader to use, either "psr0" or "psr4"  
+- `root` **(required)** - The root directory of the autoloader  
+- `namespace` - The namespace of the autoloader, only used for psr4  
+  
 ### `<section>…</section>`  
   
 Define a logical section of the generated documentation  

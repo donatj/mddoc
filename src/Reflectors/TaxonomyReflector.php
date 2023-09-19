@@ -125,6 +125,7 @@ class TaxonomyReflector {
 		if( $reflector instanceof Interface_ ) {
 			foreach( $reflector->getParents() as $interface ) {
 				$filename = $loader($interface);
+
 				if( $filename && is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);

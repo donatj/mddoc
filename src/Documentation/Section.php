@@ -50,7 +50,7 @@ class Section extends AbstractNestedDoc {
 		$document = new DocumentDepth;
 		$document->appendChild(new Header($title));
 
-		foreach( $this->getChildren() as $child ) {
+		foreach( $this->getDocumentationChildren() as $child ) {
 			$document->appendChild($child->output($depth + 1));
 		}
 

@@ -3,7 +3,8 @@
 
 use donatj\MDDoc\Documentation\AbstractNestedDoc;
 use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
-use donatj\MDDoc\DocumentationFactory;
+use donatj\MDDoc\Documentation\Interfaces\ElementInterface;
+use donatj\MDDoc\ElementFactory;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDom\Code;
 use donatj\MDDom\Document;
@@ -18,7 +19,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $doc = new Document;
 
-foreach( DocumentationFactory::DEFAULT_DOCUMENTORS as $documentor ) {
+foreach( ElementFactory::DEFAULT_ELEMENTS as $documentor ) {
 	$reflector = new ReflectionClass($documentor);
 	$filename  = $reflector->getFileName();
 
@@ -26,8 +27,8 @@ foreach( DocumentationFactory::DEFAULT_DOCUMENTORS as $documentor ) {
 	$file    = $project->getFiles()[$filename];
 
 
-	if( !is_subclass_of($documentor, DocumentationInterface::class) ) {
-		throw new ConfigException("{$documentor} does not implement " . DocumentationInterface::class);
+	if( !is_subclass_of($documentor, ElementInterface::class) ) {
+		throw new ConfigException("{$documentor} does not implement " . ElementInterface::class);
 	}
 
 	$isNesting = is_subclass_of($documentor, AbstractNestedDoc::class);
