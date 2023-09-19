@@ -1,6 +1,6 @@
 <mddoc>
-
-	<docpage target="README.md" autoloader="psr4" autoloader-root="src" autoloader-root-namespace="donatj\MDDoc">
+	<autoloader type="psr4" root="src" namespace="donatj\MDDoc"/>
+	<docpage target="README.md">
 
 		<section title="MDDoc">
 			<badge-poser type="version"/>

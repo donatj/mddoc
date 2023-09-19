@@ -14,6 +14,36 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
+## Class: \donatj\MDDoc\Autoloaders\MultiLoader
+
+A simple autoloader chain
+
+
+
+### Method: `MultiLoader->__construct(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface ...$loaders)`
+
+---
+
+### Method: MultiLoader->__invoke
+
+```php
+function __invoke(string $className) : ?string
+```
+
+Locate the filename of a given class
+
+#### Returns:
+
+- ***string*** | ***null*** - filename on class found, null on not found
+
+---
+
+### Method: `MultiLoader->appendLoader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $loader)`
+
+---
+
+### Method: `MultiLoader->count()`
+
 ## Class: \donatj\MDDoc\Autoloaders\NullLoader
 
 ### Method: NullLoader->__invoke
@@ -93,11 +123,11 @@ Locate the filename of a given class
 
 ---
 
-### Method: `AbstractDocPart->setOptionDefault(string $key, ?string $value)`
+### Method: `AbstractDocPart->getParent()`
 
 ---
 
-### Method: `AbstractDocPart->getParent()`
+### Method: `AbstractDocPart->getTextContent()`
 
 ---
 
@@ -111,6 +141,20 @@ function output(int $depth)
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
 
+## Class: \donatj\MDDoc\Documentation\AbstractElement
+
+
+
+### Method: `AbstractElement->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+
+---
+
+### Method: `AbstractElement->getParent()`
+
+---
+
+### Method: `AbstractElement->getTextContent()`
+
 ## Class: \donatj\MDDoc\Documentation\AbstractNestedDoc
 
 ### Method: AbstractNestedDoc->getChildren
@@ -121,11 +165,23 @@ function getChildren() : array
 
 #### Returns:
 
+- ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
+
+---
+
+### Method: AbstractNestedDoc->getDocumentationChildren
+
+```php
+function getDocumentationChildren() : array
+```
+
+#### Returns:
+
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
 ---
 
-### Method: `AbstractNestedDoc->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+### Method: `AbstractNestedDoc->addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children)`
 
 ---
 
@@ -133,11 +189,11 @@ function getChildren() : array
 
 ---
 
-### Method: `AbstractNestedDoc->setOptionDefault(string $key, ?string $value)`
+### Method: `AbstractNestedDoc->getParent()`
 
 ---
 
-### Method: `AbstractNestedDoc->getParent()`
+### Method: `AbstractNestedDoc->getTextContent()`
 
 ---
 
@@ -150,6 +206,46 @@ function output(int $depth)
 #### Returns:
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+## Class: \donatj\MDDoc\Documentation\Autoloader
+
+```php
+<?php
+namespace donatj\MDDoc\Documentation;
+
+class Autoloader {
+	/** The type of autoloader to use, either "psr0" or "psr4" */
+	public const OPT_TYPE = 'type';
+	/** The root directory of the autoloader */
+	public const OPT_ROOT = 'root';
+	/** The namespace of the autoloader, only used for psr4 */
+	public const OPT_NAMESPACE = 'namespace';
+}
+```
+
+
+
+### Method: `Autoloader->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)`
+
+---
+
+### Method: `Autoloader->getType()`
+
+---
+
+### Method: `Autoloader->getRoot()`
+
+---
+
+### Method: `Autoloader->getNamespace()`
+
+---
+
+### Method: `Autoloader->getParent()`
+
+---
+
+### Method: `Autoloader->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\Badge
 
@@ -185,11 +281,11 @@ function output(int $depth) : string
 
 ---
 
-### Method: `Badge->setOptionDefault(string $key, ?string $value)`
+### Method: `Badge->getParent()`
 
 ---
 
-### Method: `Badge->getParent()`
+### Method: `Badge->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgeCoveralls
 
@@ -235,11 +331,11 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgeCoveralls->setOptionDefault(string $key, ?string $value)`
+### Method: `BadgeCoveralls->getParent()`
 
 ---
 
-### Method: `BadgeCoveralls->getParent()`
+### Method: `BadgeCoveralls->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgeGitHubActions
 
@@ -282,11 +378,11 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgeGitHubActions->setOptionDefault(string $key, ?string $value)`
+### Method: `BadgeGitHubActions->getParent()`
 
 ---
 
-### Method: `BadgeGitHubActions->getParent()`
+### Method: `BadgeGitHubActions->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgePoser
 
@@ -330,11 +426,11 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgePoser->setOptionDefault(string $key, ?string $value)`
+### Method: `BadgePoser->getParent()`
 
 ---
 
-### Method: `BadgePoser->getParent()`
+### Method: `BadgePoser->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgeScrutinizer
 
@@ -380,11 +476,11 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgeScrutinizer->setOptionDefault(string $key, ?string $value)`
+### Method: `BadgeScrutinizer->getParent()`
 
 ---
 
-### Method: `BadgeScrutinizer->getParent()`
+### Method: `BadgeScrutinizer->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgeShielded
 
@@ -428,11 +524,11 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgeShielded->setOptionDefault(string $key, ?string $value)`
+### Method: `BadgeShielded->getParent()`
 
 ---
 
-### Method: `BadgeShielded->getParent()`
+### Method: `BadgeShielded->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Badges\BadgeTravis
 
@@ -474,11 +570,11 @@ function output(int $depth) : string
 
 ---
 
-### Method: `BadgeTravis->setOptionDefault(string $key, ?string $value)`
+### Method: `BadgeTravis->getParent()`
 
 ---
 
-### Method: `BadgeTravis->getParent()`
+### Method: `BadgeTravis->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\ComposerInstall
 
@@ -512,11 +608,11 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 ---
 
-### Method: `ComposerInstall->setOptionDefault(string $key, ?string $value)`
+### Method: `ComposerInstall->getParent()`
 
 ---
 
-### Method: `ComposerInstall->getParent()`
+### Method: `ComposerInstall->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\ComposerRequires
 
@@ -536,11 +632,11 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 ---
 
-### Method: `ComposerRequires->setOptionDefault(string $key, ?string $value)`
+### Method: `ComposerRequires->getParent()`
 
 ---
 
-### Method: `ComposerRequires->getParent()`
+### Method: `ComposerRequires->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\DocPage
 
@@ -586,11 +682,23 @@ function getChildren() : array
 
 #### Returns:
 
+- ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
+
+---
+
+### Method: DocPage->getDocumentationChildren
+
+```php
+function getDocumentationChildren() : array
+```
+
+#### Returns:
+
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
 ---
 
-### Method: `DocPage->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+### Method: `DocPage->addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children)`
 
 ---
 
@@ -598,11 +706,11 @@ function getChildren() : array
 
 ---
 
-### Method: `DocPage->setOptionDefault(string $key, ?string $value)`
+### Method: `DocPage->getParent()`
 
 ---
 
-### Method: `DocPage->getParent()`
+### Method: `DocPage->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\DocRoot
 
@@ -626,11 +734,23 @@ function getChildren() : array
 
 #### Returns:
 
+- ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
+
+---
+
+### Method: DocRoot->getDocumentationChildren
+
+```php
+function getDocumentationChildren() : array
+```
+
+#### Returns:
+
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
 ---
 
-### Method: `DocRoot->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+### Method: `DocRoot->addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children)`
 
 ---
 
@@ -638,11 +758,11 @@ function getChildren() : array
 
 ---
 
-### Method: `DocRoot->setOptionDefault(string $key, ?string $value)`
+### Method: `DocRoot->getParent()`
 
 ---
 
-### Method: `DocRoot->getParent()`
+### Method: `DocRoot->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Exceptions\ExecutionException
 
@@ -682,11 +802,11 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: `ExecOutput->setOptionDefault(string $key, ?string $value)`
+### Method: `ExecOutput->getParent()`
 
 ---
 
-### Method: `ExecOutput->getParent()`
+### Method: `ExecOutput->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\IncludeFile
 
@@ -714,11 +834,11 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 ---
 
-### Method: `IncludeFile->setOptionDefault(string $key, ?string $value)`
+### Method: `IncludeFile->getParent()`
 
 ---
 
-### Method: `IncludeFile->getParent()`
+### Method: `IncludeFile->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
 
@@ -727,12 +847,6 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 ### Method: `AutoloaderAware->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
 
 ## Class: \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
-
-
-
-### Method: `DocumentationInterface->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)`
-
----
 
 ### Method: DocumentationInterface->output
 
@@ -743,6 +857,16 @@ function output(int $depth)
 #### Returns:
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+
+---
+
+### Method: `DocumentationInterface->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)`
+
+## Class: \donatj\MDDoc\Documentation\Interfaces\ElementInterface
+
+
+
+### Method: `ElementInterface->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)`
 
 ## Class: \donatj\MDDoc\Documentation\Interfaces\UIAwareDocumentationInterface
 
@@ -792,11 +916,11 @@ function output(int $depth)
 
 ---
 
-### Method: `PhpFileDocs->setOptionDefault(string $key, ?string $value)`
+### Method: `PhpFileDocs->getParent()`
 
 ---
 
-### Method: `PhpFileDocs->getParent()`
+### Method: `PhpFileDocs->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\RecursiveDirectory
 
@@ -838,11 +962,23 @@ function getChildren() : array
 
 #### Returns:
 
+- ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
+
+---
+
+### Method: RecursiveDirectory->getDocumentationChildren
+
+```php
+function getDocumentationChildren() : array
+```
+
+#### Returns:
+
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
 ---
 
-### Method: `RecursiveDirectory->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+### Method: `RecursiveDirectory->addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children)`
 
 ---
 
@@ -850,11 +986,11 @@ function getChildren() : array
 
 ---
 
-### Method: `RecursiveDirectory->setOptionDefault(string $key, ?string $value)`
+### Method: `RecursiveDirectory->getParent()`
 
 ---
 
-### Method: `RecursiveDirectory->getParent()`
+### Method: `RecursiveDirectory->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Replace
 
@@ -892,11 +1028,23 @@ function getChildren() : array
 
 #### Returns:
 
+- ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
+
+---
+
+### Method: Replace->getDocumentationChildren
+
+```php
+function getDocumentationChildren() : array
+```
+
+#### Returns:
+
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
 ---
 
-### Method: `Replace->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+### Method: `Replace->addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children)`
 
 ---
 
@@ -904,11 +1052,11 @@ function getChildren() : array
 
 ---
 
-### Method: `Replace->setOptionDefault(string $key, ?string $value)`
+### Method: `Replace->getParent()`
 
 ---
 
-### Method: `Replace->getParent()`
+### Method: `Replace->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Section
 
@@ -942,11 +1090,23 @@ function getChildren() : array
 
 #### Returns:
 
+- ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
+
+---
+
+### Method: Section->getDocumentationChildren
+
+```php
+function getDocumentationChildren() : array
+```
+
+#### Returns:
+
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
 ---
 
-### Method: `Section->addChildren(\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface ...$children)`
+### Method: `Section->addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children)`
 
 ---
 
@@ -954,11 +1114,11 @@ function getChildren() : array
 
 ---
 
-### Method: `Section->setOptionDefault(string $key, ?string $value)`
+### Method: `Section->getParent()`
 
 ---
 
-### Method: `Section->getParent()`
+### Method: `Section->getTextContent()`
 
 ## Class: \donatj\MDDoc\Documentation\Source
 
@@ -988,23 +1148,17 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: `Source->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $text = ''])`
-
----
-
-### Method: `Source->setOptionDefault(string $key, ?string $value)`
+### Method: `Source->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
 ### Method: `Source->getParent()`
 
-## Class: \donatj\MDDoc\Documentation\Text
-
-
-
-### Method: `Text->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $text = ''])`
-
 ---
+
+### Method: `Source->getTextContent()`
+
+## Class: \donatj\MDDoc\Documentation\Text
 
 ### Method: Text->output
 
@@ -1018,13 +1172,17 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: `Text->setOptionDefault(string $key, ?string $value)`
+### Method: `Text->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
 ### Method: `Text->getParent()`
 
-## Class: \donatj\MDDoc\DocumentationFactory
+---
+
+### Method: `Text->getTextContent()`
+
+## Class: \donatj\MDDoc\ElementFactory
 
 Links XML Tags to their Given Documentation Generator
 
@@ -1032,25 +1190,25 @@ Links XML Tags to their Given Documentation Generator
 <?php
 namespace donatj\MDDoc;
 
-class DocumentationFactory {
-	public const DEFAULT_DOCUMENTORS = [\donatj\MDDoc\Documentation\Section::class, \donatj\MDDoc\Documentation\Replace::class, \donatj\MDDoc\Documentation\DocPage::class, \donatj\MDDoc\Documentation\Text::class, \donatj\MDDoc\Documentation\PhpFileDocs::class, \donatj\MDDoc\Documentation\RecursiveDirectory::class, \donatj\MDDoc\Documentation\IncludeFile::class, \donatj\MDDoc\Documentation\Source::class, \donatj\MDDoc\Documentation\ComposerInstall::class, \donatj\MDDoc\Documentation\ComposerRequires::class, \donatj\MDDoc\Documentation\Badges\Badge::class, \donatj\MDDoc\Documentation\Badges\BadgeCoveralls::class, \donatj\MDDoc\Documentation\Badges\BadgePoser::class, \donatj\MDDoc\Documentation\Badges\BadgeTravis::class, \donatj\MDDoc\Documentation\Badges\BadgeScrutinizer::class, \donatj\MDDoc\Documentation\Badges\BadgeShielded::class, \donatj\MDDoc\Documentation\Badges\BadgeGitHubActions::class, \donatj\MDDoc\Documentation\ExecOutput::class];
+class ElementFactory {
+	public const DEFAULT_ELEMENTS = [\donatj\MDDoc\Documentation\Autoloader::class, \donatj\MDDoc\Documentation\Section::class, \donatj\MDDoc\Documentation\Replace::class, \donatj\MDDoc\Documentation\DocPage::class, \donatj\MDDoc\Documentation\Text::class, \donatj\MDDoc\Documentation\PhpFileDocs::class, \donatj\MDDoc\Documentation\RecursiveDirectory::class, \donatj\MDDoc\Documentation\IncludeFile::class, \donatj\MDDoc\Documentation\Source::class, \donatj\MDDoc\Documentation\ComposerInstall::class, \donatj\MDDoc\Documentation\ComposerRequires::class, \donatj\MDDoc\Documentation\Badges\Badge::class, \donatj\MDDoc\Documentation\Badges\BadgeCoveralls::class, \donatj\MDDoc\Documentation\Badges\BadgePoser::class, \donatj\MDDoc\Documentation\Badges\BadgeTravis::class, \donatj\MDDoc\Documentation\Badges\BadgeScrutinizer::class, \donatj\MDDoc\Documentation\Badges\BadgeShielded::class, \donatj\MDDoc\Documentation\Badges\BadgeGitHubActions::class, \donatj\MDDoc\Documentation\ExecOutput::class];
 }
 ```
 
-### Method: DocumentationFactory->__construct
+### Method: ElementFactory->__construct
 
 ```php
 function __construct(\donatj\MDDoc\Runner\TextUI $ui)
 ```
 
-DocumentationFactory constructor.
+ElementFactory constructor.
 
 ---
 
-### Method: DocumentationFactory->makeFromTag
+### Method: ElementFactory->makeFromTag
 
 ```php
-function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent) : \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
+function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent) : \donatj\MDDoc\Documentation\Interfaces\ElementInterface
 ```
 
 Return a populated DocumentationInterface of the corresponding tagName
@@ -1194,7 +1352,7 @@ function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\Auto
 
 
 
-### Method: `ConfigParser->__construct(\donatj\MDDoc\DocumentationFactory $documentationFactory)`
+### Method: `ConfigParser->__construct(\donatj\MDDoc\ElementFactory $documentationFactory, \donatj\MDDoc\Runner\TextUI $ui)`
 
 ---
 
