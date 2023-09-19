@@ -22,7 +22,7 @@ class BadgeCoveralls extends Badge {
 
 	protected function init() : void {
 		$this->setOptionDefault(self::OPT_BRANCH, null);
-		$this->setOptionDefault(self::OPT_ALT, 'Build Status');
+		$this->setOptionDefault(self::OPT_ALT, 'Coverage Status');
 
 		$this->requireOption(self::OPT_NAME);
 		$name = $this->getOption(self::OPT_NAME);
