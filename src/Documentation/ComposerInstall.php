@@ -6,6 +6,7 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\Paragraph;
 
@@ -20,11 +21,49 @@ class ComposerInstall extends AbstractDocPart {
 	/** Whether to include --dev flag */
 	public const OPT_DEV = 'dev';
 
-	public function output( int $depth ) : Paragraph {
-		$file = $this->getWorkingFilePath('composer.json');
+	/** Package name override. Comma delimited. Defaults to `name` key of composer.json */
+	public const OPT_PACKAGE_NAMES = 'package-names';
 
-		$data   = file_get_contents($file);
-		$parsed = @json_decode($data, true);
+	public function output( int $depth ) : Paragraph {
+
+		$packageNames = [];
+
+		if( $packageNamesString = $this->getOption(self::OPT_PACKAGE_NAMES) ) {
+			$packageNames = explode(',', $packageNamesString);
+			$packageNames = array_map('trim', $packageNames);
+			$packageNames = array_filter($packageNames);
+		}
+
+		$composerName = null;
+
+		try {
+			$file   = $this->getWorkingFilePath('composer.json');
+			$data   = file_get_contents($file);
+			$parsed = @json_decode($data, true);
+			if( is_array($parsed) && !empty($parsed['name']) ) {
+				$composerName = $parsed['name'];
+			}
+		}catch(PathNotReadableException $e) {
+			// ignore
+		}
+
+		if($packageNames) {
+			foreach($packageNames as $key => $packageName) {
+				if( $packageName === '.' ) {
+					if(!$composerName) {
+						throw new \RuntimeException('Unable to determine composer package name from composer.json');
+					}
+
+					$packageNames[$key] = $composerName;
+				}
+			}
+		}elseif( $composerName ) {
+			$packageNames = [ $composerName ];
+		}
+
+		if(!$packageNames) {
+			throw new \RuntimeException('Unable to determine composer package name from composer.json and no package names provided');
+		}
 
 		$para = new Paragraph;
 		$text = $this->getOption(self::OPT_TEXT) ?? 'Install the latest version with:';
@@ -32,17 +71,20 @@ class ComposerInstall extends AbstractDocPart {
 			$para->appendChild($text);
 		}
 
-		$install = 'composer ';
+		$install = 'composer';
 		if( $this->getOption(self::OPT_GLOBAL) == 'true' ) {
-			$install .= 'global ';
+			$install .= ' global';
 		}
 
-		$install .= 'require ';
+		$install .= ' require';
 		if( $this->getOption(self::OPT_DEV) == 'true' ) {
-			$install .= '--dev ';
+			$install .= ' --dev';
 		}
 
-		$install .= escapeshellarg($parsed['name']);
+		foreach( $packageNames as $name ) {
+			$install .= ' ' . escapeshellarg($name);
+		}
+
 		$para->appendChild(new CodeBlock($install, 'bash'));
 
 		return $para;
