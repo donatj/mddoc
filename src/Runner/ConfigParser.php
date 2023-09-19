@@ -2,21 +2,24 @@
 
 namespace donatj\MDDoc\Runner;
 
-use donatj\MDDoc\Autoloaders\NullLoader;
+use donatj\MDDoc\Autoloaders\MultiLoader;
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Autoloaders\Psr4;
 use donatj\MDDoc\Documentation;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
-use donatj\MDDoc\DocumentationFactory;
+use donatj\MDDoc\ElementFactory;
 use donatj\MDDoc\Exceptions\ConfigException;
 
 class ConfigParser {
 
-	/** @var \donatj\MDDoc\DocumentationFactory */
+	/** @var \donatj\MDDoc\ElementFactory */
 	private $documentationFactory;
+	/** @var \donatj\MDDoc\Runner\TextUI */
+	private $ui;
 
-	public function __construct( DocumentationFactory $documentationFactory ) {
+	public function __construct( ElementFactory $documentationFactory, TextUI $ui ) {
 		$this->documentationFactory = $documentationFactory;
+		$this->ui                   = $ui;
 	}
 
 	/**
@@ -28,28 +31,59 @@ class ConfigParser {
 		ImmutableAttributeTree $newAttributeTree,
 		array $treeExtra = []
 	) : void {
+		$loader = new MultiLoader;
+		if( isset($treeExtra['autoloader']) ) {
+			$loader->appendLoader($treeExtra['autoloader']);
+		}
+
 		if( $sel_loader = $node->getAttribute('autoloader') ) {
+
+			$this->ui->warning("Deprecated: autoloader attribute on {$node->nodeName} line {$node->getLineNo()} - use <autoloader> tag instead");
+
 			switch( strtolower($sel_loader) ) {
 				case 'psr0':
-					$root                    = $this->requireAttr($node, 'autoloader-root');
-					$treeExtra['autoloader'] = new Psr0($root);
+					$root = $this->requireAttr($node, 'autoloader-root');
+					$loader->appendLoader(new Psr0($root));
 					break;
 				case 'psr4':
-					$root_namespace          = $this->requireAttr($node, 'autoloader-root-namespace');
-					$root                    = $this->requireAttr($node, 'autoloader-root');
-					$treeExtra['autoloader'] = new Psr4($root_namespace, $root);
+					$root_namespace = $this->requireAttr($node, 'autoloader-root-namespace');
+					$root           = $this->requireAttr($node, 'autoloader-root');
+					$loader->appendLoader(new Psr4($root_namespace, $root));
 					break;
 				default:
 					throw new ConfigException("Unrecognized autoloader: {$sel_loader}");
 			}
-		} elseif( !isset($treeExtra['autoloader']) ) {
-			$treeExtra['autoloader'] = new NullLoader;
 		}
 
-		foreach( $node->childNodes as $child ) {
-			if( $child instanceof \DOMElement ) {
-				$attributes = $this->nodeAttr($child);
+		$autoloaderNodes = $this->getDirectChildrenByTagName($node, 'autoloader');
+		foreach( $autoloaderNodes as $autoloaderNode ) {
+			$attributes    = $this->nodeAttr($autoloaderNode);
+			$newAttributes = $newAttributeTree->withAttr($attributes);
 
+			$childDoc = $this->documentationFactory->makeFromTag(
+				$autoloaderNode->nodeName, $newAttributes, $autoloaderNode->textContent
+			);
+
+			assert($childDoc instanceof Documentation\Autoloader);
+
+			switch( strtolower($childDoc->getType()) ) {
+				case 'psr0':
+					$loader->appendLoader(new Psr0($childDoc->getRoot()));
+					break;
+				case 'psr4':
+					$loader->appendLoader(new Psr4($childDoc->getNamespace(), $childDoc->getRoot()));
+					break;
+				default:
+					throw new ConfigException("Unrecognized autoloader: {$childDoc->getType()}");
+			}
+		}
+
+		$treeExtra['autoloader'] = $loader;
+
+		$children = $this->getDirectChildrenByTagName($node, 'autoloader', true);
+		foreach( $children as $child ) {
+			if( $child instanceof \DOMElement ) {
+				$attributes    = $this->nodeAttr($child);
 				$newAttributes = $newAttributeTree->withAttr($attributes);
 
 				$childDoc = $this->documentationFactory->makeFromTag(
@@ -133,6 +167,25 @@ class ConfigParser {
 		}
 
 		return $docRoot;
+	}
+
+	/**
+	 * @return \DOMElement[]
+	 */
+	private function getDirectChildrenByTagName( \DOMElement $parentNode, string $tagName, bool $exclusive = false ) : array {
+		$result = [];
+
+		foreach( $parentNode->childNodes as $child ) {
+			if( $child instanceof \DOMElement ) {
+				if( !$exclusive && $child->nodeName === $tagName ) {
+					$result[] = $child;
+				} elseif( $exclusive && $child->nodeName !== $tagName ) {
+					$result[] = $child;
+				}
+			}
+		}
+
+		return $result;
 	}
 
 }

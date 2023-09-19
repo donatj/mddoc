@@ -32,7 +32,7 @@ class Source extends Text {
 		$name = $this->getOption(self::OPT_NAME);
 		$lang = $this->getOption(self::OPT_LANG);
 
-		$text = $this->text;
+		$text = $this->getTextContent();
 		if( $name ) {
 			$file = $this->getWorkingFilePath($name);
 			$text = file_get_contents($file);

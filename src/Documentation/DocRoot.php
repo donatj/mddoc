@@ -6,7 +6,7 @@ class DocRoot extends AbstractNestedDoc {
 
 	public function output( int $depth ) {
 		$output = '';
-		foreach( $this->getChildren() as $child ) {
+		foreach( $this->getDocumentationChildren() as $child ) {
 			$output .= $child->output($depth);
 		}
 	}

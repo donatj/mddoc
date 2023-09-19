@@ -2,7 +2,7 @@
 
 namespace donatj\MDDoc;
 
-use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
+use donatj\MDDoc\Documentation\Interfaces\ElementInterface;
 use donatj\MDDoc\Documentation\Interfaces\UIAwareDocumentationInterface;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Runner\ImmutableAttributeTree;
@@ -11,19 +11,21 @@ use donatj\MDDoc\Runner\TextUI;
 /**
  * Links XML Tags to their Given Documentation Generator
  */
-class DocumentationFactory {
+class ElementFactory {
 
 	/** @var \donatj\MDDoc\Runner\TextUI */
 	private $ui;
 
 	/**
-	 * DocumentationFactory constructor.
+	 * ElementFactory constructor.
 	 */
 	public function __construct( TextUI $ui ) {
 		$this->ui = $ui;
 	}
 
-	public const DEFAULT_DOCUMENTORS = [
+	public const DEFAULT_ELEMENTS = [
+		Documentation\Autoloader::class,
+
 		Documentation\Section::class,
 		Documentation\Replace::class,
 		Documentation\DocPage::class,
@@ -51,7 +53,7 @@ class DocumentationFactory {
 		string $tagName,
 		ImmutableAttributeTree $attributeTree,
 		string $textContent
-	) : DocumentationInterface {
+	) : ElementInterface {
 		$tagName = strtolower($tagName);
 
 		switch( $tagName ) {
@@ -61,13 +63,13 @@ class DocumentationFactory {
 				break;
 		}
 
-		foreach( self::DEFAULT_DOCUMENTORS as $documentor ) {
-			if( !is_subclass_of($documentor, DocumentationInterface::class) ) {
-				throw new ConfigException("{$documentor} does not implement " . DocumentationInterface::class);
+		foreach( self::DEFAULT_ELEMENTS as $element ) {
+			if( !is_subclass_of($element, ElementInterface::class) ) {
+				throw new ConfigException("{$element} does not implement " . ElementInterface::class);
 			}
 
-			if( $documentor::tagName() === $tagName ) {
-				$element = new $documentor($attributeTree, $textContent);
+			if( $element::tagName() === $tagName ) {
+				$element = new $element($attributeTree, $textContent);
 				if( $element instanceof UIAwareDocumentationInterface ) {
 					$element->setUI($this->ui);
 				}
