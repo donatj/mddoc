@@ -32,11 +32,11 @@ This is done using a simple, expressive XML syntax. This includes:
 - **ext-dom**: *
 - **ext-json**: *
 - **ext-libxml**: *
-- **donatj/flags**: ~1.4
-- **donatj/cli-toolkit**: ~0.2
+- **donatj/cli-toolkit**: ^0.3.1
+- **donatj/flags**: ^1.5
 - **donatj/mddom**: ^0.2.0
-- **phpdocumentor/reflection**: ~5.1
-- **symfony/polyfill-php80**: ^1.23
+- **phpdocumentor/reflection**: ~5.2.0
+- **symfony/polyfill-php80**: ^1.28
 
 ## Examples
 
