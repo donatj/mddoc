@@ -781,6 +781,8 @@ class ExecOutput {
 	public const OPT_CMD = 'cmd';
 	/** The format to output the result in - options include "raw" "code" and "code-block" defaults to "raw" */
 	public const OPT_FORMAT = 'format';
+	/** Set to 'true' to allow non-zero exit codes to continue */
+	public const OPT_ALLOW_ERROR = 'allow-error';
 	public const FORMAT_DEFAULT = 'default';
 	public const FORMAT_RAW = 'raw';
 	public const FORMAT_CODE = 'code';

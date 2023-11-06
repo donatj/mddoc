@@ -352,4 +352,5 @@ Execute a command and include the standard output in the documentation
 #### Attributes:  
   
 - `cmd` **(required)** - The command to execute  
-- `format` - The format to output the result in - options include "raw" "code" and "code-block" defaults to "raw"
+- `format` - The format to output the result in - options include "raw" "code" and "code-block" defaults to "raw"  
+- `allow-error` - Set to 'true' to allow non-zero exit codes to continue

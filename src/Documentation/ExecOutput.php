@@ -22,6 +22,8 @@ class ExecOutput extends AbstractDocPart {
 	public const OPT_CMD = 'cmd';
 	/** The format to output the result in - options include "raw" "code" and "code-block" defaults to "raw" */
 	public const OPT_FORMAT = 'format';
+	/** Set to 'true' to allow non-zero exit codes to continue */
+	public const OPT_ALLOW_ERROR = 'allow-error';
 
 	public const FORMAT_DEFAULT    = 'default';
 	public const FORMAT_RAW        = 'raw';
@@ -42,6 +44,7 @@ class ExecOutput extends AbstractDocPart {
 	public function output( int $depth ) : AbstractElement {
 		$cmd    = $this->getOption(self::OPT_CMD);
 		$format = $this->getOption(self::OPT_FORMAT);
+		$allow  = $this->getOption(self::OPT_ALLOW_ERROR);
 
 		if( !in_array($format, self::FORMATS, true) ) {
 			throw new ConfigException("Invalid exec format '{$format}', expected to be in: " . implode(', ', self::FORMATS));
@@ -49,7 +52,7 @@ class ExecOutput extends AbstractDocPart {
 
 		exec($cmd, $output, $return);
 
-		if( $return !== 0 ) {
+		if( !$allow && $return !== 0 ) {
 			throw new ExecutionException("Command `{$cmd}` returned exit code: {$return}", $return);
 		}
 
