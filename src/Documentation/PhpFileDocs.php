@@ -85,6 +85,11 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 		$functions = $reflector->getFunctions();
 		foreach( $functions as $func ) {
+			$block = $func->getDocBlock();
+			if( $this->shouldSkip($block) ) {
+				continue;
+			}
+
 			$name = $func->getName();
 			$fqfn = preg_replace('/\s*\(.*$/', '', (string)$func->getFqsen());
 			$args = $this->getArgumentString($func);
@@ -105,8 +110,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 			$document->appendChild(
 				new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
 			);
-
-			$block = $func->getDocBlock();
 
 			if( $block ) {
 				$subDocument = new DocumentDepth;
