@@ -6,6 +6,11 @@ $files = [
 	__DIR__ . '/../../../../autoload.php',
 ];
 
+// phpdocumentor/reflection is noisy and doesn't look like it will be fixed
+error_reporting(
+	error_reporting() & ~E_DEPRECATED
+);
+
 foreach( $files as $file ) {
 	if( file_exists($file) ) {
 		require $file;
