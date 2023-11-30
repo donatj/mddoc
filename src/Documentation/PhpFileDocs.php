@@ -460,9 +460,11 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 			if( (string)$access->getDescription() !== 'public' ) {
 				return true;
 			}
-		} elseif( $block->getTagsByName('ignore')
+		} elseif(
+			$block->getTagsByName('ignore')
 			|| $block->getTagsByName('private')
 			|| $block->getTagsByName('internal')
+			|| $block->getTagsByName('mddoc-ignore')
 		) {
 			return true;
 		}
@@ -496,8 +498,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 		}
 
 		return implode(', ', $req_args) .
-			($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
-			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
+			   ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
+			   implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {
