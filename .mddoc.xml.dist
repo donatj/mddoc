@@ -53,7 +53,7 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
 			</section>
 
 			<section title="Configuration Syntax">
-				<exec cmd="./bin/document-tags.php"></exec>
+				<exec cmd="./bin/document-tags.php"/>
 			</section>
 		</section>
 	</docpage>
