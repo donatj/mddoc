@@ -36,8 +36,10 @@ class BadgeGitHubActions extends Badge {
 		}
 
 		if( $event = $this->getOption('event') ) {
-			$src = 'branch=' . urlencode($event) . '&';
+			$src = 'event=' . urlencode($event) . '&';
 		}
+
+		$src = rtrim($src, '&?');
 
 		$href = sprintf('%s/%s/actions/workflows/%s', self::URL_GITHUB_BASE, $name, urlencode($workflow));
 
