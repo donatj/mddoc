@@ -18,10 +18,15 @@ use donatj\MDDom\HorizontalRule;
 use donatj\MDDom\Paragraph;
 use donatj\MDDom\Text as MdText;
 use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\Element;
 use phpDocumentor\Reflection\Php\Function_;
 use phpDocumentor\Reflection\Php\Method;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
-class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
+class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwareInterface {
+
+	use LoggerAwareTrait;
 
 	/**
 	 * The file to document
@@ -130,12 +135,12 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 				$subDocument->appendChild($returnDoc);
 
 				if( $return = current($block->getTagsByName('return')) ) {
-					$returnDoc->appendChild(new Header('Returns:'));
 					if( $return instanceof DocBlock\Tags\InvalidTag ) {
-						drop($filename);
+						$this->logInvalidTag('Invalid @return tag', $func, $filename, $name, $return);
+					} else {
+						$returnDoc->appendChild(new Header('Returns:'));
+						$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
 					}
-
-					$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
 				}
 			}
 		}
@@ -425,15 +430,15 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 					if( !$this->getOption(self::OPT_SKIP_METHOD_RETURNS, true) ) {
 						if( $return = current($firstBlock->getTagsByName('return')) ) {
-							$returnDoc = new DocumentDepth;
-							$subDocument->appendChild($returnDoc);
-
-							$returnDoc->appendChild(new Header('Returns:'));
 							if( $return instanceof DocBlock\Tags\InvalidTag ) {
-								drop($filename);
-							}
+								$this->logInvalidTag('Invalid @return tag', $class, $filename, $name, $return);
+							} else {
+								$returnDoc = new DocumentDepth;
+								$subDocument->appendChild($returnDoc);
 
-							$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
+								$returnDoc->appendChild(new Header('Returns:'));
+								$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
+							}
 						}
 					}
 				} else {
@@ -571,7 +576,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 	private function arrayTrim( array $sv ) : array {
 		$s   = 0;
-		$svn = null;
+		$svn = [];
 		$c   = count($sv);
 		for( $i = 0; $i < $c; $i++ ) {
 			if( !empty($sv[$i]) ) {
@@ -611,6 +616,25 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware {
 
 	public static function tagName() : string {
 		return 'file';
+	}
+
+	private function logInvalidTag( string $message, Element $element, string $filename, string $name, DocBlock\Tags\InvalidTag $return ) : void {
+		$ctx = [
+			'item' => $element->getFqsen(),
+			'call' => $name,
+			'file' => $filename,
+		];
+
+		$ex = $return->getException();
+		if( $ex ) {
+			$ctx['message'] = $ex->getMessage();
+		}
+
+		if( $this->logger ) {
+			$this->logger->notice($message, $ctx);
+		} else {
+			throw new \RuntimeException($message);
+		}
 	}
 
 }

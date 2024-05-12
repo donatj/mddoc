@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/donatj/mddoc/version)](https://packagist.org/packages/donatj/mddoc)
 [![Total Downloads](https://poser.pugx.org/donatj/mddoc/downloads)](https://packagist.org/packages/donatj/mddoc)
 [![License](https://poser.pugx.org/donatj/mddoc/license)](https://packagist.org/packages/donatj/mddoc)
-[![ci.yml](https://github.com/donatj/mddoc/actions/workflows/ci.yml/badge.svg?)](https://github.com/donatj/mddoc/actions/workflows/ci.yml)
+[![ci.yml](https://github.com/donatj/mddoc/actions/workflows/ci.yml/badge.svg)](https://github.com/donatj/mddoc/actions/workflows/ci.yml)
 
 
 A simple, directed markdown documentation generator for PHP projects.
@@ -36,6 +36,7 @@ This is done using a simple, expressive XML syntax. This includes:
 - **donatj/flags**: ^1.5
 - **donatj/mddom**: ^0.2.0
 - **phpdocumentor/reflection**: ~5.2.0
+- **psr/log**: ^1|^2|^3
 - **symfony/polyfill-php80**: ^1.28
 
 ## Examples

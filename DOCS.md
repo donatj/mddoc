@@ -672,10 +672,6 @@ function output(int $depth) : string
 
 ---
 
-### Method: `DocPage->setUI(\donatj\MDDoc\Runner\TextUI $ui)`
-
----
-
 ### Method: DocPage->getChildren
 
 ```php
@@ -871,12 +867,6 @@ function output(int $depth)
 
 
 ### Method: `ElementInterface->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)`
-
-## Class: \donatj\MDDoc\Documentation\Interfaces\UIAwareDocumentationInterface
-
-
-
-### Method: `UIAwareDocumentationInterface->setUI(\donatj\MDDoc\Runner\TextUI $ui)`
 
 ## Class: \donatj\MDDoc\Documentation\PhpFileDocs
 
@@ -1455,12 +1445,8 @@ Output an Error before exiting with given error code
 
 ---
 
-### Method: `TextUI->warning(string $text)`
-
----
-
 ### Method: `TextUI->println([ string $text = ''])`
 
 ---
 
-### Method: `TextUI->log(string $text [, bool $timestamp = true])`
+### Method: `TextUI->log($level, $message [, array $context = array()])`

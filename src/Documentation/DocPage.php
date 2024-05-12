@@ -14,11 +14,12 @@ use donatj\MDDoc\Documentation\Interfaces\UIAwareDocumentationInterface;
 use donatj\MDDoc\Exceptions\TargetNotWritableException;
 use donatj\MDDoc\Runner\TextUI;
 use donatj\MDDom\Document;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
-class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface {
+class DocPage extends AbstractNestedDoc implements LoggerAwareInterface {
 
-	/** @var \donatj\MDDoc\Runner\TextUI|null */
-	protected $ui;
+	use LoggerAwareTrait;
 
 	/**
 	 * Filename to output
@@ -57,8 +58,8 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 			throw new TargetNotWritableException("failed to write to '{$target}'");
 		}
 
-		if( $this->ui ) {
-			$this->ui->log("output '{$target}'");
+		if( $this->logger ) {
+			$this->logger->info("output '{$target}'");
 		}
 
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
@@ -92,10 +93,6 @@ class DocPage extends AbstractNestedDoc implements UIAwareDocumentationInterface
 
 	protected function init() : void {
 		$this->requireOption('target');
-	}
-
-	public function setUI( TextUI $ui ) : void {
-		$this->ui = $ui;
 	}
 
 	public static function tagName() : string {

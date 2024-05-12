@@ -3,8 +3,13 @@
 namespace donatj\MDDoc\Runner;
 
 use CLI\Style;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerTrait;
+use Psr\Log\LogLevel;
 
-class TextUI {
+class TextUI implements LoggerInterface {
+
+	use LoggerTrait;
 
 	/** @var resource */
 	private $STDERR;
@@ -49,21 +54,42 @@ EOT;
 		die($code);
 	}
 
-	public function warning( string $text ) : void {
-		fwrite($this->STDERR, $this->getScript() . ": " . Style::yellow($text) . PHP_EOL);
-	}
-
 	public function println( string $text = '' ) : void {
 		fwrite($this->STDOUT, $text . PHP_EOL);
 	}
 
-	public function log( string $text, bool $timestamp = true ) : void {
-		if( $timestamp ) {
-			fwrite($this->STDERR, date('c '));
+	public function log( $level, $message, array $context = array() ) : void {
+		fwrite($this->STDERR, date('c '));
+
+		switch($level)  {
+			case LogLevel::DEBUG:
+				fwrite($this->STDERR, Style::cyan('DEBUG '));
+				break;
+			case LogLevel::INFO:
+				fwrite($this->STDERR, Style::green('INFO '));
+				break;
+			case LogLevel::NOTICE:
+				fwrite($this->STDERR, Style::blue('NOTICE '));
+				break;
+			case LogLevel::WARNING:
+				fwrite($this->STDERR, Style::yellow('WARNING '));
+				break;
+			case LogLevel::CRITICAL:
+			case LogLevel::ALERT:
+			case LogLevel::EMERGENCY:
+			case LogLevel::ERROR:
+				fwrite($this->STDERR, Style::red(strtoupper("{$level} ")));
+				break;
+			default:
+				fwrite($this->STDERR, "{$level} ");
 		}
 
-		fwrite($this->STDERR, $text);
+		fwrite($this->STDERR, $message);
 		fwrite($this->STDERR, PHP_EOL);
+
+		foreach( $context as $key => $value ) {
+			fwrite($this->STDERR, "  {$key}: {$value}" . PHP_EOL);
+		}
 	}
 
 	private function getScript() : string {

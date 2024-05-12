@@ -49,10 +49,9 @@ class MDDoc {
 
 		$currMen = number_format(memory_get_usage() / 1048576, 2);
 		$peakMem = number_format(memory_get_peak_usage() / 1048576, 2);
-		$time = number_format( microtime(true) - $start, 3);
+		$time    = number_format(microtime(true) - $start, 3);
 
-		$ui->log('', false);
-		$ui->log("[{$currMen}mb]{$peakMem}mb peak mem - {$time}s exec time", false);
+		$ui->debug("[{$currMen}mb]{$peakMem}mb peak mem - {$time}s exec time");
 	}
 
 	private function init( array $args, TextUI $ui ) : string {

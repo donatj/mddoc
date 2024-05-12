@@ -7,6 +7,7 @@ use donatj\MDDoc\Documentation\Interfaces\UIAwareDocumentationInterface;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Runner\ImmutableAttributeTree;
 use donatj\MDDoc\Runner\TextUI;
+use Psr\Log\LoggerAwareInterface;
 
 /**
  * Links XML Tags to their Given Documentation Generator
@@ -70,8 +71,8 @@ class ElementFactory {
 
 			if( $element::tagName() === $tagName ) {
 				$element = new $element($attributeTree, $textContent);
-				if( $element instanceof UIAwareDocumentationInterface ) {
-					$element->setUI($this->ui);
+				if($element instanceof LoggerAwareInterface) {
+					$element->setLogger($this->ui);
 				}
 
 				return $element;

@@ -9,8 +9,12 @@ namespace donatj\MDDoc\Documentation;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDom\Document;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
-class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
+class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, LoggerAwareInterface {
+
+	use LoggerAwareTrait;
 
 	/**
 	 * The directory to recursively search for files to document
@@ -41,6 +45,9 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware {
 			$class = new PhpFileDocs(
 				$this->getAttributeTree()->withAttr([ self::OPT_NAME => (string)$file ])
 			);
+			if( $this->logger ) {
+				$class->setLogger($this->logger);
+			}
 			$this->addChildren($class);
 		}
 
