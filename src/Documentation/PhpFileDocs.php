@@ -148,7 +148,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		if( $class = $reflector->getReflector() ) {
 
 			if( !$this->getOption(self::OPT_SKIP_CLASS_HEADER, true) ) {
-				$document->appendChild(new Header('Class: ' . $class->getFqsen() /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
+				$document->appendChild(new Header('Class: ' . ltrim($class->getFqsen(), "\\") /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
 
 				if( $classBlock = $class->getDocBlock() ) {
 					if( $this->shouldSkip($classBlock) ) {
