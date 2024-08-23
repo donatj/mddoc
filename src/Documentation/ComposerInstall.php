@@ -38,7 +38,11 @@ class ComposerInstall extends AbstractDocPart {
 
 		try {
 			$file   = $this->getWorkingFilePath('composer.json');
-			$data   = file_get_contents($file);
+			$data   = @file_get_contents($file);
+			if( $data === false ) {
+				throw new PathNotReadableException('Unable to read composer.json', $file);
+			}
+
 			$parsed = @json_decode($data, true);
 			if( is_array($parsed) && !empty($parsed['name']) ) {
 				$composerName = $parsed['name'];

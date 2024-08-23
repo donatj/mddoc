@@ -15,6 +15,7 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDom\AbstractElement;
 use donatj\MDDom\CodeBlock;
 
@@ -35,7 +36,10 @@ class Source extends Text {
 		$text = $this->getTextContent();
 		if( $name ) {
 			$file = $this->getWorkingFilePath($name);
-			$text = file_get_contents($file);
+			$text = @file_get_contents($file);
+			if( $text === false ) {
+				throw new PathNotReadableException("Failed to read file: {$file}", $file);
+			}
 		}
 
 		return new CodeBlock($text, $lang);

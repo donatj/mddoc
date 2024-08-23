@@ -7,6 +7,7 @@
 namespace donatj\MDDoc\Documentation\Badges;
 
 use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDoc\Exceptions\PathNotReadableException;
 
 class BadgePoser extends Badge {
 
@@ -69,7 +70,11 @@ class BadgePoser extends Badge {
 		$file = 'composer.json';
 		$name = $this->getOption(self::OPT_NAME);
 		if( !$name && is_readable($file) ) {
-			$data   = file_get_contents($file);
+			$data = @file_get_contents($file);
+			if( $data === false ) {
+				throw new PathNotReadableException('Unable to read composer.json', $file);
+			}
+
 			$parsed = @json_decode($data, true);
 			if( !empty($parsed['name']) && is_string($parsed['name']) ) {
 				$name = $parsed['name'];

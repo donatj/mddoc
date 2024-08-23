@@ -6,6 +6,7 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDom\Paragraph;
 
 class IncludeFile extends AbstractDocPart {
@@ -21,10 +22,15 @@ class IncludeFile extends AbstractDocPart {
 	 * @throws \donatj\MDDoc\Exceptions\PathNotReadableException
 	 */
 	public function output( int $depth ) : Paragraph {
-		$name = $this->getOption(self::OPT_NAME);
+		$name = $this->requireOption(self::OPT_NAME);
 		$file = $this->getWorkingFilePath($name);
 
-		return new Paragraph(file_get_contents($file));
+		$contents = @file_get_contents($file);
+		if( $contents === false ) {
+			throw new PathNotReadableException("Failed to read file: {$file}", $file);
+		}
+
+		return new Paragraph($contents);
 	}
 
 	protected function init() : void {
