@@ -58,10 +58,14 @@ EOT;
 		fwrite($this->STDOUT, $text . PHP_EOL);
 	}
 
-	public function log( $level, $message, array $context = array() ) : void {
+	public function log( $level, $message, array $context = [] ) : void {
 		fwrite($this->STDERR, date('c '));
 
-		switch($level)  {
+		if( !is_string($level) ) {
+			$level = var_export($level, true);
+		}
+
+		switch( $level ) {
 			case LogLevel::DEBUG:
 				fwrite($this->STDERR, Style::cyan('DEBUG '));
 				break;
@@ -88,6 +92,10 @@ EOT;
 		fwrite($this->STDERR, PHP_EOL);
 
 		foreach( $context as $key => $value ) {
+			if( !is_string($value) ) {
+				$value = var_export($value, true);
+			}
+
 			fwrite($this->STDERR, "  {$key}: {$value}" . PHP_EOL);
 		}
 	}
@@ -95,7 +103,12 @@ EOT;
 	private function getScript() : string {
 		global $argv;
 
-		return pathinfo(realpath($argv[0]), PATHINFO_BASENAME);
+		$path = realpath($argv[0]);
+		if( $path === false ) {
+			throw new \RuntimeException("Could not determine script path");
+		}
+
+		return pathinfo($path, PATHINFO_BASENAME);
 	}
 
 }
