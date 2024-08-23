@@ -12,19 +12,23 @@ class BadgeGitHubActions extends Badge {
 
 	/**
 	 * The name of the `.yml` file in the `.github/workflows/` directory including the `.yml` extension
+	 *
 	 * @mddoc-required
 	 */
-	public const OPT_NAME   = 'name';
+	public const OPT_NAME = 'name';
 	/** The name of the branch to show the badge for. Defaults to the default branch. */
-	public const OPT_BRANCH = 'branch';
-	public const OPT_EVENT  = 'event'; // @todo - this seems to be broken?
+	public const OPT_BRANCH        = 'branch';
+	public const OPT_EVENT         = 'event'; // @todo - this seems to be broken?
+	/**
+	 * The filename of the workflow file to use as the badge source
+	 *
+	 * @mddoc-required
+	 */
+	public const OPT_WORKFLOW_FILE = 'workflow-file';
 
 	protected function init() : void {
-		$this->requireOption(self::OPT_NAME);
-		$name = $this->getOption(self::OPT_NAME);
-
-		$this->requireOption('workflow-file');
-		$workflow = $this->getOption('workflow-file');
+		$name     = $this->requireOption(self::OPT_NAME);
+		$workflow = $this->requireOption(self::OPT_WORKFLOW_FILE);
 
 		$this->setOptionDefault(self::OPT_BRANCH, '');
 		$this->setOptionDefault(self::OPT_EVENT, '');

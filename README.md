@@ -345,6 +345,7 @@ Include a badge "shield" image for a GitHub Actions workflow
 - `name` **(required)** - The name of the `.yml` file in the `.github/workflows/` directory including the `.yml` extension  
 - `branch` - The name of the branch to show the badge for. Defaults to the default branch.  
 - `event`  
+- `workflow-file` **(required)** - The filename of the workflow file to use as the badge source  
   
 ### `<exec />`  
   
