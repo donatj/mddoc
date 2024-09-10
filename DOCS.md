@@ -139,7 +139,7 @@ function output(int $depth)
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ## Class: donatj\MDDoc\Documentation\AbstractElement
 
@@ -205,7 +205,7 @@ function output(int $depth)
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ## Class: donatj\MDDoc\Documentation\Autoloader
 
@@ -273,7 +273,7 @@ function output(int $depth) : string
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -323,7 +323,7 @@ function output(int $depth) : string
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -372,7 +372,7 @@ function output(int $depth) : string
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -393,7 +393,10 @@ function output(int $depth) : string
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgePoser {
-	/** The type of badge to display. One of: "version" "downloads" "unstable" "license" "monthly" "daily" "phpversion" "composerlock" */
+	/**
+	 * The type of badge to display. One of: "version" "downloads" "unstable" "license" "monthly" "daily" "phpversion"
+	 * "composerlock"
+	 */
 	public const OPT_TYPE = 'type';
 	/** The packagist name of the package. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present. */
 	public const OPT_NAME = 'name';
@@ -420,7 +423,7 @@ function output(int $depth) : string
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -441,7 +444,10 @@ function output(int $depth) : string
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeScrutinizer {
-	/** The packagist name of the Scrutinizer Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present. */
+	/**
+	 * The packagist name of the Scrutinizer Project. Defaults to the name key of the composer.json file in the root of
+	 * the project. Required if the composer.json file is not present.
+	 */
 	public const OPT_NAME = 'name';
 	/** The type of badge to display. One of: "quality" "coverage" "build-status" */
 	public const OPT_TYPE = 'type';
@@ -470,7 +476,7 @@ function output(int $depth) : string
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -518,7 +524,7 @@ function output(int $depth) : string
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -539,7 +545,10 @@ function output(int $depth) : string
 namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeTravis {
-	/** The packagist name of the Travis Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present. */
+	/**
+	 * The packagist name of the Travis Project. Defaults to the name key of the composer.json file in the root of the
+	 * project. Required if the composer.json file is not present.
+	 */
 	public const OPT_NAME = 'name';
 	/** The branch to show. Defaults to "master" */
 	public const OPT_BRANCH = 'branch';
@@ -564,7 +573,7 @@ function output(int $depth) : string
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -604,7 +613,7 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -628,7 +637,7 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -670,7 +679,7 @@ function output(int $depth) : string
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -722,7 +731,7 @@ function output(int $depth)
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -858,7 +867,7 @@ function output(int $depth)
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -946,7 +955,7 @@ function output(int $depth) : \donatj\MDDom\Document
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -1012,7 +1021,7 @@ function output(int $depth) : string
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -1074,7 +1083,7 @@ function output(int $depth) : \donatj\MDDom\DocumentDepth
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -1140,7 +1149,7 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -1164,7 +1173,7 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 #### Returns:
 
-- ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
+- ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
 ---
 
@@ -1383,6 +1392,10 @@ function withAttr(array $attributes) : self
 ```
 
 Returns a clone of this ImmutableAttributeTree with another depth of attributes appended.
+
+#### Parameters:
+
+- ***array<string,string>*** `$attributes`
 
 #### Returns:
 

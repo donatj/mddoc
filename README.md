@@ -299,7 +299,8 @@ Include a badge "shield" image from Pugx Poser https://poser.pugx.org/
   
 #### Attributes:  
   
-- `type` **(required)** - The type of badge to display. One of: "version" "downloads" "unstable" "license" "monthly" "daily" "phpversion" "composerlock"  
+- `type` **(required)** - The type of badge to display. One of: "version" "downloads" "unstable" "license" "monthly" "daily" "phpversion"  
+"composerlock"  
 - `name` - The packagist name of the package. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present.  
 - `suffix` - The poser endpoint to use. Defaults based on the type  
   
@@ -309,7 +310,8 @@ Include a badge "shield" image from Travis CI
   
 #### Attributes:  
   
-- `name` **(required)** - The packagist name of the Travis Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present.  
+- `name` **(required)** - The packagist name of the Travis Project. Defaults to the name key of the composer.json file in the root of the  
+project. Required if the composer.json file is not present.  
 - `branch` - The branch to show. Defaults to "master"  
   
 ### `<badge-scrutinizer />`  
@@ -318,7 +320,8 @@ Include a badge "shield" image from Scrutinizer CI
   
 #### Attributes:  
   
-- `name` **(required)** - The packagist name of the Scrutinizer Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present.  
+- `name` **(required)** - The packagist name of the Scrutinizer Project. Defaults to the name key of the composer.json file in the root of  
+the project. Required if the composer.json file is not present.  
 - `type` **(required)** - The type of badge to display. One of: "quality" "coverage" "build-status"  
 - `suffix` - The Scrutinizer endpoint to use. Defaults based on the type  
 - `branch` - The branch to show. Defaults to "master"  

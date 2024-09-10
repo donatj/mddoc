@@ -8,7 +8,6 @@ use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDoc\Runner\ConfigParser;
 use donatj\MDDoc\Runner\TextUI;
-use Exception;
 
 /**
  * Application MDDoc
@@ -68,7 +67,7 @@ class MDDoc {
 
 		try {
 			$flags->parse($args);
-		} catch( Exception $e ) {
+		} catch( \Exception $e ) {
 			$ui->dropError($e->getMessage(), 1, $flags->getDefaults());
 		}
 

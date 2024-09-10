@@ -26,7 +26,7 @@ class Replace extends AbstractNestedDoc {
 	public const OPT_REGEX = 'regex';
 
 	public function output( int $depth ) : string {
-		/** @var "true"|"false" $regex */
+		/** @var "false"|"true" $regex */
 		$regex = $this->requireOption(self::OPT_REGEX);
 		$regex = strtolower($regex);
 

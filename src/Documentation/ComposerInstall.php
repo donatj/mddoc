@@ -9,7 +9,6 @@ namespace donatj\MDDoc\Documentation;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\Paragraph;
-use RuntimeException;
 
 class ComposerInstall extends AbstractDocPart {
 
@@ -56,7 +55,7 @@ class ComposerInstall extends AbstractDocPart {
 			foreach( $packageNames as $key => $packageName ) {
 				if( $packageName === '.' ) {
 					if( !$composerName ) {
-						throw new RuntimeException('Unable to determine composer package name from composer.json');
+						throw new \RuntimeException('Unable to determine composer package name from composer.json');
 					}
 
 					$packageNames[$key] = $composerName;
@@ -67,7 +66,7 @@ class ComposerInstall extends AbstractDocPart {
 		}
 
 		if( !$packageNames ) {
-			throw new RuntimeException('Unable to determine composer package name from composer.json and no package names provided');
+			throw new \RuntimeException('Unable to determine composer package name from composer.json and no package names provided');
 		}
 
 		$para = new Paragraph;

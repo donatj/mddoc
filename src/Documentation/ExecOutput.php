@@ -12,7 +12,6 @@ use donatj\MDDom\AbstractElement;
 use donatj\MDDom\Code;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\Paragraph;
-use RuntimeException;
 
 class ExecOutput extends AbstractDocPart {
 
@@ -73,7 +72,7 @@ class ExecOutput extends AbstractDocPart {
 			case self::FORMAT_CODE_BLOCK:
 				return new CodeBlock($md, $this->getOption('lang'));
 			default:
-				throw new RuntimeException("unhandled format '$format'");
+				throw new \RuntimeException("unhandled format '$format'");
 		}
 	}
 

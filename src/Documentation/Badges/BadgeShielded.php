@@ -39,7 +39,7 @@ class BadgeShielded extends Badge {
 				'title' => $title,
 				'text'  => $text,
 				'color' => $color,
-			], static function( $v ) {
+			], static function ( $v ) {
 				return $v !== '';
 			}));
 

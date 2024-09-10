@@ -6,16 +6,11 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use ArrayIterator;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDom\Document;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RegexIterator;
-use SplFileInfo;
 
 class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, LoggerAwareInterface {
 
@@ -84,21 +79,21 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 		$path = rtrim($path, DIRECTORY_SEPARATOR);
 
 		if( is_dir($path) ) {
-			$dir = new RecursiveDirectoryIterator($path);
-			$ite = new RecursiveIteratorIterator($dir);
+			$dir = new \RecursiveDirectoryIterator($path);
+			$ite = new \RecursiveIteratorIterator($dir);
 			/** @var \Traversable<\SplFileInfo> $files */
-			$files = new RegexIterator($ite, "/\\.php$/");
+			$files = new \RegexIterator($ite, "/\\.php$/");
 
 			$fileArray = iterator_to_array($files, false);
-			usort($fileArray, function( SplFileInfo $a, SplFileInfo $b ) : int {
+			usort($fileArray, function ( \SplFileInfo $a, \SplFileInfo $b ) : int {
 				return strnatcasecmp($a->getRealPath(), $b->getRealPath());
 			});
 
-			return new ArrayIterator($fileArray);
+			return new \ArrayIterator($fileArray);
 		}
 
-		return new ArrayIterator([
-			new SplFileInfo($path),
+		return new \ArrayIterator([
+			new \SplFileInfo($path),
 		]);
 	}
 

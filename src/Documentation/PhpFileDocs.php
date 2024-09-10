@@ -26,7 +26,6 @@ use phpDocumentor\Reflection\Php\Function_;
 use phpDocumentor\Reflection\Php\Method;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use RuntimeException;
 
 class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwareInterface {
 
@@ -689,7 +688,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		if( $this->logger ) {
 			$this->logger->notice($message, $ctx);
 		} else {
-			throw new RuntimeException($message);
+			throw new \RuntimeException($message);
 		}
 	}
 

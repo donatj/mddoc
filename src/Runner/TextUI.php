@@ -6,7 +6,6 @@ use CLI\Style;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
-use RuntimeException;
 
 class TextUI implements LoggerInterface {
 
@@ -45,8 +44,8 @@ EOT;
 	/**
 	 * Output an Error before exiting with given error code
 	 *
-	 * @param string      $text Primary error log details
-	 * @param int         $code Status code to exit with (0-255)
+	 * @param string      $text       Primary error log details
+	 * @param int         $code       Status code to exit with (0-255)
 	 * @param string|null $additional Optional - will print on a second line following the log
 	 */
 	public function dropError( string $text, int $code = 1, ?string $additional = null ) : void {
@@ -106,7 +105,7 @@ EOT;
 
 		$path = realpath($argv[0]);
 		if( $path === false ) {
-			throw new RuntimeException("Could not determine script path");
+			throw new \RuntimeException("Could not determine script path");
 		}
 
 		return pathinfo($path, PATHINFO_BASENAME);
