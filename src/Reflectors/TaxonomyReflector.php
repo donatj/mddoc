@@ -7,18 +7,31 @@ use donatj\MDDoc\Exceptions\ClassNotReadableException;
 use phpDocumentor\Reflection\Element;
 use phpDocumentor\Reflection\File\LocalFile;
 use phpDocumentor\Reflection\Php\Class_;
+use phpDocumentor\Reflection\Php\Function_;
 use phpDocumentor\Reflection\Php\Interface_;
+use phpDocumentor\Reflection\Php\Project as PhpProject;
 use phpDocumentor\Reflection\Php\ProjectFactory;
 use phpDocumentor\Reflection\Php\Trait_;
 
 class TaxonomyReflector {
 
-	/** @var callable */
+	/** @var AutoloaderInterface */
 	private $autoLoader;
+	/**
+	 * @var array{
+	 *     docMethods:array<string,list<\phpDocumentor\Reflection\DocBlock\Tags\Method>>,
+	 *     methods:array<string,list<\phpDocumentor\Reflection\Php\Method>>,
+	 *     constants:array<string,list<\phpDocumentor\Reflection\Php\Constant>>,
+	 *     properties:array<string,list<\phpDocumentor\Reflection\Php\Property>>
+	 * }
+	 */
 	private $data;
+	/** @var TaxonomyReflectorFactory */
 	private $parserFactory;
+	/** @var Class_|Interface_|Trait_|null */
 	private $reflector;
 
+	/** @var Function_[] */
 	private $functions = [];
 
 	/**
@@ -27,7 +40,12 @@ class TaxonomyReflector {
 	public function __construct( string $filename, AutoloaderInterface $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
 		$this->autoLoader    = $autoLoader;
 		$this->parserFactory = $parserFactory;
-		$this->data          = [];
+		$this->data          = [
+			'docMethods' => [],
+			'methods'    => [],
+			'constants'  => [],
+			'properties' => [],
+		];
 
 		$projectFiles = [ new LocalFile($filename) ];
 
@@ -35,6 +53,10 @@ class TaxonomyReflector {
 			$project = (ProjectFactory::createInstance())->create('My Project', $projectFiles);
 		} catch( \Exception $ex ) {
 			throw new ClassNotReadableException("failed to read class file", $filename, $ex);
+		}
+
+		if( !$project instanceof PhpProject ) {
+			throw new \RuntimeException("Parsed phpdoc project is not a Php\\Project");
 		}
 
 		$fileReflector = $project->getFiles()[$filename];
@@ -62,7 +84,6 @@ class TaxonomyReflector {
 	 * @param Class_|Interface_|Trait_ $reflector
 	 */
 	private function registerClassReflectors( Element $reflector ) : void {
-
 		if( !$this->reflector ) {
 			$this->reflector = $reflector;
 		}
@@ -70,10 +91,10 @@ class TaxonomyReflector {
 		$loader = $this->autoLoader;
 
 		$docBlock = $reflector->getDocBlock();
-		if($docBlock) {
+		if( $docBlock ) {
 			/** @var \phpDocumentor\Reflection\DocBlock\Tags\Method[] $docMethods */
 			$docMethods = $docBlock->getTagsByName('method');
-			foreach($docMethods as $docMethod) {
+			foreach( $docMethods as $docMethod ) {
 				$this->data['docMethods'][$docMethod->getMethodName()][] = $docMethod;
 			}
 		}
@@ -96,7 +117,7 @@ class TaxonomyReflector {
 
 		if( $reflector instanceof Class_ ) {
 			if( $parent = $reflector->getParent() ) {
-				$filename = $loader($parent);
+				$filename = $loader($parent->__toString());
 				if( $filename && is_readable($filename) ) {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);
@@ -161,28 +182,28 @@ class TaxonomyReflector {
 	 * @return \phpDocumentor\Reflection\DocBlock\Tags\Method[][]
 	 */
 	public function getDocMethods() : array {
-		return $this->data['docMethods'] ?? [];
+		return $this->data['docMethods'];
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\Php\Method[][]
 	 */
 	public function getMethods() : array {
-		return $this->data['methods'] ?? [];
+		return $this->data['methods'];
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\Php\Constant[][]
 	 */
 	public function getConstants() : array {
-		return $this->data['constants'] ?? [];
+		return $this->data['constants'];
 	}
 
 	/**
 	 * @return \phpDocumentor\Reflection\Php\Property[][]
 	 */
 	public function getProperties() : array {
-		return $this->data['properties'] ?? [];
+		return $this->data['properties'];
 	}
 
 	/**

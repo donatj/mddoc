@@ -25,6 +25,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 	/** A regex to filter files by - specify files to be matched */
 	public const OPT_FILE_FILTER = 'file-filter';
 
+	/** @var AutoloaderInterface */
 	private $autoloader;
 
 	public function setAutoloader( AutoloaderInterface $autoloader ) : void {
@@ -33,7 +34,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 
 	public function output( int $depth ) : Document {
 		$document = new Document;
-		$name     = $this->getOption(self::OPT_NAME);
+		$name     = $this->requireOption(self::OPT_NAME);
 
 		foreach( $this->getFileList($name) as $file ) {
 			if( $fileFilter = $this->getOption(self::OPT_FILE_FILTER) ) {
@@ -48,6 +49,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 			if( $this->logger ) {
 				$class->setLogger($this->logger);
 			}
+
 			$this->addChildren($class);
 		}
 
@@ -66,7 +68,10 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 		$this->requireOption(self::OPT_NAME);
 	}
 
-	private function getFileList( $path ) : iterable {
+	/**
+	 * @return iterable<\SplFileInfo>
+	 */
+	private function getFileList( string $path ) : iterable {
 		if( $real = $this->getWorkingFilePath($path) ) {
 			$path = $real;
 		}
@@ -76,17 +81,20 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 		if( is_dir($path) ) {
 			$dir   = new \RecursiveDirectoryIterator($path);
 			$ite   = new \RecursiveIteratorIterator($dir);
+			/** @var \Traversable<\SplFileInfo> $files */
 			$files = new \RegexIterator($ite, "/\\.php$/");
 
 			$fileArray = iterator_to_array($files, false);
-			usort($fileArray, function ( \SplFileInfo $a, \SplFileInfo $b ) {
+			usort($fileArray, function ( \SplFileInfo $a, \SplFileInfo $b ) : int {
 				return strnatcasecmp($a->getRealPath(), $b->getRealPath());
 			});
 
 			return new \ArrayIterator($fileArray);
 		}
 
-		return new \ArrayIterator([ $path ]);
+		return new \ArrayIterator([
+			new \SplFileInfo($path),
+		]);
 	}
 
 	public static function tagName() : string {

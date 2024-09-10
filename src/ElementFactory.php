@@ -3,7 +3,6 @@
 namespace donatj\MDDoc;
 
 use donatj\MDDoc\Documentation\Interfaces\ElementInterface;
-use donatj\MDDoc\Documentation\Interfaces\UIAwareDocumentationInterface;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Runner\ImmutableAttributeTree;
 use donatj\MDDoc\Runner\TextUI;

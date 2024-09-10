@@ -6,6 +6,7 @@ use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 
 class TaxonomyReflectorFactory {
 
+	/** @var array<string,TaxonomyReflector> */
 	private $parsers = [];
 
 	/**

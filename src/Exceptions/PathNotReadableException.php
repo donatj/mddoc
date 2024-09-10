@@ -4,6 +4,7 @@ namespace donatj\MDDoc\Exceptions;
 
 class PathNotReadableException extends MDDocException {
 
+	/** @var string $path */
 	protected $path;
 
 	public function __construct( string $message, string $path, ?\Exception $previous_exception = null ) {

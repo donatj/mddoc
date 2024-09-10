@@ -23,6 +23,9 @@ class MDDoc {
 		".mddoc.xml.dist",
 	];
 
+	/**
+	 * @param string[] $args
+	 */
 	public function __construct( array $args ) {
 		$start = microtime(true);
 
@@ -54,6 +57,9 @@ class MDDoc {
 		$ui->debug("[{$currMen}mb]{$peakMem}mb peak mem - {$time}s exec time");
 	}
 
+	/**
+	 * @param string[] $args
+	 */
 	private function init( array $args, TextUI $ui ) : string {
 		$flags          = new Flags;
 		$displayHelp    = &$flags->bool('help', false, 'Display this help message.');

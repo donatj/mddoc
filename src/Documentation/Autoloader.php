@@ -35,10 +35,13 @@ class Autoloader extends AbstractElement {
 	/** The namespace of the autoloader, only used for psr4 */
 	public const OPT_NAMESPACE = 'namespace';
 
-	public function __construct( ImmutableAttributeTree $attributeTree, string $textContent ) {
+	public function __construct( ImmutableAttributeTree $attributeTree, string $textContent = '' ) {
 		parent::__construct($attributeTree, $textContent);
 	}
 
+	/**
+	 * @return string soup
+	 */
 	public static function tagName() : string {
 		return 'autoloader';
 	}

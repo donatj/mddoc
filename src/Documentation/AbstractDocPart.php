@@ -16,9 +16,24 @@ abstract class AbstractDocPart extends AbstractElement implements DocumentationI
 
 		$workingDir = $this->getOption('working-dir', true);
 		if( $workingDir !== null ) {
-			$this->workingDir = realpath($workingDir);
+			$path = realpath($workingDir);
+			if( $path === false || !is_dir($path) ) {
+				throw new PathNotReadableException("Provided Working Directory not readable", $workingDir);
+			}
+
+			$this->workingDir = $path;
 		} else {
-			$this->workingDir = realpath(getcwd());
+			$cwd = getcwd();
+			if( $cwd === false ) {
+				throw new PathNotReadableException("Failed to fetch Current Working Directory", '.');
+			}
+
+			$path = realpath($cwd);
+			if( $path === false || !is_dir($path) ) {
+				throw new PathNotReadableException("Current Working Directory not readable", $cwd);
+			}
+
+			$this->workingDir = $path;
 		}
 
 		$this->init();

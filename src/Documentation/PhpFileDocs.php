@@ -18,6 +18,9 @@ use donatj\MDDom\HorizontalRule;
 use donatj\MDDom\Paragraph;
 use donatj\MDDom\Text as MdText;
 use phpDocumentor\Reflection\DocBlock;
+use phpDocumentor\Reflection\DocBlock\Tags\Generic;
+use phpDocumentor\Reflection\DocBlock\Tags\InvalidTag;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use phpDocumentor\Reflection\Element;
 use phpDocumentor\Reflection\Php\Function_;
 use phpDocumentor\Reflection\Php\Method;
@@ -62,6 +65,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	 */
 	public const OPT_WARN_UNDOCUMENTED = 'warn-undocumented';
 
+	/** @var AutoloaderInterface */
 	private $autoloader;
 
 	/**
@@ -82,13 +86,13 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	 * @return AbstractElement|string
 	 */
 	private function scanSourceFile( string $filename, int $depth ) {
-
 		$document = new DocumentDepth;
 		$factory  = new TaxonomyReflectorFactory;
 
 		$reflector = $factory->newInstance($filename, $this->autoloader);
 
 		$functions = $reflector->getFunctions();
+
 		foreach( $functions as $func ) {
 			$block = $func->getDocBlock();
 			if( $this->shouldSkip($block) ) {
@@ -134,9 +138,12 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$returnDoc = new DocumentDepth;
 				$subDocument->appendChild($returnDoc);
 
-				if( $return = current($block->getTagsByName('return')) ) {
-					if( $return instanceof DocBlock\Tags\InvalidTag ) {
+				$return = current($block->getTagsByName('return'));
+				if( $return ) {
+					if( $return instanceof InvalidTag ) {
 						$this->logInvalidTag('Invalid @return tag', $func, $filename, $name, $return);
+					} elseif( !$return instanceof Return_ ) {
+						$this->logInvalidTag('Unknown @return tag', $func, $filename, $name, $return);
 					} else {
 						$returnDoc->appendChild(new Header('Returns:'));
 						$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
@@ -164,11 +171,13 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			$classInner = "<?php\n";
 
 			// @todo figure some stuff out
-			if( $ns = $class->getLocation() ) {
-				$classInner .= sprintf("namespace %s;\n\n",
-					trim(substr((string)$class->getFqsen(), 0, 0 - strlen($class->getName())), '\\')
-				);
-			}
+			//			$ns = $class->getLocation();
+			//			drop($ns);
+			//			if( $ns->__toString() ) {
+			$classInner .= sprintf("namespace %s;\n\n",
+				trim(substr((string)$class->getFqsen(), 0, 0 - strlen($class->getName())), '\\')
+			);
+			//			}
 
 			$classInner .= "class {$class->getName()} {\n";
 
@@ -430,7 +439,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 					if( !$this->getOption(self::OPT_SKIP_METHOD_RETURNS, true) ) {
 						if( $return = current($firstBlock->getTagsByName('return')) ) {
-							if( $return instanceof DocBlock\Tags\InvalidTag ) {
+							if( $return instanceof InvalidTag ) {
 								$this->logInvalidTag('Invalid @return tag', $class, $filename, $name, $return);
 							} else {
 								$returnDoc = new DocumentDepth;
@@ -462,6 +471,12 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	private function shouldSkip( DocBlock $block ) : bool {
 		if( $access = $block->getTagsByName('access') ) {
 			$access = reset($access);
+			if( !$access instanceof Generic ) {
+				$this->logInvalidTag('Failed to parse @access tag', null, '', '', $access);
+
+				return true;
+			}
+
 			if( (string)$access->getDescription() !== 'public' ) {
 				return true;
 			}
@@ -503,8 +518,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		}
 
 		return implode(', ', $req_args) .
-			   ($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
-			   implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
+			($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
+			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {
@@ -574,6 +589,12 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		);
 	}
 
+	/**
+	 * Trims whitespace from non-empty strings in an array.
+	 *
+	 * @param string[] $sv
+	 * @return string[]
+	 */
 	private function arrayTrim( array $sv ) : array {
 		$s   = 0;
 		$svn = [];
@@ -588,14 +609,30 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	}
 
 	private function getParamDocs( DocBlock $block ) : ?DocumentDepth {
-		/** @var \phpDocumentor\Reflection\DocBlock\Tags\Param[] $methodParams */
-		if( $methodParams = $block->getTagsByName('param') ) {
+		$methodParams = $block->getTagsByName('param');
+		if( $methodParams ) {
 			$paramDoc = new DocumentDepth;
 
 			$paramDoc->appendChild(new Header('Parameters:'));
 
 			$output = '';
 			foreach( $methodParams as $tag ) {
+				if( $tag instanceof InvalidTag ) {
+					$this->logger->notice('Failed to parse @param tag', [
+						'name' => $tag->getName(),
+						'data' => (string)$tag,
+					]);
+
+					continue;
+				}
+
+				if( !$tag instanceof DocBlock\Tags\Param ) {
+					$this->logger->notice('Unknown @param tag', [
+						$tag->getName(),
+					]);
+
+					continue;
+				}
 
 				$output .= sprintf('- %s `$%s`', $this->formatType($tag->getType()), $tag->getVariableName());
 
@@ -618,16 +655,27 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		return 'file';
 	}
 
-	private function logInvalidTag( string $message, Element $element, string $filename, string $name, DocBlock\Tags\InvalidTag $return ) : void {
+	private function logInvalidTag(
+		string $message,
+		?Element $element,
+		string $filename,
+		string $name,
+		DocBlock\Tag $return
+	) : void {
 		$ctx = [
-			'item' => $element->getFqsen(),
 			'call' => $name,
 			'file' => $filename,
 		];
 
-		$ex = $return->getException();
-		if( $ex ) {
-			$ctx['message'] = $ex->getMessage();
+		if( $element ) {
+			$ctx['item'] = $element->getFqsen();
+		}
+
+		if( $return instanceof InvalidTag ) {
+			$ex = $return->getException();
+			if( $ex ) {
+				$ctx['message'] = $ex->getMessage();
+			}
 		}
 
 		if( $this->logger ) {

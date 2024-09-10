@@ -5,9 +5,10 @@ namespace donatj\MDDoc\Documentation;
 class DocRoot extends AbstractNestedDoc {
 
 	public function output( int $depth ) {
-		$output = '';
+		// $output = '';
 		foreach( $this->getDocumentationChildren() as $child ) {
-			$output .= $child->output($depth);
+			// $output .=
+			$child->output($depth);
 		}
 	}
 

@@ -10,9 +10,7 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use donatj\MDDoc\Documentation\Interfaces\UIAwareDocumentationInterface;
 use donatj\MDDoc\Exceptions\TargetNotWritableException;
-use donatj\MDDoc\Runner\TextUI;
 use donatj\MDDom\Document;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -40,7 +38,7 @@ class DocPage extends AbstractNestedDoc implements LoggerAwareInterface {
 
 		$document = new Document;
 
-		$target         = $this->getOption(self::OPT_TARGET);
+		$target         = $this->requireOption(self::OPT_TARGET);
 		$link           = $this->getOption(self::OPT_LINK) ?: $target;
 		$link_text      = $this->getOption(self::OPT_LINK_TEXT) ?: "See: {$link}";
 		$pre_link_text  = $this->getOption(self::OPT_LINK_PRE_TEXT) ?: '';
@@ -92,7 +90,7 @@ class DocPage extends AbstractNestedDoc implements LoggerAwareInterface {
 	}
 
 	protected function init() : void {
-		$this->requireOption('target');
+		$this->requireOption(self::OPT_TARGET);
 	}
 
 	public static function tagName() : string {

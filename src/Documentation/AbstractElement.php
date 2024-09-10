@@ -11,6 +11,7 @@ abstract class AbstractElement implements Interfaces\ElementInterface {
 	private $parent;
 	/** @var array<string,?string> */
 	private $defaults = [];
+	/** @var string */
 	private $textContent;
 	/** @var \donatj\MDDoc\Runner\ImmutableAttributeTree */
 	private $attributeTree;

@@ -42,7 +42,7 @@ class ExecOutput extends AbstractDocPart {
 	 * @throws \donatj\MDDoc\Documentation\Exceptions\ExecutionException
 	 */
 	public function output( int $depth ) : AbstractElement {
-		$cmd    = $this->getOption(self::OPT_CMD);
+		$cmd    = $this->requireOption(self::OPT_CMD);
 		$format = $this->getOption(self::OPT_FORMAT);
 		$allow  = $this->getOption(self::OPT_ALLOW_ERROR);
 

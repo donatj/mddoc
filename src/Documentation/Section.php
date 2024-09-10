@@ -45,7 +45,7 @@ class Section extends AbstractNestedDoc {
 	public const OPT_TITLE = 'title';
 
 	public function output( int $depth ) : DocumentDepth {
-		$title = $this->getOption(self::OPT_TITLE);
+		$title = $this->requireOption(self::OPT_TITLE);
 
 		$document = new DocumentDepth;
 		$document->appendChild(new Header($title));
