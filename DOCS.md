@@ -1,6 +1,6 @@
 # Full API Docs (WIP)
 
-## Class: \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
+## Class: donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
 
 ### Method: AutoloaderInterface->__invoke
 
@@ -14,7 +14,7 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
-## Class: \donatj\MDDoc\Autoloaders\MultiLoader
+## Class: donatj\MDDoc\Autoloaders\MultiLoader
 
 A simple autoloader chain
 
@@ -44,7 +44,7 @@ Locate the filename of a given class
 
 ### Method: `MultiLoader->count()`
 
-## Class: \donatj\MDDoc\Autoloaders\NullLoader
+## Class: donatj\MDDoc\Autoloaders\NullLoader
 
 ### Method: NullLoader->__invoke
 
@@ -58,7 +58,7 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
-## Class: \donatj\MDDoc\Autoloaders\Psr0
+## Class: donatj\MDDoc\Autoloaders\Psr0
 
 Class Psr0
 
@@ -86,7 +86,7 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
-## Class: \donatj\MDDoc\Autoloaders\Psr4
+## Class: donatj\MDDoc\Autoloaders\Psr4
 
 Class Psr4
 
@@ -115,7 +115,7 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
-## Class: \donatj\MDDoc\Documentation\AbstractDocPart
+## Class: donatj\MDDoc\Documentation\AbstractDocPart
 
 
 
@@ -141,7 +141,7 @@ function output(int $depth)
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
 
-## Class: \donatj\MDDoc\Documentation\AbstractElement
+## Class: donatj\MDDoc\Documentation\AbstractElement
 
 
 
@@ -155,7 +155,7 @@ function output(int $depth)
 
 ### Method: `AbstractElement->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\AbstractNestedDoc
+## Class: donatj\MDDoc\Documentation\AbstractNestedDoc
 
 ### Method: AbstractNestedDoc->getChildren
 
@@ -207,7 +207,7 @@ function output(int $depth)
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** - Cannot be annotated as also accepts __toString-able objects
 
-## Class: \donatj\MDDoc\Documentation\Autoloader
+## Class: donatj\MDDoc\Documentation\Autoloader
 
 ```php
 <?php
@@ -225,7 +225,7 @@ class Autoloader {
 
 
 
-### Method: `Autoloader->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)`
+### Method: `Autoloader->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
 
 ---
 
@@ -247,7 +247,7 @@ class Autoloader {
 
 ### Method: `Autoloader->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Badges\Badge
+## Class: donatj\MDDoc\Documentation\Badges\Badge
 
 ```php
 <?php
@@ -287,7 +287,7 @@ function output(int $depth) : string
 
 ### Method: `Badge->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Badges\BadgeCoveralls
+## Class: donatj\MDDoc\Documentation\Badges\BadgeCoveralls
 
 ```php
 <?php
@@ -337,7 +337,7 @@ function output(int $depth) : string
 
 ### Method: `BadgeCoveralls->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Badges\BadgeGitHubActions
+## Class: donatj\MDDoc\Documentation\Badges\BadgeGitHubActions
 
 ```php
 <?php
@@ -349,6 +349,8 @@ class BadgeGitHubActions {
 	/** The name of the branch to show the badge for. Defaults to the default branch. */
 	public const OPT_BRANCH = 'branch';
 	public const OPT_EVENT = 'event';
+	/** The filename of the workflow file to use as the badge source */
+	public const OPT_WORKFLOW_FILE = 'workflow-file';
 	/** The image url **(required)** */
 	public const OPT_SRC = 'src';
 	/** The image alt text **(required)** */
@@ -384,7 +386,7 @@ function output(int $depth) : string
 
 ### Method: `BadgeGitHubActions->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Badges\BadgePoser
+## Class: donatj\MDDoc\Documentation\Badges\BadgePoser
 
 ```php
 <?php
@@ -432,7 +434,7 @@ function output(int $depth) : string
 
 ### Method: `BadgePoser->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Badges\BadgeScrutinizer
+## Class: donatj\MDDoc\Documentation\Badges\BadgeScrutinizer
 
 ```php
 <?php
@@ -482,7 +484,7 @@ function output(int $depth) : string
 
 ### Method: `BadgeScrutinizer->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Badges\BadgeShielded
+## Class: donatj\MDDoc\Documentation\Badges\BadgeShielded
 
 ```php
 <?php
@@ -530,7 +532,7 @@ function output(int $depth) : string
 
 ### Method: `BadgeShielded->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Badges\BadgeTravis
+## Class: donatj\MDDoc\Documentation\Badges\BadgeTravis
 
 ```php
 <?php
@@ -576,7 +578,7 @@ function output(int $depth) : string
 
 ### Method: `BadgeTravis->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\ComposerInstall
+## Class: donatj\MDDoc\Documentation\ComposerInstall
 
 ```php
 <?php
@@ -616,7 +618,7 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 ### Method: `ComposerInstall->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\ComposerRequires
+## Class: donatj\MDDoc\Documentation\ComposerRequires
 
 ### Method: ComposerRequires->output
 
@@ -640,7 +642,7 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 ### Method: `ComposerRequires->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\DocPage
+## Class: donatj\MDDoc\Documentation\DocPage
 
 ```php
 <?php
@@ -710,7 +712,7 @@ function getDocumentationChildren() : array
 
 ### Method: `DocPage->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\DocRoot
+## Class: donatj\MDDoc\Documentation\DocRoot
 
 ### Method: DocRoot->output
 
@@ -762,11 +764,11 @@ function getDocumentationChildren() : array
 
 ### Method: `DocRoot->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Exceptions\ExecutionException
+## Class: donatj\MDDoc\Documentation\Exceptions\ExecutionException
 
-## Class: \donatj\MDDoc\Documentation\Exceptions\UnhandledConfigTagException
+## Class: donatj\MDDoc\Documentation\Exceptions\UnhandledConfigTagException
 
-## Class: \donatj\MDDoc\Documentation\ExecOutput
+## Class: donatj\MDDoc\Documentation\ExecOutput
 
 ```php
 <?php
@@ -808,7 +810,7 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 ### Method: `ExecOutput->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\IncludeFile
+## Class: donatj\MDDoc\Documentation\IncludeFile
 
 ```php
 <?php
@@ -840,13 +842,13 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 
 ### Method: `IncludeFile->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
+## Class: donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
 
 
 
 ### Method: `AutoloaderAware->setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader)`
 
-## Class: \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
+## Class: donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
 
 ### Method: DocumentationInterface->output
 
@@ -862,13 +864,13 @@ function output(int $depth)
 
 ### Method: `DocumentationInterface->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)`
 
-## Class: \donatj\MDDoc\Documentation\Interfaces\ElementInterface
+## Class: donatj\MDDoc\Documentation\Interfaces\ElementInterface
 
 
 
 ### Method: `ElementInterface->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)`
 
-## Class: \donatj\MDDoc\Documentation\PhpFileDocs
+## Class: donatj\MDDoc\Documentation\PhpFileDocs
 
 ```php
 <?php
@@ -916,7 +918,7 @@ function output(int $depth)
 
 ### Method: `PhpFileDocs->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\RecursiveDirectory
+## Class: donatj\MDDoc\Documentation\RecursiveDirectory
 
 ```php
 <?php
@@ -986,7 +988,7 @@ function getDocumentationChildren() : array
 
 ### Method: `RecursiveDirectory->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Replace
+## Class: donatj\MDDoc\Documentation\Replace
 
 ```php
 <?php
@@ -1052,7 +1054,7 @@ function getDocumentationChildren() : array
 
 ### Method: `Replace->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Section
+## Class: donatj\MDDoc\Documentation\Section
 
 ```php
 <?php
@@ -1114,7 +1116,7 @@ function getDocumentationChildren() : array
 
 ### Method: `Section->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Source
+## Class: donatj\MDDoc\Documentation\Source
 
 Class Source
 
@@ -1152,7 +1154,7 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 ### Method: `Source->getTextContent()`
 
-## Class: \donatj\MDDoc\Documentation\Text
+## Class: donatj\MDDoc\Documentation\Text
 
 ### Method: Text->output
 
@@ -1176,7 +1178,7 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 
 ### Method: `Text->getTextContent()`
 
-## Class: \donatj\MDDoc\ElementFactory
+## Class: donatj\MDDoc\ElementFactory
 
 Links XML Tags to their Given Documentation Generator
 
@@ -1207,7 +1209,7 @@ function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTre
 
 Return a populated DocumentationInterface of the corresponding tagName
 
-## Class: \donatj\MDDoc\Exceptions\ClassNotReadableException
+## Class: donatj\MDDoc\Exceptions\ClassNotReadableException
 
 
 
@@ -1217,11 +1219,11 @@ Return a populated DocumentationInterface of the corresponding tagName
 
 ### Method: `ClassNotReadableException->getPath()`
 
-## Class: \donatj\MDDoc\Exceptions\ConfigException
+## Class: donatj\MDDoc\Exceptions\ConfigException
 
-## Class: \donatj\MDDoc\Exceptions\MDDocException
+## Class: donatj\MDDoc\Exceptions\MDDocException
 
-## Class: \donatj\MDDoc\Exceptions\PathNotReadableException
+## Class: donatj\MDDoc\Exceptions\PathNotReadableException
 
 
 
@@ -1231,9 +1233,9 @@ Return a populated DocumentationInterface of the corresponding tagName
 
 ### Method: `PathNotReadableException->getPath()`
 
-## Class: \donatj\MDDoc\Exceptions\TargetNotWritableException
+## Class: donatj\MDDoc\Exceptions\TargetNotWritableException
 
-## Class: \donatj\MDDoc\MDDoc
+## Class: donatj\MDDoc\MDDoc
 
 Application MDDoc
 
@@ -1246,11 +1248,17 @@ class MDDoc {
 }
 ```
 
+### Method: MDDoc->__construct
 
+```php
+function __construct(array $args)
+```
 
-### Method: `MDDoc->__construct(array $args)`
+#### Parameters:
 
-## Class: \donatj\MDDoc\Reflectors\TaxonomyReflector
+- ***string[]*** `$args`
+
+## Class: donatj\MDDoc\Reflectors\TaxonomyReflector
 
 ### Method: TaxonomyReflector->__construct
 
@@ -1332,7 +1340,7 @@ function getFunctions() : array
 
 - ***\phpDocumentor\Reflection\Php\Function_[]***
 
-## Class: \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory
+## Class: donatj\MDDoc\Reflectors\TaxonomyReflectorFactory
 
 ### Method: TaxonomyReflectorFactory->newInstance
 
@@ -1342,7 +1350,7 @@ function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\Auto
 
 **Throws**: `\donatj\MDDoc\Exceptions\ClassNotReadableException`
 
-## Class: \donatj\MDDoc\Runner\ConfigParser
+## Class: donatj\MDDoc\Runner\ConfigParser
 
 
 
@@ -1364,7 +1372,7 @@ Parse a config file
 
 - ***\donatj\MDDoc\Documentation\DocRoot***
 
-## Class: \donatj\MDDoc\Runner\ImmutableAttributeTree
+## Class: donatj\MDDoc\Runner\ImmutableAttributeTree
 
 ImmutableAttributeTree is a helper for reading XML Attributes
 
@@ -1408,7 +1416,7 @@ Fetch the first attribute value by key from the starting with the top-most eleme
 
 - ***string*** | ***null*** - Returns null on not found.
 
-## Class: \donatj\MDDoc\Runner\TextUI
+## Class: donatj\MDDoc\Runner\TextUI
 
 ### Method: TextUI->__construct
 
@@ -1449,4 +1457,4 @@ Output an Error before exiting with given error code
 
 ---
 
-### Method: `TextUI->log($level, $message [, array $context = array()])`
+### Method: `TextUI->log($level, $message [, array $context = []])`
