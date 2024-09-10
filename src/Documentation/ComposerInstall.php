@@ -9,6 +9,7 @@ namespace donatj\MDDoc\Documentation;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\Paragraph;
+use RuntimeException;
 
 class ComposerInstall extends AbstractDocPart {
 
@@ -37,8 +38,8 @@ class ComposerInstall extends AbstractDocPart {
 		$composerName = null;
 
 		try {
-			$file   = $this->getWorkingFilePath('composer.json');
-			$data   = @file_get_contents($file);
+			$file = $this->getWorkingFilePath('composer.json');
+			$data = @file_get_contents($file);
 			if( $data === false ) {
 				throw new PathNotReadableException('Unable to read composer.json', $file);
 			}
@@ -47,26 +48,26 @@ class ComposerInstall extends AbstractDocPart {
 			if( is_array($parsed) && !empty($parsed['name']) ) {
 				$composerName = $parsed['name'];
 			}
-		}catch(PathNotReadableException $e) {
+		} catch( PathNotReadableException $e ) {
 			// ignore
 		}
 
-		if($packageNames) {
-			foreach($packageNames as $key => $packageName) {
+		if( $packageNames ) {
+			foreach( $packageNames as $key => $packageName ) {
 				if( $packageName === '.' ) {
-					if(!$composerName) {
-						throw new \RuntimeException('Unable to determine composer package name from composer.json');
+					if( !$composerName ) {
+						throw new RuntimeException('Unable to determine composer package name from composer.json');
 					}
 
 					$packageNames[$key] = $composerName;
 				}
 			}
-		}elseif( $composerName ) {
+		} elseif( $composerName ) {
 			$packageNames = [ $composerName ];
 		}
 
-		if(!$packageNames) {
-			throw new \RuntimeException('Unable to determine composer package name from composer.json and no package names provided');
+		if( !$packageNames ) {
+			throw new RuntimeException('Unable to determine composer package name from composer.json and no package names provided');
 		}
 
 		$para = new Paragraph;

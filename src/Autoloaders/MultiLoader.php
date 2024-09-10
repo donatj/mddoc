@@ -2,12 +2,13 @@
 
 namespace donatj\MDDoc\Autoloaders;
 
+use Countable;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 
 /**
  * A simple autoloader chain
  */
-class MultiLoader implements AutoloaderInterface, \Countable {
+class MultiLoader implements AutoloaderInterface, Countable {
 
 	/** @var AutoloaderInterface[] */
 	private $loaders;

@@ -15,7 +15,9 @@ class BadgePoser extends Badge {
 	private const URL_PACKAGIST_BASE = 'https://packagist.org/packages/';
 
 	/**
-	 * The type of badge to display. One of: "version" "downloads" "unstable" "license" "monthly" "daily" "phpversion" "composerlock"
+	 * The type of badge to display. One of: "version" "downloads" "unstable" "license" "monthly" "daily" "phpversion"
+	 * "composerlock"
+	 *
 	 * @mddoc-required
 	 */
 	public const OPT_TYPE = 'type';
@@ -76,7 +78,7 @@ class BadgePoser extends Badge {
 			}
 
 			$parsed = @json_decode($data, true);
-			if( !empty($parsed['name']) && is_string($parsed['name']) ) {
+			if( is_array($parsed) && !empty($parsed['name']) && is_string($parsed['name']) ) {
 				$name = $parsed['name'];
 			}
 		}

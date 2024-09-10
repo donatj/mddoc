@@ -2,6 +2,8 @@
 
 namespace donatj\MDDoc\Exceptions;
 
-class MDDocException extends \RuntimeException {
+use RuntimeException;
+
+class MDDocException extends RuntimeException {
 
 }

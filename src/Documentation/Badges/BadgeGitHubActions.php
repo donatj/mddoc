@@ -17,8 +17,8 @@ class BadgeGitHubActions extends Badge {
 	 */
 	public const OPT_NAME = 'name';
 	/** The name of the branch to show the badge for. Defaults to the default branch. */
-	public const OPT_BRANCH        = 'branch';
-	public const OPT_EVENT         = 'event'; // @todo - this seems to be broken?
+	public const OPT_BRANCH = 'branch';
+	public const OPT_EVENT  = 'event'; // @todo - this seems to be broken?
 	/**
 	 * The filename of the workflow file to use as the badge source
 	 *

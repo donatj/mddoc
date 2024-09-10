@@ -22,7 +22,7 @@ class BadgeShielded extends Badge {
 	/** The title of the badge when displaying a static badge. */
 	public const OPT_TITLE = 'title';
 	/** The text of the badge when displaying a static badge. */
-	public const OPT_TEXT  = 'text';
+	public const OPT_TEXT = 'text';
 
 	protected function init() : void {
 		$id  = $this->getOption(self::OPT_ID);
@@ -36,12 +36,12 @@ class BadgeShielded extends Badge {
 		$color = $this->getOption(self::OPT_COLOR) ?? '';
 
 		$url .= '?' . http_build_query(array_filter([
-			'title' => $title,
-			'text'  => $text,
-			'color' => $color,
-		], static function ( $v ) {
-			return $v !== '';
-		}));
+				'title' => $title,
+				'text'  => $text,
+				'color' => $color,
+			], static function( $v ) {
+				return $v !== '';
+			}));
 
 		$url = rtrim($url, '?');
 

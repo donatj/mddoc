@@ -14,12 +14,15 @@ class BadgeScrutinizer extends Badge {
 	private const URL_SCRUTINIZER_BASE = 'https://scrutinizer-ci.com/g/';
 
 	/**
-	 * The packagist name of the Scrutinizer Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present.
+	 * The packagist name of the Scrutinizer Project. Defaults to the name key of the composer.json file in the root of
+	 * the project. Required if the composer.json file is not present.
+	 *
 	 * @mddoc-required
 	 */
 	public const OPT_NAME = 'name';
 	/**
 	 * The type of badge to display. One of: "quality" "coverage" "build-status"
+	 *
 	 * @mddoc-required
 	 */
 	public const OPT_TYPE = 'type';

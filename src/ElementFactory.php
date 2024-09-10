@@ -70,7 +70,7 @@ class ElementFactory {
 
 			if( $element::tagName() === $tagName ) {
 				$element = new $element($attributeTree, $textContent);
-				if($element instanceof LoggerAwareInterface) {
+				if( $element instanceof LoggerAwareInterface ) {
 					$element->setLogger($this->ui);
 				}
 

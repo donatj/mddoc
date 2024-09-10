@@ -2,6 +2,10 @@
 
 namespace donatj\MDDoc\Runner;
 
+use DOMAttr;
+use DOMDocument;
+use DOMElement;
+use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Autoloaders\MultiLoader;
 use donatj\MDDoc\Autoloaders\Psr0;
 use donatj\MDDoc\Autoloaders\Psr4;
@@ -9,6 +13,7 @@ use donatj\MDDoc\Documentation;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDoc\ElementFactory;
 use donatj\MDDoc\Exceptions\ConfigException;
+use RuntimeException;
 
 class ConfigParser {
 
@@ -23,10 +28,11 @@ class ConfigParser {
 	}
 
 	/**
+	 * @param array{autoloader?:AutoloaderInterface} $treeExtra
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
 	private function loadChildren(
-		\DOMElement $node,
+		DOMElement $node,
 		Documentation\AbstractNestedDoc $parent,
 		ImmutableAttributeTree $newAttributeTree,
 		array $treeExtra = []
@@ -82,7 +88,7 @@ class ConfigParser {
 
 		$children = $this->getDirectChildrenByTagName($node, 'autoloader', true);
 		foreach( $children as $child ) {
-			if( $child instanceof \DOMElement ) {
+			if( $child instanceof DOMElement ) {
 				$attributes    = $this->nodeAttr($child);
 				$newAttributes = $newAttributeTree->withAttr($attributes);
 
@@ -93,7 +99,7 @@ class ConfigParser {
 				$parent->addChildren($childDoc);
 				$childDoc->setParent($parent);
 
-				if( $childDoc instanceof AutoloaderAware && isset($treeExtra['autoloader']) ) {
+				if( $childDoc instanceof AutoloaderAware ) {
 					$childDoc->setAutoloader($treeExtra['autoloader']);
 				}
 
@@ -107,7 +113,7 @@ class ConfigParser {
 	/**
 	 * @throws ConfigException
 	 */
-	private function requireAttr( \DOMElement $node, string $attribute ) : string {
+	private function requireAttr( DOMElement $node, string $attribute ) : string {
 		if( !$value = $node->getAttribute($attribute) ) {
 			throw new ConfigException("Element `{$node->nodeName}` missing required attribute: {$attribute}");
 		}
@@ -115,11 +121,16 @@ class ConfigParser {
 		return $value;
 	}
 
-	private function nodeAttr( \DOMElement $node ) : array {
+	/**
+	 * @param \DOMElement $node
+	 * @return array<string,string>
+	 */
+	private function nodeAttr( DOMElement $node ) : array {
 		$attributes = [];
 		if( $node->hasAttributes() ) {
 			foreach( $node->attributes as $attr ) {
-				$attributes[strtolower($attr->nodeName)] = $attr->nodeValue;
+				assert($attr instanceof DOMAttr);
+				$attributes[strtolower($attr->nodeName)] = $attr->nodeValue ?? '';
 			}
 		}
 
@@ -129,8 +140,8 @@ class ConfigParser {
 	/**
 	 * Parse a config file
 	 *
-	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 * @return \donatj\MDDoc\Documentation\DocRoot
+	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
 	public function parse( string $filename ) : Documentation\DocRoot {
 		if( !is_readable($filename) ) {
@@ -138,7 +149,7 @@ class ConfigParser {
 		}
 
 		libxml_use_internal_errors(true);
-		$dom = new \DOMDocument;
+		$dom = new DOMDocument;
 		if( @$dom->load($filename) === false ) {
 			$error = libxml_get_last_error();
 			if( $error ) {
@@ -149,8 +160,8 @@ class ConfigParser {
 		}
 
 		$root = $dom->firstChild;
-		if( !$root instanceof \DOMElement ) {
-			throw new \RuntimeException('Needs a DOM element');
+		if( !$root instanceof DOMElement ) {
+			throw new RuntimeException('Needs a DOM element');
 		}
 
 		$attributeTree = (new ImmutableAttributeTree)->withAttr($this->nodeAttr($root));
@@ -172,11 +183,11 @@ class ConfigParser {
 	/**
 	 * @return \DOMElement[]
 	 */
-	private function getDirectChildrenByTagName( \DOMElement $parentNode, string $tagName, bool $exclusive = false ) : array {
+	private function getDirectChildrenByTagName( DOMElement $parentNode, string $tagName, bool $exclusive = false ) : array {
 		$result = [];
 
 		foreach( $parentNode->childNodes as $child ) {
-			if( $child instanceof \DOMElement ) {
+			if( $child instanceof DOMElement ) {
 				if( !$exclusive && $child->nodeName === $tagName ) {
 					$result[] = $child;
 				} elseif( $exclusive && $child->nodeName !== $tagName ) {

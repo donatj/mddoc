@@ -26,6 +26,7 @@ use phpDocumentor\Reflection\Php\Function_;
 use phpDocumentor\Reflection\Php\Method;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use RuntimeException;
 
 class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwareInterface {
 
@@ -72,7 +73,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	 * @return AbstractElement|string
 	 */
 	public function output( int $depth ) {
-		$file = $this->getOption(self::OPT_NAME);
+		$file = $this->requireOption(self::OPT_NAME);
 		$path = $this->getWorkingFilePath($file);
 
 		return $this->scanSourceFile($path, $depth);
@@ -185,6 +186,9 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$constantData = $reflector->getConstants();
 				foreach( $constantData as $constants ) {
 					$constant = reset($constants);
+					if( !$constant ) {
+						continue;
+					}
 
 					$visibility = (string)$constant->getVisibility();
 					if( $visibility === 'private' ) {
@@ -468,7 +472,11 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		return $document;
 	}
 
-	private function shouldSkip( DocBlock $block ) : bool {
+	private function shouldSkip( ?DocBlock $block ) : bool {
+		if( !$block ) {
+			return false;
+		}
+
 		if( $access = $block->getTagsByName('access') ) {
 			$access = reset($access);
 			if( !$access instanceof Generic ) {
@@ -681,7 +689,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		if( $this->logger ) {
 			$this->logger->notice($message, $ctx);
 		} else {
-			throw new \RuntimeException($message);
+			throw new RuntimeException($message);
 		}
 	}
 

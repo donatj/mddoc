@@ -26,12 +26,17 @@ class Replace extends AbstractNestedDoc {
 	public const OPT_REGEX = 'regex';
 
 	public function output( int $depth ) : string {
-		$regex = $this->getOption(self::OPT_REGEX);
+		/** @var "true"|"false" $regex */
+		$regex = $this->requireOption(self::OPT_REGEX);
 		$regex = strtolower($regex);
 
 		$output = '';
 		foreach( $this->getDocumentationChildren() as $child ) {
 			$result = $child->output($depth);
+			if( $result === null ) {
+				throw new ConfigException(get_class($child) . ' incorrectly used as a nested element');
+			}
+
 			if( is_string($result) ) {
 				$output .= $result;
 			} else {
@@ -39,12 +44,12 @@ class Replace extends AbstractNestedDoc {
 			}
 		}
 
-		$search  = $this->getOption(self::OPT_SEARCH);
-		$replace = $this->getOption(self::OPT_REPLACE);
+		$search  = $this->requireOption(self::OPT_SEARCH);
+		$replace = $this->requireOption(self::OPT_REPLACE);
 
 		if( $regex === 'true' ) {
 			$output = @preg_replace($search, $replace, $output);
-			if( preg_last_error() !== PREG_NO_ERROR ) {
+			if( $output === null || preg_last_error() !== PREG_NO_ERROR ) {
 				throw new ConfigException("user regex error: " . preg_last_error_msg());
 			}
 

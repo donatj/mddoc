@@ -4,6 +4,7 @@ namespace donatj\MDDoc\Reflectors;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Exceptions\ClassNotReadableException;
+use Exception;
 use phpDocumentor\Reflection\Element;
 use phpDocumentor\Reflection\File\LocalFile;
 use phpDocumentor\Reflection\Php\Class_;
@@ -12,6 +13,7 @@ use phpDocumentor\Reflection\Php\Interface_;
 use phpDocumentor\Reflection\Php\Project as PhpProject;
 use phpDocumentor\Reflection\Php\ProjectFactory;
 use phpDocumentor\Reflection\Php\Trait_;
+use RuntimeException;
 
 class TaxonomyReflector {
 
@@ -51,12 +53,12 @@ class TaxonomyReflector {
 
 		try {
 			$project = (ProjectFactory::createInstance())->create('My Project', $projectFiles);
-		} catch( \Exception $ex ) {
+		} catch( Exception $ex ) {
 			throw new ClassNotReadableException("failed to read class file", $filename, $ex);
 		}
 
 		if( !$project instanceof PhpProject ) {
-			throw new \RuntimeException("Parsed phpdoc project is not a Php\\Project");
+			throw new RuntimeException("Parsed phpdoc project is not a Php\\Project");
 		}
 
 		$fileReflector = $project->getFiles()[$filename];
@@ -76,7 +78,6 @@ class TaxonomyReflector {
 		foreach( $fileReflector->getTraits() as $trait ) {
 			$this->registerClassReflectors($trait);
 		}
-
 		//		$this->fileReflector->getClasses(); // -- I don't think this did anything.
 	}
 
@@ -122,7 +123,6 @@ class TaxonomyReflector {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
-
 				//					throw new ExecutionException("failed to locate '{$parent}'"); -- todo handle builtins
 
 			}
@@ -136,7 +136,6 @@ class TaxonomyReflector {
 						$parser     = $this->parserFactory->newInstance($filename, $loader);
 						$this->data = array_merge_recursive($this->data, $parser->data);
 					}
-
 					//						throw new ExecutionException("failed to locate '{$trait}'"); -- todo handle builtins
 
 				}
@@ -151,7 +150,6 @@ class TaxonomyReflector {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
-
 				//					throw new ExecutionException("failed to locate '{$interface}'"); -- todo handle builtins
 
 			}
@@ -164,7 +162,6 @@ class TaxonomyReflector {
 					$parser     = $this->parserFactory->newInstance($filename, $loader);
 					$this->data = array_merge_recursive($this->data, $parser->data);
 				}
-
 				//					throw new ExecutionException("failed to locate '{$interface}'"); -- todo handle builtins
 
 			}

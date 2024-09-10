@@ -18,7 +18,7 @@ abstract class AbstractElement implements Interfaces\ElementInterface {
 
 	public function __construct( ImmutableAttributeTree $attributeTree, string $textContent = '' ) {
 		$this->attributeTree = $attributeTree;
-		$this->textContent = $textContent;
+		$this->textContent   = $textContent;
 	}
 
 	/**

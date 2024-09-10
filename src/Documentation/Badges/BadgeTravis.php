@@ -9,10 +9,12 @@ namespace donatj\MDDoc\Documentation\Badges;
 class BadgeTravis extends Badge {
 
 	/**
-	 * The packagist name of the Travis Project. Defaults to the name key of the composer.json file in the root of the project. Required if the composer.json file is not present.
+	 * The packagist name of the Travis Project. Defaults to the name key of the composer.json file in the root of the
+	 * project. Required if the composer.json file is not present.
+	 *
 	 * @mddoc-required
 	 */
-	public const OPT_NAME = 'name';
+	public const  OPT_NAME        = 'name';
 	private const URL_TRAVIS_BASE = 'https://travis-ci.org/';
 
 	/** The branch to show. Defaults to "master" */

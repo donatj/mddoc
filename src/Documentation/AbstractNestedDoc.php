@@ -21,7 +21,7 @@ abstract class AbstractNestedDoc extends AbstractDocPart {
 	 * @return \donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]
 	 */
 	public function getDocumentationChildren() : array {
-		$return = [];
+		$return   = [];
 		$children = $this->getChildren();
 
 		foreach( $children as $child ) {

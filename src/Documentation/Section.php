@@ -32,6 +32,7 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDom\DocumentDepth;
 use donatj\MDDom\Header;
 
@@ -51,7 +52,12 @@ class Section extends AbstractNestedDoc {
 		$document->appendChild(new Header($title));
 
 		foreach( $this->getDocumentationChildren() as $child ) {
-			$document->appendChild($child->output($depth + 1));
+			$output = $child->output($depth + 1);
+			if( $output === null ) {
+				throw new ConfigException(get_class($child) . ' incorrectly used as a nested element');
+			}
+
+			$document->appendChild($output);
 		}
 
 		return $document;

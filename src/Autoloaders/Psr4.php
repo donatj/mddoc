@@ -19,7 +19,7 @@ class Psr4 implements AutoloaderInterface {
 
 	/**
 	 * @param string $root_namespace Namespace prefix
-	 * @param string $path           Root path
+	 * @param string $path Root path
 	 */
 	public function __construct( string $root_namespace, string $path ) {
 		$this->namespace = $this->trimSlashes($root_namespace);
@@ -43,7 +43,6 @@ class Psr4 implements AutoloaderInterface {
 			if( file_exists($filename) ) {
 				return $filename;
 			}
-
 		}
 
 		return null;

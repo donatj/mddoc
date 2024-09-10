@@ -10,6 +10,7 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\TargetNotWritableException;
 use donatj\MDDom\Document;
 use Psr\Log\LoggerAwareInterface;
@@ -49,7 +50,12 @@ class DocPage extends AbstractNestedDoc implements LoggerAwareInterface {
 		}
 
 		foreach( $this->getDocumentationChildren() as $child ) {
-			$document->appendChild($child->output(0));
+			$output = $child->output(0);
+			if( $output === null ) {
+				throw new ConfigException(get_class($child) . ' incorrectly used as a nested element');
+			}
+
+			$document->appendChild($output);
 		}
 
 		if( @file_put_contents($target, $document->exportMarkdown(-1)) === false ) {
