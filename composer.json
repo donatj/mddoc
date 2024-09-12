@@ -9,7 +9,7 @@
 		"donatj/cli-toolkit": "^0.3.1",
 		"donatj/flags": "^1.5",
 		"donatj/mddom": "^0.2.0",
-		"phpdocumentor/reflection": "~5.2.0",
+		"phpdocumentor/reflection": "~6.0.0",
 		"psr/log": "^1|^2|^3",
 		"symfony/polyfill-php80": "^1.28"
 	},
