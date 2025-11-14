@@ -295,7 +295,7 @@ namespace donatj\MDDoc\Documentation\Badges;
 
 class BadgeCoveralls {
 	/**
-	 * The BadgeCoveralls name of the Project. Required.
+	 * The BadgeCoveralls name of the Project.
 	 * 
 	 * This includes the service name, e.g. "github/donatj/php-dnf-solver"
 	 */

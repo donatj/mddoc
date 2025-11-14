@@ -288,7 +288,7 @@ Include a coverage badge from BadgeCoveralls.io
   
 #### Attributes:  
   
-- `name` - The BadgeCoveralls name of the Project. Required.  
+- `name` **(required)** - The BadgeCoveralls name of the Project.  
   
 This includes the service name, e.g. "github/donatj/php-dnf-solver"  
 - `branch` - The branch to show. Defaults to empty which shows the default branch  
