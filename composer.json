@@ -2,7 +2,7 @@
 	"name": "donatj/mddoc",
 	"description": "Powerful, User Directed Markdown Documentation Generator",
 	"require": {
-		"php": ">=7.2",
+		"php": ">=7.4",
 		"ext-dom": "*",
 		"ext-json": "*",
 		"ext-libxml": "*",
