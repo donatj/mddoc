@@ -28,13 +28,13 @@ This is done using a simple, expressive XML syntax. This includes:
 
 ## Requirements
 
-- **php**: >=7.2
+- **php**: >=7.4
 - **ext-dom**: *
 - **ext-json**: *
 - **ext-libxml**: *
 - **donatj/cli-toolkit**: ^0.3.1
 - **donatj/flags**: ^1.5
-- **donatj/mddom**: ^0.2.0
+- **donatj/mddom**: ^0.3.0
 - **phpdocumentor/reflection**: ~5.2.0
 - **psr/log**: ^1|^2|^3
 - **symfony/polyfill-php80**: ^1.28
