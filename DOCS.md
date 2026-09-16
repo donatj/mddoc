@@ -1267,6 +1267,8 @@ function __construct(array $args)
 
 - ***string[]*** `$args`
 
+
+
 ## Class: donatj\MDDoc\Reflectors\TaxonomyReflector
 
 ### Method: TaxonomyReflector->__construct
@@ -1282,12 +1284,10 @@ function __construct(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\Auto
 ### Method: TaxonomyReflector->getReflector
 
 ```php
-function getReflector() : ?\phpDocumentor\Reflection\Element
+function getReflector() : ?\donatj\MDDoc\Reflectors\Source\Element
 ```
 
-#### Returns:
-
-- ***\phpDocumentor\Reflection\Php\Class_*** | ***\phpDocumentor\Reflection\Php\Interface_*** | ***\phpDocumentor\Reflection\Php\Trait_*** | ***null***
+Returns the source class, interface, or trait declaration.
 
 ---
 
@@ -1299,7 +1299,7 @@ function getDocMethods() : array
 
 #### Returns:
 
-- ***\phpDocumentor\Reflection\DocBlock\Tags\Method[][]***
+- ***array<string,list<\donatj\MDDoc\Reflectors\Source\Tag>>***
 
 ---
 
@@ -1311,7 +1311,7 @@ function getMethods() : array
 
 #### Returns:
 
-- ***\phpDocumentor\Reflection\Php\Method[][]***
+- ***array<string,list<\donatj\MDDoc\Reflectors\Source\Element>>***
 
 ---
 
@@ -1323,7 +1323,7 @@ function getConstants() : array
 
 #### Returns:
 
-- ***\phpDocumentor\Reflection\Php\Constant[][]***
+- ***array<string,list<\donatj\MDDoc\Reflectors\Source\Element>>***
 
 ---
 
@@ -1335,7 +1335,7 @@ function getProperties() : array
 
 #### Returns:
 
-- ***\phpDocumentor\Reflection\Php\Property[][]***
+- ***array<string,list<\donatj\MDDoc\Reflectors\Source\Element>>***
 
 ---
 
@@ -1347,7 +1347,7 @@ function getFunctions() : array
 
 #### Returns:
 
-- ***\phpDocumentor\Reflection\Php\Function_[]***
+- ***array<string,\donatj\MDDoc\Reflectors\Source\Element>***
 
 ## Class: donatj\MDDoc\Reflectors\TaxonomyReflectorFactory
 

@@ -35,7 +35,8 @@ This is done using a simple, expressive XML syntax. This includes:
 - **donatj/cli-toolkit**: ^0.3.1
 - **donatj/flags**: ^1.5
 - **donatj/mddom**: ^0.3.0
-- **phpdocumentor/reflection**: ~5.2.0
+- **nikic/php-parser**: ^4.13
+- **phpstan/phpdoc-parser**: ^2.3.5
 - **psr/log**: ^1|^2|^3
 - **symfony/polyfill-php80**: ^1.28
 
