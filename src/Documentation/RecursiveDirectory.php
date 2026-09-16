@@ -25,8 +25,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 	/** A regex to filter files by - specify files to be matched */
 	public const OPT_FILE_FILTER = 'file-filter';
 
-	/** @var AutoloaderInterface */
-	private $autoloader;
+	private AutoloaderInterface $autoloader;
 
 	public function setAutoloader( AutoloaderInterface $autoloader ) : void {
 		$this->autoloader = $autoloader;

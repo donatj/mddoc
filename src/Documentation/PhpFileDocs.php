@@ -61,8 +61,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	 */
 	public const OPT_WARN_UNDOCUMENTED = 'warn-undocumented';
 
-	/** @var AutoloaderInterface */
-	private $autoloader;
+	private AutoloaderInterface $autoloader;
 
 	/**
 	 * @return AbstractElement|string
@@ -491,10 +490,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		return false;
 	}
 
-	/**
-	 * @param Element $method
-	 */
-	private function getArgumentString( $method ) : string {
+	private function getArgumentString( Element $method ) : string {
 		$req_args = [];
 		$opt_args = [];
 		foreach( $method->getArguments() as $argument ) {

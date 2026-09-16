@@ -29,11 +29,8 @@ use PHPStan\PhpDocParser\ParserConfig;
 /** @mddoc-ignore */
 class DocBlockParser {
 
-	/** @var Lexer */
-	private $lexer;
-
-	/** @var PhpStanDocBlockParser */
-	private $parser;
+	private Lexer $lexer;
+	private PhpStanDocBlockParser $parser;
 
 	public function __construct() {
 		$config    = new ParserConfig([]);

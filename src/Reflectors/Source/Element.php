@@ -5,29 +5,16 @@ namespace donatj\MDDoc\Reflectors\Source;
 /** @mddoc-ignore */
 class Element {
 
-	/** @var string */
-	private $name;
-
-	/** @var string */
-	private $fqsen;
-
-	/** @var DocBlock|null */
-	private $docBlock;
-
-	/** @var string */
-	private $visibility;
-
-	/** @var bool */
-	private $static;
+	private string $name;
+	private string $fqsen;
+	private ?DocBlock $docBlock;
+	private string $visibility;
+	private bool $static;
 
 	/** @var Argument[] */
-	private $arguments;
-
-	/** @var string */
-	private $returnType;
-
-	/** @var string|null */
-	private $value;
+	private array $arguments;
+	private string $returnType;
+	private ?string $value;
 
 	/**
 	 * @param Argument[] $arguments

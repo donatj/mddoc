@@ -5,29 +5,16 @@ namespace donatj\MDDoc\Reflectors\Source;
 /** @mddoc-ignore */
 class Tag {
 
-	/** @var string */
-	private $name;
-
-	/** @var string|null */
-	private $type;
-
-	/** @var string */
-	private $description;
-
-	/** @var string */
-	private $variableName;
-
-	/** @var string */
-	private $methodName;
-
-	/** @var bool */
-	private $static;
+	private string $name;
+	private ?string $type;
+	private string $description;
+	private string $variableName;
+	private string $methodName;
+	private bool $static;
 
 	/** @var array<int,array{name:string,type:string}> */
-	private $arguments;
-
-	/** @var bool */
-	private $valid;
+	private array $arguments;
+	private bool $valid;
 
 	/**
 	 * @param array<int,array{name:string,type:string}> $arguments

@@ -5,17 +5,10 @@ namespace donatj\MDDoc\Reflectors\Source;
 /** @mddoc-ignore */
 class Argument {
 
-	/** @var string */
-	private $name;
-
-	/** @var string */
-	private $type;
-
-	/** @var string|null */
-	private $default;
-
-	/** @var bool */
-	private $variadic;
+	private string $name;
+	private string $type;
+	private ?string $default;
+	private bool $variadic;
 
 	public function __construct( string $name, string $type = 'mixed', ?string $default = null, bool $variadic = false ) {
 		$this->name     = $name;

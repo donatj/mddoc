@@ -5,6 +5,7 @@ namespace donatj\MDDoc\Reflectors;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Exceptions\ClassNotReadableException;
 use donatj\MDDoc\Reflectors\Source\Argument;
+use donatj\MDDoc\Reflectors\Source\DocBlock;
 use donatj\MDDoc\Reflectors\Source\DocBlockParser;
 use donatj\MDDoc\Reflectors\Source\Element;
 use PhpParser\Node;
@@ -27,8 +28,7 @@ use PhpParser\PrettyPrinter\Standard;
 
 class TaxonomyReflector {
 
-	/** @var AutoloaderInterface */
-	private $autoLoader;
+	private AutoloaderInterface $autoLoader;
 
 	/**
 	 * @var array{
@@ -38,25 +38,17 @@ class TaxonomyReflector {
 	 *     properties:array<string,list<Element>>
 	 * }
 	 */
-	private $data;
+	private array $data;
 
-	/** @var TaxonomyReflectorFactory */
-	private $parserFactory;
-
-	/** @var Element|null */
-	private $reflector;
+	private TaxonomyReflectorFactory $parserFactory;
+	private ?Element $reflector = null;
 
 	/** @var array<string,Element> */
-	private $functions = [];
+	private array $functions = [];
 
-	/** @var DocBlockParser */
-	private $docBlockParser;
-
-	/** @var \donatj\MDDoc\Reflectors\Source\DocBlock|null */
-	private $fileDocBlock;
-
-	/** @var Standard */
-	private $prettyPrinter;
+	private DocBlockParser $docBlockParser;
+	private ?DocBlock $fileDocBlock = null;
+	private Standard $prettyPrinter;
 
 	/**
 	 * @throws ClassNotReadableException
@@ -382,7 +374,7 @@ class TaxonomyReflector {
 	}
 
 	/** @mddoc-ignore */
-	public function getFileDocBlock() : ?\donatj\MDDoc\Reflectors\Source\DocBlock {
+	public function getFileDocBlock() : ?DocBlock {
 		return $this->fileDocBlock;
 	}
 

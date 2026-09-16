@@ -5,14 +5,11 @@ namespace donatj\MDDoc\Reflectors\Source;
 /** @mddoc-ignore */
 class DocBlock {
 
-	/** @var string */
-	private $summary;
-
-	/** @var string */
-	private $description;
+	private string $summary;
+	private string $description;
 
 	/** @var array<string,Tag[]> */
-	private $tags;
+	private array $tags;
 
 	/**
 	 * @param array<string,Tag[]> $tags
