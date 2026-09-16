@@ -8,6 +8,9 @@ namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
+use donatj\MDDoc\Reflectors\Source\DocBlock;
+use donatj\MDDoc\Reflectors\Source\Element;
+use donatj\MDDoc\Reflectors\Source\Tag;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use donatj\MDDom\AbstractElement;
 use donatj\MDDom\Code;
@@ -17,13 +20,6 @@ use donatj\MDDom\Header;
 use donatj\MDDom\HorizontalRule;
 use donatj\MDDom\Paragraph;
 use donatj\MDDom\Text as MdText;
-use phpDocumentor\Reflection\DocBlock;
-use phpDocumentor\Reflection\DocBlock\Tags\Generic;
-use phpDocumentor\Reflection\DocBlock\Tags\InvalidTag;
-use phpDocumentor\Reflection\DocBlock\Tags\Return_;
-use phpDocumentor\Reflection\Element;
-use phpDocumentor\Reflection\Php\Function_;
-use phpDocumentor\Reflection\Php\Method;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -140,9 +136,9 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 				$return = current($block->getTagsByName('return'));
 				if( $return ) {
-					if( $return instanceof InvalidTag ) {
+					if( !$return->isValid() ) {
 						$this->logInvalidTag('Invalid @return tag', $func, $filename, $name, $return);
-					} elseif( !$return instanceof Return_ ) {
+					} elseif( $return->getType() === null ) {
 						$this->logInvalidTag('Unknown @return tag', $func, $filename, $name, $return);
 					} else {
 						$returnDoc->appendChild(new Header('Returns:'));
@@ -206,7 +202,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						);
 
 						if( $vars = $constantBlock->getTagsByName('var') ) {
-							/** @var \phpDocumentor\Reflection\DocBlock\Tags\Var_ $var */
 							$var          = reset($vars);
 							$constParts[] = '@var ' . (string)$var;
 						}
@@ -249,7 +244,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					}
 
 					if( $vars = $propertyBlock->getTagsByName('var') ) {
-						/** @var \phpDocumentor\Reflection\DocBlock\Tags\Var_ $var */
 						$var        = reset($vars);
 						$classInner .= "\n\t * @var " . (string)$var;
 					}
@@ -349,7 +343,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					$fReturnS = " : {$fReturn}";
 				}
 
-				/** @var \phpDocumentor\Reflection\DocBlock[] $blocks */
 				$blocks = [];
 
 				foreach( $methods as $subMethod ) {
@@ -426,7 +419,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						$throwsDoc = new DocumentDepth;
 						$subDocument->appendChild($throwsDoc);
 
-						/** @var \phpDocumentor\Reflection\DocBlock\Tags\Throws $throwsBlock */
 						foreach( $throwsBlocks as $throwsBlock ) {
 							$throwsParagraph = new Paragraph(
 								new MdText('**Throws**: '),
@@ -442,7 +434,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 					if( !$this->getOption(self::OPT_SKIP_METHOD_RETURNS, true) ) {
 						if( $return = current($firstBlock->getTagsByName('return')) ) {
-							if( $return instanceof InvalidTag ) {
+							if( !$return->isValid() ) {
 								$this->logInvalidTag('Invalid @return tag', $class, $filename, $name, $return);
 							} else {
 								$returnDoc = new DocumentDepth;
@@ -478,7 +470,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 		if( $access = $block->getTagsByName('access') ) {
 			$access = reset($access);
-			if( !$access instanceof Generic ) {
+			if( !$access->isValid() ) {
 				$this->logInvalidTag('Failed to parse @access tag', null, '', '', $access);
 
 				return true;
@@ -500,7 +492,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	}
 
 	/**
-	 * @param Function_|Method $method
+	 * @param Element $method
 	 */
 	private function getArgumentString( $method ) : string {
 		$req_args = [];
@@ -566,7 +558,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	}
 
 	private function formatType( ?string $type, string $default = 'mixed' ) : string {
-		$types = array_filter(explode('|', $type ?? ''));
+		$types = $this->splitTopLevelTypes($type ?? '');
 
 		if( !$types ) {
 			$types = [ $default ];
@@ -578,6 +570,44 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		}
 
 		return trim($output, ' |');
+	}
+
+	/**
+	 * Splits unions without breaking callable signatures and array shapes.
+	 *
+	 * @return string[]
+	 */
+	private function splitTopLevelTypes( string $type ) : array {
+		$types   = [];
+		$current = '';
+		$depth   = 0;
+		$length  = strlen($type);
+
+		for( $i = 0; $i < $length; $i++ ) {
+			$character = $type[$i];
+			if( strpos('(<[{', $character) !== false ) {
+				$depth++;
+			} elseif( strpos(')>]}', $character) !== false && $depth > 0 ) {
+				$depth--;
+			}
+
+			if( $character === '|' && $depth === 0 ) {
+				if( $current !== '' ) {
+					$types[] = $current;
+				}
+
+				$current = '';
+				continue;
+			}
+
+			$current .= $character;
+		}
+
+		if( $current !== '' ) {
+			$types[] = $current;
+		}
+
+		return $types;
 	}
 
 	private function smartLineTrim( string $data ) : string {
@@ -592,7 +622,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		return trim(
 			trim($block->getSummary()) .
 			"\n\n" .
-			trim($block->getDescription()->__toString())
+			trim($block->getDescription())
 		);
 	}
 
@@ -624,7 +654,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 			$output = '';
 			foreach( $methodParams as $tag ) {
-				if( $tag instanceof InvalidTag ) {
+				if( !$tag->isValid() ) {
 					$this->logger->notice('Failed to parse @param tag', [
 						'name' => $tag->getName(),
 						'data' => (string)$tag,
@@ -633,7 +663,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					continue;
 				}
 
-				if( !$tag instanceof DocBlock\Tags\Param ) {
+				if( $tag->getType() === null || $tag->getVariableName() === '' ) {
 					$this->logger->notice('Unknown @param tag', [
 						$tag->getName(),
 					]);
@@ -667,7 +697,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		?Element $element,
 		string $filename,
 		string $name,
-		DocBlock\Tag $return
+		Tag $return
 	) : void {
 		$ctx = [
 			'call' => $name,
@@ -678,11 +708,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			$ctx['item'] = $element->getFqsen();
 		}
 
-		if( $return instanceof InvalidTag ) {
-			$ex = $return->getException();
-			if( $ex ) {
-				$ctx['message'] = $ex->getMessage();
-			}
+		if( !$return->isValid() ) {
+			$ctx['message'] = $return->getDescription();
 		}
 
 		if( $this->logger ) {

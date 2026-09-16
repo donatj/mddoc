@@ -4,210 +4,418 @@ namespace donatj\MDDoc\Reflectors;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Exceptions\ClassNotReadableException;
-use phpDocumentor\Reflection\Element;
-use phpDocumentor\Reflection\File\LocalFile;
-use phpDocumentor\Reflection\Php\Class_;
-use phpDocumentor\Reflection\Php\Function_;
-use phpDocumentor\Reflection\Php\Interface_;
-use phpDocumentor\Reflection\Php\Project as PhpProject;
-use phpDocumentor\Reflection\Php\ProjectFactory;
-use phpDocumentor\Reflection\Php\Trait_;
+use donatj\MDDoc\Reflectors\Source\Argument;
+use donatj\MDDoc\Reflectors\Source\DocBlockParser;
+use donatj\MDDoc\Reflectors\Source\Element;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Node\Stmt\TraitUse;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NameResolver;
+use PhpParser\ParserFactory;
+use PhpParser\PrettyPrinter\Standard;
 
 class TaxonomyReflector {
 
 	/** @var AutoloaderInterface */
 	private $autoLoader;
+
 	/**
 	 * @var array{
-	 *     docMethods:array<string,list<\phpDocumentor\Reflection\DocBlock\Tags\Method>>,
-	 *     methods:array<string,list<\phpDocumentor\Reflection\Php\Method>>,
-	 *     constants:array<string,list<\phpDocumentor\Reflection\Php\Constant>>,
-	 *     properties:array<string,list<\phpDocumentor\Reflection\Php\Property>>
+	 *     docMethods:array<string,list<\donatj\MDDoc\Reflectors\Source\Tag>>,
+	 *     methods:array<string,list<Element>>,
+	 *     constants:array<string,list<Element>>,
+	 *     properties:array<string,list<Element>>
 	 * }
 	 */
 	private $data;
+
 	/** @var TaxonomyReflectorFactory */
 	private $parserFactory;
-	/** @var Class_|Interface_|Trait_|null */
+
+	/** @var Element|null */
 	private $reflector;
 
-	/** @var Function_[] */
+	/** @var array<string,Element> */
 	private $functions = [];
+
+	/** @var DocBlockParser */
+	private $docBlockParser;
+
+	/** @var \donatj\MDDoc\Reflectors\Source\DocBlock|null */
+	private $fileDocBlock;
+
+	/** @var Standard */
+	private $prettyPrinter;
 
 	/**
 	 * @throws ClassNotReadableException
 	 */
 	public function __construct( string $filename, AutoloaderInterface $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
-		$this->autoLoader    = $autoLoader;
-		$this->parserFactory = $parserFactory;
-		$this->data          = [
+		$this->autoLoader     = $autoLoader;
+		$this->parserFactory  = $parserFactory;
+		$this->docBlockParser = new DocBlockParser;
+		$this->prettyPrinter  = new Standard;
+		$this->data           = [
 			'docMethods' => [],
 			'methods'    => [],
 			'constants'  => [],
 			'properties' => [],
 		];
 
-		$projectFiles = [ new LocalFile($filename) ];
+		$source = @file_get_contents($filename);
+		if( $source === false ) {
+			throw new ClassNotReadableException('failed to read class file', $filename);
+		}
+
+		$this->fileDocBlock = $this->docBlockParser->parse($this->getFileDocComment($source));
 
 		try {
-			$project = (ProjectFactory::createInstance())->create('My Project', $projectFiles);
+			$parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+			$nodes  = $parser->parse($source);
+
+			$traverser = new NodeTraverser;
+			$traverser->addVisitor(new NameResolver);
+			$nodes = $traverser->traverse($nodes ?? []);
 		} catch( \Exception $ex ) {
-			throw new ClassNotReadableException("failed to read class file", $filename, $ex);
+			throw new ClassNotReadableException('failed to read class file', $filename, $ex);
 		}
 
-		if( !$project instanceof PhpProject ) {
-			throw new \RuntimeException("Parsed phpdoc project is not a Php\\Project");
-		}
-
-		$fileReflector = $project->getFiles()[$filename];
-
-		foreach( $fileReflector->getFunctions() as $function ) {
-			$this->functions[$function->getName()] = $function;
-		}
-
-		foreach( $fileReflector->getInterfaces() as $interfaces ) {
-			$this->registerClassReflectors($interfaces);
-		}
-
-		foreach( $fileReflector->getClasses() as $class ) {
-			$this->registerClassReflectors($class);
-		}
-
-		foreach( $fileReflector->getTraits() as $trait ) {
-			$this->registerClassReflectors($trait);
-		}
-
-		//		$this->fileReflector->getClasses(); // -- I don't think this did anything.
+		$this->registerStatements($nodes);
 	}
 
 	/**
-	 * @param Class_|Interface_|Trait_ $reflector
+	 * @param Node[] $nodes
 	 */
-	private function registerClassReflectors( Element $reflector ) : void {
+	private function registerStatements( array $nodes, string $namespace = '', array $imports = [] ) : void {
+		foreach( $nodes as $node ) {
+			if( $node instanceof Namespace_ ) {
+				$this->registerStatements($node->stmts, $node->name === null ? '' : $node->name->toString(), $this->importsFromNodes($node->stmts));
+			} elseif( $node instanceof Function_ ) {
+				$function                            = $this->elementFromFunction($node, $namespace, $imports);
+				$this->functions[$function->getName()] = $function;
+			} elseif( $node instanceof Class_ || $node instanceof Interface_ || $node instanceof Trait_ ) {
+				$this->registerClassReflector($node, $namespace, $imports);
+			}
+		}
+	}
+
+	/**
+	 * @param Class_|Interface_|Trait_ $node
+	 */
+	private function registerClassReflector( Node $node, string $namespace, array $imports ) : void {
+		$reflector = new Element(
+			$node->name === null ? '' : $node->name->toString(),
+			$this->getNamespacedName($node),
+			$this->docBlockParser->parse($this->getDocComment($node), $namespace, $imports)
+		);
+
 		if( !$this->reflector ) {
 			$this->reflector = $reflector;
 		}
 
-		$loader = $this->autoLoader;
-
-		$docBlock = $reflector->getDocBlock();
-		if( $docBlock ) {
-			/** @var \phpDocumentor\Reflection\DocBlock\Tags\Method[] $docMethods */
-			$docMethods = $docBlock->getTagsByName('method');
-			foreach( $docMethods as $docMethod ) {
+		if( $docBlock = $reflector->getDocBlock() ) {
+			foreach( $docBlock->getTagsByName('method') as $docMethod ) {
 				$this->data['docMethods'][$docMethod->getMethodName()][] = $docMethod;
 			}
 		}
 
-		foreach( $reflector->getMethods() as $method ) {
-			$this->data['methods'][$method->getName()][] = $method;
-		}
+		foreach( $node->stmts as $statement ) {
+			if( $statement instanceof ClassMethod ) {
+				$method = $this->elementFromMethod($statement, $reflector->getFqsen(), $namespace, $imports);
+				$this->data['methods'][$method->getName()][] = $method;
 
-		if( !$reflector instanceof Trait_ ) {
-			foreach( $reflector->getConstants() as $constant ) {
-				$this->data['constants'][$constant->getName()][] = $constant;
-			}
-		}
-
-		if( method_exists($reflector, 'getProperties') ) {
-			foreach( $reflector->getProperties() as $property ) {
-				$this->data['properties'][$property->getName()][] = $property;
-			}
-		}
-
-		if( $reflector instanceof Class_ ) {
-			if( $parent = $reflector->getParent() ) {
-				$filename = $loader($parent->__toString());
-				if( $filename && is_readable($filename) ) {
-					$parser     = $this->parserFactory->newInstance($filename, $loader);
-					$this->data = array_merge_recursive($this->data, $parser->data);
+				if( $method->getName() === '__construct' ) {
+					$this->registerPromotedProperties($statement, $reflector);
 				}
-
-				//					throw new ExecutionException("failed to locate '{$parent}'"); -- todo handle builtins
-
+			} elseif( $statement instanceof ClassConst && !($node instanceof Trait_) ) {
+				foreach( $statement->consts as $const ) {
+					$constant = new Element(
+						$const->name->toString(),
+						$reflector->getFqsen() . '::' . $const->name->toString(),
+						$this->docBlockParser->parse($this->getDocComment($statement), $namespace, $imports),
+						$this->visibility($statement),
+						false,
+						[],
+						'mixed',
+						$this->prettyPrinter->prettyPrintExpr($const->value)
+					);
+					$this->data['constants'][$constant->getName()][] = $constant;
+				}
+			} elseif( $statement instanceof Property ) {
+				foreach( $statement->props as $property ) {
+					$default = $property->default === null ? null : $this->prettyPrinter->prettyPrintExpr($property->default);
+					$sourceProperty = new Element(
+						$property->name->toString(),
+						$reflector->getFqsen() . '::$' . $property->name->toString(),
+						$this->docBlockParser->parse($this->getDocComment($statement), $namespace, $imports),
+						$this->visibility($statement),
+						$statement->isStatic(),
+						[],
+						'mixed',
+						$default
+					);
+					$this->data['properties'][$sourceProperty->getName()][] = $sourceProperty;
+				}
 			}
 		}
 
-		if( $reflector instanceof Class_ || $reflector instanceof Trait_ ) {
-			if( $traits = $reflector->getUsedTraits() ) {
-				foreach( $traits as $trait ) {
-					$filename = $loader($trait);
-					if( $filename && is_readable($filename) ) {
-						$parser     = $this->parserFactory->newInstance($filename, $loader);
-						$this->data = array_merge_recursive($this->data, $parser->data);
+		if( $node instanceof Class_ && $node->extends !== null ) {
+			$this->mergeDependency((string)$node->extends);
+		}
+
+		if( $node instanceof Class_ || $node instanceof Trait_ ) {
+			foreach( $node->stmts as $statement ) {
+				if( $statement instanceof TraitUse ) {
+					foreach( $statement->traits as $trait ) {
+						$this->mergeDependency((string)$trait);
 					}
-
-					//						throw new ExecutionException("failed to locate '{$trait}'"); -- todo handle builtins
-
 				}
 			}
 		}
 
-		if( $reflector instanceof Interface_ ) {
-			foreach( $reflector->getParents() as $interface ) {
-				$filename = $loader($interface);
-
-				if( $filename && is_readable($filename) ) {
-					$parser     = $this->parserFactory->newInstance($filename, $loader);
-					$this->data = array_merge_recursive($this->data, $parser->data);
-				}
-
-				//					throw new ExecutionException("failed to locate '{$interface}'"); -- todo handle builtins
-
+		if( $node instanceof Interface_ ) {
+			foreach( $node->extends as $interface ) {
+				$this->mergeDependency((string)$interface);
 			}
 		}
 
-		if( method_exists($reflector, 'getInterfaces') ) {
-			foreach( $reflector->getInterfaces() as $interface ) {
-				$filename = $loader($interface);
-				if( $filename && is_readable($filename) ) {
-					$parser     = $this->parserFactory->newInstance($filename, $loader);
-					$this->data = array_merge_recursive($this->data, $parser->data);
-				}
-
-				//					throw new ExecutionException("failed to locate '{$interface}'"); -- todo handle builtins
-
+		if( $node instanceof Class_ ) {
+			foreach( $node->implements as $interface ) {
+				$this->mergeDependency((string)$interface);
 			}
 		}
 	}
 
+	private function mergeDependency( string $name ) : void {
+		$filename = ($this->autoLoader)($name);
+		if( $filename && is_readable($filename) ) {
+			$parser     = $this->parserFactory->newInstance($filename, $this->autoLoader);
+			$this->data = array_merge_recursive($this->data, $parser->data);
+		}
+	}
+
+	private function registerPromotedProperties( ClassMethod $method, Element $class ) : void {
+		foreach( $method->params as $param ) {
+			if( $param->flags === 0 ) {
+				continue;
+			}
+
+			$default = $param->default === null ? null : $this->prettyPrinter->prettyPrintExpr($param->default);
+			$property = new Element(
+				$param->var->name,
+				$class->getFqsen() . '::$' . $param->var->name,
+				null,
+				$this->visibilityFromFlags($param->flags),
+				($param->flags & Class_::MODIFIER_STATIC) !== 0,
+				[],
+				'mixed',
+				$default
+			);
+
+			$this->data['properties'][$property->getName()][] = $property;
+		}
+	}
+
+	private function elementFromFunction( Function_ $node, string $namespace, array $imports ) : Element {
+		$name = $node->name->toString();
+
+		return new Element(
+			$name,
+			$this->getNamespacedName($node),
+			$this->docBlockParser->parse($this->getDocComment($node), $namespace, $imports),
+			'public',
+			false,
+			$this->argumentsFromNode($node),
+			$this->typeFromNode($node->returnType)
+		);
+	}
+
+	private function elementFromMethod( ClassMethod $node, string $className, string $namespace, array $imports ) : Element {
+		$name = $node->name->toString();
+
+		return new Element(
+			$name,
+			$className . '::' . $name . '()',
+			$this->docBlockParser->parse($this->getDocComment($node), $namespace, $imports),
+			$this->visibility($node),
+			$node->isStatic(),
+			$this->argumentsFromNode($node),
+			$this->typeFromNode($node->returnType)
+		);
+	}
+
 	/**
-	 * @return Class_|Interface_|Trait_|null
+	 * @param Function_|ClassMethod $node
+	 * @return Argument[]
 	 */
+	private function argumentsFromNode( Node $node ) : array {
+		$arguments = [];
+		foreach( $node->params as $param ) {
+			$arguments[] = new Argument(
+				$param->var->name,
+				$this->typeFromNode($param->type),
+				$param->default === null ? null : $this->prettyPrinter->prettyPrintExpr($param->default),
+				$param->variadic
+			);
+		}
+
+		return $arguments;
+	}
+
+	private function getNamespacedName( Node $node ) : string {
+		$name = property_exists($node, 'namespacedName') ? $node->namespacedName : null;
+
+		return $name instanceof Name ? '\\' . $name->toString() : '';
+	}
+
+	private function getDocComment( Node $node ) : ?string {
+		$comment = $node->getDocComment();
+
+		return $comment === null ? null : $comment->getText();
+	}
+
+	private function getFileDocComment( string $source ) : ?string {
+		foreach( token_get_all($source) as $token ) {
+			if( !is_array($token) ) {
+				continue;
+			}
+
+			if( $token[0] === T_NAMESPACE ) {
+				return null;
+			}
+
+			if( $token[0] === T_DOC_COMMENT ) {
+				return $token[1];
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param Node[] $nodes
+	 * @return array<string,string>
+	 */
+	private function importsFromNodes( array $nodes ) : array {
+		$imports = [];
+		foreach( $nodes as $node ) {
+			if( !$node instanceof Use_ || $node->type !== Use_::TYPE_NORMAL ) {
+				continue;
+			}
+
+			foreach( $node->uses as $use ) {
+				$imports[strtolower($use->getAlias()->toString())] = $use->name->toString();
+			}
+		}
+
+		return $imports;
+	}
+
+	private function typeFromNode( ?Node $type ) : string {
+		if( $type === null ) {
+			return 'mixed';
+		}
+
+		if( $type instanceof FullyQualified ) {
+			return '\\' . (string)$type;
+		}
+
+		if( $type instanceof Name ) {
+			return (string)$type;
+		}
+
+		if( $type instanceof Node\NullableType ) {
+			return '?' . $this->typeFromNode($type->type);
+		}
+
+		if( $type instanceof Node\UnionType || $type instanceof Node\IntersectionType ) {
+			$separator = $type instanceof Node\UnionType ? '|' : '&';
+			$types     = [];
+			foreach( $type->types as $member ) {
+				$types[] = $this->typeFromNode($member);
+			}
+
+			return implode($separator, $types);
+		}
+
+		return (string)$type;
+	}
+
+	private function visibility( Node $node ) : string {
+		if( method_exists($node, 'isPrivate') && $node->isPrivate() ) {
+			return 'private';
+		}
+
+		if( method_exists($node, 'isProtected') && $node->isProtected() ) {
+			return 'protected';
+		}
+
+		return 'public';
+	}
+
+	private function visibilityFromFlags( int $flags ) : string {
+		if( ($flags & Class_::MODIFIER_PRIVATE) !== 0 ) {
+			return 'private';
+		}
+
+		if( ($flags & Class_::MODIFIER_PROTECTED) !== 0 ) {
+			return 'protected';
+		}
+
+		return 'public';
+	}
+
+	/** Returns the source class, interface, or trait declaration. */
 	public function getReflector() : ?Element {
 		return $this->reflector;
 	}
 
+	/** @mddoc-ignore */
+	public function getFileDocBlock() : ?\donatj\MDDoc\Reflectors\Source\DocBlock {
+		return $this->fileDocBlock;
+	}
+
 	/**
-	 * @return \phpDocumentor\Reflection\DocBlock\Tags\Method[][]
+	 * @return array<string,list<\donatj\MDDoc\Reflectors\Source\Tag>>
 	 */
 	public function getDocMethods() : array {
 		return $this->data['docMethods'];
 	}
 
 	/**
-	 * @return \phpDocumentor\Reflection\Php\Method[][]
+	 * @return array<string,list<Element>>
 	 */
 	public function getMethods() : array {
 		return $this->data['methods'];
 	}
 
 	/**
-	 * @return \phpDocumentor\Reflection\Php\Constant[][]
+	 * @return array<string,list<Element>>
 	 */
 	public function getConstants() : array {
 		return $this->data['constants'];
 	}
 
 	/**
-	 * @return \phpDocumentor\Reflection\Php\Property[][]
+	 * @return array<string,list<Element>>
 	 */
 	public function getProperties() : array {
 		return $this->data['properties'];
 	}
 
 	/**
-	 * @return \phpDocumentor\Reflection\Php\Function_[]
+	 * @return array<string,Element>
 	 */
 	public function getFunctions() : array {
 		return $this->functions;

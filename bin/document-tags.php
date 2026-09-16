@@ -2,18 +2,17 @@
 <?php
 
 use donatj\MDDoc\Documentation\AbstractNestedDoc;
-use donatj\MDDoc\Documentation\Interfaces\DocumentationInterface;
 use donatj\MDDoc\Documentation\Interfaces\ElementInterface;
 use donatj\MDDoc\ElementFactory;
 use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDoc\Autoloaders\NullLoader;
+use donatj\MDDoc\Reflectors\Source\DocBlock;
+use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use donatj\MDDom\Code;
 use donatj\MDDom\Document;
 use donatj\MDDom\DocumentDepth;
 use donatj\MDDom\Header;
 use donatj\MDDom\Paragraph;
-use phpDocumentor\Reflection\DocBlock;
-use phpDocumentor\Reflection\File\LocalFile;
-use phpDocumentor\Reflection\Php\ProjectFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -23,8 +22,7 @@ foreach( ElementFactory::DEFAULT_ELEMENTS as $documentor ) {
 	$reflector = new ReflectionClass($documentor);
 	$filename  = $reflector->getFileName();
 
-	$project = (ProjectFactory::createInstance())->create('My Project', [ new LocalFile($filename) ]);
-	$file    = $project->getFiles()[$filename];
+	$source = (new TaxonomyReflectorFactory)->newInstance($filename, new NullLoader);
 
 
 	if( !is_subclass_of($documentor, ElementInterface::class) ) {
@@ -38,20 +36,23 @@ foreach( ElementFactory::DEFAULT_ELEMENTS as $documentor ) {
 
 	$doc->appendChild(new Header(new Code($headerText)));
 
-	$block = $file->getDocBlock();
+	$block = $source->getFileDocBlock();
 	if( $block ) {
 		$doc->appendChild(new Paragraph(getDocStr($block)));
 	}
 
-	$classes = $file->getClasses();
-	foreach( $classes as $class ) {
-		$constants = $class->getConstants();
-		if( $constants ) {
+	$constants = $source->getConstants();
+	if( $constants ) {
 			$constantDoc = new DocumentDepth(new Header('Attributes:'));
 			$doc->appendChild($constantDoc);
 
 			$attributes = '';
-			foreach( $constants as $constant ) {
+			foreach( $constants as $constantList ) {
+				$constant = reset($constantList);
+				if( !$constant ) {
+					continue;
+				}
+
 				if( strpos($constant->getName(), 'OPT_') !== 0 ) {
 					continue;
 				}
@@ -82,7 +83,6 @@ foreach( ElementFactory::DEFAULT_ELEMENTS as $documentor ) {
 
 			$constantDoc->appendChild(new Paragraph($attributes));
 		}
-	}
 }
 
 
@@ -93,6 +93,6 @@ function getDocStr( DocBlock $block ) : string {
 	return trim(
 		trim($block->getSummary()) .
 		"\n\n" .
-		trim($block->getDescription()->__toString())
+		trim($block->getDescription())
 	);
 }
