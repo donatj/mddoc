@@ -1267,8 +1267,6 @@ function __construct(array $args)
 
 - ***string[]*** `$args`
 
-
-
 ## Class: donatj\MDDoc\Reflectors\TaxonomyReflector
 
 ### Method: TaxonomyReflector->__construct
