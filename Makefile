@@ -6,6 +6,7 @@ README.md DOCS.md: $(SRC_FILES)
 .PHONY: test
 test: cs
 	./vendor/bin/parallel-lint src
+	php test/phpdoc-types.php
 
 .PHONY: cs
 cs:
