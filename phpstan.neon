@@ -2,4 +2,4 @@ parameters:
 	level: 9
 	paths:
 		- src
-	phpVersion: 70200
+	phpVersion: 70400
