@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasImportTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
@@ -53,6 +54,8 @@ class DocBlockParser {
 				$typeNames[$child->value->name] = true;
 			} elseif( $child->value instanceof TypeAliasTagValueNode ) {
 				$typeNames[$child->value->alias] = true;
+			} elseif( $child->value instanceof TypeAliasImportTagValueNode ) {
+				$typeNames[$child->value->importedAs ?? $child->value->importedAlias] = true;
 			}
 		}
 

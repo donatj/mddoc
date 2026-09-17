@@ -55,6 +55,15 @@ class ModernTypes {
 	}
 
 	/**
+	 * @phpstan-import-type ExternalItem from ExternalTypes
+	 * @phpstan-import-type OtherItem from ExternalTypes as ImportedItem
+	 * @param ExternalItem $external
+	 * @param ImportedItem $imported
+	 */
+	public function importedAliases( $external, $imported ) {
+	}
+
+	/**
 	 * @param \Countable&(\Iterator|\Stringable) $intersection
 	 */
 	public function compoundIntersection( $intersection ) {

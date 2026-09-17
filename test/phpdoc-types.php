@@ -36,6 +36,8 @@ try {
 		'***T*** `$template`',
 		'***Item*** `$item`',
 		'***array-key*** `$key`',
+		'***ExternalItem*** `$external`',
+		'***ImportedItem*** `$imported`',
 		'***\\Countable&(\\Iterator|\\Stringable)*** `$intersection`',
 		'***(\\Countable&\\Iterator)*** | ***\\Stringable*** `$union`',
 		'***?(\\Countable|\\Iterator)*** `$nullable`',
