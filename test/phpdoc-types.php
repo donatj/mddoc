@@ -12,12 +12,14 @@ if( !mkdir($tempDir, 0700) ) {
 try {
 	$output = $tempDir . '/README.md';
 	$source = realpath(__DIR__ . '/fixtures/phpdoc-types/ModernTypes.php');
+	$globalImports = realpath(__DIR__ . '/fixtures/phpdoc-types/GlobalImports.php');
 	$config = $tempDir . '/mddoc.xml';
 
 	file_put_contents($config, sprintf(
-		'<mddoc><docpage target="%s"><file name="%s" /></docpage></mddoc>',
+		'<mddoc><docpage target="%s"><file name="%s" /><file name="%s" /></docpage></mddoc>',
 		htmlspecialchars($output, ENT_XML1),
-		htmlspecialchars($source, ENT_XML1)
+		htmlspecialchars($source, ENT_XML1),
+		htmlspecialchars($globalImports, ENT_XML1)
 	));
 
 	new MDDoc([ 'mddoc', $config ]);
@@ -30,6 +32,7 @@ try {
 		'**Throws**: `\\RuntimeException`',
 		'function find(callable(string|int): bool $filter) : array<string,int>',
 		'@var array{label: string,callback: callable(string|int): bool}',
+		'***\\RuntimeException***',
 	];
 
 	foreach( $expected as $needle ) {

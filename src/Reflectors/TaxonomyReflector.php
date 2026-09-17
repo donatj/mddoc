@@ -83,7 +83,7 @@ class TaxonomyReflector {
 			throw new ClassNotReadableException('failed to read class file', $filename, $ex);
 		}
 
-		$this->registerStatements($nodes);
+		$this->registerStatements($nodes, '', $this->importsFromNodes($nodes));
 	}
 
 	/**
