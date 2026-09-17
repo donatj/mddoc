@@ -185,10 +185,16 @@ class DocBlockParser {
 		}
 
 		if( $type instanceof UnionTypeNode || $type instanceof IntersectionTypeNode ) {
-			$separator = $type instanceof UnionTypeNode ? '|' : '&';
+			$isUnion   = $type instanceof UnionTypeNode;
+			$separator = $isUnion ? '|' : '&';
 			$types     = [];
 			foreach( $type->types as $member ) {
-				$types[] = $this->formatType($member, $namespace, $imports, $typeNames);
+				$memberType = $this->formatType($member, $namespace, $imports, $typeNames);
+				if( ($isUnion && $member instanceof IntersectionTypeNode) || (!$isUnion && $member instanceof UnionTypeNode) ) {
+					$memberType = "({$memberType})";
+				}
+
+				$types[] = $memberType;
 			}
 
 			return implode($separator, $types);

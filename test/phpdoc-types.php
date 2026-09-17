@@ -36,6 +36,8 @@ try {
 		'***T*** `$template`',
 		'***Item*** `$item`',
 		'***array-key*** `$key`',
+		'***\\Countable&(\\Iterator|\\Stringable)*** `$intersection`',
+		'***(\\Countable&\\Iterator)*** | ***\\Stringable*** `$union`',
 		'**Throws**: `\\RuntimeException`',
 		'function find(callable(string|int): bool $filter) : array<string,int>',
 		'@var array{label: string,callback: callable(string|int): bool}',

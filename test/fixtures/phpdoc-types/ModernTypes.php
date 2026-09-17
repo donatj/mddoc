@@ -54,6 +54,18 @@ class ModernTypes {
 	public function contextualTypes( $template, $item, $key ) {
 	}
 
+	/**
+	 * @param \Countable&(\Iterator|\Stringable) $intersection
+	 */
+	public function compoundIntersection( $intersection ) {
+	}
+
+	/**
+	 * @param (\Countable&\Iterator)|\Stringable $union
+	 */
+	public function compoundUnion( $union ) {
+	}
+
 	/** @return mixed */
 	public function dnf( (\Countable&\Iterator)|\Stringable $value ) : (\Countable&\Iterator)|\Stringable {
 	}
