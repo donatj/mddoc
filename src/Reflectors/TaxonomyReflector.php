@@ -288,7 +288,8 @@ class TaxonomyReflector {
 	}
 
 	private function getFileDocComment( string $source ) : ?string {
-		foreach( token_get_all($source) as $token ) {
+		$tokens = token_get_all($source);
+		foreach( $tokens as $index => $token ) {
 			if( !is_array($token) ) {
 				continue;
 			}
@@ -298,6 +299,26 @@ class TaxonomyReflector {
 			}
 
 			if( $token[0] === T_DOC_COMMENT ) {
+				foreach( array_slice($tokens, $index + 1) as $next ) {
+					if( !is_array($next) ) {
+						if( trim($next) === '' ) {
+							continue;
+						}
+
+						return $token[1];
+					}
+
+					if( $next[0] === T_WHITESPACE || $next[0] === T_COMMENT || $next[0] === T_ABSTRACT || $next[0] === T_FINAL ) {
+						continue;
+					}
+
+					if( $next[0] === T_CLASS || $next[0] === T_INTERFACE || $next[0] === T_TRAIT || $next[0] === T_FUNCTION || (defined('T_ENUM') && $next[0] === constant('T_ENUM')) ) {
+						return null;
+					}
+
+					return $token[1];
+				}
+
 				return $token[1];
 			}
 		}

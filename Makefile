@@ -8,6 +8,7 @@ test: cs
 	./vendor/bin/parallel-lint src
 	php test/phpdoc-types.php
 	php test/recursive-directory.php
+	php test/file-docblocks.php
 
 .PHONY: cs
 cs:
