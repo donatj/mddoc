@@ -2,6 +2,7 @@
 
 namespace donatj\MDDoc;
 
+use Composer\InstalledVersions;
 use donatj\Flags;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\MDDocException;
@@ -13,8 +14,6 @@ use donatj\MDDoc\Runner\TextUI;
  * Application MDDoc
  */
 class MDDoc {
-
-	public const VERSION = "0.1.0";
 
 	private const CONFIG_FILES = [
 		"mddoc.xml",
@@ -97,7 +96,9 @@ class MDDoc {
 	}
 
 	private static function versionMarker( TextUI $ui ) : void {
-		$ui->println("MDDoc " . self::VERSION . " by Jesse G. Donat" . PHP_EOL);
+		$version = InstalledVersions::getPrettyVersion('donatj/mddoc') ?? 'unknown';
+
+		$ui->println("MDDoc {$version} by Jesse G. Donat" . PHP_EOL);
 	}
 
 }
