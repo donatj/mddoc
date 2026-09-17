@@ -8,7 +8,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
@@ -42,51 +44,65 @@ class DocBlockParser {
 
 	/**
 	 * @param array<string,string> $imports
+	 * @param array<string,true> $typeNames
 	 */
-	public function parse( ?string $comment, string $namespace = '', array $imports = [] ) : ?DocBlock {
+	public function parse( ?string $comment, string $namespace = '', array $imports = [], array $typeNames = [] ) : ?DocBlock {
 		if( $comment === null ) {
 			return null;
 		}
 
 		$doc = $this->parser->parse(new TokenIterator($this->lexer->tokenize($comment)));
 
+		foreach( $doc->children as $child ) {
+			if( !$child instanceof PhpDocTagNode ) {
+				continue;
+			}
+
+			if( $child->value instanceof TemplateTagValueNode ) {
+				$typeNames[$child->value->name] = true;
+			} elseif( $child->value instanceof TypeAliasTagValueNode ) {
+				$typeNames[$child->value->alias] = true;
+			}
+		}
+
 		$tags = [];
 		foreach( $doc->children as $child ) {
 			if( $child instanceof PhpDocTagNode ) {
-				$tag = $this->tagFromNode($child, $namespace, $imports);
+				$tag = $this->tagFromNode($child, $namespace, $imports, $typeNames);
 				$tags[$tag->getName()][] = $tag;
 			}
 		}
 
 		list($summary, $description) = $this->splitText($this->textFromComment($comment));
 
-		return new DocBlock($summary, $description, $tags);
+		return new DocBlock($summary, $description, $tags, $typeNames);
 	}
 
 	/**
 	 * @param array<string,string> $imports
+	 * @param array<string,true> $typeNames
 	 */
-	private function tagFromNode( PhpDocTagNode $node, string $namespace, array $imports ) : Tag {
+	private function tagFromNode( PhpDocTagNode $node, string $namespace, array $imports, array $typeNames ) : Tag {
 		$name  = ltrim($node->name, '@');
 		$value = $node->value;
 
 		if( $value instanceof ParamTagValueNode ) {
 			return new Tag(
 				$name,
-				$this->formatType($value->type, $namespace, $imports),
+				$this->formatType($value->type, $namespace, $imports, $typeNames),
 				$this->normaliseTagDescription($value->description),
 				ltrim($value->parameterName, '$')
 			);
 		}
 
 		if( $value instanceof ReturnTagValueNode || $value instanceof ThrowsTagValueNode ) {
-			return new Tag($name, $this->formatType($value->type, $namespace, $imports), $this->normaliseTagDescription($value->description));
+			return new Tag($name, $this->formatType($value->type, $namespace, $imports, $typeNames), $this->normaliseTagDescription($value->description));
 		}
 
 		if( $value instanceof VarTagValueNode ) {
 			return new Tag(
 				$name,
-				$this->formatType($value->type, $namespace, $imports),
+				$this->formatType($value->type, $namespace, $imports, $typeNames),
 				$this->normaliseTagDescription($value->description),
 				ltrim($value->variableName, '$')
 			);
@@ -97,13 +113,13 @@ class DocBlockParser {
 			foreach( $value->parameters as $parameter ) {
 				$args[] = [
 					'name' => ltrim($parameter->parameterName, '$'),
-					'type' => $parameter->type === null ? 'mixed' : $this->formatType($parameter->type, $namespace, $imports),
+					'type' => $parameter->type === null ? 'mixed' : $this->formatType($parameter->type, $namespace, $imports, $typeNames),
 				];
 			}
 
 			return new Tag(
 				$name,
-				$value->returnType === null ? 'mixed' : $this->formatType($value->returnType, $namespace, $imports),
+				$value->returnType === null ? 'mixed' : $this->formatType($value->returnType, $namespace, $imports, $typeNames),
 				$this->normaliseTagDescription($value->description),
 				'',
 				$value->methodName,
@@ -125,10 +141,11 @@ class DocBlockParser {
 
 	/**
 	 * @param array<string,string> $imports
+	 * @param array<string,true> $typeNames
 	 */
-	private function formatType( TypeNode $type, string $namespace, array $imports ) : string {
+	private function formatType( TypeNode $type, string $namespace, array $imports, array $typeNames ) : string {
 		if( $type instanceof ArrayTypeNode ) {
-			$innerType = $this->formatType($type->type, $namespace, $imports);
+			$innerType = $this->formatType($type->type, $namespace, $imports, $typeNames);
 			if( $type->type instanceof UnionTypeNode || $type->type instanceof IntersectionTypeNode || $type->type instanceof NullableTypeNode ) {
 				$innerType = "({$innerType})";
 			}
@@ -140,7 +157,7 @@ class DocBlockParser {
 			$items = [];
 			foreach( $type->items as $item ) {
 				$key     = $item->keyName === null ? '' : $item->keyName . ($item->optional ? '?' : '') . ': ';
-				$items[] = $key . $this->formatType($item->valueType, $namespace, $imports);
+				$items[] = $key . $this->formatType($item->valueType, $namespace, $imports, $typeNames);
 			}
 
 			if( !$type->sealed ) {
@@ -157,32 +174,32 @@ class DocBlockParser {
 					($parameter->isReference ? '&' : '') .
 					($parameter->isVariadic ? '...' : '') .
 					$parameter->parameterName;
-				$parameters[] = $this->formatType($parameter->type, $namespace, $imports) .
+				$parameters[] = $this->formatType($parameter->type, $namespace, $imports, $typeNames) .
 					($suffix === '' ? '' : ' ' . $suffix) .
 					($parameter->isOptional ? '=' : '');
 			}
 
-			return $this->resolveIdentifier($type->identifier->name, $namespace, $imports) .
+			return $this->resolveIdentifier($type->identifier->name, $namespace, $imports, $typeNames) .
 				'(' . implode(',', $parameters) . '): ' .
-				$this->formatType($type->returnType, $namespace, $imports);
+				$this->formatType($type->returnType, $namespace, $imports, $typeNames);
 		}
 
 		if( $type instanceof UnionTypeNode || $type instanceof IntersectionTypeNode ) {
 			$separator = $type instanceof UnionTypeNode ? '|' : '&';
 			$types     = [];
 			foreach( $type->types as $member ) {
-				$types[] = $this->formatType($member, $namespace, $imports);
+				$types[] = $this->formatType($member, $namespace, $imports, $typeNames);
 			}
 
 			return implode($separator, $types);
 		}
 
 		if( $type instanceof NullableTypeNode ) {
-			return '?' . $this->formatType($type->type, $namespace, $imports);
+			return '?' . $this->formatType($type->type, $namespace, $imports, $typeNames);
 		}
 
 		if( $type instanceof GenericTypeNode ) {
-			$baseType = $this->resolveIdentifier($type->type->name, $namespace, $imports);
+			$baseType = $this->resolveIdentifier($type->type->name, $namespace, $imports, $typeNames);
 			$types = [];
 			foreach( $type->genericTypes as $index => $member ) {
 				$variance = $type->variances[$index] ?? GenericTypeNode::VARIANCE_INVARIANT;
@@ -193,7 +210,7 @@ class DocBlockParser {
 
 				$types[] =
 					($variance === GenericTypeNode::VARIANCE_INVARIANT ? '' : $variance . ' ') .
-					$this->formatType($member, $namespace, $imports);
+					$this->formatType($member, $namespace, $imports, $typeNames);
 			}
 
 			if( $baseType === 'array' && count($types) === 1 ) {
@@ -204,7 +221,7 @@ class DocBlockParser {
 		}
 
 		if( $type instanceof IdentifierTypeNode ) {
-			return $this->resolveIdentifier($type->name, $namespace, $imports);
+			return $this->resolveIdentifier($type->name, $namespace, $imports, $typeNames);
 		}
 
 		return preg_replace('/\s*([|&,])\s*/', '$1', (string)$type);
@@ -212,9 +229,10 @@ class DocBlockParser {
 
 	/**
 	 * @param array<string,string> $imports
+	 * @param array<string,true> $typeNames
 	 */
-	private function resolveIdentifier( string $name, string $namespace, array $imports ) : string {
-		if( $name === '' || $name[0] === '\\' || in_array(strtolower($name), [
+	private function resolveIdentifier( string $name, string $namespace, array $imports, array $typeNames ) : string {
+		if( $name === '' || $name[0] === '\\' || isset($typeNames[$name]) || strpos($name, '-') !== false || in_array(strtolower($name), [
 			'array', 'bool', 'boolean', 'callable', 'class-string', 'closed-resource', 'false',
 			'float', 'int', 'integer', 'iterable', 'list', 'mixed', 'never', 'null', 'numeric',
 			'object', 'open-resource', 'parent', 'positive-int', 'resource', 'scalar', 'self',

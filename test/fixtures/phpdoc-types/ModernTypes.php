@@ -8,6 +8,8 @@ use Psr\Log\LoggerInterface as Logger;
  * A source file that uses PHPDoc types beyond phpDocumentor/reflection's grammar.
  *
  * @method static array<string,int> find(callable(string|int): bool $filter) Finds matching values.
+ * @template T
+ * @phpstan-type Item array-key
  */
 class ModernTypes {
 
@@ -42,6 +44,14 @@ class ModernTypes {
 	 * @param Logger<string> $loggers
 	 */
 	public function genericAlias( $loggers ) {
+	}
+
+	/**
+	 * @param T $template
+	 * @param Item $item
+	 * @param array-key $key
+	 */
+	public function contextualTypes( $template, $item, $key ) {
 	}
 
 	/** @return mixed */

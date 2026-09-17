@@ -107,11 +107,13 @@ class TaxonomyReflector {
 	 * @param Class_|Interface_|Trait_ $node
 	 */
 	private function registerClassReflector( Node $node, string $namespace, array $imports ) : void {
+		$classDocBlock = $this->docBlockParser->parse($this->getDocComment($node), $namespace, $imports);
 		$reflector = new Element(
 			$node->name === null ? '' : $node->name->toString(),
 			$this->getNamespacedName($node),
-			$this->docBlockParser->parse($this->getDocComment($node), $namespace, $imports)
+			$classDocBlock
 		);
+		$typeNames = $classDocBlock === null ? [] : $classDocBlock->getTypeNames();
 
 		if( !$this->reflector ) {
 			$this->reflector = $reflector;
@@ -125,7 +127,7 @@ class TaxonomyReflector {
 
 		foreach( $node->stmts as $statement ) {
 			if( $statement instanceof ClassMethod ) {
-				$method = $this->elementFromMethod($statement, $reflector->getFqsen(), $namespace, $imports);
+				$method = $this->elementFromMethod($statement, $reflector->getFqsen(), $namespace, $imports, $typeNames);
 				$this->data['methods'][$method->getName()][] = $method;
 
 				if( $method->getName() === '__construct' ) {
@@ -136,7 +138,7 @@ class TaxonomyReflector {
 					$constant = new Element(
 						$const->name->toString(),
 						$reflector->getFqsen() . '::' . $const->name->toString(),
-						$this->docBlockParser->parse($this->getDocComment($statement), $namespace, $imports),
+						$this->docBlockParser->parse($this->getDocComment($statement), $namespace, $imports, $typeNames),
 						$this->visibility($statement),
 						false,
 						[],
@@ -151,7 +153,7 @@ class TaxonomyReflector {
 					$sourceProperty = new Element(
 						$property->name->toString(),
 						$reflector->getFqsen() . '::$' . $property->name->toString(),
-						$this->docBlockParser->parse($this->getDocComment($statement), $namespace, $imports),
+						$this->docBlockParser->parse($this->getDocComment($statement), $namespace, $imports, $typeNames),
 						$this->visibility($statement),
 						$statement->isStatic(),
 						[],
@@ -234,13 +236,20 @@ class TaxonomyReflector {
 		);
 	}
 
-	private function elementFromMethod( ClassMethod $node, string $className, string $namespace, array $imports ) : Element {
+	/** @param array<string,true> $typeNames */
+	private function elementFromMethod(
+		ClassMethod $node,
+		string $className,
+		string $namespace,
+		array $imports,
+		array $typeNames
+	) : Element {
 		$name = $node->name->toString();
 
 		return new Element(
 			$name,
 			$className . '::' . $name . '()',
-			$this->docBlockParser->parse($this->getDocComment($node), $namespace, $imports),
+			$this->docBlockParser->parse($this->getDocComment($node), $namespace, $imports, $typeNames),
 			$this->visibility($node),
 			$node->isStatic(),
 			$this->argumentsFromNode($node),
