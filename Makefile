@@ -6,9 +6,7 @@ README.md DOCS.md: $(SRC_FILES)
 .PHONY: test
 test: cs
 	./vendor/bin/parallel-lint src
-	php test/phpdoc-types.php
-	php test/recursive-directory.php
-	php test/file-docblocks.php
+	./vendor/bin/phpunit
 
 .PHONY: cs
 cs:
