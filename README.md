@@ -32,6 +32,7 @@ This is done using a simple, expressive XML syntax. This includes:
 - **ext-dom**: *
 - **ext-json**: *
 - **ext-libxml**: *
+- **composer-runtime-api**: ^2.0
 - **donatj/cli-toolkit**: ^0.3.1
 - **donatj/flags**: ^1.5
 - **donatj/mddom**: ^0.3.0
