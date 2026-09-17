@@ -12,15 +12,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TypeAliasTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser as PhpStanDocBlockParser;
@@ -65,10 +56,11 @@ class DocBlockParser {
 			}
 		}
 
-		$tags = [];
+		$typeFormatter = new PhpDocTypeFormatter($namespace, $imports, $typeNames);
+		$tags          = [];
 		foreach( $doc->children as $child ) {
 			if( $child instanceof PhpDocTagNode ) {
-				$tag = $this->tagFromNode($child, $namespace, $imports, $typeNames);
+				$tag = $this->tagFromNode($child, $typeFormatter);
 				$tags[$tag->getName()][] = $tag;
 			}
 		}
@@ -78,31 +70,27 @@ class DocBlockParser {
 		return new DocBlock($summary, $description, $tags, $typeNames);
 	}
 
-	/**
-	 * @param array<string,string> $imports
-	 * @param array<string,true> $typeNames
-	 */
-	private function tagFromNode( PhpDocTagNode $node, string $namespace, array $imports, array $typeNames ) : Tag {
+	private function tagFromNode( PhpDocTagNode $node, PhpDocTypeFormatter $typeFormatter ) : Tag {
 		$name  = ltrim($node->name, '@');
 		$value = $node->value;
 
 		if( $value instanceof ParamTagValueNode ) {
 			return new Tag(
 				$name,
-				$this->formatType($value->type, $namespace, $imports, $typeNames),
+				$typeFormatter->format($value->type),
 				$this->normaliseTagDescription($value->description),
 				ltrim($value->parameterName, '$')
 			);
 		}
 
 		if( $value instanceof ReturnTagValueNode || $value instanceof ThrowsTagValueNode ) {
-			return new Tag($name, $this->formatType($value->type, $namespace, $imports, $typeNames), $this->normaliseTagDescription($value->description));
+			return new Tag($name, $typeFormatter->format($value->type), $this->normaliseTagDescription($value->description));
 		}
 
 		if( $value instanceof VarTagValueNode ) {
 			return new Tag(
 				$name,
-				$this->formatType($value->type, $namespace, $imports, $typeNames),
+				$typeFormatter->format($value->type),
 				$this->normaliseTagDescription($value->description),
 				ltrim($value->variableName, '$')
 			);
@@ -113,13 +101,13 @@ class DocBlockParser {
 			foreach( $value->parameters as $parameter ) {
 				$args[] = [
 					'name' => ltrim($parameter->parameterName, '$'),
-					'type' => $parameter->type === null ? 'mixed' : $this->formatType($parameter->type, $namespace, $imports, $typeNames),
+					'type' => $parameter->type === null ? 'mixed' : $typeFormatter->format($parameter->type),
 				];
 			}
 
 			return new Tag(
 				$name,
-				$value->returnType === null ? 'mixed' : $this->formatType($value->returnType, $namespace, $imports, $typeNames),
+				$value->returnType === null ? 'mixed' : $typeFormatter->format($value->returnType),
 				$this->normaliseTagDescription($value->description),
 				'',
 				$value->methodName,
@@ -137,128 +125,6 @@ class DocBlockParser {
 		}
 
 		return new Tag($name, null, (string)$value);
-	}
-
-	/**
-	 * @param array<string,string> $imports
-	 * @param array<string,true> $typeNames
-	 */
-	private function formatType( TypeNode $type, string $namespace, array $imports, array $typeNames ) : string {
-		if( $type instanceof ArrayTypeNode ) {
-			$innerType = $this->formatType($type->type, $namespace, $imports, $typeNames);
-			if( $type->type instanceof UnionTypeNode || $type->type instanceof IntersectionTypeNode || $type->type instanceof NullableTypeNode ) {
-				$innerType = "({$innerType})";
-			}
-
-			return $innerType . '[]';
-		}
-
-		if( $type instanceof ArrayShapeNode ) {
-			$items = [];
-			foreach( $type->items as $item ) {
-				$key     = $item->keyName === null ? '' : $item->keyName . ($item->optional ? '?' : '') . ': ';
-				$items[] = $key . $this->formatType($item->valueType, $namespace, $imports, $typeNames);
-			}
-
-			if( !$type->sealed ) {
-				$items[] = '...' . $type->unsealedType;
-			}
-
-			return $type->kind . '{' . implode(',', $items) . '}';
-		}
-
-		if( $type instanceof CallableTypeNode ) {
-			$parameters = [];
-			foreach( $type->parameters as $parameter ) {
-				$suffix =
-					($parameter->isReference ? '&' : '') .
-					($parameter->isVariadic ? '...' : '') .
-					$parameter->parameterName;
-				$parameters[] = $this->formatType($parameter->type, $namespace, $imports, $typeNames) .
-					($suffix === '' ? '' : ' ' . $suffix) .
-					($parameter->isOptional ? '=' : '');
-			}
-
-			return $this->resolveIdentifier($type->identifier->name, $namespace, $imports, $typeNames) .
-				'(' . implode(',', $parameters) . '): ' .
-				$this->formatType($type->returnType, $namespace, $imports, $typeNames);
-		}
-
-		if( $type instanceof UnionTypeNode || $type instanceof IntersectionTypeNode ) {
-			$isUnion   = $type instanceof UnionTypeNode;
-			$separator = $isUnion ? '|' : '&';
-			$types     = [];
-			foreach( $type->types as $member ) {
-				$memberType = $this->formatType($member, $namespace, $imports, $typeNames);
-				if( ($isUnion && $member instanceof IntersectionTypeNode) || (!$isUnion && $member instanceof UnionTypeNode) ) {
-					$memberType = "({$memberType})";
-				}
-
-				$types[] = $memberType;
-			}
-
-			return implode($separator, $types);
-		}
-
-		if( $type instanceof NullableTypeNode ) {
-			$innerType = $this->formatType($type->type, $namespace, $imports, $typeNames);
-			if( $type->type instanceof UnionTypeNode || $type->type instanceof IntersectionTypeNode ) {
-				$innerType = "({$innerType})";
-			}
-
-			return '?' . $innerType;
-		}
-
-		if( $type instanceof GenericTypeNode ) {
-			$baseType = $this->resolveIdentifier($type->type->name, $namespace, $imports, $typeNames);
-			$types = [];
-			foreach( $type->genericTypes as $index => $member ) {
-				$variance = $type->variances[$index] ?? GenericTypeNode::VARIANCE_INVARIANT;
-				if( $variance === GenericTypeNode::VARIANCE_BIVARIANT ) {
-					$types[] = '*';
-					continue;
-				}
-
-				$types[] =
-					($variance === GenericTypeNode::VARIANCE_INVARIANT ? '' : $variance . ' ') .
-					$this->formatType($member, $namespace, $imports, $typeNames);
-			}
-
-			if( $baseType === 'array' && count($types) === 1 ) {
-				return $types[0] . '[]';
-			}
-
-			return $baseType . '<' . implode(',', $types) . '>';
-		}
-
-		if( $type instanceof IdentifierTypeNode ) {
-			return $this->resolveIdentifier($type->name, $namespace, $imports, $typeNames);
-		}
-
-		return preg_replace('/\s*([|&,])\s*/', '$1', (string)$type);
-	}
-
-	/**
-	 * @param array<string,string> $imports
-	 * @param array<string,true> $typeNames
-	 */
-	private function resolveIdentifier( string $name, string $namespace, array $imports, array $typeNames ) : string {
-		if( $name === '' || $name[0] === '\\' || isset($typeNames[$name]) || strpos($name, '-') !== false || in_array(strtolower($name), [
-			'array', 'bool', 'boolean', 'callable', 'class-string', 'closed-resource', 'false',
-			'float', 'int', 'integer', 'iterable', 'list', 'mixed', 'never', 'null', 'numeric',
-			'object', 'open-resource', 'parent', 'positive-int', 'resource', 'scalar', 'self',
-			'static', 'string', 'true', 'void',
-		], true) ) {
-			return $name;
-		}
-
-		$parts = explode('\\', $name, 2);
-		$alias = strtolower($parts[0]);
-		if( isset($imports[$alias]) ) {
-			return '\\' . $imports[$alias] . (isset($parts[1]) ? '\\' . $parts[1] : '');
-		}
-
-		return $namespace === '' ? $name : '\\' . $namespace . '\\' . $name;
 	}
 
 	private function normaliseTagDescription( string $description ) : string {
