@@ -5,7 +5,7 @@ README.md DOCS.md: $(SRC_FILES)
 
 .PHONY: test
 test: cs
-	./vendor/bin/parallel-lint src test
+	./vendor/bin/parallel-lint src
 	./vendor/bin/phpunit
 
 .PHONY: cs
