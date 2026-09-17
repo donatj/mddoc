@@ -128,7 +128,12 @@ class DocBlockParser {
 	 */
 	private function formatType( TypeNode $type, string $namespace, array $imports ) : string {
 		if( $type instanceof ArrayTypeNode ) {
-			return $this->formatType($type->type, $namespace, $imports) . '[]';
+			$innerType = $this->formatType($type->type, $namespace, $imports);
+			if( $type->type instanceof UnionTypeNode || $type->type instanceof IntersectionTypeNode || $type->type instanceof NullableTypeNode ) {
+				$innerType = "({$innerType})";
+			}
+
+			return $innerType . '[]';
 		}
 
 		if( $type instanceof ArrayShapeNode ) {

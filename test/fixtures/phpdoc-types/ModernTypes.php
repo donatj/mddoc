@@ -23,6 +23,12 @@ class ModernTypes {
 	public function process( $names, $filter ) {
 	}
 
+	/**
+	 * @param (string|int)[] $compound
+	 */
+	public function compoundArray( $compound ) {
+	}
+
 	/** @return mixed */
 	public function dnf( (\Countable&\Iterator)|\Stringable $value ) : (\Countable&\Iterator)|\Stringable {
 	}

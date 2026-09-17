@@ -29,6 +29,7 @@ try {
 		'***string[]*** `$names`',
 		'***callable(string|int): bool*** `$filter`',
 		'***array{items: list<string>,count: positive-int}***',
+		'***(string|int)[]*** `$compound`',
 		'**Throws**: `\\RuntimeException`',
 		'function find(callable(string|int): bool $filter) : array<string,int>',
 		'@var array{label: string,callback: callable(string|int): bool}',
