@@ -1248,15 +1248,6 @@ Return a populated DocumentationInterface of the corresponding tagName
 
 Application MDDoc
 
-```php
-<?php
-namespace donatj\MDDoc;
-
-class MDDoc {
-	public const VERSION = "0.1.0";
-}
-```
-
 ### Method: MDDoc->__construct
 
 ```php
