@@ -66,6 +66,12 @@ class ModernTypes {
 	public function compoundUnion( $union ) {
 	}
 
+	/**
+	 * @param ?(\Countable|\Iterator) $nullable
+	 */
+	public function nullableCompound( $nullable ) {
+	}
+
 	/** @return mixed */
 	public function dnf( (\Countable&\Iterator)|\Stringable $value ) : (\Countable&\Iterator)|\Stringable {
 	}

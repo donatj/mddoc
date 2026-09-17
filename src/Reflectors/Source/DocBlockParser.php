@@ -201,7 +201,12 @@ class DocBlockParser {
 		}
 
 		if( $type instanceof NullableTypeNode ) {
-			return '?' . $this->formatType($type->type, $namespace, $imports, $typeNames);
+			$innerType = $this->formatType($type->type, $namespace, $imports, $typeNames);
+			if( $type->type instanceof UnionTypeNode || $type->type instanceof IntersectionTypeNode ) {
+				$innerType = "({$innerType})";
+			}
+
+			return '?' . $innerType;
 		}
 
 		if( $type instanceof GenericTypeNode ) {
