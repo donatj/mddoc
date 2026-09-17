@@ -17,10 +17,11 @@ class ModernTypes {
 	 *
 	 * @param array<string> $names Names to process.
 	 * @param callable(string|int): bool $filter Decides whether a value is included.
+	 * @param callable(string $value, int ...$values): bool $formatter Formats a value.
 	 * @return array{items: list<string>, count: positive-int} Processed values and their count.
 	 * @throws \RuntimeException When processing fails.
 	 */
-	public function process( $names, $filter ) {
+	public function process( $names, $filter, $formatter ) {
 	}
 
 	/**

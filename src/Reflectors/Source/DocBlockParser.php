@@ -153,10 +153,12 @@ class DocBlockParser {
 		if( $type instanceof CallableTypeNode ) {
 			$parameters = [];
 			foreach( $type->parameters as $parameter ) {
-				$parameters[] = $this->formatType($parameter->type, $namespace, $imports) .
-					($parameter->isReference ? ' &' : '') .
+				$suffix =
+					($parameter->isReference ? '&' : '') .
 					($parameter->isVariadic ? '...' : '') .
-					$parameter->parameterName .
+					$parameter->parameterName;
+				$parameters[] = $this->formatType($parameter->type, $namespace, $imports) .
+					($suffix === '' ? '' : ' ' . $suffix) .
 					($parameter->isOptional ? '=' : '');
 			}
 

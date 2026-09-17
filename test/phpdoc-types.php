@@ -28,6 +28,7 @@ try {
 	$expected = [
 		'***string[]*** `$names`',
 		'***callable(string|int): bool*** `$filter`',
+		'***callable(string $value,int ...$values): bool*** `$formatter`',
 		'***array{items: list<string>,count: positive-int}***',
 		'***(string|int)[]*** `$compound`',
 		'**Throws**: `\\RuntimeException`',
