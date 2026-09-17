@@ -74,7 +74,7 @@ class TaxonomyReflector {
 		$this->fileDocBlock = $this->docBlockParser->parse($this->getFileDocComment($source));
 
 		try {
-			$parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+			$parser = (new ParserFactory)->createForNewestSupportedVersion();
 			$nodes  = $parser->parse($source);
 
 			$traverser = new NodeTraverser;
