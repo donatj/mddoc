@@ -34,6 +34,7 @@ try {
 		'@var array{label: string,callback: callable(string|int): bool}',
 		'***\\RuntimeException***',
 		'***\\Psr\\Log\\LoggerInterface***',
+		'function dnf((\\Countable&\\Iterator)|\\Stringable $value) : (\\Countable&\\Iterator)|\\Stringable',
 	];
 
 	foreach( $expected as $needle ) {

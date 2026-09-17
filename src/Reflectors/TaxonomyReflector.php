@@ -339,10 +339,16 @@ class TaxonomyReflector {
 		}
 
 		if( $type instanceof Node\UnionType || $type instanceof Node\IntersectionType ) {
-			$separator = $type instanceof Node\UnionType ? '|' : '&';
+			$isUnion  = $type instanceof Node\UnionType;
+			$separator = $isUnion ? '|' : '&';
 			$types     = [];
 			foreach( $type->types as $member ) {
-				$types[] = $this->typeFromNode($member);
+				$memberType = $this->typeFromNode($member);
+				if( ($isUnion && $member instanceof Node\IntersectionType) || (!$isUnion && $member instanceof Node\UnionType) ) {
+					$memberType = "({$memberType})";
+				}
+
+				$types[] = $memberType;
 			}
 
 			return implode($separator, $types);

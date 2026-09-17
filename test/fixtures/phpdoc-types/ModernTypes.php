@@ -23,4 +23,8 @@ class ModernTypes {
 	public function process( $names, $filter ) {
 	}
 
+	/** @return mixed */
+	public function dnf( (\Countable&\Iterator)|\Stringable $value ) : (\Countable&\Iterator)|\Stringable {
+	}
+
 }
