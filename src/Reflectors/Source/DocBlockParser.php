@@ -182,6 +182,7 @@ class DocBlockParser {
 		}
 
 		if( $type instanceof GenericTypeNode ) {
+			$baseType = $this->resolveIdentifier($type->type->name, $namespace, $imports);
 			$types = [];
 			foreach( $type->genericTypes as $index => $member ) {
 				$variance = $type->variances[$index] ?? GenericTypeNode::VARIANCE_INVARIANT;
@@ -195,11 +196,11 @@ class DocBlockParser {
 					$this->formatType($member, $namespace, $imports);
 			}
 
-			if( (string)$type->type === 'array' && count($types) === 1 ) {
+			if( $baseType === 'array' && count($types) === 1 ) {
 				return $types[0] . '[]';
 			}
 
-			return $type->type . '<' . implode(',', $types) . '>';
+			return $baseType . '<' . implode(',', $types) . '>';
 		}
 
 		if( $type instanceof IdentifierTypeNode ) {

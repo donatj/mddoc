@@ -32,6 +32,7 @@ try {
 		'***array{items: list<string>,count: positive-int}***',
 		'***(string|int)[]*** `$compound`',
 		'***iterable<covariant string,contravariant int,*>*** `$variance`',
+		'***\\Psr\\Log\\LoggerInterface<string>*** `$loggers`',
 		'**Throws**: `\\RuntimeException`',
 		'function find(callable(string|int): bool $filter) : array<string,int>',
 		'@var array{label: string,callback: callable(string|int): bool}',

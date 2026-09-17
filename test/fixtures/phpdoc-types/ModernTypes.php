@@ -2,6 +2,8 @@
 
 namespace MDDocTest;
 
+use Psr\Log\LoggerInterface as Logger;
+
 /**
  * A source file that uses PHPDoc types beyond phpDocumentor/reflection's grammar.
  *
@@ -34,6 +36,12 @@ class ModernTypes {
 	 * @param iterable<covariant string, contravariant int, *> $variance
 	 */
 	public function variance( $variance ) {
+	}
+
+	/**
+	 * @param Logger<string> $loggers
+	 */
+	public function genericAlias( $loggers ) {
 	}
 
 	/** @return mixed */
