@@ -31,6 +31,7 @@ try {
 		'***callable(string $value,int ...$values): bool*** `$formatter`',
 		'***array{items: list<string>,count: positive-int}***',
 		'***(string|int)[]*** `$compound`',
+		'***iterable<covariant string,contravariant int,*>*** `$variance`',
 		'**Throws**: `\\RuntimeException`',
 		'function find(callable(string|int): bool $filter) : array<string,int>',
 		'@var array{label: string,callback: callable(string|int): bool}',

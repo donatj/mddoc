@@ -183,8 +183,16 @@ class DocBlockParser {
 
 		if( $type instanceof GenericTypeNode ) {
 			$types = [];
-			foreach( $type->genericTypes as $member ) {
-				$types[] = $this->formatType($member, $namespace, $imports);
+			foreach( $type->genericTypes as $index => $member ) {
+				$variance = $type->variances[$index] ?? GenericTypeNode::VARIANCE_INVARIANT;
+				if( $variance === GenericTypeNode::VARIANCE_BIVARIANT ) {
+					$types[] = '*';
+					continue;
+				}
+
+				$types[] =
+					($variance === GenericTypeNode::VARIANCE_INVARIANT ? '' : $variance . ' ') .
+					$this->formatType($member, $namespace, $imports);
 			}
 
 			if( (string)$type->type === 'array' && count($types) === 1 ) {

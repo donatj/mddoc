@@ -30,6 +30,12 @@ class ModernTypes {
 	public function compoundArray( $compound ) {
 	}
 
+	/**
+	 * @param iterable<covariant string, contravariant int, *> $variance
+	 */
+	public function variance( $variance ) {
+	}
+
 	/** @return mixed */
 	public function dnf( (\Countable&\Iterator)|\Stringable $value ) : (\Countable&\Iterator)|\Stringable {
 	}
