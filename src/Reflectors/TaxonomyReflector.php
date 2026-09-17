@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
@@ -302,12 +303,18 @@ class TaxonomyReflector {
 	private function importsFromNodes( array $nodes ) : array {
 		$imports = [];
 		foreach( $nodes as $node ) {
-			if( !$node instanceof Use_ || $node->type !== Use_::TYPE_NORMAL ) {
-				continue;
-			}
+			if( $node instanceof Use_ && $node->type === Use_::TYPE_NORMAL ) {
+				foreach( $node->uses as $use ) {
+					$imports[strtolower($use->getAlias()->toString())] = $use->name->toString();
+				}
+			} elseif( $node instanceof GroupUse ) {
+				foreach( $node->uses as $use ) {
+					if( $use->type !== Use_::TYPE_NORMAL ) {
+						continue;
+					}
 
-			foreach( $node->uses as $use ) {
-				$imports[strtolower($use->getAlias()->toString())] = $use->name->toString();
+					$imports[strtolower($use->getAlias()->toString())] = $node->prefix->toString() . '\\' . $use->name->toString();
+				}
 			}
 		}
 

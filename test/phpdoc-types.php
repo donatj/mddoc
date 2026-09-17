@@ -33,6 +33,7 @@ try {
 		'function find(callable(string|int): bool $filter) : array<string,int>',
 		'@var array{label: string,callback: callable(string|int): bool}',
 		'***\\RuntimeException***',
+		'***\\Psr\\Log\\LoggerInterface***',
 	];
 
 	foreach( $expected as $needle ) {
