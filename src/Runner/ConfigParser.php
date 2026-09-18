@@ -26,7 +26,7 @@ class ConfigParser {
 	}
 
 	/**
-	 * @param array{autoloader?:AutoloaderInterface,composerAutoloader?:AutoloaderInterface} $treeExtra
+	 * @param array{autoloader?:AutoloaderInterface,composerAutoloaders?:ComposerAutoloader[]} $treeExtra
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
 	private function loadChildren(
@@ -72,11 +72,14 @@ class ConfigParser {
 
 			switch( strtolower($childDoc->getType()) ) {
 				case 'composer':
-					if( !isset($treeExtra['composerAutoloader']) ) {
+					if( !isset($treeExtra['composerAutoloaders']) ) {
 						throw new ConfigException('Composer autoloader unavailable for config project');
 					}
 
-					$loader->appendLoader($treeExtra['composerAutoloader']);
+					foreach( $treeExtra['composerAutoloaders'] as $composerAutoloader ) {
+						$loader->appendLoader($composerAutoloader);
+					}
+
 					break;
 				case 'psr0':
 					$loader->appendLoader(new Psr0($childDoc->getRoot()));
@@ -141,24 +144,26 @@ class ConfigParser {
 		return $attributes;
 	}
 
-	private function getComposerAutoloader( string $projectRoot ) : ?ComposerAutoloader {
+	/** @return ComposerAutoloader[] */
+	private function getComposerAutoloaders( string $projectRoot ) : array {
 		$vendorDirectory = rtrim($projectRoot, ' /\\') . DIRECTORY_SEPARATOR . 'vendor';
 		if( !is_dir($vendorDirectory) || !is_file($vendorDirectory . DIRECTORY_SEPARATOR . 'autoload.php') ) {
-			return null;
+			return [];
 		}
 
 		$vendorDirectory = realpath($vendorDirectory);
 		if( $vendorDirectory === false ) {
-			return null;
+			return [];
 		}
 
+		$autoloaders = [];
 		foreach( ClassLoader::getRegisteredLoaders() as $directory => $loader ) {
 			if( realpath($directory) === $vendorDirectory ) {
-				return new ComposerAutoloader($loader);
+				$autoloaders[] = new ComposerAutoloader($loader);
 			}
 		}
 
-		return null;
+		return $autoloaders;
 	}
 
 	/**
@@ -193,8 +198,8 @@ class ConfigParser {
 		$docRoot = new Documentation\DocRoot($attributeTree);
 		if( $root->nodeName === 'mddoc' ) {
 			$treeExtra = [];
-			if( $composerAutoloader = $this->getComposerAutoloader(dirname($filename)) ) {
-				$treeExtra['composerAutoloader'] = $composerAutoloader;
+			if( $composerAutoloaders = $this->getComposerAutoloaders(dirname($filename)) ) {
+				$treeExtra['composerAutoloaders'] = $composerAutoloaders;
 			}
 
 			$this->loadChildren($root, $docRoot, $attributeTree, $treeExtra);
