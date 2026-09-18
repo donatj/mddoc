@@ -1,5 +1,5 @@
 <mddoc>
-	<autoloader type="psr4" root="src" namespace="donatj\MDDoc"/>
+	<autoloader type="composer"/>
 	<docpage target="README.md">
 
 		<section title="MDDoc">
