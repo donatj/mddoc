@@ -14,7 +14,7 @@
 function __invoke(string $className) : ?string
 ```
 
-> *Inherited from:* `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
+> *Inherited from*: `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
 > 
 > Locate the filename of a given class
 
@@ -52,7 +52,7 @@ A simple autoloader chain
 function __invoke(string $className) : ?string
 ```
 
-> *Inherited from:* `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
+> *Inherited from*: `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
 > 
 > Locate the filename of a given class
 
@@ -76,7 +76,7 @@ function __invoke(string $className) : ?string
 function __invoke(string $className) : ?string
 ```
 
-> *Inherited from:* `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
+> *Inherited from*: `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
 > 
 > Locate the filename of a given class
 
@@ -106,7 +106,7 @@ function __construct(string $path)
 function __invoke(string $className) : ?string
 ```
 
-> *Inherited from:* `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
+> *Inherited from*: `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
 > 
 > Locate the filename of a given class
 
@@ -137,7 +137,7 @@ function __construct(string $root_namespace, string $path)
 function __invoke(string $className) : ?string
 ```
 
-> *Inherited from:* `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
+> *Inherited from*: `\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface`
 > 
 > Locate the filename of a given class
 
@@ -375,11 +375,11 @@ function output(int $depth) : string
 function setLogger(\Psr\Log\LoggerInterface $logger) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerAwareTrait`
+> *Inherited from*: `\Psr\Log\LoggerAwareTrait`
 > 
 > Sets a logger.
 > 
-> *Inherited from:* `\Psr\Log\LoggerAwareInterface`
+> *Inherited from*: `\Psr\Log\LoggerAwareInterface`
 > 
 > Sets a logger instance on the object.
 
@@ -775,11 +775,11 @@ function getDocumentationChildren() : array
 function setLogger(\Psr\Log\LoggerInterface $logger) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerAwareTrait`
+> *Inherited from*: `\Psr\Log\LoggerAwareTrait`
 > 
 > Sets a logger.
 > 
-> *Inherited from:* `\Psr\Log\LoggerAwareInterface`
+> *Inherited from*: `\Psr\Log\LoggerAwareInterface`
 > 
 > Sets a logger instance on the object.
 
@@ -997,11 +997,11 @@ function output(int $depth)
 function setLogger(\Psr\Log\LoggerInterface $logger) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerAwareTrait`
+> *Inherited from*: `\Psr\Log\LoggerAwareTrait`
 > 
 > Sets a logger.
 > 
-> *Inherited from:* `\Psr\Log\LoggerAwareInterface`
+> *Inherited from*: `\Psr\Log\LoggerAwareInterface`
 > 
 > Sets a logger instance on the object.
 
@@ -1083,11 +1083,11 @@ function getDocumentationChildren() : array
 function setLogger(\Psr\Log\LoggerInterface $logger) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerAwareTrait`
+> *Inherited from*: `\Psr\Log\LoggerAwareTrait`
 > 
 > Sets a logger.
 > 
-> *Inherited from:* `\Psr\Log\LoggerAwareInterface`
+> *Inherited from*: `\Psr\Log\LoggerAwareInterface`
 > 
 > Sets a logger instance on the object.
 
@@ -1559,11 +1559,11 @@ Output an Error before exiting with given error code
 function log($level, $message [, array $context = []]) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerTrait`
+> *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Logs with an arbitrary level.
 > 
-> *Inherited from:* `\Psr\Log\LoggerInterface`
+> *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Logs with an arbitrary level.
 
@@ -1581,11 +1581,11 @@ function log($level, $message [, array $context = []]) : void
 function emergency(string|\Stringable $message [, array $context = []]) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerTrait`
+> *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > System is unusable.
 > 
-> *Inherited from:* `\Psr\Log\LoggerInterface`
+> *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > System is unusable.
 
@@ -1601,14 +1601,14 @@ function emergency(string|\Stringable $message [, array $context = []]) : void
 function alert(string|\Stringable $message [, array $context = []]) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerTrait`
+> *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Action must be taken immediately.  
 >   
 > Example: Entire website down, database unavailable, etc. This should  
 > trigger the SMS alerts and wake you up.
 > 
-> *Inherited from:* `\Psr\Log\LoggerInterface`
+> *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Action must be taken immediately.  
 >   
@@ -1627,13 +1627,13 @@ function alert(string|\Stringable $message [, array $context = []]) : void
 function critical(string|\Stringable $message [, array $context = []]) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerTrait`
+> *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Critical conditions.  
 >   
 > Example: Application component unavailable, unexpected exception.
 > 
-> *Inherited from:* `\Psr\Log\LoggerInterface`
+> *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Critical conditions.  
 >   
@@ -1651,12 +1651,12 @@ function critical(string|\Stringable $message [, array $context = []]) : void
 function error(string|\Stringable $message [, array $context = []]) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerTrait`
+> *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Runtime errors that do not require immediate action but should typically  
 > be logged and monitored.
 > 
-> *Inherited from:* `\Psr\Log\LoggerInterface`
+> *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Runtime errors that do not require immediate action but should typically  
 > be logged and monitored.
@@ -1673,14 +1673,14 @@ function error(string|\Stringable $message [, array $context = []]) : void
 function warning(string|\Stringable $message [, array $context = []]) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerTrait`
+> *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Exceptional occurrences that are not errors.  
 >   
 > Example: Use of deprecated APIs, poor use of an API, undesirable things  
 > that are not necessarily wrong.
 > 
-> *Inherited from:* `\Psr\Log\LoggerInterface`
+> *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Exceptional occurrences that are not errors.  
 >   
@@ -1699,11 +1699,11 @@ function warning(string|\Stringable $message [, array $context = []]) : void
 function notice(string|\Stringable $message [, array $context = []]) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerTrait`
+> *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Normal but significant events.
 > 
-> *Inherited from:* `\Psr\Log\LoggerInterface`
+> *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Normal but significant events.
 
@@ -1719,13 +1719,13 @@ function notice(string|\Stringable $message [, array $context = []]) : void
 function info(string|\Stringable $message [, array $context = []]) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerTrait`
+> *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Interesting events.  
 >   
 > Example: User logs in, SQL logs.
 > 
-> *Inherited from:* `\Psr\Log\LoggerInterface`
+> *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Interesting events.  
 >   
@@ -1743,11 +1743,11 @@ function info(string|\Stringable $message [, array $context = []]) : void
 function debug(string|\Stringable $message [, array $context = []]) : void
 ```
 
-> *Inherited from:* `\Psr\Log\LoggerTrait`
+> *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Detailed debug information.
 > 
-> *Inherited from:* `\Psr\Log\LoggerInterface`
+> *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Detailed debug information.
 
