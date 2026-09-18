@@ -1,4 +1,5 @@
 <mddoc>
+	<autoloader type="composer"/>
 	<docpage target="README.md">
 
 		<section title="MDDoc">
