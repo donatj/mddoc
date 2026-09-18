@@ -2,6 +2,7 @@
 
 namespace donatj\MDDoc\Runner;
 
+use Composer\Autoload\ClassLoader;
 use donatj\MDDoc\Autoloaders\ComposerAutoloader;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Autoloaders\MultiLoader;
@@ -138,6 +139,26 @@ class ConfigParser {
 		return $attributes;
 	}
 
+	private function getComposerAutoloader( string $projectRoot ) : ?ComposerAutoloader {
+		$vendorDirectory = rtrim($projectRoot, ' /\\') . DIRECTORY_SEPARATOR . 'vendor';
+		if( !is_dir($vendorDirectory) || !is_file($vendorDirectory . DIRECTORY_SEPARATOR . 'autoload.php') ) {
+			return null;
+		}
+
+		$vendorDirectory = realpath($vendorDirectory);
+		if( $vendorDirectory === false ) {
+			return null;
+		}
+
+		foreach( ClassLoader::getRegisteredLoaders() as $directory => $loader ) {
+			if( realpath($directory) === $vendorDirectory ) {
+				return new ComposerAutoloader($loader);
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Parse a config file
 	 *
@@ -169,9 +190,12 @@ class ConfigParser {
 
 		$docRoot = new Documentation\DocRoot($attributeTree);
 		if( $root->nodeName === 'mddoc' ) {
-			$this->loadChildren($root, $docRoot, $attributeTree, [
-				'composerAutoloader' => new ComposerAutoloader(dirname($filename)),
-			]);
+			$treeExtra = [];
+			if( $composerAutoloader = $this->getComposerAutoloader(dirname($filename)) ) {
+				$treeExtra['composerAutoloader'] = $composerAutoloader;
+			}
+
+			$this->loadChildren($root, $docRoot, $attributeTree, $treeExtra);
 		} else {
 			if( $root->nodeName ) {
 				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid. Expected mddoc.");
