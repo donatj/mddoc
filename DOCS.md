@@ -14,7 +14,7 @@
 function __invoke(string $className) : ?string
 ```
 
-Locate the filename of a given class
+> Locate the filename of a given class
 
 #### Returns:
 
@@ -50,7 +50,7 @@ A simple autoloader chain
 function __invoke(string $className) : ?string
 ```
 
-Locate the filename of a given class
+> Locate the filename of a given class
 
 #### Returns:
 
@@ -72,7 +72,7 @@ Locate the filename of a given class
 function __invoke(string $className) : ?string
 ```
 
-Locate the filename of a given class
+> Locate the filename of a given class
 
 #### Returns:
 
@@ -100,7 +100,7 @@ function __construct(string $path)
 function __invoke(string $className) : ?string
 ```
 
-Locate the filename of a given class
+> Locate the filename of a given class
 
 #### Returns:
 
@@ -129,7 +129,7 @@ function __construct(string $root_namespace, string $path)
 function __invoke(string $className) : ?string
 ```
 
-Locate the filename of a given class
+> Locate the filename of a given class
 
 #### Returns:
 
@@ -365,9 +365,9 @@ function output(int $depth) : string
 function setLogger(\Psr\Log\LoggerInterface $logger) : void
 ```
 
-Sets a logger.
-
-Sets a logger instance on the object.
+> Sets a logger.
+> 
+> Sets a logger instance on the object.
 
 ## Class: donatj\MDDoc\Documentation\Badges\BadgeGitHubActions
 
@@ -761,9 +761,9 @@ function getDocumentationChildren() : array
 function setLogger(\Psr\Log\LoggerInterface $logger) : void
 ```
 
-Sets a logger.
-
-Sets a logger instance on the object.
+> Sets a logger.
+> 
+> Sets a logger instance on the object.
 
 ## Class: donatj\MDDoc\Documentation\DocRoot
 
@@ -979,9 +979,9 @@ function output(int $depth)
 function setLogger(\Psr\Log\LoggerInterface $logger) : void
 ```
 
-Sets a logger.
-
-Sets a logger instance on the object.
+> Sets a logger.
+> 
+> Sets a logger instance on the object.
 
 ## Class: donatj\MDDoc\Documentation\RecursiveDirectory
 
@@ -1061,9 +1061,9 @@ function getDocumentationChildren() : array
 function setLogger(\Psr\Log\LoggerInterface $logger) : void
 ```
 
-Sets a logger.
-
-Sets a logger instance on the object.
+> Sets a logger.
+> 
+> Sets a logger instance on the object.
 
 ## Class: donatj\MDDoc\Documentation\Replace
 
@@ -1533,9 +1533,9 @@ Output an Error before exiting with given error code
 function log($level, $message [, array $context = []]) : void
 ```
 
-Logs with an arbitrary level.
-
-Logs with an arbitrary level.
+> Logs with an arbitrary level.
+> 
+> Logs with an arbitrary level.
 
 #### Parameters:
 
@@ -1551,9 +1551,9 @@ Logs with an arbitrary level.
 function emergency(string|\Stringable $message [, array $context = []]) : void
 ```
 
-System is unusable.
-
-System is unusable.
+> System is unusable.
+> 
+> System is unusable.
 
 #### Parameters:
 
@@ -1567,15 +1567,15 @@ System is unusable.
 function alert(string|\Stringable $message [, array $context = []]) : void
 ```
 
-Action must be taken immediately.  
-  
-Example: Entire website down, database unavailable, etc. This should  
-trigger the SMS alerts and wake you up.
-
-Action must be taken immediately.  
-  
-Example: Entire website down, database unavailable, etc. This should  
-trigger the SMS alerts and wake you up.
+> Action must be taken immediately.  
+>   
+> Example: Entire website down, database unavailable, etc. This should  
+> trigger the SMS alerts and wake you up.
+> 
+> Action must be taken immediately.  
+>   
+> Example: Entire website down, database unavailable, etc. This should  
+> trigger the SMS alerts and wake you up.
 
 #### Parameters:
 
@@ -1589,13 +1589,13 @@ trigger the SMS alerts and wake you up.
 function critical(string|\Stringable $message [, array $context = []]) : void
 ```
 
-Critical conditions.  
-  
-Example: Application component unavailable, unexpected exception.
-
-Critical conditions.  
-  
-Example: Application component unavailable, unexpected exception.
+> Critical conditions.  
+>   
+> Example: Application component unavailable, unexpected exception.
+> 
+> Critical conditions.  
+>   
+> Example: Application component unavailable, unexpected exception.
 
 #### Parameters:
 
@@ -1609,11 +1609,11 @@ Example: Application component unavailable, unexpected exception.
 function error(string|\Stringable $message [, array $context = []]) : void
 ```
 
-Runtime errors that do not require immediate action but should typically  
-be logged and monitored.
-
-Runtime errors that do not require immediate action but should typically  
-be logged and monitored.
+> Runtime errors that do not require immediate action but should typically  
+> be logged and monitored.
+> 
+> Runtime errors that do not require immediate action but should typically  
+> be logged and monitored.
 
 #### Parameters:
 
@@ -1627,15 +1627,15 @@ be logged and monitored.
 function warning(string|\Stringable $message [, array $context = []]) : void
 ```
 
-Exceptional occurrences that are not errors.  
-  
-Example: Use of deprecated APIs, poor use of an API, undesirable things  
-that are not necessarily wrong.
-
-Exceptional occurrences that are not errors.  
-  
-Example: Use of deprecated APIs, poor use of an API, undesirable things  
-that are not necessarily wrong.
+> Exceptional occurrences that are not errors.  
+>   
+> Example: Use of deprecated APIs, poor use of an API, undesirable things  
+> that are not necessarily wrong.
+> 
+> Exceptional occurrences that are not errors.  
+>   
+> Example: Use of deprecated APIs, poor use of an API, undesirable things  
+> that are not necessarily wrong.
 
 #### Parameters:
 
@@ -1649,9 +1649,9 @@ that are not necessarily wrong.
 function notice(string|\Stringable $message [, array $context = []]) : void
 ```
 
-Normal but significant events.
-
-Normal but significant events.
+> Normal but significant events.
+> 
+> Normal but significant events.
 
 #### Parameters:
 
@@ -1665,13 +1665,13 @@ Normal but significant events.
 function info(string|\Stringable $message [, array $context = []]) : void
 ```
 
-Interesting events.  
-  
-Example: User logs in, SQL logs.
-
-Interesting events.  
-  
-Example: User logs in, SQL logs.
+> Interesting events.  
+>   
+> Example: User logs in, SQL logs.
+> 
+> Interesting events.  
+>   
+> Example: User logs in, SQL logs.
 
 #### Parameters:
 
@@ -1685,9 +1685,9 @@ Example: User logs in, SQL logs.
 function debug(string|\Stringable $message [, array $context = []]) : void
 ```
 
-Detailed debug information.
-
-Detailed debug information.
+> Detailed debug information.
+> 
+> Detailed debug information.
 
 #### Parameters:
 
