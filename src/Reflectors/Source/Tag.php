@@ -15,7 +15,6 @@ class Tag {
 	/** @var array<int,array{name:string,type:string}> */
 	private array $arguments;
 	private bool $valid;
-	private int $inheritanceDepth;
 	private ?string $declaringClass;
 
 	/**
@@ -30,7 +29,6 @@ class Tag {
 		bool $static = false,
 		array $arguments = [],
 		bool $valid = true,
-		int $inheritanceDepth = 0,
 		?string $declaringClass = null
 	) {
 		$this->name         = $name;
@@ -41,7 +39,6 @@ class Tag {
 		$this->static       = $static;
 		$this->arguments    = $arguments;
 		$this->valid        = $valid;
-		$this->inheritanceDepth = $inheritanceDepth;
 		$this->declaringClass = $declaringClass;
 	}
 
@@ -82,17 +79,6 @@ class Tag {
 
 	public function isValid() : bool {
 		return $this->valid;
-	}
-
-	public function getInheritanceDepth() : int {
-		return $this->inheritanceDepth;
-	}
-
-	public function withInheritedDepth() : self {
-		$tag = clone $this;
-		$tag->inheritanceDepth++;
-
-		return $tag;
 	}
 
 	public function getDeclaringClass() : ?string {
