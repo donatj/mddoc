@@ -37,9 +37,6 @@ class Autoloader extends AbstractElement {
 		parent::__construct($attributeTree, $textContent);
 	}
 
-	/**
-	 * @return string soup
-	 */
 	public static function tagName() : string {
 		return 'autoloader';
 	}
