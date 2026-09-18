@@ -13,9 +13,11 @@ use donatj\MDDoc\Reflectors\Source\Element;
 use donatj\MDDoc\Reflectors\Source\Tag;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use donatj\MDDom\AbstractElement;
+use donatj\MDDom\BlockQuote;
 use donatj\MDDom\Code;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\DocumentDepth;
+use donatj\MDDom\Emphasis;
 use donatj\MDDom\Header;
 use donatj\MDDom\HorizontalRule;
 use donatj\MDDom\Paragraph;
@@ -312,13 +314,17 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
 				);
 
-				if( $docMethodDescr = $docMethod->getDescription() ) {
-					$subDocument->appendChild(
-						$this->descriptionFormat(
-							(string)$docMethodDescr
-						)
-					);
+				$descriptions = [];
+				foreach( $docMethods as $docMethod ) {
+					if( $docMethodDescr = $docMethod->getDescription() ) {
+						$descriptions[] = [
+							'description'   => (string)$docMethodDescr,
+							'inheritedFrom' => $docMethod->getDeclaringClass(),
+						];
+					}
 				}
+
+				$this->appendDescriptions($subDocument, $descriptions, $class->getFqsen());
 			}
 
 			$methodData = $reflector->getMethods();
@@ -346,12 +352,15 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 				foreach( $methods as $subMethod ) {
 					if( $block = $subMethod->getDocBlock() ) {
-						$blocks[] = $block;
+						$blocks[] = [
+							'block'         => $block,
+							'inheritedFrom' => $subMethod->getDeclaringClass(),
+						];
 					}
 				}
 
-				foreach( $blocks as $block ) {
-					if( $this->shouldSkip($block) ) {
+				foreach( $blocks as $blockData ) {
+					if( $this->shouldSkip($blockData['block']) ) {
 						continue 2;
 					}
 				}
@@ -359,7 +368,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$subDocument = new DocumentDepth;
 				$document->appendChild($subDocument);
 
-				$firstBlock = reset($blocks);
+				$firstBlockData = reset($blocks);
+				$firstBlock     = $firstBlockData === false ? null : $firstBlockData['block'];
 
 				$operator = $method->isStatic() ? '::' : '->';
 
@@ -384,15 +394,18 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
 					);
 
-					foreach( $blocks as $block ) {
+					$descriptions = [];
+					foreach( $blocks as $blockData ) {
+						$block = $blockData['block'];
 						if( $block->getSummary() ) {
-							$subDocument->appendChild(
-								$this->descriptionFormat(
-									$this->getDocStr($block)
-								)
-							);
+							$descriptions[] = [
+								'description'   => $this->getDocStr($block),
+								'inheritedFrom' => $blockData['inheritedFrom'],
+							];
 						}
 					}
+
+					$this->appendDescriptions($subDocument, $descriptions, $class->getFqsen());
 
 					if( $deprecatedBlocks = $firstBlock->getTagsByName('deprecated') ) {
 						$deprecatedDoc = new DocumentDepth;
@@ -406,8 +419,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						}
 					}
 
-					foreach( $blocks as $block ) {
-						$paramDoc = $this->getParamDocs($block);
+					foreach( $blocks as $blockData ) {
+						$paramDoc = $this->getParamDocs($blockData['block']);
 						if( $paramDoc ) {
 							$subDocument->appendChild($paramDoc);
 							break;
@@ -515,6 +528,25 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		return implode(', ', $req_args) .
 			($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
 			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
+	}
+
+	/** @param array<int,array{description:string,inheritedFrom:?string}> $descriptions */
+	private function appendDescriptions( DocumentDepth $document, array $descriptions, string $className ) : void {
+		foreach( $descriptions as $description ) {
+			if( $description['inheritedFrom'] === null || $description['inheritedFrom'] === $className ) {
+				$document->appendChild($this->descriptionFormat($description['description']));
+				continue;
+			}
+
+			$quoteContent = new DocumentDepth;
+			$quoteContent->appendChild(new Paragraph(
+				new Emphasis('Inherited from'),
+				': ',
+				new Code($description['inheritedFrom'])
+			));
+			$quoteContent->appendChild($this->descriptionFormat($description['description']));
+			$document->appendChild(new BlockQuote(null, $quoteContent));
+		}
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {

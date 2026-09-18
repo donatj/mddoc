@@ -15,6 +15,7 @@ class Tag {
 	/** @var array<int,array{name:string,type:string}> */
 	private array $arguments;
 	private bool $valid;
+	private ?string $declaringClass;
 
 	/**
 	 * @param array<int,array{name:string,type:string}> $arguments
@@ -27,7 +28,8 @@ class Tag {
 		string $methodName = '',
 		bool $static = false,
 		array $arguments = [],
-		bool $valid = true
+		bool $valid = true,
+		?string $declaringClass = null
 	) {
 		$this->name         = $name;
 		$this->type         = $type;
@@ -37,6 +39,7 @@ class Tag {
 		$this->static       = $static;
 		$this->arguments    = $arguments;
 		$this->valid        = $valid;
+		$this->declaringClass = $declaringClass;
 	}
 
 	public function getName() : string {
@@ -76,6 +79,17 @@ class Tag {
 
 	public function isValid() : bool {
 		return $this->valid;
+	}
+
+	public function getDeclaringClass() : ?string {
+		return $this->declaringClass;
+	}
+
+	public function withDeclaringClass( string $declaringClass ) : self {
+		$tag = clone $this;
+		$tag->declaringClass = $declaringClass;
+
+		return $tag;
 	}
 
 	public function __toString() : string {

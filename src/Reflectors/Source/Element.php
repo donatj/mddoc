@@ -47,6 +47,10 @@ class Element {
 		return $this->fqsen;
 	}
 
+	public function getDeclaringClass() : string {
+		return explode('::', $this->fqsen, 2)[0];
+	}
+
 	public function getDocBlock() : ?DocBlock {
 		return $this->docBlock;
 	}
