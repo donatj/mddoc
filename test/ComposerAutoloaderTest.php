@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ComposerAutoloaderTest extends TestCase {
 
-	public function testComposerAutoloaderFindsClassesWithoutLoadingThem() : void {
+	public function testConfigUsesComposerAutoloaderOnlyWithAutoloadFile() : void {
 		$tempDir = sys_get_temp_dir() . '/mddoc-composer-autoloader-' . uniqid('', true);
 		self::assertTrue(mkdir($tempDir, 0700));
 		self::assertTrue(mkdir($tempDir . '/src', 0700));
@@ -20,9 +20,6 @@ class ComposerAutoloaderTest extends TestCase {
 			$config   = $tempDir . '/mddoc.xml';
 			$output   = $tempDir . '/README.md';
 			$autoload = $tempDir . '/vendor/autoload.php';
-
-			self::assertNull((new ComposerAutoloader($tempDir))('Legacy_Class'));
-			self::assertTrue(mkdir($tempDir . '/vendor', 0700));
 
 			self::assertTrue(mkdir(dirname($legacy), 0700));
 			self::assertNotFalse(file_put_contents($child, <<<'PHP'
@@ -51,23 +48,33 @@ class ParentClass {
 PHP
 		));
 			self::assertNotFalse(file_put_contents($legacy, "<?php\n"));
+			self::assertNotFalse(file_put_contents($config, sprintf(
+				'<mddoc><docpage target="%s"><file name="%s" /></docpage></mddoc>',
+				htmlspecialchars($output, ENT_XML1),
+				htmlspecialchars($child, ENT_XML1)
+			)));
+
+			new MDDoc([ 'mddoc', $config ]);
+			$markdown = file_get_contents($output);
+			self::assertIsString($markdown);
+			self::assertStringNotContainsString('function inherited()', $markdown);
+
+			self::assertTrue(mkdir($tempDir . '/vendor', 0700));
 
 			$targetLoader = new ClassLoader($tempDir . '/vendor');
 			$targetLoader->add('Legacy_', [ $tempDir . '/legacy' ]);
 			$targetLoader->addPsr4('Example\\', [ $tempDir . '/src' ]);
 			$targetLoader->register();
 
-			self::assertNull((new ComposerAutoloader($tempDir))('Legacy_Class'));
-			self::assertNotFalse(file_put_contents($autoload, "<?php\n"));
-
-			$loader = new ComposerAutoloader($tempDir);
+			$loader = new ComposerAutoloader($targetLoader);
 			self::assertSame($legacy, $loader('Legacy_Class'));
 
-			self::assertNotFalse(file_put_contents($config, sprintf(
-				'<mddoc><docpage target="%s"><file name="%s" /></docpage></mddoc>',
-				htmlspecialchars($output, ENT_XML1),
-				htmlspecialchars($child, ENT_XML1)
-			)));
+			new MDDoc([ 'mddoc', $config ]);
+			$markdown = file_get_contents($output);
+			self::assertIsString($markdown);
+			self::assertStringNotContainsString('function inherited()', $markdown);
+
+			self::assertNotFalse(file_put_contents($autoload, "<?php\n"));
 
 			new MDDoc([ 'mddoc', $config ]);
 
