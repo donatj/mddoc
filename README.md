@@ -51,7 +51,6 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
 
 ```xml
 <mddoc>
-  <autoloader type="psr4" root="src" namespace="donatj\MDDoc"/>
   <docpage target="README.md">
 
     <section title="MDDoc">
@@ -129,9 +128,9 @@ all children
 Multiple autoloaders can be specified, and they will be checked in the order  
 they are specified  
   
-These are necessary to specify by hand because the composer autoloaders  
-do not provide a method to locate a class by name without loading it,  
-which is necessary for documentation generation without code execution.  
+When mddoc is run through Composer, its registered autoloader is used  
+automatically to find project and dependency classes without loading them.  
+Use this tag to add PSR-0 or PSR-4 mappings, or override Composer mappings.  
   
 #### Attributes:  
   
