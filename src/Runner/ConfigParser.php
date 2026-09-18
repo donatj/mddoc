@@ -2,6 +2,7 @@
 
 namespace donatj\MDDoc\Runner;
 
+use donatj\MDDoc\Autoloaders\ComposerAutoloader;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Autoloaders\MultiLoader;
 use donatj\MDDoc\Autoloaders\Psr0;
@@ -24,7 +25,7 @@ class ConfigParser {
 	}
 
 	/**
-	 * @param array{autoloader?:AutoloaderInterface} $treeExtra
+	 * @param array{autoloader?:AutoloaderInterface,composerAutoloader?:AutoloaderInterface} $treeExtra
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
 	private function loadChildren(
@@ -78,6 +79,11 @@ class ConfigParser {
 				default:
 					throw new ConfigException("Unrecognized autoloader: {$childDoc->getType()}");
 			}
+		}
+
+		if( isset($treeExtra['composerAutoloader']) ) {
+			$loader->appendLoader($treeExtra['composerAutoloader']);
+			unset($treeExtra['composerAutoloader']);
 		}
 
 		$treeExtra['autoloader'] = $loader;
@@ -163,7 +169,9 @@ class ConfigParser {
 
 		$docRoot = new Documentation\DocRoot($attributeTree);
 		if( $root->nodeName === 'mddoc' ) {
-			$this->loadChildren($root, $docRoot, $attributeTree);
+			$this->loadChildren($root, $docRoot, $attributeTree, [
+				'composerAutoloader' => new ComposerAutoloader(dirname($filename)),
+			]);
 		} else {
 			if( $root->nodeName ) {
 				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid. Expected mddoc.");
