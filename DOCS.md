@@ -4,7 +4,7 @@
 
 
 
-### Method: `ComposerAutoloader->__construct(string $projectRoot)`
+### Method: `ComposerAutoloader->__construct(\Composer\Autoload\ClassLoader $loader)`
 
 ---
 
