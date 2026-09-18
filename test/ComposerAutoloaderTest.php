@@ -12,7 +12,6 @@ class ComposerAutoloaderTest extends TestCase {
 		self::assertTrue(mkdir($tempDir, 0700));
 		self::assertTrue(mkdir($tempDir . '/src', 0700));
 		self::assertTrue(mkdir($tempDir . '/legacy', 0700));
-		self::assertTrue(mkdir($tempDir . '/vendor', 0700));
 
 		try {
 			$child    = $tempDir . '/src/Child.php';
@@ -20,6 +19,10 @@ class ComposerAutoloaderTest extends TestCase {
 			$legacy   = $tempDir . '/legacy/Legacy/Class.php';
 			$config   = $tempDir . '/mddoc.xml';
 			$output   = $tempDir . '/README.md';
+			$autoload = $tempDir . '/vendor/autoload.php';
+
+			self::assertNull((new ComposerAutoloader($tempDir))('Legacy_Class'));
+			self::assertTrue(mkdir($tempDir . '/vendor', 0700));
 
 			self::assertTrue(mkdir(dirname($legacy), 0700));
 			self::assertNotFalse(file_put_contents($child, <<<'PHP'
@@ -54,6 +57,9 @@ PHP
 			$targetLoader->addPsr4('Example\\', [ $tempDir . '/src' ]);
 			$targetLoader->register();
 
+			self::assertNull((new ComposerAutoloader($tempDir))('Legacy_Class'));
+			self::assertNotFalse(file_put_contents($autoload, "<?php\n"));
+
 			$loader = new ComposerAutoloader($tempDir);
 			self::assertSame($legacy, $loader('Legacy_Class'));
 
@@ -74,7 +80,7 @@ PHP
 				$targetLoader->unregister();
 			}
 
-			foreach( [ $child ?? null, $parent ?? null, $legacy ?? null, $config ?? null, $output ?? null ] as $file ) {
+			foreach( [ $child ?? null, $parent ?? null, $legacy ?? null, $config ?? null, $output ?? null, $autoload ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {
 					unlink($file);
 				}
