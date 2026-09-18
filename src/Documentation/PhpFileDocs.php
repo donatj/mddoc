@@ -17,6 +17,7 @@ use donatj\MDDom\BlockQuote;
 use donatj\MDDom\Code;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\DocumentDepth;
+use donatj\MDDom\Emphasis;
 use donatj\MDDom\Header;
 use donatj\MDDom\HorizontalRule;
 use donatj\MDDom\Paragraph;
@@ -319,6 +320,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						$descriptions[] = [
 							'description'      => (string)$docMethodDescr,
 							'inheritanceDepth' => $docMethod->getInheritanceDepth(),
+							'inheritedFrom'    => $docMethod->getDeclaringClass(),
 						];
 					}
 				}
@@ -354,6 +356,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						$blocks[] = [
 							'block'            => $block,
 							'inheritanceDepth' => $subMethod->getInheritanceDepth(),
+							'inheritedFrom'    => $subMethod->getDeclaringClass(),
 						];
 					}
 				}
@@ -400,6 +403,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 							$descriptions[] = [
 								'description'      => $this->getDocStr($block),
 								'inheritanceDepth' => $blockData['inheritanceDepth'],
+								'inheritedFrom'    => $blockData['inheritedFrom'],
 							];
 						}
 					}
@@ -529,7 +533,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 	}
 
-	/** @param array<int,array{description:string,inheritanceDepth:int}> $descriptions */
+	/** @param array<int,array{description:string,inheritanceDepth:int,inheritedFrom:?string}> $descriptions */
 	private function appendDescriptions( DocumentDepth $document, array $descriptions ) : void {
 		$inheritedDescriptions = [];
 		foreach( $descriptions as $description ) {
@@ -538,7 +542,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				continue;
 			}
 
-			$inheritedDescriptions[$description['inheritanceDepth']][] = $description['description'];
+			$inheritedDescriptions[$description['inheritanceDepth']][] = $description;
 		}
 
 		if( !$inheritedDescriptions ) {
@@ -549,7 +553,15 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		for( $depth = max(array_keys($inheritedDescriptions)); $depth > 0; $depth-- ) {
 			$quoteContent = new DocumentDepth;
 			foreach( $inheritedDescriptions[$depth] ?? [] as $description ) {
-				$quoteContent->appendChild($this->descriptionFormat($description));
+				if( $description['inheritedFrom'] !== null ) {
+					$quoteContent->appendChild(new Paragraph(
+						new Emphasis('Inherited from:'),
+						' ',
+						new Code($description['inheritedFrom'])
+					));
+				}
+
+				$quoteContent->appendChild($this->descriptionFormat($description['description']));
 			}
 
 			if( $quote !== null ) {
