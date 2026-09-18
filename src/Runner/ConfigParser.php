@@ -71,6 +71,13 @@ class ConfigParser {
 			assert($childDoc instanceof Documentation\Autoloader);
 
 			switch( strtolower($childDoc->getType()) ) {
+				case 'composer':
+					if( !isset($treeExtra['composerAutoloader']) ) {
+						throw new ConfigException('Composer autoloader unavailable for config project');
+					}
+
+					$loader->appendLoader($treeExtra['composerAutoloader']);
+					break;
 				case 'psr0':
 					$loader->appendLoader(new Psr0($childDoc->getRoot()));
 					break;
@@ -80,11 +87,6 @@ class ConfigParser {
 				default:
 					throw new ConfigException("Unrecognized autoloader: {$childDoc->getType()}");
 			}
-		}
-
-		if( isset($treeExtra['composerAutoloader']) ) {
-			$loader->appendLoader($treeExtra['composerAutoloader']);
-			unset($treeExtra['composerAutoloader']);
 		}
 
 		$treeExtra['autoloader'] = $loader;
