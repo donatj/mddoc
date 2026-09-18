@@ -16,6 +16,7 @@ class Tag {
 	private array $arguments;
 	private bool $valid;
 	private int $inheritanceDepth;
+	private ?string $declaringClass;
 
 	/**
 	 * @param array<int,array{name:string,type:string}> $arguments
@@ -29,7 +30,8 @@ class Tag {
 		bool $static = false,
 		array $arguments = [],
 		bool $valid = true,
-		int $inheritanceDepth = 0
+		int $inheritanceDepth = 0,
+		?string $declaringClass = null
 	) {
 		$this->name         = $name;
 		$this->type         = $type;
@@ -40,6 +42,7 @@ class Tag {
 		$this->arguments    = $arguments;
 		$this->valid        = $valid;
 		$this->inheritanceDepth = $inheritanceDepth;
+		$this->declaringClass = $declaringClass;
 	}
 
 	public function getName() : string {
@@ -88,6 +91,17 @@ class Tag {
 	public function withInheritedDepth() : self {
 		$tag = clone $this;
 		$tag->inheritanceDepth++;
+
+		return $tag;
+	}
+
+	public function getDeclaringClass() : ?string {
+		return $this->declaringClass;
+	}
+
+	public function withDeclaringClass( string $declaringClass ) : self {
+		$tag = clone $this;
+		$tag->declaringClass = $declaringClass;
 
 		return $tag;
 	}

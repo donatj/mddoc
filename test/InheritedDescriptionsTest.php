@@ -64,10 +64,10 @@ PHP
 
 			$markdown = file_get_contents($output);
 			self::assertIsString($markdown);
-			self::assertMatchesRegularExpression(
-				'/^> Parent method description\.\n> \n> > Grandparent method description\.$/m',
-				$markdown
-			);
+			self::assertStringContainsString('> *Inherited from:* `\\Example\\ParentType`', $markdown);
+			self::assertStringContainsString('> > *Inherited from:* `\\Example\\GrandparentType`', $markdown);
+			self::assertMatchesRegularExpression('/^> Parent method description\.\n> \n> > /m', $markdown);
+			self::assertStringContainsString('> > Grandparent method description.', $markdown);
 		} finally {
 			foreach( [ $child ?? null, $parent ?? null, $grandparent ?? null, $config ?? null, $output ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {

@@ -123,7 +123,7 @@ class TaxonomyReflector {
 
 		if( $docBlock = $reflector->getDocBlock() ) {
 			foreach( $docBlock->getTagsByName('method') as $docMethod ) {
-				$this->data['docMethods'][$docMethod->getMethodName()][] = $docMethod;
+				$this->data['docMethods'][$docMethod->getMethodName()][] = $docMethod->withDeclaringClass($reflector->getFqsen());
 			}
 		}
 
