@@ -15,7 +15,6 @@ class Element {
 	private array $arguments;
 	private string $returnType;
 	private ?string $value;
-	private int $inheritanceDepth;
 
 	/**
 	 * @param Argument[] $arguments
@@ -28,8 +27,7 @@ class Element {
 		bool $static = false,
 		array $arguments = [],
 		string $returnType = 'mixed',
-		?string $value = null,
-		int $inheritanceDepth = 0
+		?string $value = null
 	) {
 		$this->name       = $name;
 		$this->fqsen      = $fqsen;
@@ -39,7 +37,6 @@ class Element {
 		$this->arguments  = $arguments;
 		$this->returnType = $returnType;
 		$this->value      = $value;
-		$this->inheritanceDepth = $inheritanceDepth;
 	}
 
 	public function getName() : string {
@@ -83,17 +80,6 @@ class Element {
 
 	public function getDefault() : ?string {
 		return $this->value;
-	}
-
-	public function getInheritanceDepth() : int {
-		return $this->inheritanceDepth;
-	}
-
-	public function withInheritedDepth() : self {
-		$element = clone $this;
-		$element->inheritanceDepth++;
-
-		return $element;
 	}
 
 }

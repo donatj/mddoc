@@ -318,14 +318,13 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				foreach( $docMethods as $docMethod ) {
 					if( $docMethodDescr = $docMethod->getDescription() ) {
 						$descriptions[] = [
-							'description'      => (string)$docMethodDescr,
-							'inheritanceDepth' => $docMethod->getInheritanceDepth(),
-							'inheritedFrom'    => $docMethod->getDeclaringClass(),
+							'description'   => (string)$docMethodDescr,
+							'inheritedFrom' => $docMethod->getDeclaringClass(),
 						];
 					}
 				}
 
-				$this->appendDescriptions($subDocument, $descriptions);
+				$this->appendDescriptions($subDocument, $descriptions, $class->getFqsen());
 			}
 
 			$methodData = $reflector->getMethods();
@@ -354,9 +353,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				foreach( $methods as $subMethod ) {
 					if( $block = $subMethod->getDocBlock() ) {
 						$blocks[] = [
-							'block'            => $block,
-							'inheritanceDepth' => $subMethod->getInheritanceDepth(),
-							'inheritedFrom'    => $subMethod->getDeclaringClass(),
+							'block'         => $block,
+							'inheritedFrom' => $subMethod->getDeclaringClass(),
 						];
 					}
 				}
@@ -401,14 +399,13 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						$block = $blockData['block'];
 						if( $block->getSummary() ) {
 							$descriptions[] = [
-								'description'      => $this->getDocStr($block),
-								'inheritanceDepth' => $blockData['inheritanceDepth'],
-								'inheritedFrom'    => $blockData['inheritedFrom'],
+								'description'   => $this->getDocStr($block),
+								'inheritedFrom' => $blockData['inheritedFrom'],
 							];
 						}
 					}
 
-					$this->appendDescriptions($subDocument, $descriptions);
+					$this->appendDescriptions($subDocument, $descriptions, $class->getFqsen());
 
 					if( $deprecatedBlocks = $firstBlock->getTagsByName('deprecated') ) {
 						$deprecatedDoc = new DocumentDepth;
@@ -533,45 +530,23 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
 	}
 
-	/** @param array<int,array{description:string,inheritanceDepth:int,inheritedFrom:?string}> $descriptions */
-	private function appendDescriptions( DocumentDepth $document, array $descriptions ) : void {
-		$inheritedDescriptions = [];
+	/** @param array<int,array{description:string,inheritedFrom:?string}> $descriptions */
+	private function appendDescriptions( DocumentDepth $document, array $descriptions, string $className ) : void {
 		foreach( $descriptions as $description ) {
-			if( $description['inheritanceDepth'] === 0 ) {
+			if( $description['inheritedFrom'] === null || $description['inheritedFrom'] === $className ) {
 				$document->appendChild($this->descriptionFormat($description['description']));
 				continue;
 			}
 
-			$inheritedDescriptions[$description['inheritanceDepth']][] = $description;
-		}
-
-		if( !$inheritedDescriptions ) {
-			return;
-		}
-
-		$quote = null;
-		for( $depth = max(array_keys($inheritedDescriptions)); $depth > 0; $depth-- ) {
 			$quoteContent = new DocumentDepth;
-			foreach( $inheritedDescriptions[$depth] ?? [] as $description ) {
-				if( $description['inheritedFrom'] !== null ) {
-					$quoteContent->appendChild(new Paragraph(
-						new Emphasis('Inherited from'),
-						': ',
-						new Code($description['inheritedFrom'])
-					));
-				}
-
-				$quoteContent->appendChild($this->descriptionFormat($description['description']));
-			}
-
-			if( $quote !== null ) {
-				$quoteContent->appendChild($quote);
-			}
-
-			$quote = new BlockQuote(null, $quoteContent);
+			$quoteContent->appendChild(new Paragraph(
+				new Emphasis('Inherited from'),
+				': ',
+				new Code($description['inheritedFrom'])
+			));
+			$quoteContent->appendChild($this->descriptionFormat($description['description']));
+			$document->appendChild(new BlockQuote(null, $quoteContent));
 		}
-
-		$document->appendChild($quote);
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {

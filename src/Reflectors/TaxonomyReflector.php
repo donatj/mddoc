@@ -195,21 +195,8 @@ class TaxonomyReflector {
 	private function mergeDependency( string $name ) : void {
 		$filename = ($this->autoLoader)($name);
 		if( $filename && is_readable($filename) ) {
-			$parser = $this->parserFactory->newInstance($filename, $this->autoLoader);
-
-			foreach( $parser->data['docMethods'] as $name => $docMethods ) {
-				foreach( $docMethods as $docMethod ) {
-					$this->data['docMethods'][$name][] = $docMethod->withInheritedDepth();
-				}
-			}
-
-			foreach( [ 'methods', 'constants', 'properties' ] as $type ) {
-				foreach( $parser->data[$type] as $name => $elements ) {
-					foreach( $elements as $element ) {
-						$this->data[$type][$name][] = $element->withInheritedDepth();
-					}
-				}
-			}
+			$parser     = $this->parserFactory->newInstance($filename, $this->autoLoader);
+			$this->data = array_merge_recursive($this->data, $parser->data);
 		}
 	}
 
