@@ -555,8 +555,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			foreach( $inheritedDescriptions[$depth] ?? [] as $description ) {
 				if( $description['inheritedFrom'] !== null ) {
 					$quoteContent->appendChild(new Paragraph(
-						new Emphasis('Inherited from:'),
-						' ',
+						new Emphasis('Inherited from'),
+						': ',
 						new Code($description['inheritedFrom'])
 					));
 				}

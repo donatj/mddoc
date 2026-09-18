@@ -64,8 +64,8 @@ PHP
 
 			$markdown = file_get_contents($output);
 			self::assertIsString($markdown);
-			self::assertStringContainsString('> *Inherited from:* `\\Example\\ParentType`', $markdown);
-			self::assertStringContainsString('> > *Inherited from:* `\\Example\\GrandparentType`', $markdown);
+			self::assertStringContainsString('> *Inherited from*: `\\Example\\ParentType`', $markdown);
+			self::assertStringContainsString('> > *Inherited from*: `\\Example\\GrandparentType`', $markdown);
 			self::assertMatchesRegularExpression('/^> Parent method description\.\n> \n> > /m', $markdown);
 			self::assertStringContainsString('> > Grandparent method description.', $markdown);
 		} finally {
