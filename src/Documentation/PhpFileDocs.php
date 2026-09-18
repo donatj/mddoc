@@ -14,6 +14,7 @@ use donatj\MDDoc\Reflectors\Source\Element;
 use donatj\MDDoc\Reflectors\Source\Tag;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use donatj\MDDom\AbstractElement;
+use donatj\MDDom\BlockQuote;
 use donatj\MDDom\Code;
 use donatj\MDDom\CodeBlock;
 use donatj\MDDom\DocumentDepth;
@@ -306,13 +307,17 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					new CodeBlock($this->getFunctionSignature($name, $args, (string)$docMethod->getReturnType()), 'php')
 				);
 
-				if( $docMethodDescr = $docMethod->getDescription() ) {
-					$subDocument->appendChild(
-						$this->descriptionFormat(
-							(string)$docMethodDescr
-						)
-					);
+				$descriptions = [];
+				foreach( $docMethods as $docMethod ) {
+					if( $docMethodDescr = $docMethod->getDescription() ) {
+						$descriptions[] = [
+							'description'      => (string)$docMethodDescr,
+							'inheritanceDepth' => $docMethod->getInheritanceDepth(),
+						];
+					}
 				}
+
+				$this->appendDescriptions($subDocument, $descriptions);
 			}
 
 			$methodData = $reflector->getMethods();
@@ -335,12 +340,15 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 				foreach( $methods as $subMethod ) {
 					if( $block = $subMethod->getDocBlock() ) {
-						$blocks[] = $block;
+						$blocks[] = [
+							'block'            => $block,
+							'inheritanceDepth' => $subMethod->getInheritanceDepth(),
+						];
 					}
 				}
 
-				foreach( $blocks as $block ) {
-					if( $this->shouldSkip($block) ) {
+				foreach( $blocks as $blockData ) {
+					if( $this->shouldSkip($blockData['block']) ) {
 						continue 2;
 					}
 				}
@@ -348,7 +356,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$subDocument = new DocumentDepth;
 				$document->appendChild($subDocument);
 
-				$firstBlock = reset($blocks);
+				$firstBlockData = reset($blocks);
+				$firstBlock     = $firstBlockData === false ? null : $firstBlockData['block'];
 
 				$operator = $method->isStatic() ? '::' : '->';
 
@@ -373,15 +382,18 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType()), 'php')
 					);
 
-					foreach( $blocks as $block ) {
+					$descriptions = [];
+					foreach( $blocks as $blockData ) {
+						$block = $blockData['block'];
 						if( $block->getSummary() ) {
-							$subDocument->appendChild(
-								$this->descriptionFormat(
-									$this->getDocStr($block)
-								)
-							);
+							$descriptions[] = [
+								'description'      => $this->getDocStr($block),
+								'inheritanceDepth' => $blockData['inheritanceDepth'],
+							];
 						}
 					}
+
+					$this->appendDescriptions($subDocument, $descriptions);
 
 					if( $deprecatedBlocks = $firstBlock->getTagsByName('deprecated') ) {
 						$deprecatedDoc = new DocumentDepth;
@@ -395,8 +407,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						}
 					}
 
-					foreach( $blocks as $block ) {
-						$paramDoc = $this->getParamDocs($block);
+					foreach( $blocks as $blockData ) {
+						$paramDoc = $this->getParamDocs($blockData['block']);
 						if( $paramDoc ) {
 							$subDocument->appendChild($paramDoc);
 							break;
@@ -536,6 +548,39 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		$wrapLength = (int)$wrapLength;
 
 		return $wrapLength > 0 ? $wrapLength : null;
+	}
+
+	/** @param array<int,array{description:string,inheritanceDepth:int}> $descriptions */
+	private function appendDescriptions( DocumentDepth $document, array $descriptions ) : void {
+		$inheritedDescriptions = [];
+		foreach( $descriptions as $description ) {
+			if( $description['inheritanceDepth'] === 0 ) {
+				$document->appendChild($this->descriptionFormat($description['description']));
+				continue;
+			}
+
+			$inheritedDescriptions[$description['inheritanceDepth']][] = $description['description'];
+		}
+
+		if( !$inheritedDescriptions ) {
+			return;
+		}
+
+		$quote = null;
+		for( $depth = max(array_keys($inheritedDescriptions)); $depth > 0; $depth-- ) {
+			$quoteContent = new DocumentDepth;
+			foreach( $inheritedDescriptions[$depth] ?? [] as $description ) {
+				$quoteContent->appendChild($this->descriptionFormat($description));
+			}
+
+			if( $quote !== null ) {
+				$quoteContent->appendChild($quote);
+			}
+
+			$quote = new BlockQuote(null, $quoteContent);
+		}
+
+		$document->appendChild($quote);
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {
