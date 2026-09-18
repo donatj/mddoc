@@ -378,7 +378,7 @@ function setLogger(\Psr\Log\LoggerInterface $logger) : void
 > *Inherited from*: `\Psr\Log\LoggerAwareTrait`
 > 
 > Sets a logger.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerAwareInterface`
 > 
 > Sets a logger instance on the object.
@@ -778,7 +778,7 @@ function setLogger(\Psr\Log\LoggerInterface $logger) : void
 > *Inherited from*: `\Psr\Log\LoggerAwareTrait`
 > 
 > Sets a logger.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerAwareInterface`
 > 
 > Sets a logger instance on the object.
@@ -1000,7 +1000,7 @@ function setLogger(\Psr\Log\LoggerInterface $logger) : void
 > *Inherited from*: `\Psr\Log\LoggerAwareTrait`
 > 
 > Sets a logger.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerAwareInterface`
 > 
 > Sets a logger instance on the object.
@@ -1086,7 +1086,7 @@ function setLogger(\Psr\Log\LoggerInterface $logger) : void
 > *Inherited from*: `\Psr\Log\LoggerAwareTrait`
 > 
 > Sets a logger.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerAwareInterface`
 > 
 > Sets a logger instance on the object.
@@ -1562,7 +1562,7 @@ function log($level, $message [, array $context = []]) : void
 > *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Logs with an arbitrary level.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Logs with an arbitrary level.
@@ -1584,7 +1584,7 @@ function emergency(string|\Stringable $message [, array $context = []]) : void
 > *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > System is unusable.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > System is unusable.
@@ -1607,7 +1607,7 @@ function alert(string|\Stringable $message [, array $context = []]) : void
 >   
 > Example: Entire website down, database unavailable, etc. This should  
 > trigger the SMS alerts and wake you up.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Action must be taken immediately.  
@@ -1632,7 +1632,7 @@ function critical(string|\Stringable $message [, array $context = []]) : void
 > Critical conditions.  
 >   
 > Example: Application component unavailable, unexpected exception.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Critical conditions.  
@@ -1655,7 +1655,7 @@ function error(string|\Stringable $message [, array $context = []]) : void
 > 
 > Runtime errors that do not require immediate action but should typically  
 > be logged and monitored.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Runtime errors that do not require immediate action but should typically  
@@ -1679,7 +1679,7 @@ function warning(string|\Stringable $message [, array $context = []]) : void
 >   
 > Example: Use of deprecated APIs, poor use of an API, undesirable things  
 > that are not necessarily wrong.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Exceptional occurrences that are not errors.  
@@ -1702,7 +1702,7 @@ function notice(string|\Stringable $message [, array $context = []]) : void
 > *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Normal but significant events.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Normal but significant events.
@@ -1724,7 +1724,7 @@ function info(string|\Stringable $message [, array $context = []]) : void
 > Interesting events.  
 >   
 > Example: User logs in, SQL logs.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Interesting events.  
@@ -1746,7 +1746,7 @@ function debug(string|\Stringable $message [, array $context = []]) : void
 > *Inherited from*: `\Psr\Log\LoggerTrait`
 > 
 > Detailed debug information.
-> 
+
 > *Inherited from*: `\Psr\Log\LoggerInterface`
 > 
 > Detailed debug information.
