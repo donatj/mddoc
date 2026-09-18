@@ -9,9 +9,9 @@
  * Multiple autoloaders can be specified, and they will be checked in the order
  * they are specified
  *
- * When mddoc is run through Composer, its registered autoloader is used
- * automatically to find project and dependency classes without loading them.
- * Use this tag to add PSR-0 or PSR-4 mappings, or override Composer mappings.
+ * The composer type uses the Composer autoloader registered for the project
+ * containing the configuration file. It finds project and dependency classes
+ * without loading them.
  */
 
 namespace donatj\MDDoc\Documentation;
@@ -21,15 +21,13 @@ use donatj\MDDoc\Runner\ImmutableAttributeTree;
 class Autoloader extends AbstractElement {
 
 	/**
-	 * The type of autoloader to use, either "psr0" or "psr4"
+	 * The type of autoloader to use: "composer", "psr0", or "psr4"
 	 *
 	 * @mddoc-required
 	 */
 	public const OPT_TYPE = 'type';
 	/**
-	 * The root directory of the autoloader
-	 *
-	 * @mddoc-required
+	 * The root directory of the autoloader, required for "psr0" and "psr4"
 	 */
 	public const OPT_ROOT = 'root';
 	/** The namespace of the autoloader, only used for psr4 */

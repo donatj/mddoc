@@ -2,12 +2,16 @@
 
 use Composer\Autoload\ClassLoader;
 use donatj\MDDoc\Autoloaders\ComposerAutoloader;
+use donatj\MDDoc\ElementFactory;
+use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\MDDoc;
+use donatj\MDDoc\Runner\ConfigParser;
+use donatj\MDDoc\Runner\TextUI;
 use PHPUnit\Framework\TestCase;
 
 class ComposerAutoloaderTest extends TestCase {
 
-	public function testConfigUsesComposerAutoloaderOnlyWithAutoloadFile() : void {
+	public function testConfigUsesDeclaredComposerAutoloader() : void {
 		$tempDir = sys_get_temp_dir() . '/mddoc-composer-autoloader-' . uniqid('', true);
 		self::assertTrue(mkdir($tempDir, 0700));
 		self::assertTrue(mkdir($tempDir . '/src', 0700));
@@ -49,15 +53,19 @@ PHP
 		));
 			self::assertNotFalse(file_put_contents($legacy, "<?php\n"));
 			self::assertNotFalse(file_put_contents($config, sprintf(
-				'<mddoc><docpage target="%s"><file name="%s" /></docpage></mddoc>',
+				'<mddoc><docpage target="%s"><autoloader type="composer"/><file name="%s" /></docpage></mddoc>',
 				htmlspecialchars($output, ENT_XML1),
 				htmlspecialchars($child, ENT_XML1)
 			)));
 
-			new MDDoc([ 'mddoc', $config ]);
-			$markdown = file_get_contents($output);
-			self::assertIsString($markdown);
-			self::assertStringNotContainsString('function inherited()', $markdown);
+			$ui     = new TextUI(STDOUT, STDERR);
+			$parser = new ConfigParser(new ElementFactory($ui), $ui);
+			try {
+				$parser->parse($config);
+				self::fail('Expected unavailable Composer autoloader to fail.');
+			} catch( ConfigException $exception ) {
+				self::assertSame('Composer autoloader unavailable for config project', $exception->getMessage());
+			}
 
 			self::assertTrue(mkdir($tempDir . '/vendor', 0700));
 
@@ -69,12 +77,23 @@ PHP
 			$loader = new ComposerAutoloader($targetLoader);
 			self::assertSame($legacy, $loader('Legacy_Class'));
 
+			self::assertNotFalse(file_put_contents($autoload, "<?php\n"));
+			self::assertNotFalse(file_put_contents($config, sprintf(
+				'<mddoc><docpage target="%s"><file name="%s" /></docpage></mddoc>',
+				htmlspecialchars($output, ENT_XML1),
+				htmlspecialchars($child, ENT_XML1)
+			)));
+
 			new MDDoc([ 'mddoc', $config ]);
 			$markdown = file_get_contents($output);
 			self::assertIsString($markdown);
 			self::assertStringNotContainsString('function inherited()', $markdown);
 
-			self::assertNotFalse(file_put_contents($autoload, "<?php\n"));
+			self::assertNotFalse(file_put_contents($config, sprintf(
+				'<mddoc><docpage target="%s"><autoloader type="composer"/><file name="%s" /></docpage></mddoc>',
+				htmlspecialchars($output, ENT_XML1),
+				htmlspecialchars($child, ENT_XML1)
+			)));
 
 			new MDDoc([ 'mddoc', $config ]);
 
