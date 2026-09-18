@@ -234,9 +234,9 @@ function output(int $depth)
 namespace donatj\MDDoc\Documentation;
 
 class Autoloader {
-	/** The type of autoloader to use, either "psr0" or "psr4" */
+	/** The type of autoloader to use: "composer", "psr0", or "psr4" */
 	public const OPT_TYPE = 'type';
-	/** The root directory of the autoloader */
+	/** The root directory of the autoloader, required for "psr0" and "psr4" */
 	public const OPT_ROOT = 'root';
 	/** The namespace of the autoloader, only used for psr4 */
 	public const OPT_NAMESPACE = 'namespace';
