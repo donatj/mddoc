@@ -67,7 +67,7 @@ class DryRunTest extends TestCase {
 		$command = implode(' ', [
 			escapeshellarg(PHP_BINARY),
 			escapeshellarg(__DIR__ . '/../composer/bin/mddoc'),
-			'--dry-run',
+			'--dry-run=true',
 			escapeshellarg($config),
 		]) . ' 2>&1';
 

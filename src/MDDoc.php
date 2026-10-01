@@ -71,7 +71,6 @@ class MDDoc {
 	 * @param string[] $args
 	 */
 	private function init( array $args, TextUI $ui ) : string {
-		$bareDryRun = $this->removeBareDryRunFlag($args);
 		$flags          = new Flags;
 		$displayHelp    = &$flags->bool('help', false, 'Display this help message.');
 		$displayVersion = &$flags->bool('version', false, 'Display this applications version.');
@@ -83,7 +82,7 @@ class MDDoc {
 			$ui->dropError($e->getMessage(), 1, $flags->getDefaults());
 		}
 
-		if( $dryRun || $bareDryRun ) {
+		if( $dryRun ) {
 			$this->dryRunResult = new DryRunResult;
 		}
 
@@ -110,28 +109,6 @@ class MDDoc {
 		}
 
 		throw new ConfigException('No config file found');
-	}
-
-	/**
-	 * donatj/flags treats the next positional argument as the value of a bare
-	 * boolean flag. Removing this switch preserves the usual CLI form:
-	 * `mddoc --dry-run path/to/mddoc.xml`.
-	 *
-	 * @param string[] $args
-	 */
-	private function removeBareDryRunFlag( array &$args ) : bool {
-		$found = false;
-
-		foreach( $args as $key => $arg ) {
-			if( $arg === '--dry-run' ) {
-				$found = true;
-				unset($args[$key]);
-			}
-		}
-
-		$args = array_values($args);
-
-		return $found;
 	}
 
 	private static function versionMarker( TextUI $ui ) : void {
