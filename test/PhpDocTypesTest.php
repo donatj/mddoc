@@ -45,11 +45,12 @@ class PhpDocTypesTest extends TestCase {
 				'***(\\Countable&\\Iterator)*** | ***\\Stringable*** `$union`',
 				'***?(\\Countable|\\Iterator)*** `$nullable`',
 				'**Throws**: `\\RuntimeException`',
-				'function find(callable(string|int): bool $filter) : array<string,int>',
+				'function nativeReturn(): int',
+				'function find(callable(string|int): bool $filter): array<string,int>',
 				'@var array{label: string,callback: callable(string|int): bool}',
 				'***\\RuntimeException***',
 				'***\\Psr\\Log\\LoggerInterface***',
-				'function dnf((\\Countable&\\Iterator)|\\Stringable $value) : (\\Countable&\\Iterator)|\\Stringable',
+				'function dnf((\\Countable&\\Iterator)|\\Stringable $value): (\\Countable&\\Iterator)|\\Stringable',
 			] as $needle ) {
 				self::assertStringContainsString($needle, $markdown);
 			}

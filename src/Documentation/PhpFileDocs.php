@@ -101,7 +101,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			$fReturnS = '';
 			$fReturn  = (string)$func->getReturnType();
 			if( $fReturn !== 'mixed' ) {
-				$fReturnS = " : {$fReturn}";
+				$fReturnS = ": {$fReturn}";
 			}
 
 			//			$subDocument = new DocumentDepth;
@@ -279,7 +279,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$fReturnS = '';
 				$fReturn  = (string)$docMethod->getReturnType();
 				if( $fReturn !== 'mixed' ) {
-					$fReturnS = " : {$fReturn}";
+					$fReturnS = ": {$fReturn}";
 				}
 
 				$subDocument = new DocumentDepth;
@@ -339,7 +339,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$fReturnS = '';
 				$fReturn  = (string)$method->getReturnType();
 				if( $fReturn !== 'mixed' ) {
-					$fReturnS = " : {$fReturn}";
+					$fReturnS = ": {$fReturn}";
 				}
 
 				$blocks = [];

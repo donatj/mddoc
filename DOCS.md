@@ -5,7 +5,7 @@
 ### Method: AutoloaderInterface->__invoke
 
 ```php
-function __invoke(string $className) : ?string
+function __invoke(string $className): ?string
 ```
 
 Locate the filename of a given class
@@ -27,7 +27,7 @@ A simple autoloader chain
 ### Method: MultiLoader->__invoke
 
 ```php
-function __invoke(string $className) : ?string
+function __invoke(string $className): ?string
 ```
 
 Locate the filename of a given class
@@ -49,7 +49,7 @@ Locate the filename of a given class
 ### Method: NullLoader->__invoke
 
 ```php
-function __invoke(string $className) : ?string
+function __invoke(string $className): ?string
 ```
 
 Locate the filename of a given class
@@ -77,7 +77,7 @@ function __construct(string $path)
 ### Method: Psr0->__invoke
 
 ```php
-function __invoke(string $className) : ?string
+function __invoke(string $className): ?string
 ```
 
 Locate the filename of a given class
@@ -106,7 +106,7 @@ function __construct(string $root_namespace, string $path)
 ### Method: Psr4->__invoke
 
 ```php
-function __invoke(string $className) : ?string
+function __invoke(string $className): ?string
 ```
 
 Locate the filename of a given class
@@ -160,7 +160,7 @@ function output(int $depth)
 ### Method: AbstractNestedDoc->getChildren
 
 ```php
-function getChildren() : array
+function getChildren(): array
 ```
 
 #### Returns:
@@ -172,7 +172,7 @@ function getChildren() : array
 ### Method: AbstractNestedDoc->getDocumentationChildren
 
 ```php
-function getDocumentationChildren() : array
+function getDocumentationChildren(): array
 ```
 
 #### Returns:
@@ -268,7 +268,7 @@ class Badge {
 ### Method: Badge->output
 
 ```php
-function output(int $depth) : string
+function output(int $depth): string
 ```
 
 #### Returns:
@@ -318,7 +318,7 @@ class BadgeCoveralls {
 ### Method: BadgeCoveralls->output
 
 ```php
-function output(int $depth) : string
+function output(int $depth): string
 ```
 
 #### Returns:
@@ -367,7 +367,7 @@ class BadgeGitHubActions {
 ### Method: BadgeGitHubActions->output
 
 ```php
-function output(int $depth) : string
+function output(int $depth): string
 ```
 
 #### Returns:
@@ -418,7 +418,7 @@ class BadgePoser {
 ### Method: BadgePoser->output
 
 ```php
-function output(int $depth) : string
+function output(int $depth): string
 ```
 
 #### Returns:
@@ -471,7 +471,7 @@ class BadgeScrutinizer {
 ### Method: BadgeScrutinizer->output
 
 ```php
-function output(int $depth) : string
+function output(int $depth): string
 ```
 
 #### Returns:
@@ -519,7 +519,7 @@ class BadgeShielded {
 ### Method: BadgeShielded->output
 
 ```php
-function output(int $depth) : string
+function output(int $depth): string
 ```
 
 #### Returns:
@@ -568,7 +568,7 @@ class BadgeTravis {
 ### Method: BadgeTravis->output
 
 ```php
-function output(int $depth) : string
+function output(int $depth): string
 ```
 
 #### Returns:
@@ -608,7 +608,7 @@ class ComposerInstall {
 ### Method: ComposerInstall->output
 
 ```php
-function output(int $depth) : \donatj\MDDom\Paragraph
+function output(int $depth): \donatj\MDDom\Paragraph
 ```
 
 #### Returns:
@@ -632,7 +632,7 @@ function output(int $depth) : \donatj\MDDom\Paragraph
 ### Method: ComposerRequires->output
 
 ```php
-function output(int $depth) : \donatj\MDDom\Paragraph
+function output(int $depth): \donatj\MDDom\Paragraph
 ```
 
 #### Returns:
@@ -674,7 +674,7 @@ class DocPage {
 ### Method: DocPage->output
 
 ```php
-function output(int $depth) : string
+function output(int $depth): string
 ```
 
 #### Returns:
@@ -686,7 +686,7 @@ function output(int $depth) : string
 ### Method: DocPage->getChildren
 
 ```php
-function getChildren() : array
+function getChildren(): array
 ```
 
 #### Returns:
@@ -698,7 +698,7 @@ function getChildren() : array
 ### Method: DocPage->getDocumentationChildren
 
 ```php
-function getDocumentationChildren() : array
+function getDocumentationChildren(): array
 ```
 
 #### Returns:
@@ -738,7 +738,7 @@ function output(int $depth)
 ### Method: DocRoot->getChildren
 
 ```php
-function getChildren() : array
+function getChildren(): array
 ```
 
 #### Returns:
@@ -750,7 +750,7 @@ function getChildren() : array
 ### Method: DocRoot->getDocumentationChildren
 
 ```php
-function getDocumentationChildren() : array
+function getDocumentationChildren(): array
 ```
 
 #### Returns:
@@ -800,7 +800,7 @@ class ExecOutput {
 ### Method: ExecOutput->output
 
 ```php
-function output(int $depth) : \donatj\MDDom\AbstractElement
+function output(int $depth): \donatj\MDDom\AbstractElement
 ```
 
 **Throws**: `\donatj\MDDoc\Exceptions\ConfigException`
@@ -834,7 +834,7 @@ class IncludeFile {
 ### Method: IncludeFile->output
 
 ```php
-function output(int $depth) : \donatj\MDDom\Paragraph
+function output(int $depth): \donatj\MDDom\Paragraph
 ```
 
 **Throws**: `\donatj\MDDoc\Exceptions\PathNotReadableException`
@@ -950,7 +950,7 @@ class RecursiveDirectory {
 ### Method: RecursiveDirectory->output
 
 ```php
-function output(int $depth) : \donatj\MDDom\Document
+function output(int $depth): \donatj\MDDom\Document
 ```
 
 #### Returns:
@@ -962,7 +962,7 @@ function output(int $depth) : \donatj\MDDom\Document
 ### Method: RecursiveDirectory->getChildren
 
 ```php
-function getChildren() : array
+function getChildren(): array
 ```
 
 #### Returns:
@@ -974,7 +974,7 @@ function getChildren() : array
 ### Method: RecursiveDirectory->getDocumentationChildren
 
 ```php
-function getDocumentationChildren() : array
+function getDocumentationChildren(): array
 ```
 
 #### Returns:
@@ -1016,7 +1016,7 @@ class Replace {
 ### Method: Replace->output
 
 ```php
-function output(int $depth) : string
+function output(int $depth): string
 ```
 
 #### Returns:
@@ -1028,7 +1028,7 @@ function output(int $depth) : string
 ### Method: Replace->getChildren
 
 ```php
-function getChildren() : array
+function getChildren(): array
 ```
 
 #### Returns:
@@ -1040,7 +1040,7 @@ function getChildren() : array
 ### Method: Replace->getDocumentationChildren
 
 ```php
-function getDocumentationChildren() : array
+function getDocumentationChildren(): array
 ```
 
 #### Returns:
@@ -1078,7 +1078,7 @@ class Section {
 ### Method: Section->output
 
 ```php
-function output(int $depth) : \donatj\MDDom\DocumentDepth
+function output(int $depth): \donatj\MDDom\DocumentDepth
 ```
 
 #### Returns:
@@ -1090,7 +1090,7 @@ function output(int $depth) : \donatj\MDDom\DocumentDepth
 ### Method: Section->getChildren
 
 ```php
-function getChildren() : array
+function getChildren(): array
 ```
 
 #### Returns:
@@ -1102,7 +1102,7 @@ function getChildren() : array
 ### Method: Section->getDocumentationChildren
 
 ```php
-function getDocumentationChildren() : array
+function getDocumentationChildren(): array
 ```
 
 #### Returns:
@@ -1144,7 +1144,7 @@ class Source {
 ### Method: Source->output
 
 ```php
-function output(int $depth) : \donatj\MDDom\AbstractElement
+function output(int $depth): \donatj\MDDom\AbstractElement
 ```
 
 #### Returns:
@@ -1168,7 +1168,7 @@ function output(int $depth) : \donatj\MDDom\AbstractElement
 ### Method: Text->output
 
 ```php
-function output(int $depth) : \donatj\MDDom\AbstractElement
+function output(int $depth): \donatj\MDDom\AbstractElement
 ```
 
 #### Returns:
@@ -1213,7 +1213,7 @@ ElementFactory constructor.
 ### Method: ElementFactory->makeFromTag
 
 ```php
-function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent) : \donatj\MDDoc\Documentation\Interfaces\ElementInterface
+function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent): \donatj\MDDoc\Documentation\Interfaces\ElementInterface
 ```
 
 Return a populated DocumentationInterface of the corresponding tagName
@@ -1273,7 +1273,7 @@ function __construct(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\Auto
 ### Method: TaxonomyReflector->getReflector
 
 ```php
-function getReflector() : ?\donatj\MDDoc\Reflectors\Source\Element
+function getReflector(): ?\donatj\MDDoc\Reflectors\Source\Element
 ```
 
 Returns the source class, interface, or trait declaration.
@@ -1283,7 +1283,7 @@ Returns the source class, interface, or trait declaration.
 ### Method: TaxonomyReflector->getDocMethods
 
 ```php
-function getDocMethods() : array
+function getDocMethods(): array
 ```
 
 #### Returns:
@@ -1295,7 +1295,7 @@ function getDocMethods() : array
 ### Method: TaxonomyReflector->getMethods
 
 ```php
-function getMethods() : array
+function getMethods(): array
 ```
 
 #### Returns:
@@ -1307,7 +1307,7 @@ function getMethods() : array
 ### Method: TaxonomyReflector->getConstants
 
 ```php
-function getConstants() : array
+function getConstants(): array
 ```
 
 #### Returns:
@@ -1319,7 +1319,7 @@ function getConstants() : array
 ### Method: TaxonomyReflector->getProperties
 
 ```php
-function getProperties() : array
+function getProperties(): array
 ```
 
 #### Returns:
@@ -1331,7 +1331,7 @@ function getProperties() : array
 ### Method: TaxonomyReflector->getFunctions
 
 ```php
-function getFunctions() : array
+function getFunctions(): array
 ```
 
 #### Returns:
@@ -1343,7 +1343,7 @@ function getFunctions() : array
 ### Method: TaxonomyReflectorFactory->newInstance
 
 ```php
-function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader) : \donatj\MDDoc\Reflectors\TaxonomyReflector
+function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader): \donatj\MDDoc\Reflectors\TaxonomyReflector
 ```
 
 **Throws**: `\donatj\MDDoc\Exceptions\ClassNotReadableException`
@@ -1359,7 +1359,7 @@ function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\Auto
 ### Method: ConfigParser->parse
 
 ```php
-function parse(string $filename) : \donatj\MDDoc\Documentation\DocRoot
+function parse(string $filename): \donatj\MDDoc\Documentation\DocRoot
 ```
 
 Parse a config file
@@ -1377,7 +1377,7 @@ ImmutableAttributeTree is a helper for reading XML Attributes
 ### Method: ImmutableAttributeTree->withAttr
 
 ```php
-function withAttr(array $attributes) : self
+function withAttr(array $attributes): self
 ```
 
 Returns a clone of this ImmutableAttributeTree with another depth of attributes appended.
@@ -1395,7 +1395,7 @@ Returns a clone of this ImmutableAttributeTree with another depth of attributes 
 ### Method: ImmutableAttributeTree->shallowValue
 
 ```php
-function shallowValue(string $attr) : ?string
+function shallowValue(string $attr): ?string
 ```
 
 Fetch an attribute value by key from the top-most element.
@@ -1409,7 +1409,7 @@ Fetch an attribute value by key from the top-most element.
 ### Method: ImmutableAttributeTree->deepValue
 
 ```php
-function deepValue(string $attr) : ?string
+function deepValue(string $attr): ?string
 ```
 
 Fetch the first attribute value by key from the starting with the top-most element and working up to the root.
@@ -1442,7 +1442,7 @@ UserInterface constructor.
 ### Method: TextUI->dropError
 
 ```php
-function dropError(string $text [, int $code = 1 [, ?string $additional = null]]) : void
+function dropError(string $text [, int $code = 1 [, ?string $additional = null]]): void
 ```
 
 Output an Error before exiting with given error code
