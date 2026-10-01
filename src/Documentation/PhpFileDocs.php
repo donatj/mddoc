@@ -140,7 +140,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					} elseif( $return->getType() === null ) {
 						$this->logInvalidTag('Unknown @return tag', $func, $filename, $name, $return);
 					} else {
-						$returnDoc->appendChild(new Header('Returns:'));
+						$returnDoc->appendChild(new Header('Return Value'));
 						$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
 					}
 				}
@@ -439,7 +439,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 								$returnDoc = new DocumentDepth;
 								$subDocument->appendChild($returnDoc);
 
-								$returnDoc->appendChild(new Header('Returns:'));
+								$returnDoc->appendChild(new Header('Return Value'));
 								$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
 							}
 						}
@@ -637,7 +637,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		if( $methodParams ) {
 			$paramDoc = new DocumentDepth;
 
-			$paramDoc->appendChild(new Header('Parameters:'));
+			$paramDoc->appendChild(new Header('Parameters'));
 
 			$output = '';
 			foreach( $methodParams as $tag ) {

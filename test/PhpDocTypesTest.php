@@ -52,6 +52,8 @@ class PhpDocTypesTest extends TestCase {
 				'***\\RuntimeException***',
 				'***\\Psr\\Log\\LoggerInterface***',
 				'function dnf((\\Countable&\\Iterator)|\\Stringable $value): (\\Countable&\\Iterator)|\\Stringable',
+				'### Parameters',
+				'### Return Value',
 				'## Method: ModernTypes->undocumented',
 				"function undocumented(string \$name = ''): string\n```\n\nUndocumented",
 			] as $needle ) {
@@ -59,6 +61,8 @@ class PhpDocTypesTest extends TestCase {
 			}
 
 			self::assertStringNotContainsString('Undocumented Method:', $markdown);
+			self::assertStringNotContainsString('### Parameters:', $markdown);
+			self::assertStringNotContainsString('### Returns:', $markdown);
 		} finally {
 			foreach( [ $config ?? null, $output ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {
