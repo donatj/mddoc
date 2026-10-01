@@ -8,6 +8,7 @@ use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDoc\Runner\ConfigParser;
+use donatj\MDDoc\Runner\DryRunResult;
 use donatj\MDDoc\Runner\TextUI;
 
 /**
@@ -22,6 +23,9 @@ class MDDoc {
 		".mddoc.xml.dist",
 	];
 
+	private int $exitCode = 0;
+	private ?DryRunResult $dryRunResult = null;
+
 	/**
 	 * @param string[] $args
 	 */
@@ -35,12 +39,15 @@ class MDDoc {
 		try {
 			$config = $this->init($args, $ui);
 			$parser = new ConfigParser(
-				new ElementFactory($ui), $ui
+				new ElementFactory($ui, $this->dryRunResult), $ui
 			);
 
 			$doc = $parser->parse($config);
 
 			$doc->output(0);
+			if( $this->dryRunResult !== null && $this->dryRunResult->hasMismatches() ) {
+				$this->exitCode = 1;
+			}
 		} catch( ConfigException $e ) {
 			$ui->dropError("Configuration error; " . $e->getMessage());
 		} catch( PathNotReadableException $e ) {
@@ -56,18 +63,28 @@ class MDDoc {
 		$ui->debug("[{$currMen}mb]{$peakMem}mb peak mem - {$time}s exec time");
 	}
 
+	public function getExitCode() : int {
+		return $this->exitCode;
+	}
+
 	/**
 	 * @param string[] $args
 	 */
 	private function init( array $args, TextUI $ui ) : string {
+		$bareDryRun = $this->removeBareDryRunFlag($args);
 		$flags          = new Flags;
 		$displayHelp    = &$flags->bool('help', false, 'Display this help message.');
 		$displayVersion = &$flags->bool('version', false, 'Display this applications version.');
+		$dryRun         = &$flags->bool('dry-run', false, 'Check generated documentation without writing files.');
 
 		try {
 			$flags->parse($args);
 		} catch( \Exception $e ) {
 			$ui->dropError($e->getMessage(), 1, $flags->getDefaults());
+		}
+
+		if( $dryRun || $bareDryRun ) {
+			$this->dryRunResult = new DryRunResult;
 		}
 
 		switch( true ) {
@@ -93,6 +110,28 @@ class MDDoc {
 		}
 
 		throw new ConfigException('No config file found');
+	}
+
+	/**
+	 * donatj/flags treats the next positional argument as the value of a bare
+	 * boolean flag. Removing this switch preserves the usual CLI form:
+	 * `mddoc --dry-run path/to/mddoc.xml`.
+	 *
+	 * @param string[] $args
+	 */
+	private function removeBareDryRunFlag( array &$args ) : bool {
+		$found = false;
+
+		foreach( $args as $key => $arg ) {
+			if( $arg === '--dry-run' ) {
+				$found = true;
+				unset($args[$key]);
+			}
+		}
+
+		$args = array_values($args);
+
+		return $found;
 	}
 
 	private static function versionMarker( TextUI $ui ) : void {

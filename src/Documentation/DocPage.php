@@ -12,6 +12,7 @@ namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\TargetNotWritableException;
+use donatj\MDDoc\Runner\DryRunResult;
 use donatj\MDDom\Document;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -19,6 +20,8 @@ use Psr\Log\LoggerAwareTrait;
 class DocPage extends AbstractNestedDoc implements LoggerAwareInterface {
 
 	use LoggerAwareTrait;
+
+	private ?DryRunResult $dryRunResult = null;
 
 	/**
 	 * Filename to output
@@ -45,7 +48,7 @@ class DocPage extends AbstractNestedDoc implements LoggerAwareInterface {
 		$pre_link_text  = $this->getOption(self::OPT_LINK_PRE_TEXT) ?: '';
 		$post_link_text = $this->getOption(self::OPT_LINK_POST_TEXT) ?: '';
 
-		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
+		if( $this->dryRunResult === null && ((is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target)) ) {
 			throw new TargetNotWritableException("Path '{$target}' not writable");
 		}
 
@@ -58,15 +61,27 @@ class DocPage extends AbstractNestedDoc implements LoggerAwareInterface {
 			$document->appendChild($output);
 		}
 
-		if( @file_put_contents($target, $document->exportMarkdown(-1)) === false ) {
+		$markdown = $document->exportMarkdown(-1);
+		if( $this->dryRunResult !== null ) {
+			if( @file_get_contents($target) !== $markdown ) {
+				$this->dryRunResult->markMismatch();
+				if( $this->logger ) {
+					$this->logger->warning("dry run: output '{$target}' differs");
+				}
+			}
+		} elseif( @file_put_contents($target, $markdown) === false ) {
 			throw new TargetNotWritableException("failed to write to '{$target}'");
 		}
 
-		if( $this->logger ) {
+		if( $this->logger && $this->dryRunResult === null ) {
 			$this->logger->info("output '{$target}'");
 		}
 
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
+	}
+
+	public function setDryRunResult( DryRunResult $dryRunResult ) : void {
+		$this->dryRunResult = $dryRunResult;
 	}
 
 	private function recursiveTouch( string $new, ?int $time = null ) : bool {

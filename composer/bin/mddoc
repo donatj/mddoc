@@ -14,4 +14,6 @@ foreach( $files as $file ) {
 }
 
 
-new \donatj\MDDoc\MDDoc($argv);
+$mddoc = new \donatj\MDDoc\MDDoc($argv);
+
+exit($mddoc->getExitCode());

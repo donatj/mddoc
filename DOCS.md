@@ -859,6 +859,14 @@ function output(int $depth): string
 
 ---
 
+### Method: DocPage->setDryRunResult
+
+```php
+function setDryRunResult(\donatj\MDDoc\Runner\DryRunResult $dryRunResult): void
+```
+
+---
+
 ### Method: DocPage->getChildren
 
 ```php
@@ -1533,7 +1541,7 @@ class ElementFactory {
 ### Method: ElementFactory->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\TextUI $ui)
+function __construct(\donatj\MDDoc\Runner\TextUI $ui, ?\donatj\MDDoc\Runner\DryRunResult $dryRunResult = null)
 ```
 
 ElementFactory constructor.
@@ -1599,6 +1607,14 @@ function __construct(array $args)
 #### Parameters
 
 - ***string[]*** `$args`
+
+---
+
+### Method: MDDoc->getExitCode
+
+```php
+function getExitCode(): int
+```
 
 ## Class: donatj\MDDoc\Reflectors\TaxonomyReflector
 
@@ -1713,6 +1729,22 @@ Parse a config file
 #### Return Value
 
 - ***\donatj\MDDoc\Documentation\DocRoot***
+
+## Class: donatj\MDDoc\Runner\DryRunResult
+
+### Method: DryRunResult->markMismatch
+
+```php
+function markMismatch(): void
+```
+
+---
+
+### Method: DryRunResult->hasMismatches
+
+```php
+function hasMismatches(): bool
+```
 
 ## Class: donatj\MDDoc\Runner\ImmutableAttributeTree
 
