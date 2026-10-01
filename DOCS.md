@@ -119,7 +119,7 @@ Locate the filename of a given class
 
 
 
-### Method: `AbstractDocPart->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `AbstractDocPart->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -145,7 +145,7 @@ function output(int $depth)
 
 
 
-### Method: `AbstractElement->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `AbstractElement->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -185,7 +185,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: `AbstractNestedDoc->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `AbstractNestedDoc->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -225,7 +225,7 @@ class Autoloader {
 
 
 
-### Method: `Autoloader->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `Autoloader->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -277,7 +277,7 @@ function output(int $depth): string
 
 ---
 
-### Method: `Badge->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `Badge->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -327,7 +327,7 @@ function output(int $depth): string
 
 ---
 
-### Method: `BadgeCoveralls->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `BadgeCoveralls->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -376,7 +376,7 @@ function output(int $depth): string
 
 ---
 
-### Method: `BadgeGitHubActions->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `BadgeGitHubActions->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -427,7 +427,7 @@ function output(int $depth): string
 
 ---
 
-### Method: `BadgePoser->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `BadgePoser->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -480,7 +480,7 @@ function output(int $depth): string
 
 ---
 
-### Method: `BadgeScrutinizer->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `BadgeScrutinizer->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -528,7 +528,7 @@ function output(int $depth): string
 
 ---
 
-### Method: `BadgeShielded->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `BadgeShielded->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -577,7 +577,7 @@ function output(int $depth): string
 
 ---
 
-### Method: `BadgeTravis->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `BadgeTravis->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -617,7 +617,7 @@ function output(int $depth): \donatj\MDDom\Paragraph
 
 ---
 
-### Method: `ComposerInstall->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `ComposerInstall->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -641,7 +641,7 @@ function output(int $depth): \donatj\MDDom\Paragraph
 
 ---
 
-### Method: `ComposerRequires->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `ComposerRequires->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -711,7 +711,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: `DocPage->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `DocPage->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -763,7 +763,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: `DocRoot->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `DocRoot->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -809,7 +809,7 @@ function output(int $depth): \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: `ExecOutput->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `ExecOutput->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -841,7 +841,7 @@ function output(int $depth): \donatj\MDDom\Paragraph
 
 ---
 
-### Method: `IncludeFile->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `IncludeFile->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -917,7 +917,7 @@ function output(int $depth)
 
 ---
 
-### Method: `PhpFileDocs->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `PhpFileDocs->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -987,7 +987,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: `RecursiveDirectory->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `RecursiveDirectory->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -1053,7 +1053,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: `Replace->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `Replace->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -1115,7 +1115,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: `Section->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `Section->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -1153,7 +1153,7 @@ function output(int $depth): \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: `Source->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `Source->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -1177,7 +1177,7 @@ function output(int $depth): \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: `Text->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree [, string $textContent = ''])`
+### Method: `Text->__construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')`
 
 ---
 
@@ -1222,7 +1222,7 @@ Return a populated DocumentationInterface of the corresponding tagName
 
 
 
-### Method: `ClassNotReadableException->__construct(string $message, string $path [, ?\Exception $previous_exception = null])`
+### Method: `ClassNotReadableException->__construct(string $message, string $path, ?\Exception $previous_exception = null)`
 
 ---
 
@@ -1236,7 +1236,7 @@ Return a populated DocumentationInterface of the corresponding tagName
 
 
 
-### Method: `PathNotReadableException->__construct(string $message, string $path [, ?\Exception $previous_exception = null])`
+### Method: `PathNotReadableException->__construct(string $message, string $path, ?\Exception $previous_exception = null)`
 
 ---
 
@@ -1442,7 +1442,7 @@ UserInterface constructor.
 ### Method: TextUI->dropError
 
 ```php
-function dropError(string $text [, int $code = 1 [, ?string $additional = null]]): void
+function dropError(string $text, int $code = 1, ?string $additional = null): void
 ```
 
 Output an Error before exiting with given error code
@@ -1455,8 +1455,8 @@ Output an Error before exiting with given error code
 
 ---
 
-### Method: `TextUI->println([ string $text = ''])`
+### Method: `TextUI->println(string $text = '')`
 
 ---
 
-### Method: `TextUI->log($level, $message [, array $context = []])`
+### Method: `TextUI->log($level, $message, array $context = [])`

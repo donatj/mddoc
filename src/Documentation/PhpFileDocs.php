@@ -491,8 +491,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	}
 
 	private function getArgumentString( Element $method ) : string {
-		$req_args = [];
-		$opt_args = [];
+		$args = [];
 		foreach( $method->getArguments() as $argument ) {
 			$prefix = '';
 			if( (string)$argument->getType() !== 'mixed' ) {
@@ -503,18 +502,15 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$prefix .= '...';
 			}
 
-			// @todo: the types are currently borked on default parameters.
-			$optDefault = $argument->getDefault();
-			if( $optDefault !== null ) {
-				$opt_args[] = $prefix . '$' . $argument->getName() . ' = ' . $optDefault;
-			} else {
-				$req_args[] = $prefix . '$' . $argument->getName();
+			$arg = $prefix . '$' . $argument->getName();
+			if( ($default = $argument->getDefault()) !== null ) {
+				$arg .= ' = ' . $default;
 			}
+
+			$args[] = $arg;
 		}
 
-		return implode(', ', $req_args) .
-			($opt_args ? ($req_args ? ' [, ' : '[ ') : '') .
-			implode(' [, ', $opt_args) . str_repeat(']', count($opt_args));
+		return implode(', ', $args);
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {
