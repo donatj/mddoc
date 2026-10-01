@@ -10,7 +10,7 @@ function __invoke(string $className): ?string
 
 Locate the filename of a given class
 
-#### Returns:
+#### Return Value
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
@@ -34,7 +34,7 @@ function __invoke(string $className): ?string
 
 Locate the filename of a given class
 
-#### Returns:
+#### Return Value
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
@@ -64,7 +64,7 @@ function __invoke(string $className): ?string
 
 Locate the filename of a given class
 
-#### Returns:
+#### Return Value
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
@@ -78,7 +78,7 @@ Class Psr0
 function __construct(string $path)
 ```
 
-#### Parameters:
+#### Parameters
 
 - ***string*** `$path` - Root path
 
@@ -92,7 +92,7 @@ function __invoke(string $className): ?string
 
 Locate the filename of a given class
 
-#### Returns:
+#### Return Value
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
@@ -106,7 +106,7 @@ Class Psr4
 function __construct(string $root_namespace, string $path)
 ```
 
-#### Parameters:
+#### Parameters
 
 - ***string*** `$root_namespace` - Namespace prefix
 - ***string*** `$path` - Root path
@@ -121,7 +121,7 @@ function __invoke(string $className): ?string
 
 Locate the filename of a given class
 
-#### Returns:
+#### Return Value
 
 - ***string*** | ***null*** - filename on class found, null on not found
 
@@ -157,7 +157,7 @@ function getTextContent(): string
 function output(int $depth)
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -193,7 +193,7 @@ function getTextContent(): string
 function getChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
 
@@ -205,7 +205,7 @@ function getChildren(): array
 function getDocumentationChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
@@ -249,7 +249,7 @@ function getTextContent(): string
 function output(int $depth)
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -339,7 +339,7 @@ class Badge {
 function output(int $depth): string
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -401,7 +401,7 @@ class BadgeCoveralls {
 function output(int $depth): string
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -462,7 +462,7 @@ class BadgeGitHubActions {
 function output(int $depth): string
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -525,7 +525,7 @@ class BadgePoser {
 function output(int $depth): string
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -590,7 +590,7 @@ class BadgeScrutinizer {
 function output(int $depth): string
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -650,7 +650,7 @@ class BadgeShielded {
 function output(int $depth): string
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -711,7 +711,7 @@ class BadgeTravis {
 function output(int $depth): string
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -763,7 +763,7 @@ class ComposerInstall {
 function output(int $depth): \donatj\MDDom\Paragraph
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -799,7 +799,7 @@ function getTextContent(): string
 function output(int $depth): \donatj\MDDom\Paragraph
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -853,7 +853,7 @@ class DocPage {
 function output(int $depth): string
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -865,7 +865,7 @@ function output(int $depth): string
 function getChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
 
@@ -877,7 +877,7 @@ function getChildren(): array
 function getDocumentationChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
@@ -921,7 +921,7 @@ function getTextContent(): string
 function output(int $depth)
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -933,7 +933,7 @@ function output(int $depth)
 function getChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
 
@@ -945,7 +945,7 @@ function getChildren(): array
 function getDocumentationChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
@@ -1099,7 +1099,7 @@ function setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface 
 function output(int $depth)
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -1147,7 +1147,7 @@ class PhpFileDocs {
 function output(int $depth)
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string***
 
@@ -1211,7 +1211,7 @@ function setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface 
 function output(int $depth): \donatj\MDDom\Document
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -1223,7 +1223,7 @@ function output(int $depth): \donatj\MDDom\Document
 function getChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
 
@@ -1235,7 +1235,7 @@ function getChildren(): array
 function getDocumentationChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
@@ -1293,7 +1293,7 @@ class Replace {
 function output(int $depth): string
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -1305,7 +1305,7 @@ function output(int $depth): string
 function getChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
 
@@ -1317,7 +1317,7 @@ function getChildren(): array
 function getDocumentationChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
@@ -1371,7 +1371,7 @@ class Section {
 function output(int $depth): \donatj\MDDom\DocumentDepth
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -1383,7 +1383,7 @@ function output(int $depth): \donatj\MDDom\DocumentDepth
 function getChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\ElementInterface[]***
 
@@ -1395,7 +1395,7 @@ function getChildren(): array
 function getDocumentationChildren(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\Interfaces\DocumentationInterface[]***
 
@@ -1453,7 +1453,7 @@ class Source {
 function output(int $depth): \donatj\MDDom\AbstractElement
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -1489,7 +1489,7 @@ function getTextContent(): string
 function output(int $depth): \donatj\MDDom\AbstractElement
 ```
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
@@ -1596,7 +1596,7 @@ Application MDDoc
 function __construct(array $args)
 ```
 
-#### Parameters:
+#### Parameters
 
 - ***string[]*** `$args`
 
@@ -1628,7 +1628,7 @@ Returns the source class, interface, or trait declaration.
 function getDocMethods(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***array<string,list<\donatj\MDDoc\Reflectors\Source\Tag>>***
 
@@ -1640,7 +1640,7 @@ function getDocMethods(): array
 function getMethods(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***array<string,list<\donatj\MDDoc\Reflectors\Source\Element>>***
 
@@ -1652,7 +1652,7 @@ function getMethods(): array
 function getConstants(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***array<string,list<\donatj\MDDoc\Reflectors\Source\Element>>***
 
@@ -1664,7 +1664,7 @@ function getConstants(): array
 function getProperties(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***array<string,list<\donatj\MDDoc\Reflectors\Source\Element>>***
 
@@ -1676,7 +1676,7 @@ function getProperties(): array
 function getFunctions(): array
 ```
 
-#### Returns:
+#### Return Value
 
 - ***array<string,\donatj\MDDoc\Reflectors\Source\Element>***
 
@@ -1710,7 +1710,7 @@ Parse a config file
 
 **Throws**: `\donatj\MDDoc\Exceptions\ConfigException`
 
-#### Returns:
+#### Return Value
 
 - ***\donatj\MDDoc\Documentation\DocRoot***
 
@@ -1726,11 +1726,11 @@ function withAttr(array $attributes): self
 
 Returns a clone of this ImmutableAttributeTree with another depth of attributes appended.
 
-#### Parameters:
+#### Parameters
 
 - ***array<string,string>*** `$attributes`
 
-#### Returns:
+#### Return Value
 
 - ***$this*** - Clone of current ImmutableAttributeTree
 
@@ -1744,7 +1744,7 @@ function shallowValue(string $attr): ?string
 
 Fetch an attribute value by key from the top-most element.
 
-#### Returns:
+#### Return Value
 
 - ***string*** | ***null*** - Returns null on not found.
 
@@ -1758,7 +1758,7 @@ function deepValue(string $attr): ?string
 
 Fetch the first attribute value by key from the starting with the top-most element and working up to the root.
 
-#### Returns:
+#### Return Value
 
 - ***string*** | ***null*** - Returns null on not found.
 
@@ -1772,7 +1772,7 @@ function __construct($STDOUT, $STDERR)
 
 UserInterface constructor.
 
-#### Parameters:
+#### Parameters
 
 - ***resource*** `$STDOUT`
 - ***resource*** `$STDERR`
@@ -1795,7 +1795,7 @@ function dropError(string $text, int $code = 1, ?string $additional = null): voi
 
 Output an Error before exiting with given error code
 
-#### Parameters:
+#### Parameters
 
 - ***string*** `$text` - Primary error log details
 - ***int*** `$code` - Status code to exit with (0-255)
