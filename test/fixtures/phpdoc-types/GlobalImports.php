@@ -14,3 +14,6 @@ function importedException() {
  */
 function groupedLogger() {
 }
+
+function nativeReturn() : int {
+}
