@@ -445,16 +445,11 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						}
 					}
 				} else {
-					$subDocument = new DocumentDepth;
-					$document->appendChild($subDocument);
-
-					// @todo Special rules for constructors and other "built ins"
-					$title = 'Undocumented Method';
-					if( $this->getOption(self::OPT_WARN_UNDOCUMENTED, true) === 'false' ) {
-						$title = 'Method';
+					$subDocument->appendChild(new Header("Method: {$class->getName()}{$operator}{$name}"));
+					$subDocument->appendChild(new CodeBlock("function {$name}({$args}){$fReturnS}", 'php'));
+					if( $this->getOption(self::OPT_WARN_UNDOCUMENTED, true) !== 'false' ) {
+						$subDocument->appendChild(new MdText('Undocumented'));
 					}
-
-					$subDocument->appendChild(new Header("{$title}: `{$class->getName()}{$operator}{$name}({$args})`"));
 				}
 			}
 		}

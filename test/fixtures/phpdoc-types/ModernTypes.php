@@ -85,4 +85,8 @@ class ModernTypes {
 	public function dnf( (\Countable&\Iterator)|\Stringable $value ) : (\Countable&\Iterator)|\Stringable {
 	}
 
+	public function undocumented( string $name = '' ) : string {
+		return $name;
+	}
+
 }
