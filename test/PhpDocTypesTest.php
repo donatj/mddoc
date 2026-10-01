@@ -47,6 +47,7 @@ class PhpDocTypesTest extends TestCase {
 				'**Throws**: `\\RuntimeException`',
 				'function nativeReturn(): int',
 				'function find(callable(string|int): bool $filter): array<string,int>',
+				'function optionalParameters(string $required, int $count = 1, ?string $label = \\null)',
 				'@var array{label: string,callback: callable(string|int): bool}',
 				'***\\RuntimeException***',
 				'***\\Psr\\Log\\LoggerInterface***',
