@@ -1738,6 +1738,10 @@ Parse a config file
 function write(string $target, callable $render): bool
 ```
 
+#### Parameters
+
+- ***callable(): string*** `$render`
+
 ## Class: donatj\MDDoc\Runner\DryRunDocumentationOutput
 
 ### Method: DryRunDocumentationOutput->write
@@ -1745,6 +1749,10 @@ function write(string $target, callable $render): bool
 ```php
 function write(string $target, callable $render): bool
 ```
+
+#### Parameters
+
+- ***callable(): string*** `$render`
 
 ## Class: donatj\MDDoc\Runner\FileDocumentationOutput
 
@@ -1761,6 +1769,10 @@ function __construct(\Psr\Log\LoggerInterface $logger)
 ```php
 function write(string $target, callable $render): bool
 ```
+
+#### Parameters
+
+- ***callable(): string*** `$render`
 
 ## Class: donatj\MDDoc\Runner\ImmutableAttributeTree
 

@@ -13,6 +13,7 @@ class FileDocumentationOutput implements DocumentationOutput {
 		$this->logger = $logger;
 	}
 
+	/** @param callable(): string $render */
 	public function write( string $target, callable $render ) : bool {
 		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
 			throw new TargetNotWritableException("Path '{$target}' not writable");
