@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface as Logger;
  *
  * @method static array<string,int> find(callable(string|int): bool $filter) Finds matching values.
  * @method static \DateTimeImmutable multiLineMagicSignature(\DateTimeImmutable $createdAt, \DateTimeImmutable $updatedAt, \DateTimeImmutable $publishedAt, \DateTimeImmutable $archivedAt)
+ * @method static \DateTimeImmutable multiLineCallableMagicSignature(callable(string, int): bool $filter, \DateTimeImmutable $createdAt, \DateTimeImmutable $updatedAt, \DateTimeImmutable $publishedAt)
  * @template T
  * @phpstan-type Item array-key
  */
@@ -92,6 +93,15 @@ class ModernTypes {
 		\DateTimeImmutable $updatedAt,
 		\DateTimeImmutable $publishedAt,
 		\DateTimeImmutable $archivedAt
+	) : \DateTimeImmutable {
+	}
+
+	/** A long signature with a comma-bearing default value. */
+	public function multiLineDefaultSignature(
+		array $labels = [ 'first', 'second' ],
+		\DateTimeImmutable $createdAt,
+		\DateTimeImmutable $updatedAt,
+		\DateTimeImmutable $publishedAt
 	) : \DateTimeImmutable {
 	}
 
