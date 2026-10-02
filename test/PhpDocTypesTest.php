@@ -53,6 +53,7 @@ class PhpDocTypesTest extends TestCase {
 				'***\\Psr\\Log\\LoggerInterface***',
 				'function dnf((\\Countable&\\Iterator)|\\Stringable $value): (\\Countable&\\Iterator)|\\Stringable',
 				"function multiLineSignature(\n\t\\DateTimeImmutable \$createdAt,\n\t\\DateTimeImmutable \$updatedAt,\n\t\\DateTimeImmutable \$publishedAt,\n\t\\DateTimeImmutable \$archivedAt,\n): \\DateTimeImmutable",
+				"function aMethodWithAnIntentionallyLongNameThatStillRequiresWrappingEvenThoughItDoesNotHaveAnyParametersAtAll(\n): \\DateTimeImmutable",
 				'### Parameters',
 				'### Return Value',
 				'## Method: ModernTypes->undocumented',

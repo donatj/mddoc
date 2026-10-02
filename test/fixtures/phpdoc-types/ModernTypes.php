@@ -94,6 +94,10 @@ class ModernTypes {
 	) : \DateTimeImmutable {
 	}
 
+	/** A parameterless method whose generated signature still exceeds the line limit. */
+	public function aMethodWithAnIntentionallyLongNameThatStillRequiresWrappingEvenThoughItDoesNotHaveAnyParametersAtAll() : \DateTimeImmutable {
+	}
+
 	public function undocumented( string $name = '' ) : string {
 		return $name;
 	}
