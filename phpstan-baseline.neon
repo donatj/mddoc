@@ -1,0 +1,247 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Parameter \#1 \$arg of function escapeshellarg expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Documentation/ComposerInstall.php
+
+		-
+			message: '#^Part \$version \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
+			count: 1
+			path: src/Documentation/ComposerRequires.php
+
+		-
+			message: '#^Cannot call method getArguments\(\) on donatj\\MDDoc\\Reflectors\\Source\\Tag\|false\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method getDefault\(\) on donatj\\MDDoc\\Reflectors\\Source\\Element\|false\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method getDescription\(\) on donatj\\MDDoc\\Reflectors\\Source\\Tag\|false\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method getDocBlock\(\) on donatj\\MDDoc\\Reflectors\\Source\\Element\|false\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method getMethodName\(\) on donatj\\MDDoc\\Reflectors\\Source\\Tag\|false\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method getName\(\) on donatj\\MDDoc\\Reflectors\\Source\\Element\|false\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method getReturnType\(\) on donatj\\MDDoc\\Reflectors\\Source\\Element\|false\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method getReturnType\(\) on donatj\\MDDoc\\Reflectors\\Source\\Tag\|false\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method getVisibility\(\) on donatj\\MDDoc\\Reflectors\\Source\\Element\|false\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method isStatic\(\) on donatj\\MDDoc\\Reflectors\\Source\\Element\|false\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method isStatic\(\) on donatj\\MDDoc\\Reflectors\\Source\\Tag\|false\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Cannot call method notice\(\) on Psr\\Log\\LoggerInterface\|null\.$#'
+			identifier: method.nonObject
+			count: 2
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Method donatj\\MDDoc\\Documentation\\PhpFileDocs\:\:smartLineTrim\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Parameter \#1 \$method of method donatj\\MDDoc\\Documentation\\PhpFileDocs\:\:getArgumentString\(\) expects donatj\\MDDoc\\Reflectors\\Source\\Element, donatj\\MDDoc\\Reflectors\\Source\\Element\|false given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Parameter \#1 \$source of class donatj\\MDDom\\Code constructor expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between string and false will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/Documentation/PhpFileDocs.php
+
+		-
+			message: '#^Parameter \#1 \.\.\.\$children of method donatj\\MDDom\\AbstractNestingElement\:\:appendChild\(\) expects donatj\\MDDom\\AbstractElement\|float\|int\|string, donatj\\MDDom\\AbstractElement\|string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Documentation/RecursiveDirectory.php
+
+		-
+			message: '#^Call to function is_subclass_of\(\) with ''donatj\\\\MDDoc\\\\Documentation\\\\Autoloader''\|''donatj\\\\MDDoc\\\\Documentation\\\\Badges\\\\Badge''\|''donatj\\\\MDDoc\\\\Documentation\\\\Badges\\\\BadgeCoveralls''\|''donatj\\\\MDDoc\\\\Documentation\\\\Badges\\\\BadgeGitHubActions''\|''donatj\\\\MDDoc\\\\Documentation\\\\Badges\\\\BadgePoser''\|''donatj\\\\MDDoc\\\\Documentation\\\\Badges\\\\BadgeScrutinizer''\|''donatj\\\\MDDoc\\\\Documentation\\\\Badges\\\\BadgeShielded''\|''donatj\\\\MDDoc\\\\Documentation\\\\Badges\\\\BadgeTravis''\|''donatj\\\\MDDoc\\\\Documentation\\\\ComposerInstall''\|''donatj\\\\MDDoc\\\\Documentation\\\\ComposerRequires''\|''donatj\\\\MDDoc\\\\Documentation\\\\DocPage''\|''donatj\\\\MDDoc\\\\Documentation\\\\ExecOutput''\|''donatj\\\\MDDoc\\\\Documentation\\\\IncludeFile''\|''donatj\\\\MDDoc\\\\Documentation\\\\PhpFileDocs''\|''donatj\\\\MDDoc\\\\Documentation\\\\RecursiveDirectory''\|''donatj\\\\MDDoc\\\\Documentation\\\\Replace''\|''donatj\\\\MDDoc\\\\Documentation\\\\Section''\|''donatj\\\\MDDoc\\\\Documentation\\\\Source''\|''donatj\\\\MDDoc\\\\Documentation\\\\Text'' and ''donatj\\\\MDDoc\\\\Documentation\\\\Interfaces\\\\ElementInterface'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/ElementFactory.php
+
+		-
+			message: '#^Argument of an invalid type list\<string\>\|false supplied for foreach, only iterables are supported\.$#'
+			identifier: foreach.nonIterable
+			count: 3
+			path: src/Reflectors/Source/DocBlockParser.php
+
+		-
+			message: '#^Method donatj\\MDDoc\\Reflectors\\Source\\DocBlockParser\:\:normaliseTagDescription\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Reflectors/Source/DocBlockParser.php
+
+		-
+			message: '#^Parameter \#1 \$str of function ltrim expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Reflectors/Source/DocBlockParser.php
+
+		-
+			message: '#^Parameter \#1 \$str of function rtrim expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Reflectors/Source/DocBlockParser.php
+
+		-
+			message: '#^Parameter \#2 \$subject of function preg_match expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 3
+			path: src/Reflectors/Source/DocBlockParser.php
+
+		-
+			message: '#^Parameter \#2 \$subject of function preg_split expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Reflectors/Source/DocBlockParser.php
+
+		-
+			message: '#^Method donatj\\MDDoc\\Reflectors\\Source\\PhpDocTypeFormatter\:\:format\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Reflectors/Source/PhpDocTypeFormatter.php
+
+		-
+			message: '#^Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: src/Reflectors/TaxonomyReflector.php
+
+		-
+			message: '#^Binary operation "\." between non\-falsy\-string and PhpParser\\Node\\Expr\|string results in an error\.$#'
+			identifier: binaryOp.invalid
+			count: 1
+			path: src/Reflectors/TaxonomyReflector.php
+
+		-
+			message: '#^Cannot cast PhpParser\\Node to string\.$#'
+			identifier: cast.string
+			count: 1
+			path: src/Reflectors/TaxonomyReflector.php
+
+		-
+			message: '#^Instanceof between PhpParser\\Node\\Identifier\|PhpParser\\Node\\IntersectionType\|PhpParser\\Node\\Name and PhpParser\\Node\\UnionType will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
+			count: 1
+			path: src/Reflectors/TaxonomyReflector.php
+
+		-
+			message: '#^Parameter \#1 \$name of class donatj\\MDDoc\\Reflectors\\Source\\Argument constructor expects string, PhpParser\\Node\\Expr\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Reflectors/TaxonomyReflector.php
+
+		-
+			message: '#^Parameter \#1 \$name of class donatj\\MDDoc\\Reflectors\\Source\\Element constructor expects string, PhpParser\\Node\\Expr\|string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Reflectors/TaxonomyReflector.php
+
+		-
+			message: '#^Property donatj\\MDDoc\\Reflectors\\TaxonomyReflector\:\:\$data \(array\{docMethods\: array\<string, list\<donatj\\MDDoc\\Reflectors\\Source\\Tag\>\>, methods\: array\<string, list\<donatj\\MDDoc\\Reflectors\\Source\\Element\>\>, constants\: array\<string, list\<donatj\\MDDoc\\Reflectors\\Source\\Element\>\>, properties\: array\<string, list\<donatj\\MDDoc\\Reflectors\\Source\\Element\>\>\}\) does not accept array\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Reflectors/TaxonomyReflector.php
+
+		-
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 1
+			path: src/Reflectors/TaxonomyReflector.php
+
+		-
+			message: '#^Call to an undefined method donatj\\MDDoc\\Documentation\\Interfaces\\ElementInterface\:\:setParent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Runner/ConfigParser.php
+
+		-
+			message: '#^Call to function assert\(\) with true will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Runner/ConfigParser.php
+
+		-
+			message: '#^Instanceof between DOMAttr and DOMAttr will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Runner/ConfigParser.php
+
+		-
+			message: '#^Instanceof between DOMElement and DOMElement will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: src/Runner/ConfigParser.php
+
+		-
+			message: '#^Method donatj\\MDDoc\\Runner\\TextUI\:\:log\(\) has parameter \$message with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Runner/TextUI.php
