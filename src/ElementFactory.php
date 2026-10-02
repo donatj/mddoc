@@ -2,8 +2,10 @@
 
 namespace donatj\MDDoc;
 
+use donatj\MDDoc\Documentation\Interfaces\DocumentationOutputStrategyAware;
 use donatj\MDDoc\Documentation\Interfaces\ElementInterface;
 use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDoc\Runner\DocumentationOutputStrategy;
 use donatj\MDDoc\Runner\ImmutableAttributeTree;
 use donatj\MDDoc\Runner\TextUI;
 use Psr\Log\LoggerAwareInterface;
@@ -13,14 +15,15 @@ use Psr\Log\LoggerAwareInterface;
  */
 class ElementFactory {
 
-	/** @var \donatj\MDDoc\Runner\TextUI */
-	private $ui;
+	private TextUI $ui;
+	private DocumentationOutputStrategy $documentationOutputStrategy;
 
 	/**
 	 * ElementFactory constructor.
 	 */
-	public function __construct( TextUI $ui ) {
-		$this->ui = $ui;
+	public function __construct( TextUI $ui, DocumentationOutputStrategy $documentationOutputStrategy ) {
+		$this->ui                          = $ui;
+		$this->documentationOutputStrategy = $documentationOutputStrategy;
 	}
 
 	public const DEFAULT_ELEMENTS = [
@@ -72,6 +75,10 @@ class ElementFactory {
 				$element = new $element($attributeTree, $textContent);
 				if( $element instanceof LoggerAwareInterface ) {
 					$element->setLogger($this->ui);
+				}
+
+				if( $element instanceof DocumentationOutputStrategyAware ) {
+					$element->setDocumentationOutputStrategy($this->documentationOutputStrategy);
 				}
 
 				return $element;

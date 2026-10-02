@@ -859,6 +859,14 @@ function output(int $depth): string
 
 ---
 
+### Method: DocPage->setDocumentationOutputStrategy
+
+```php
+function setDocumentationOutputStrategy(\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy): void
+```
+
+---
+
 ### Method: DocPage->getChildren
 
 ```php
@@ -1109,6 +1117,14 @@ function output(int $depth)
 
 ```php
 function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)
+```
+
+## Class: donatj\MDDoc\Documentation\Interfaces\DocumentationOutputStrategyAware
+
+### Method: DocumentationOutputStrategyAware->setDocumentationOutputStrategy
+
+```php
+function setDocumentationOutputStrategy(\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy): void
 ```
 
 ## Class: donatj\MDDoc\Documentation\Interfaces\ElementInterface
@@ -1533,7 +1549,7 @@ class ElementFactory {
 ### Method: ElementFactory->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\TextUI $ui)
+function __construct(\donatj\MDDoc\Runner\TextUI $ui, \donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy)
 ```
 
 ElementFactory constructor.
@@ -1565,6 +1581,22 @@ function getPath(): string
 ```
 
 ## Class: donatj\MDDoc\Exceptions\ConfigException
+
+## Class: donatj\MDDoc\Exceptions\DryRunMismatchException
+
+### Method: DryRunMismatchException->__construct
+
+```php
+function __construct(string $target)
+```
+
+---
+
+### Method: DryRunMismatchException->getTarget
+
+```php
+function getTarget(): string
+```
 
 ## Class: donatj\MDDoc\Exceptions\MDDocException
 
@@ -1713,6 +1745,50 @@ Parse a config file
 #### Return Value
 
 - ***\donatj\MDDoc\Documentation\DocRoot***
+
+## Class: donatj\MDDoc\Runner\DocumentationOutputStrategy
+
+### Method: DocumentationOutputStrategy->write
+
+```php
+function write(string $target, callable $render): bool
+```
+
+#### Parameters
+
+- ***callable(): string*** `$render`
+
+## Class: donatj\MDDoc\Runner\DryRunDocumentationOutputStrategy
+
+### Method: DryRunDocumentationOutputStrategy->write
+
+```php
+function write(string $target, callable $render): bool
+```
+
+#### Parameters
+
+- ***callable(): string*** `$render`
+
+## Class: donatj\MDDoc\Runner\FileDocumentationOutputStrategy
+
+### Method: FileDocumentationOutputStrategy->__construct
+
+```php
+function __construct(\Psr\Log\LoggerInterface $logger)
+```
+
+---
+
+### Method: FileDocumentationOutputStrategy->write
+
+```php
+function write(string $target, callable $render): bool
+```
+
+#### Parameters
+
+- ***callable(): string*** `$render`
 
 ## Class: donatj\MDDoc\Runner\ImmutableAttributeTree
 

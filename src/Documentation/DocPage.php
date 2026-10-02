@@ -10,15 +10,15 @@
 
 namespace donatj\MDDoc\Documentation;
 
+use donatj\MDDoc\Documentation\Interfaces\DocumentationOutputStrategyAware;
 use donatj\MDDoc\Exceptions\ConfigException;
-use donatj\MDDoc\Exceptions\TargetNotWritableException;
+use donatj\MDDoc\Exceptions\MDDocException;
+use donatj\MDDoc\Runner\DocumentationOutputStrategy;
 use donatj\MDDom\Document;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 
-class DocPage extends AbstractNestedDoc implements LoggerAwareInterface {
+class DocPage extends AbstractNestedDoc implements DocumentationOutputStrategyAware {
 
-	use LoggerAwareTrait;
+	private DocumentationOutputStrategy $documentationOutputStrategy;
 
 	/**
 	 * Filename to output
@@ -45,54 +45,26 @@ class DocPage extends AbstractNestedDoc implements LoggerAwareInterface {
 		$pre_link_text  = $this->getOption(self::OPT_LINK_PRE_TEXT) ?: '';
 		$post_link_text = $this->getOption(self::OPT_LINK_POST_TEXT) ?: '';
 
-		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
-			throw new TargetNotWritableException("Path '{$target}' not writable");
-		}
+		if( !$this->documentationOutputStrategy->write($target, function () use( $document ) : string {
+			foreach( $this->getDocumentationChildren() as $child ) {
+				$output = $child->output(0);
+				if( $output === null ) {
+					throw new ConfigException(get_class($child) . ' incorrectly used as a nested element');
+				}
 
-		foreach( $this->getDocumentationChildren() as $child ) {
-			$output = $child->output(0);
-			if( $output === null ) {
-				throw new ConfigException(get_class($child) . ' incorrectly used as a nested element');
+				$document->appendChild($output);
 			}
 
-			$document->appendChild($output);
-		}
-
-		if( @file_put_contents($target, $document->exportMarkdown(-1)) === false ) {
-			throw new TargetNotWritableException("failed to write to '{$target}'");
-		}
-
-		if( $this->logger ) {
-			$this->logger->info("output '{$target}'");
+			return $document->exportMarkdown(-1);
+		}) ) {
+			throw new MDDocException("failed to write output '{$target}'");
 		}
 
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
 	}
 
-	private function recursiveTouch( string $new, ?int $time = null ) : bool {
-		if( $time === null ) {
-			$time = time();
-		}
-
-		if( $new[0] !== '/' && $new[0] !== '.' ) {
-			$new = realpath('.') . '/' . $new;
-		}
-
-		$dirs = explode('/', $new);
-		array_pop($dirs);
-
-		$path = '';
-		array_filter($dirs);
-		foreach( $dirs as $dir ) {
-			$path .= '/' . $dir;
-			if( !is_dir($path) ) {
-				if( !mkdir($path) && !is_dir($path) ) {
-					return false;
-				}
-			}
-		}
-
-		return touch($new, $time);
+	public function setDocumentationOutputStrategy( DocumentationOutputStrategy $documentationOutputStrategy ) : void {
+		$this->documentationOutputStrategy = $documentationOutputStrategy;
 	}
 
 	protected function init() : void {

@@ -5,9 +5,13 @@ namespace donatj\MDDoc;
 use Composer\InstalledVersions;
 use donatj\Flags;
 use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDoc\Exceptions\DryRunMismatchException;
 use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDoc\Runner\ConfigParser;
+use donatj\MDDoc\Runner\DocumentationOutputStrategy;
+use donatj\MDDoc\Runner\DryRunDocumentationOutputStrategy;
+use donatj\MDDoc\Runner\FileDocumentationOutputStrategy;
 use donatj\MDDoc\Runner\TextUI;
 
 /**
@@ -22,6 +26,8 @@ class MDDoc {
 		".mddoc.xml.dist",
 	];
 
+	private DocumentationOutputStrategy $documentationOutputStrategy;
+
 	/**
 	 * @param string[] $args
 	 */
@@ -35,12 +41,16 @@ class MDDoc {
 		try {
 			$config = $this->init($args, $ui);
 			$parser = new ConfigParser(
-				new ElementFactory($ui), $ui
+				new ElementFactory($ui, $this->documentationOutputStrategy), $ui
 			);
 
 			$doc = $parser->parse($config);
 
 			$doc->output(0);
+		} catch( DryRunMismatchException $e ) {
+			$ui->warning("output '{$e->getTarget()}' differs");
+
+			die(1);
 		} catch( ConfigException $e ) {
 			$ui->dropError("Configuration error; " . $e->getMessage());
 		} catch( PathNotReadableException $e ) {
@@ -63,12 +73,17 @@ class MDDoc {
 		$flags          = new Flags;
 		$displayHelp    = &$flags->bool('help', false, 'Display this help message.');
 		$displayVersion = &$flags->bool('version', false, 'Display this applications version.');
+		$dryRun         = &$flags->bool('dry-run', false, 'Check generated documentation without writing files.');
 
 		try {
 			$flags->parse($args);
 		} catch( \Exception $e ) {
 			$ui->dropError($e->getMessage(), 1, $flags->getDefaults());
 		}
+
+		$this->documentationOutputStrategy = $dryRun
+			? new DryRunDocumentationOutputStrategy
+			: new FileDocumentationOutputStrategy($ui);
 
 		switch( true ) {
 			case $displayVersion:
