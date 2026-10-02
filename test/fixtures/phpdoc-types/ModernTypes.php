@@ -8,6 +8,7 @@ use Psr\Log\LoggerInterface as Logger;
  * A source file that uses PHPDoc types beyond phpDocumentor/reflection's grammar.
  *
  * @method static array<string,int> find(callable(string|int): bool $filter) Finds matching values.
+ * @method static \DateTimeImmutable multiLineMagicSignature(\DateTimeImmutable $createdAt, \DateTimeImmutable $updatedAt, \DateTimeImmutable $publishedAt, \DateTimeImmutable $archivedAt)
  * @template T
  * @phpstan-type Item array-key
  */
@@ -96,6 +97,10 @@ class ModernTypes {
 
 	/** A parameterless method whose generated signature still exceeds the line limit. */
 	public function aMethodWithAnIntentionallyLongNameThatStillRequiresWrappingEvenThoughItDoesNotHaveAnyParametersAtAll() : \DateTimeImmutable {
+	}
+
+	/** A variadic method. */
+	public function variadicSignature( string ...$values ) : void {
 	}
 
 	public function undocumented( string $name = '' ) : string {
