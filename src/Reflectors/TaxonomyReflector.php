@@ -89,6 +89,7 @@ class TaxonomyReflector {
 
 	/**
 	 * @param Node[] $nodes
+	 * @param array<string,string> $imports
 	 */
 	private function registerStatements( array $nodes, string $namespace = '', array $imports = [] ) : void {
 		foreach( $nodes as $node ) {
@@ -105,6 +106,7 @@ class TaxonomyReflector {
 
 	/**
 	 * @param Class_|Interface_|Trait_ $node
+	 * @param array<string,string> $imports
 	 */
 	private function registerClassReflector( Node $node, string $namespace, array $imports ) : void {
 		$classDocBlock = $this->docBlockParser->parse($this->getDocComment($node), $namespace, $imports);
@@ -222,6 +224,7 @@ class TaxonomyReflector {
 		}
 	}
 
+	/** @param array<string,string> $imports */
 	private function elementFromFunction( Function_ $node, string $namespace, array $imports ) : Element {
 		$name = $node->name->toString();
 
@@ -236,7 +239,10 @@ class TaxonomyReflector {
 		);
 	}
 
-	/** @param array<string,true> $typeNames */
+	/**
+	 * @param array<string,string> $imports
+	 * @param array<string,true> $typeNames
+	 */
 	private function elementFromMethod(
 		ClassMethod $node,
 		string $className,

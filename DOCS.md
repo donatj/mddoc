@@ -1808,7 +1808,7 @@ Returns a clone of this ImmutableAttributeTree with another depth of attributes 
 
 #### Return Value
 
-- ***$this*** - Clone of current ImmutableAttributeTree
+- ***static*** - Clone of current ImmutableAttributeTree
 
 ---
 
