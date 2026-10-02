@@ -86,6 +86,30 @@ class DryRunTest extends TestCase {
 		}
 	}
 
+	public function testDryRunStrategyThrowsForDirectoryTarget() : void {
+		$target = sys_get_temp_dir() . '/mddoc-dry-run-' . uniqid('', true);
+		self::assertTrue(mkdir($target, 0700));
+		$rendered = false;
+
+		try {
+			try {
+				(new DryRunDocumentationOutputStrategy)->write($target, function () use ( &$rendered ) : string {
+					$rendered = true;
+
+					return '';
+				});
+
+				self::fail('Expected a dry run mismatch exception');
+			} catch( DryRunMismatchException $e ) {
+				self::assertSame($target, $e->getTarget());
+			}
+
+			self::assertTrue($rendered);
+		} finally {
+			rmdir($target);
+		}
+	}
+
 	/** @return array{int,string} */
 	private function runDryRun( string $config ) : array {
 		$command = implode(' ', [

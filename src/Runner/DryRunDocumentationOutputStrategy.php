@@ -10,7 +10,7 @@ class DryRunDocumentationOutputStrategy implements DocumentationOutputStrategy {
 	public function write( string $target, callable $render ) : bool {
 		$markdown = $render();
 
-		if( @file_get_contents($target) !== $markdown ) {
+		if( !is_file($target) || @file_get_contents($target) !== $markdown ) {
 			throw new DryRunMismatchException($target);
 		}
 
