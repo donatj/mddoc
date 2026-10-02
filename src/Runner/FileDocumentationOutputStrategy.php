@@ -42,7 +42,7 @@ class FileDocumentationOutputStrategy implements DocumentationOutputStrategy {
 		array_pop($dirs);
 
 		$path = '';
-		foreach( array_filter($dirs) as $dir ) {
+		foreach( $dirs as $dir ) {
 			$path .= '/' . $dir;
 			if( !is_dir($path) ) {
 				if( !mkdir($path) && !is_dir($path) ) {
