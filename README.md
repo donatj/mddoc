@@ -4,6 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/donatj/mddoc/downloads)](https://packagist.org/packages/donatj/mddoc)
 [![License](https://poser.pugx.org/donatj/mddoc/license)](https://packagist.org/packages/donatj/mddoc)
 [![ci.yml](https://github.com/donatj/mddoc/actions/workflows/ci.yml/badge.svg)](https://github.com/donatj/mddoc/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/donatj/mddoc/badge.svg)](https://coveralls.io/github/donatj/mddoc)
 
 
 A simple, directed markdown documentation generator for PHP projects.
@@ -59,6 +60,7 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
       <badge-poser type="downloads"/>
       <badge-poser type="license"/>
       <badge-github-action name="donatj/mddoc" workflow-file="ci.yml"/>
+      <badge-coveralls name="github/donatj/mddoc"/>
 
       <text><![CDATA[
 A simple, directed markdown documentation generator for PHP projects.

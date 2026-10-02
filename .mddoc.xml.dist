@@ -7,6 +7,7 @@
 			<badge-poser type="downloads"/>
 			<badge-poser type="license"/>
 			<badge-github-action name="donatj/mddoc" workflow-file="ci.yml"/>
+			<badge-coveralls name="github/donatj/mddoc"/>
 
 			<text><![CDATA[
 A simple, directed markdown documentation generator for PHP projects.
