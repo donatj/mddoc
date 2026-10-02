@@ -14,7 +14,7 @@ class ImmutableAttributeTree {
 	 * Returns a clone of this ImmutableAttributeTree with another depth of attributes appended.
 	 *
 	 * @param array<string,string> $attributes
-	 * @return $this Clone of current ImmutableAttributeTree
+	 * @return static Clone of current ImmutableAttributeTree
 	 */
 	public function withAttr( array $attributes ) : self {
 		$tree = clone $this;
