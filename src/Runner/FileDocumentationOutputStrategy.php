@@ -2,7 +2,6 @@
 
 namespace donatj\MDDoc\Runner;
 
-use donatj\MDDoc\Exceptions\TargetNotWritableException;
 use Psr\Log\LoggerInterface;
 
 class FileDocumentationOutputStrategy implements DocumentationOutputStrategy {
@@ -16,13 +15,13 @@ class FileDocumentationOutputStrategy implements DocumentationOutputStrategy {
 	/** @param callable(): string $render */
 	public function write( string $target, callable $render ) : bool {
 		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
-			throw new TargetNotWritableException("Path '{$target}' not writable");
+			return false;
 		}
 
 		$markdown = $render();
 
 		if( @file_put_contents($target, $markdown) === false ) {
-			throw new TargetNotWritableException("failed to write to '{$target}'");
+			return false;
 		}
 
 		$this->logger->info("output '{$target}'");

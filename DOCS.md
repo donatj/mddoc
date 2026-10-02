@@ -1582,6 +1582,14 @@ function getPath(): string
 
 ## Class: donatj\MDDoc\Exceptions\ConfigException
 
+## Class: donatj\MDDoc\Exceptions\DryRunMismatchException
+
+### Method: DryRunMismatchException->__construct
+
+```php
+function __construct(string $target)
+```
+
 ## Class: donatj\MDDoc\Exceptions\MDDocException
 
 ## Class: donatj\MDDoc\Exceptions\PathNotReadableException

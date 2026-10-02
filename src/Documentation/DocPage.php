@@ -57,7 +57,7 @@ class DocPage extends AbstractNestedDoc implements DocumentationOutputStrategyAw
 
 			return $document->exportMarkdown(-1);
 		}) ) {
-			throw new MDDocException("output '{$target}' differs");
+			throw new MDDocException("failed to write output '{$target}'");
 		}
 
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";

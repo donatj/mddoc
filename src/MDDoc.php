@@ -5,6 +5,7 @@ namespace donatj\MDDoc;
 use Composer\InstalledVersions;
 use donatj\Flags;
 use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDoc\Exceptions\DryRunMismatchException;
 use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDoc\Runner\ConfigParser;
@@ -46,6 +47,10 @@ class MDDoc {
 			$doc = $parser->parse($config);
 
 			$doc->output(0);
+		} catch( DryRunMismatchException $e ) {
+			$ui->warning($e->getMessage());
+
+			die(1);
 		} catch( ConfigException $e ) {
 			$ui->dropError("Configuration error; " . $e->getMessage());
 		} catch( PathNotReadableException $e ) {

@@ -1,6 +1,8 @@
 <?php
 
+use donatj\MDDoc\Exceptions\DryRunMismatchException;
 use donatj\MDDoc\MDDoc;
+use donatj\MDDoc\Runner\DryRunDocumentationOutputStrategy;
 use PHPUnit\Framework\TestCase;
 
 class DryRunTest extends TestCase {
@@ -59,6 +61,24 @@ class DryRunTest extends TestCase {
 			}
 
 			rmdir($tempDir);
+		}
+	}
+
+	public function testDryRunStrategyThrowsForMismatchedOutput() : void {
+		$target = tempnam(sys_get_temp_dir(), 'mddoc-dry-run-');
+		self::assertIsString($target);
+
+		try {
+			self::assertNotFalse(file_put_contents($target, 'outdated documentation'));
+
+			$this->expectException(DryRunMismatchException::class);
+			$this->expectExceptionMessage("output '{$target}' differs");
+
+			(new DryRunDocumentationOutputStrategy)->write($target, static function () : string {
+				return 'generated documentation';
+			});
+		} finally {
+			unlink($target);
 		}
 	}
 
