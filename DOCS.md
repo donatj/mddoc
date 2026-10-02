@@ -862,7 +862,9 @@ function output(int $depth): string
 ### Method: DocPage->setDocumentationOutputStrategy
 
 ```php
-function setDocumentationOutputStrategy(\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy): void
+function setDocumentationOutputStrategy(
+	\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy,
+): void
 ```
 
 ---
@@ -1124,7 +1126,9 @@ function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
 ### Method: DocumentationOutputStrategyAware->setDocumentationOutputStrategy
 
 ```php
-function setDocumentationOutputStrategy(\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy): void
+function setDocumentationOutputStrategy(
+	\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy,
+): void
 ```
 
 ## Class: donatj\MDDoc\Documentation\Interfaces\ElementInterface
@@ -1549,7 +1553,10 @@ class ElementFactory {
 ### Method: ElementFactory->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\TextUI $ui, \donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy)
+function __construct(
+	\donatj\MDDoc\Runner\TextUI $ui,
+	\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy,
+)
 ```
 
 ElementFactory constructor.
@@ -1559,7 +1566,11 @@ ElementFactory constructor.
 ### Method: ElementFactory->makeFromTag
 
 ```php
-function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent): \donatj\MDDoc\Documentation\Interfaces\ElementInterface
+function makeFromTag(
+	string $tagName,
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent,
+): \donatj\MDDoc\Documentation\Interfaces\ElementInterface
 ```
 
 Return a populated DocumentationInterface of the corresponding tagName
@@ -1637,7 +1648,11 @@ function __construct(array $args)
 ### Method: TaxonomyReflector->__construct
 
 ```php
-function __construct(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader, \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory $parserFactory)
+function __construct(
+	string $filename,
+	\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader,
+	\donatj\MDDoc\Reflectors\TaxonomyReflectorFactory $parserFactory,
+)
 ```
 
 **Throws**: `\donatj\MDDoc\Exceptions\ClassNotReadableException`
@@ -1717,7 +1732,10 @@ function getFunctions(): array
 ### Method: TaxonomyReflectorFactory->newInstance
 
 ```php
-function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader): \donatj\MDDoc\Reflectors\TaxonomyReflector
+function newInstance(
+	string $filename,
+	\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader,
+): \donatj\MDDoc\Reflectors\TaxonomyReflector
 ```
 
 **Throws**: `\donatj\MDDoc\Exceptions\ClassNotReadableException`

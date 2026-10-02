@@ -27,6 +27,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 	use LoggerAwareTrait;
 
+	private const MAX_SIGNATURE_LENGTH = 120;
+
 	/**
 	 * The file to document
 	 *
@@ -96,14 +98,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 			$name = $func->getName();
 			$fqfn = preg_replace('/\s*\(.*$/', '', (string)$func->getFqsen());
-			$args = $this->getArgumentString($func);
-
-			$fReturnS = '';
-			$fReturn  = (string)$func->getReturnType();
-			if( $fReturn !== 'mixed' ) {
-				$fReturnS = ": {$fReturn}";
-			}
-
 			//			$subDocument = new DocumentDepth;
 			//			$document->appendChild($subDocument);
 
@@ -112,7 +106,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			);
 
 			$document->appendChild(
-				new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
+				new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($func), (string)$func->getReturnType()), 'php')
 			);
 
 			if( $block ) {
@@ -276,12 +270,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 				$name = $docMethod->getMethodName();
 
-				$fReturnS = '';
-				$fReturn  = (string)$docMethod->getReturnType();
-				if( $fReturn !== 'mixed' ) {
-					$fReturnS = ": {$fReturn}";
-				}
-
 				$subDocument = new DocumentDepth;
 				$document->appendChild($subDocument);
 
@@ -295,7 +283,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					new Header("Magic Method: {$class->getName()}{$operator}{$name}")
 				);
 
-				$args     = '';
+				$args     = [];
 				$argParts = $docMethod->getArguments();
 				foreach( $argParts as $argPart ) {
 					$prefix = '';
@@ -303,13 +291,11 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						$prefix = "{$argPart['type']} ";
 					}
 
-					$args .= $prefix . '$' . $argPart['name'] . ', ';
+					$args[] = $prefix . '$' . $argPart['name'];
 				}
 
-				$args = rtrim($args, ', ');
-
 				$subDocument->appendChild(
-					new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
+					new CodeBlock($this->getFunctionSignature($name, $args, (string)$docMethod->getReturnType()), 'php')
 				);
 
 				if( $docMethodDescr = $docMethod->getDescription() ) {
@@ -328,6 +314,9 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$i++;
 
 				$method = reset($methods);
+				if( !$method ) {
+					continue;
+				}
 
 				if( (string)$method->getVisibility() !== 'public' ) {
 					continue;
@@ -335,12 +324,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 				$name = $method->getName();
 				$args = $this->getArgumentString($method);
-
-				$fReturnS = '';
-				$fReturn  = (string)$method->getReturnType();
-				if( $fReturn !== 'mixed' ) {
-					$fReturnS = ": {$fReturn}";
-				}
 
 				$blocks = [];
 
@@ -381,7 +364,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					);
 
 					$subDocument->appendChild(
-						new CodeBlock("function {$name}({$args}){$fReturnS}", 'php')
+						new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType()), 'php')
 					);
 
 					foreach( $blocks as $block ) {
@@ -446,7 +429,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					}
 				} else {
 					$subDocument->appendChild(new Header("Method: {$class->getName()}{$operator}{$name}"));
-					$subDocument->appendChild(new CodeBlock("function {$name}({$args}){$fReturnS}", 'php'));
+					$subDocument->appendChild(new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType()), 'php'));
 					if( $this->getOption(self::OPT_WARN_UNDOCUMENTED, true) !== 'false' ) {
 						$subDocument->appendChild(new MdText('Undocumented'));
 					}
@@ -486,6 +469,13 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	}
 
 	private function getArgumentString( Element $method ) : string {
+		return implode(', ', $this->getArgumentStrings($method));
+	}
+
+	/**
+	 * @return string[]
+	 */
+	private function getArgumentStrings( Element $method ) : array {
 		$args = [];
 		foreach( $method->getArguments() as $argument ) {
 			$prefix = '';
@@ -505,7 +495,25 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			$args[] = $arg;
 		}
 
-		return implode(', ', $args);
+		return $args;
+	}
+
+	/**
+	 * @param string[] $arguments
+	 */
+	private function getFunctionSignature( string $name, array $arguments, string $returnType ) : string {
+		$return = $returnType === 'mixed' ? '' : ": {$returnType}";
+
+		$signature = "function {$name}(" . implode(', ', $arguments) . "){$return}";
+		if( strlen($signature) <= self::MAX_SIGNATURE_LENGTH ) {
+			return $signature;
+		}
+
+		if( !$arguments ) {
+			return "function {$name}(\n){$return}";
+		}
+
+		return "function {$name}(\n\t" . implode(",\n\t", $arguments) . ",\n){$return}";
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {

@@ -85,6 +85,15 @@ class ModernTypes {
 	public function dnf( (\Countable&\Iterator)|\Stringable $value ) : (\Countable&\Iterator)|\Stringable {
 	}
 
+	/** A method with a signature long enough to wrap in generated documentation. */
+	public function multiLineSignature(
+		\DateTimeImmutable $createdAt,
+		\DateTimeImmutable $updatedAt,
+		\DateTimeImmutable $publishedAt,
+		\DateTimeImmutable $archivedAt
+	) : \DateTimeImmutable {
+	}
+
 	public function undocumented( string $name = '' ) : string {
 		return $name;
 	}
