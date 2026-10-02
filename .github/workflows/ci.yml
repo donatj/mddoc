@@ -31,5 +31,5 @@ jobs:
       - name: Run tests
         run: make test
 
-      - name: Run tool
-        run: ./composer/bin/mddoc
+      - name: Check generated documentation
+        run: ./composer/bin/mddoc --dry-run=true .mddoc.xml.dist
