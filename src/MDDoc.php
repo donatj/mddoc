@@ -48,7 +48,7 @@ class MDDoc {
 
 			$doc->output(0);
 		} catch( DryRunMismatchException $e ) {
-			$ui->warning($e->getMessage());
+			$ui->warning("output '{$e->getTarget()}' differs");
 
 			die(1);
 		} catch( ConfigException $e ) {

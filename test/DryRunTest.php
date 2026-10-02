@@ -31,6 +31,7 @@ class DryRunTest extends TestCase {
 
 			[ $exitCode, $output ] = $this->runDryRun($config);
 			self::assertSame(1, $exitCode, $output);
+			self::assertStringContainsString("output '{$target}' differs", $output);
 			self::assertSame('outdated documentation', file_get_contents($target));
 			self::assertSame(1234567890, filemtime($target));
 		} finally {
@@ -71,12 +72,15 @@ class DryRunTest extends TestCase {
 		try {
 			self::assertNotFalse(file_put_contents($target, 'outdated documentation'));
 
-			$this->expectException(DryRunMismatchException::class);
-			$this->expectExceptionMessage("output '{$target}' differs");
+			try {
+				(new DryRunDocumentationOutputStrategy)->write($target, static function () : string {
+					return 'generated documentation';
+				});
 
-			(new DryRunDocumentationOutputStrategy)->write($target, static function () : string {
-				return 'generated documentation';
-			});
+				self::fail('Expected a dry run mismatch exception');
+			} catch( DryRunMismatchException $e ) {
+				self::assertSame($target, $e->getTarget());
+			}
 		} finally {
 			unlink($target);
 		}
