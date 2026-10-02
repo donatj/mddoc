@@ -859,10 +859,10 @@ function output(int $depth): string
 
 ---
 
-### Method: DocPage->setDryRunResult
+### Method: DocPage->setDocumentationOutput
 
 ```php
-function setDryRunResult(\donatj\MDDoc\Runner\DryRunResult $dryRunResult): void
+function setDocumentationOutput(\donatj\MDDoc\Runner\DocumentationOutput $documentationOutput): void
 ```
 
 ---
@@ -1117,6 +1117,14 @@ function output(int $depth)
 
 ```php
 function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)
+```
+
+## Class: donatj\MDDoc\Documentation\Interfaces\DocumentationOutputAware
+
+### Method: DocumentationOutputAware->setDocumentationOutput
+
+```php
+function setDocumentationOutput(\donatj\MDDoc\Runner\DocumentationOutput $documentationOutput): void
 ```
 
 ## Class: donatj\MDDoc\Documentation\Interfaces\ElementInterface
@@ -1541,7 +1549,7 @@ class ElementFactory {
 ### Method: ElementFactory->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\TextUI $ui, ?\donatj\MDDoc\Runner\DryRunResult $dryRunResult = null)
+function __construct(\donatj\MDDoc\Runner\TextUI $ui, \donatj\MDDoc\Runner\DocumentationOutput $documentationOutput)
 ```
 
 ElementFactory constructor.
@@ -1730,20 +1738,92 @@ Parse a config file
 
 - ***\donatj\MDDoc\Documentation\DocRoot***
 
-## Class: donatj\MDDoc\Runner\DryRunResult
+## Class: donatj\MDDoc\Runner\DocumentationOutput
 
-### Method: DryRunResult->markMismatch
+### Method: DocumentationOutput->prepare
 
 ```php
-function markMismatch(): void
+function prepare(string $target): void
 ```
 
 ---
 
-### Method: DryRunResult->hasMismatches
+### Method: DocumentationOutput->write
 
 ```php
-function hasMismatches(): bool
+function write(string $target, string $markdown): void
+```
+
+---
+
+### Method: DocumentationOutput->getExitCode
+
+```php
+function getExitCode(): int
+```
+
+## Class: donatj\MDDoc\Runner\DryRunDocumentationOutput
+
+### Method: DryRunDocumentationOutput->__construct
+
+```php
+function __construct(\Psr\Log\LoggerInterface $logger)
+```
+
+---
+
+### Method: DryRunDocumentationOutput->prepare
+
+```php
+function prepare(string $target): void
+```
+
+---
+
+### Method: DryRunDocumentationOutput->write
+
+```php
+function write(string $target, string $markdown): void
+```
+
+---
+
+### Method: DryRunDocumentationOutput->getExitCode
+
+```php
+function getExitCode(): int
+```
+
+## Class: donatj\MDDoc\Runner\FileDocumentationOutput
+
+### Method: FileDocumentationOutput->__construct
+
+```php
+function __construct(\Psr\Log\LoggerInterface $logger)
+```
+
+---
+
+### Method: FileDocumentationOutput->prepare
+
+```php
+function prepare(string $target): void
+```
+
+---
+
+### Method: FileDocumentationOutput->write
+
+```php
+function write(string $target, string $markdown): void
+```
+
+---
+
+### Method: FileDocumentationOutput->getExitCode
+
+```php
+function getExitCode(): int
 ```
 
 ## Class: donatj\MDDoc\Runner\ImmutableAttributeTree

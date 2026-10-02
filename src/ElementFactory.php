@@ -2,9 +2,10 @@
 
 namespace donatj\MDDoc;
 
+use donatj\MDDoc\Documentation\Interfaces\DocumentationOutputAware;
 use donatj\MDDoc\Documentation\Interfaces\ElementInterface;
 use donatj\MDDoc\Exceptions\ConfigException;
-use donatj\MDDoc\Runner\DryRunResult;
+use donatj\MDDoc\Runner\DocumentationOutput;
 use donatj\MDDoc\Runner\ImmutableAttributeTree;
 use donatj\MDDoc\Runner\TextUI;
 use Psr\Log\LoggerAwareInterface;
@@ -15,14 +16,14 @@ use Psr\Log\LoggerAwareInterface;
 class ElementFactory {
 
 	private TextUI $ui;
-	private ?DryRunResult $dryRunResult;
+	private DocumentationOutput $documentationOutput;
 
 	/**
 	 * ElementFactory constructor.
 	 */
-	public function __construct( TextUI $ui, ?DryRunResult $dryRunResult = null ) {
-		$this->ui           = $ui;
-		$this->dryRunResult = $dryRunResult;
+	public function __construct( TextUI $ui, DocumentationOutput $documentationOutput ) {
+		$this->ui                  = $ui;
+		$this->documentationOutput = $documentationOutput;
 	}
 
 	public const DEFAULT_ELEMENTS = [
@@ -76,8 +77,8 @@ class ElementFactory {
 					$element->setLogger($this->ui);
 				}
 
-				if( $element instanceof Documentation\DocPage && $this->dryRunResult !== null ) {
-					$element->setDryRunResult($this->dryRunResult);
+				if( $element instanceof DocumentationOutputAware ) {
+					$element->setDocumentationOutput($this->documentationOutput);
 				}
 
 				return $element;

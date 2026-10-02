@@ -8,7 +8,9 @@ use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDoc\Runner\ConfigParser;
-use donatj\MDDoc\Runner\DryRunResult;
+use donatj\MDDoc\Runner\DocumentationOutput;
+use donatj\MDDoc\Runner\DryRunDocumentationOutput;
+use donatj\MDDoc\Runner\FileDocumentationOutput;
 use donatj\MDDoc\Runner\TextUI;
 
 /**
@@ -24,7 +26,7 @@ class MDDoc {
 	];
 
 	private int $exitCode = 0;
-	private ?DryRunResult $dryRunResult = null;
+	private DocumentationOutput $documentationOutput;
 
 	/**
 	 * @param string[] $args
@@ -39,15 +41,13 @@ class MDDoc {
 		try {
 			$config = $this->init($args, $ui);
 			$parser = new ConfigParser(
-				new ElementFactory($ui, $this->dryRunResult), $ui
+				new ElementFactory($ui, $this->documentationOutput), $ui
 			);
 
 			$doc = $parser->parse($config);
 
 			$doc->output(0);
-			if( $this->dryRunResult !== null && $this->dryRunResult->hasMismatches() ) {
-				$this->exitCode = 1;
-			}
+			$this->exitCode = $this->documentationOutput->getExitCode();
 		} catch( ConfigException $e ) {
 			$ui->dropError("Configuration error; " . $e->getMessage());
 		} catch( PathNotReadableException $e ) {
@@ -82,9 +82,9 @@ class MDDoc {
 			$ui->dropError($e->getMessage(), 1, $flags->getDefaults());
 		}
 
-		if( $dryRun ) {
-			$this->dryRunResult = new DryRunResult;
-		}
+		$this->documentationOutput = $dryRun
+			? new DryRunDocumentationOutput($ui)
+			: new FileDocumentationOutput($ui);
 
 		switch( true ) {
 			case $displayVersion:
