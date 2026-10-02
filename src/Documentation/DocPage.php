@@ -12,6 +12,7 @@ namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Documentation\Interfaces\DocumentationOutputAware;
 use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Runner\DocumentationOutput;
 use donatj\MDDom\Document;
 
@@ -44,18 +45,20 @@ class DocPage extends AbstractNestedDoc implements DocumentationOutputAware {
 		$pre_link_text  = $this->getOption(self::OPT_LINK_PRE_TEXT) ?: '';
 		$post_link_text = $this->getOption(self::OPT_LINK_POST_TEXT) ?: '';
 
-		$this->documentationOutput->prepare($target);
+		if( !$this->documentationOutput->write($target, function () use( $document ) : string {
+			foreach( $this->getDocumentationChildren() as $child ) {
+				$output = $child->output(0);
+				if( $output === null ) {
+					throw new ConfigException(get_class($child) . ' incorrectly used as a nested element');
+				}
 
-		foreach( $this->getDocumentationChildren() as $child ) {
-			$output = $child->output(0);
-			if( $output === null ) {
-				throw new ConfigException(get_class($child) . ' incorrectly used as a nested element');
+				$document->appendChild($output);
 			}
 
-			$document->appendChild($output);
+			return $document->exportMarkdown(-1);
+		}) ) {
+			throw new MDDocException("output '{$target}' differs");
 		}
-
-		$this->documentationOutput->write($target, $document->exportMarkdown(-1));
 
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
 	}

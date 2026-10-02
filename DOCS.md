@@ -1616,14 +1616,6 @@ function __construct(array $args)
 
 - ***string[]*** `$args`
 
----
-
-### Method: MDDoc->getExitCode
-
-```php
-function getExitCode(): int
-```
-
 ## Class: donatj\MDDoc\Reflectors\TaxonomyReflector
 
 ### Method: TaxonomyReflector->__construct
@@ -1740,58 +1732,18 @@ Parse a config file
 
 ## Class: donatj\MDDoc\Runner\DocumentationOutput
 
-### Method: DocumentationOutput->prepare
-
-```php
-function prepare(string $target): void
-```
-
----
-
 ### Method: DocumentationOutput->write
 
 ```php
-function write(string $target, string $markdown): void
-```
-
----
-
-### Method: DocumentationOutput->getExitCode
-
-```php
-function getExitCode(): int
+function write(string $target, callable $render): bool
 ```
 
 ## Class: donatj\MDDoc\Runner\DryRunDocumentationOutput
 
-### Method: DryRunDocumentationOutput->__construct
-
-```php
-function __construct(\Psr\Log\LoggerInterface $logger)
-```
-
----
-
-### Method: DryRunDocumentationOutput->prepare
-
-```php
-function prepare(string $target): void
-```
-
----
-
 ### Method: DryRunDocumentationOutput->write
 
 ```php
-function write(string $target, string $markdown): void
-```
-
----
-
-### Method: DryRunDocumentationOutput->getExitCode
-
-```php
-function getExitCode(): int
+function write(string $target, callable $render): bool
 ```
 
 ## Class: donatj\MDDoc\Runner\FileDocumentationOutput
@@ -1804,26 +1756,10 @@ function __construct(\Psr\Log\LoggerInterface $logger)
 
 ---
 
-### Method: FileDocumentationOutput->prepare
-
-```php
-function prepare(string $target): void
-```
-
----
-
 ### Method: FileDocumentationOutput->write
 
 ```php
-function write(string $target, string $markdown): void
-```
-
----
-
-### Method: FileDocumentationOutput->getExitCode
-
-```php
-function getExitCode(): int
+function write(string $target, callable $render): bool
 ```
 
 ## Class: donatj\MDDoc\Runner\ImmutableAttributeTree

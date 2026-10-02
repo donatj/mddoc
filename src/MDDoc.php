@@ -25,7 +25,6 @@ class MDDoc {
 		".mddoc.xml.dist",
 	];
 
-	private int $exitCode = 0;
 	private DocumentationOutput $documentationOutput;
 
 	/**
@@ -47,7 +46,6 @@ class MDDoc {
 			$doc = $parser->parse($config);
 
 			$doc->output(0);
-			$this->exitCode = $this->documentationOutput->getExitCode();
 		} catch( ConfigException $e ) {
 			$ui->dropError("Configuration error; " . $e->getMessage());
 		} catch( PathNotReadableException $e ) {
@@ -61,10 +59,6 @@ class MDDoc {
 		$time    = number_format(microtime(true) - $start, 3);
 
 		$ui->debug("[{$currMen}mb]{$peakMem}mb peak mem - {$time}s exec time");
-	}
-
-	public function getExitCode() : int {
-		return $this->exitCode;
 	}
 
 	/**
@@ -83,7 +77,7 @@ class MDDoc {
 		}
 
 		$this->documentationOutput = $dryRun
-			? new DryRunDocumentationOutput($ui)
+			? new DryRunDocumentationOutput
 			: new FileDocumentationOutput($ui);
 
 		switch( true ) {

@@ -13,22 +13,20 @@ class FileDocumentationOutput implements DocumentationOutput {
 		$this->logger = $logger;
 	}
 
-	public function prepare( string $target ) : void {
+	public function write( string $target, callable $render ) : bool {
 		if( (is_file($target) && !is_writable($target)) || !$this->recursiveTouch($target) ) {
 			throw new TargetNotWritableException("Path '{$target}' not writable");
 		}
-	}
 
-	public function write( string $target, string $markdown ) : void {
+		$markdown = $render();
+
 		if( @file_put_contents($target, $markdown) === false ) {
 			throw new TargetNotWritableException("failed to write to '{$target}'");
 		}
 
 		$this->logger->info("output '{$target}'");
-	}
 
-	public function getExitCode() : int {
-		return 0;
+		return true;
 	}
 
 	private function recursiveTouch( string $new, ?int $time = null ) : bool {
