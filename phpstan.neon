@@ -3,6 +3,7 @@ includes:
 
 parameters:
 	level: 9
+	reportUnmatchedIgnoredErrors: false
 	paths:
 		- src
 	phpVersion: 70400
