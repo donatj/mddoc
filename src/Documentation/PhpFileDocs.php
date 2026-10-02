@@ -314,9 +314,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$i++;
 
 				$method = reset($methods);
-				if( !$method ) {
-					continue;
-				}
+				if( !$method ) { continue; }
 
 				if( (string)$method->getVisibility() !== 'public' ) {
 					continue;
