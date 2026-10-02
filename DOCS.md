@@ -859,10 +859,10 @@ function output(int $depth): string
 
 ---
 
-### Method: DocPage->setDocumentationOutput
+### Method: DocPage->setDocumentationOutputStrategy
 
 ```php
-function setDocumentationOutput(\donatj\MDDoc\Runner\DocumentationOutput $documentationOutput): void
+function setDocumentationOutputStrategy(\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy): void
 ```
 
 ---
@@ -1119,12 +1119,12 @@ function output(int $depth)
 function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)
 ```
 
-## Class: donatj\MDDoc\Documentation\Interfaces\DocumentationOutputAware
+## Class: donatj\MDDoc\Documentation\Interfaces\DocumentationOutputStrategyAware
 
-### Method: DocumentationOutputAware->setDocumentationOutput
+### Method: DocumentationOutputStrategyAware->setDocumentationOutputStrategy
 
 ```php
-function setDocumentationOutput(\donatj\MDDoc\Runner\DocumentationOutput $documentationOutput): void
+function setDocumentationOutputStrategy(\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy): void
 ```
 
 ## Class: donatj\MDDoc\Documentation\Interfaces\ElementInterface
@@ -1549,7 +1549,7 @@ class ElementFactory {
 ### Method: ElementFactory->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\TextUI $ui, \donatj\MDDoc\Runner\DocumentationOutput $documentationOutput)
+function __construct(\donatj\MDDoc\Runner\TextUI $ui, \donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy)
 ```
 
 ElementFactory constructor.
@@ -1730,21 +1730,9 @@ Parse a config file
 
 - ***\donatj\MDDoc\Documentation\DocRoot***
 
-## Class: donatj\MDDoc\Runner\DocumentationOutput
+## Class: donatj\MDDoc\Runner\DocumentationOutputStrategy
 
-### Method: DocumentationOutput->write
-
-```php
-function write(string $target, callable $render): bool
-```
-
-#### Parameters
-
-- ***callable(): string*** `$render`
-
-## Class: donatj\MDDoc\Runner\DryRunDocumentationOutput
-
-### Method: DryRunDocumentationOutput->write
+### Method: DocumentationOutputStrategy->write
 
 ```php
 function write(string $target, callable $render): bool
@@ -1754,9 +1742,21 @@ function write(string $target, callable $render): bool
 
 - ***callable(): string*** `$render`
 
-## Class: donatj\MDDoc\Runner\FileDocumentationOutput
+## Class: donatj\MDDoc\Runner\DryRunDocumentationOutputStrategy
 
-### Method: FileDocumentationOutput->__construct
+### Method: DryRunDocumentationOutputStrategy->write
+
+```php
+function write(string $target, callable $render): bool
+```
+
+#### Parameters
+
+- ***callable(): string*** `$render`
+
+## Class: donatj\MDDoc\Runner\FileDocumentationOutputStrategy
+
+### Method: FileDocumentationOutputStrategy->__construct
 
 ```php
 function __construct(\Psr\Log\LoggerInterface $logger)
@@ -1764,7 +1764,7 @@ function __construct(\Psr\Log\LoggerInterface $logger)
 
 ---
 
-### Method: FileDocumentationOutput->write
+### Method: FileDocumentationOutputStrategy->write
 
 ```php
 function write(string $target, callable $render): bool

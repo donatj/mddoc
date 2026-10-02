@@ -8,9 +8,9 @@ use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
 use donatj\MDDoc\Runner\ConfigParser;
-use donatj\MDDoc\Runner\DocumentationOutput;
-use donatj\MDDoc\Runner\DryRunDocumentationOutput;
-use donatj\MDDoc\Runner\FileDocumentationOutput;
+use donatj\MDDoc\Runner\DocumentationOutputStrategy;
+use donatj\MDDoc\Runner\DryRunDocumentationOutputStrategy;
+use donatj\MDDoc\Runner\FileDocumentationOutputStrategy;
 use donatj\MDDoc\Runner\TextUI;
 
 /**
@@ -25,7 +25,7 @@ class MDDoc {
 		".mddoc.xml.dist",
 	];
 
-	private DocumentationOutput $documentationOutput;
+	private DocumentationOutputStrategy $documentationOutputStrategy;
 
 	/**
 	 * @param string[] $args
@@ -40,7 +40,7 @@ class MDDoc {
 		try {
 			$config = $this->init($args, $ui);
 			$parser = new ConfigParser(
-				new ElementFactory($ui, $this->documentationOutput), $ui
+				new ElementFactory($ui, $this->documentationOutputStrategy), $ui
 			);
 
 			$doc = $parser->parse($config);
@@ -76,9 +76,9 @@ class MDDoc {
 			$ui->dropError($e->getMessage(), 1, $flags->getDefaults());
 		}
 
-		$this->documentationOutput = $dryRun
-			? new DryRunDocumentationOutput
-			: new FileDocumentationOutput($ui);
+		$this->documentationOutputStrategy = $dryRun
+			? new DryRunDocumentationOutputStrategy
+			: new FileDocumentationOutputStrategy($ui);
 
 		switch( true ) {
 			case $displayVersion:

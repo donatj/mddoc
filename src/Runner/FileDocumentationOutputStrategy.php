@@ -5,7 +5,7 @@ namespace donatj\MDDoc\Runner;
 use donatj\MDDoc\Exceptions\TargetNotWritableException;
 use Psr\Log\LoggerInterface;
 
-class FileDocumentationOutput implements DocumentationOutput {
+class FileDocumentationOutputStrategy implements DocumentationOutputStrategy {
 
 	private LoggerInterface $logger;
 

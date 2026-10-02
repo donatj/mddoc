@@ -2,7 +2,7 @@
 
 namespace donatj\MDDoc\Runner;
 
-class DryRunDocumentationOutput implements DocumentationOutput {
+class DryRunDocumentationOutputStrategy implements DocumentationOutputStrategy {
 
 	/** @param callable(): string $render */
 	public function write( string $target, callable $render ) : bool {

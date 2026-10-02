@@ -10,15 +10,15 @@
 
 namespace donatj\MDDoc\Documentation;
 
-use donatj\MDDoc\Documentation\Interfaces\DocumentationOutputAware;
+use donatj\MDDoc\Documentation\Interfaces\DocumentationOutputStrategyAware;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\MDDocException;
-use donatj\MDDoc\Runner\DocumentationOutput;
+use donatj\MDDoc\Runner\DocumentationOutputStrategy;
 use donatj\MDDom\Document;
 
-class DocPage extends AbstractNestedDoc implements DocumentationOutputAware {
+class DocPage extends AbstractNestedDoc implements DocumentationOutputStrategyAware {
 
-	private DocumentationOutput $documentationOutput;
+	private DocumentationOutputStrategy $documentationOutputStrategy;
 
 	/**
 	 * Filename to output
@@ -45,7 +45,7 @@ class DocPage extends AbstractNestedDoc implements DocumentationOutputAware {
 		$pre_link_text  = $this->getOption(self::OPT_LINK_PRE_TEXT) ?: '';
 		$post_link_text = $this->getOption(self::OPT_LINK_POST_TEXT) ?: '';
 
-		if( !$this->documentationOutput->write($target, function () use( $document ) : string {
+		if( !$this->documentationOutputStrategy->write($target, function () use( $document ) : string {
 			foreach( $this->getDocumentationChildren() as $child ) {
 				$output = $child->output(0);
 				if( $output === null ) {
@@ -63,8 +63,8 @@ class DocPage extends AbstractNestedDoc implements DocumentationOutputAware {
 		return "{$pre_link_text}[{$link_text}]({$link}){$post_link_text}\n\n";
 	}
 
-	public function setDocumentationOutput( DocumentationOutput $documentationOutput ) : void {
-		$this->documentationOutput = $documentationOutput;
+	public function setDocumentationOutputStrategy( DocumentationOutputStrategy $documentationOutputStrategy ) : void {
+		$this->documentationOutputStrategy = $documentationOutputStrategy;
 	}
 
 	protected function init() : void {
