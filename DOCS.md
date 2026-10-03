@@ -20,7 +20,7 @@ Locate the filename of a given class
 
 #### Return Value
 
-- ***string*** | ***null*** - filename on class found, null on not found
+- ***string*** | ***null*** - Filename when the class is found, null otherwise
 
 ## Class: donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
 
@@ -34,7 +34,7 @@ Locate the filename of a given class
 
 #### Return Value
 
-- ***string*** | ***null*** - filename on class found, null on not found
+- ***string*** | ***null*** - Filename when the class is found, null otherwise
 
 ## Class: donatj\MDDoc\Autoloaders\MultiLoader
 
@@ -60,7 +60,7 @@ Locate the filename of a given class
 
 #### Return Value
 
-- ***string*** | ***null*** - filename on class found, null on not found
+- ***string*** | ***null*** - Filename when the class is found, null otherwise
 
 ---
 
@@ -92,7 +92,7 @@ Locate the filename of a given class
 
 #### Return Value
 
-- ***string*** | ***null*** - filename on class found, null on not found
+- ***string*** | ***null*** - Filename when the class is found, null otherwise
 
 ## Class: donatj\MDDoc\Autoloaders\Psr0
 
@@ -120,7 +120,7 @@ Locate the filename of a given class
 
 #### Return Value
 
-- ***string*** | ***null*** - filename on class found, null on not found
+- ***string*** | ***null*** - Filename when the class is found, null otherwise
 
 ## Class: donatj\MDDoc\Autoloaders\Psr4
 
@@ -149,7 +149,7 @@ Locate the filename of a given class
 
 #### Return Value
 
-- ***string*** | ***null*** - filename on class found, null on not found
+- ***string*** | ***null*** - Filename when the class is found, null otherwise
 
 ## Class: donatj\MDDoc\Documentation\AbstractDocPart
 

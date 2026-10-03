@@ -7,7 +7,7 @@ interface AutoloaderInterface {
 	/**
 	 * Locate the filename of a given class
 	 *
-	 * @return string|null filename on class found, null on not found
+	 * @return string|null Filename when the class is found, null otherwise
 	 */
 	public function __invoke( string $className ) : ?string;
 
