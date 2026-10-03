@@ -1,5 +1,27 @@
 # Full API Docs (WIP)
 
+## Class: donatj\MDDoc\Autoloaders\ComposerAutoloader
+
+### Method: ComposerAutoloader->__construct
+
+```php
+function __construct(\Composer\Autoload\ClassLoader $loader)
+```
+
+---
+
+### Method: ComposerAutoloader->__invoke
+
+```php
+function __invoke(string $className): ?string
+```
+
+Locate the filename of a given class
+
+#### Return Value
+
+- ***string*** | ***null*** - filename on class found, null on not found
+
 ## Class: donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
 
 ### Method: AutoloaderInterface->__invoke
@@ -275,9 +297,9 @@ function output(int $depth)
 namespace donatj\MDDoc\Documentation;
 
 class Autoloader {
-	/** The type of autoloader to use, either "psr0" or "psr4" */
+	/** The type of autoloader to use: "composer", "psr0", or "psr4" */
 	public const OPT_TYPE = 'type';
-	/** The root directory of the autoloader */
+	/** The root directory of the autoloader, required for "psr0" and "psr4" */
 	public const OPT_ROOT = 'root';
 	/** The namespace of the autoloader, only used for psr4 */
 	public const OPT_NAMESPACE = 'namespace';
@@ -452,6 +474,18 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 ```php
 function getTextContent(): string
 ```
+
+---
+
+### Method: BadgeCoveralls->setLogger
+
+```php
+function setLogger(\Psr\Log\LoggerInterface $logger): void
+```
+
+Sets a logger.
+
+Sets a logger instance on the object.
 
 ## Class: donatj\MDDoc\Documentation\Badges\BadgeGitHubActions
 
@@ -1279,6 +1313,18 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 function getTextContent(): string
 ```
 
+---
+
+### Method: PhpFileDocs->setLogger
+
+```php
+function setLogger(\Psr\Log\LoggerInterface $logger): void
+```
+
+Sets a logger.
+
+Sets a logger instance on the object.
+
 ## Class: donatj\MDDoc\Documentation\RecursiveDirectory
 
 ```php
@@ -1373,6 +1419,18 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 ```php
 function getTextContent(): string
 ```
+
+---
+
+### Method: RecursiveDirectory->setLogger
+
+```php
+function setLogger(\Psr\Log\LoggerInterface $logger): void
+```
+
+Sets a logger.
+
+Sets a logger instance on the object.
 
 ## Class: donatj\MDDoc\Documentation\Replace
 
@@ -2024,3 +2082,163 @@ function println(string $text = ''): void
 ```php
 function log($level, $message, array $context = []): void
 ```
+
+Logs with an arbitrary level.
+
+Logs with an arbitrary level.
+
+#### Parameters
+
+- ***mixed*** `$level`
+
+**Throws**: `\Psr\Log\InvalidArgumentException`
+
+---
+
+### Method: TextUI->emergency
+
+```php
+function emergency(string|\Stringable $message, array $context = []): void
+```
+
+System is unusable.
+
+System is unusable.
+
+#### Parameters
+
+- ***mixed[]*** `$context`
+
+---
+
+### Method: TextUI->alert
+
+```php
+function alert(string|\Stringable $message, array $context = []): void
+```
+
+Action must be taken immediately.  
+  
+Example: Entire website down, database unavailable, etc. This should  
+trigger the SMS alerts and wake you up.
+
+Action must be taken immediately.  
+  
+Example: Entire website down, database unavailable, etc. This should  
+trigger the SMS alerts and wake you up.
+
+#### Parameters
+
+- ***mixed[]*** `$context`
+
+---
+
+### Method: TextUI->critical
+
+```php
+function critical(string|\Stringable $message, array $context = []): void
+```
+
+Critical conditions.  
+  
+Example: Application component unavailable, unexpected exception.
+
+Critical conditions.  
+  
+Example: Application component unavailable, unexpected exception.
+
+#### Parameters
+
+- ***mixed[]*** `$context`
+
+---
+
+### Method: TextUI->error
+
+```php
+function error(string|\Stringable $message, array $context = []): void
+```
+
+Runtime errors that do not require immediate action but should typically  
+be logged and monitored.
+
+Runtime errors that do not require immediate action but should typically  
+be logged and monitored.
+
+#### Parameters
+
+- ***mixed[]*** `$context`
+
+---
+
+### Method: TextUI->warning
+
+```php
+function warning(string|\Stringable $message, array $context = []): void
+```
+
+Exceptional occurrences that are not errors.  
+  
+Example: Use of deprecated APIs, poor use of an API, undesirable things  
+that are not necessarily wrong.
+
+Exceptional occurrences that are not errors.  
+  
+Example: Use of deprecated APIs, poor use of an API, undesirable things  
+that are not necessarily wrong.
+
+#### Parameters
+
+- ***mixed[]*** `$context`
+
+---
+
+### Method: TextUI->notice
+
+```php
+function notice(string|\Stringable $message, array $context = []): void
+```
+
+Normal but significant events.
+
+Normal but significant events.
+
+#### Parameters
+
+- ***mixed[]*** `$context`
+
+---
+
+### Method: TextUI->info
+
+```php
+function info(string|\Stringable $message, array $context = []): void
+```
+
+Interesting events.  
+  
+Example: User logs in, SQL logs.
+
+Interesting events.  
+  
+Example: User logs in, SQL logs.
+
+#### Parameters
+
+- ***mixed[]*** `$context`
+
+---
+
+### Method: TextUI->debug
+
+```php
+function debug(string|\Stringable $message, array $context = []): void
+```
+
+Detailed debug information.
+
+Detailed debug information.
+
+#### Parameters
+
+- ***mixed[]*** `$context`
