@@ -18,6 +18,7 @@ class ComposerAutoloaderTest extends TestCase {
 		self::assertTrue(mkdir($tempDir . '/src', 0700));
 		self::assertTrue(mkdir($tempDir . '/legacy', 0700));
 		self::assertTrue(mkdir($tempDir . '/secondary', 0700));
+		self::assertTrue(mkdir($tempDir . '/override', 0700));
 
 		try {
 			$child           = $tempDir . '/src/Child.php';
@@ -25,8 +26,13 @@ class ComposerAutoloaderTest extends TestCase {
 			$legacy          = $tempDir . '/legacy/Legacy/Class.php';
 			$secondaryChild  = $tempDir . '/secondary/Child.php';
 			$secondaryParent = $tempDir . '/secondary/ParentClass.php';
+			$overrideParent  = $tempDir . '/override/ParentClass.php';
 			$config          = $tempDir . '/mddoc.xml';
 			$output          = $tempDir . '/README.md';
+			$composerOutput  = $tempDir . '/composer.md';
+			$unscopedOutput  = $tempDir . '/unscoped.md';
+			$psrFirstOutput  = $tempDir . '/psr-first.md';
+			$composerFirstOutput = $tempDir . '/composer-first.md';
 			$autoload        = $tempDir . '/vendor/autoload.php';
 			$vendorLink      = $tempDir . '/vendor-link';
 
@@ -79,6 +85,20 @@ class ParentClass {
 }
 PHP
 ));
+			self::assertNotFalse(file_put_contents($overrideParent, <<<'PHP'
+<?php
+
+namespace Example;
+
+class ParentClass {
+
+	/** Manually mapped inherited method. */
+	public function manuallyMapped() {
+	}
+
+}
+PHP
+));
 			self::assertNotFalse(file_put_contents($legacy, "<?php\n"));
 			self::assertNotFalse(file_put_contents($config, sprintf(
 				'<mddoc><docpage target="%s"><autoloader type="composer"/><file name="%s" /></docpage></mddoc>',
@@ -121,21 +141,67 @@ PHP
 			self::assertIsString($markdown);
 			self::assertStringNotContainsString('function inherited()', $markdown);
 
-			self::assertNotFalse(file_put_contents($config, sprintf(
-				'<mddoc><docpage target="%s"><autoloader type="composer"/><file name="%s" /><file name="%s" /></docpage></mddoc>',
+			self::assertNotFalse(file_put_contents($config, sprintf(<<<'XML'
+<mddoc>
+	<docpage target="%s">
+		<docpage target="%s">
+			<autoloader type="composer"/>
+			<file name="%s"/>
+			<file name="%s"/>
+		</docpage>
+		<docpage target="%s">
+			<file name="%s"/>
+		</docpage>
+		<docpage target="%s">
+			<autoloader type="psr4" root="%s" namespace="Example"/>
+			<autoloader type="composer"/>
+			<file name="%s"/>
+		</docpage>
+		<docpage target="%s">
+			<autoloader type="composer"/>
+			<autoloader type="psr4" root="%s" namespace="Example"/>
+			<file name="%s"/>
+		</docpage>
+	</docpage>
+</mddoc>
+XML,
 				htmlspecialchars($output, ENT_XML1),
+				htmlspecialchars($composerOutput, ENT_XML1),
 				htmlspecialchars($child, ENT_XML1),
-				htmlspecialchars($secondaryChild, ENT_XML1)
+				htmlspecialchars($secondaryChild, ENT_XML1),
+				htmlspecialchars($unscopedOutput, ENT_XML1),
+				htmlspecialchars($secondaryChild, ENT_XML1),
+				htmlspecialchars($psrFirstOutput, ENT_XML1),
+				htmlspecialchars($tempDir . '/override', ENT_XML1),
+				htmlspecialchars($child, ENT_XML1),
+				htmlspecialchars($composerFirstOutput, ENT_XML1),
+				htmlspecialchars($tempDir . '/override', ENT_XML1),
+				htmlspecialchars($child, ENT_XML1)
 			)));
 
 			new MDDoc([ 'mddoc', $config ]);
 
-			$markdown = file_get_contents($output);
-			self::assertIsString($markdown);
-			self::assertStringContainsString('Class: Example\\Child', $markdown);
-			self::assertStringContainsString('function inherited()', $markdown);
-			self::assertStringContainsString('Class: Secondary\\Child', $markdown);
-			self::assertStringContainsString('function secondaryInherited()', $markdown);
+			$composerMarkdown = file_get_contents($composerOutput);
+			self::assertIsString($composerMarkdown);
+			self::assertStringContainsString('Class: Example\\Child', $composerMarkdown);
+			self::assertStringContainsString('function inherited()', $composerMarkdown);
+			self::assertStringContainsString('Class: Secondary\\Child', $composerMarkdown);
+			self::assertStringContainsString('function secondaryInherited()', $composerMarkdown);
+
+			$unscopedMarkdown = file_get_contents($unscopedOutput);
+			self::assertIsString($unscopedMarkdown);
+			self::assertStringContainsString('Class: Secondary\\Child', $unscopedMarkdown);
+			self::assertStringNotContainsString('function secondaryInherited()', $unscopedMarkdown);
+
+			$psrFirstMarkdown = file_get_contents($psrFirstOutput);
+			self::assertIsString($psrFirstMarkdown);
+			self::assertStringContainsString('function manuallyMapped()', $psrFirstMarkdown);
+			self::assertStringNotContainsString('function inherited()', $psrFirstMarkdown);
+
+			$composerFirstMarkdown = file_get_contents($composerFirstOutput);
+			self::assertIsString($composerFirstMarkdown);
+			self::assertStringContainsString('function inherited()', $composerFirstMarkdown);
+			self::assertStringNotContainsString('function manuallyMapped()', $composerFirstMarkdown);
 		} finally {
 			if( isset($secondaryLoader) ) {
 				$secondaryLoader->unregister();
@@ -145,13 +211,13 @@ PHP
 				$targetLoader->unregister();
 			}
 
-			foreach( [ $child ?? null, $parent ?? null, $legacy ?? null, $secondaryChild ?? null, $secondaryParent ?? null, $config ?? null, $output ?? null, $autoload ?? null, $vendorLink ?? null ] as $file ) {
+			foreach( [ $child ?? null, $parent ?? null, $legacy ?? null, $secondaryChild ?? null, $secondaryParent ?? null, $overrideParent ?? null, $config ?? null, $output ?? null, $composerOutput ?? null, $unscopedOutput ?? null, $psrFirstOutput ?? null, $composerFirstOutput ?? null, $autoload ?? null, $vendorLink ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {
 					unlink($file);
 				}
 			}
 
-			foreach( [ $tempDir . '/legacy/Legacy', $tempDir . '/legacy', $tempDir . '/secondary', $tempDir . '/src', $tempDir . '/vendor', $tempDir ] as $directory ) {
+			foreach( [ $tempDir . '/legacy/Legacy', $tempDir . '/legacy', $tempDir . '/secondary', $tempDir . '/override', $tempDir . '/src', $tempDir . '/vendor', $tempDir ] as $directory ) {
 				if( is_dir($directory) ) {
 					rmdir($directory);
 				}
