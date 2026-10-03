@@ -109,7 +109,11 @@ class ModernTypes {
 	public function aMethodWithAnIntentionallyLongNameThatStillRequiresWrappingEvenThoughItDoesNotHaveAnyParametersAtAll() : \DateTimeImmutable {
 	}
 
-	/** A variadic method. */
+	/**
+	 * A variadic method.
+	 *
+	 * @return void
+	 */
 	public function variadicSignature( string ...$values ) : void {
 	}
 

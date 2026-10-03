@@ -69,6 +69,15 @@ class PhpDocTypesTest extends TestCase {
 			self::assertStringNotContainsString('Undocumented Method:', $markdown);
 			self::assertStringNotContainsString('### Parameters:', $markdown);
 			self::assertStringNotContainsString('### Returns:', $markdown);
+
+			$voidFunction = strstr($markdown, 'function documentedVoidFunction(): void');
+			self::assertIsString($voidFunction);
+			self::assertStringNotContainsString('### Return Value', $voidFunction);
+
+			$voidMethod = strstr($markdown, 'function variadicSignature(string ...$values): void');
+			self::assertIsString($voidMethod);
+			$nextMethod = strpos($voidMethod, "\n## Method:", 1);
+			self::assertStringNotContainsString('### Return Value', $nextMethod === false ? $voidMethod : substr($voidMethod, 0, $nextMethod));
 		} finally {
 			foreach( [ $config ?? null, $output ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {
