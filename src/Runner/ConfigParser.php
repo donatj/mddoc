@@ -2,6 +2,8 @@
 
 namespace donatj\MDDoc\Runner;
 
+use Composer\Autoload\ClassLoader;
+use donatj\MDDoc\Autoloaders\ComposerAutoloader;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Autoloaders\MultiLoader;
 use donatj\MDDoc\Autoloaders\Psr0;
@@ -24,7 +26,7 @@ class ConfigParser {
 	}
 
 	/**
-	 * @param array{autoloader?:AutoloaderInterface} $treeExtra
+	 * @param array{autoloader?:AutoloaderInterface,composerAutoloaders?:ComposerAutoloader[]} $treeExtra
 	 * @throws \donatj\MDDoc\Exceptions\ConfigException
 	 */
 	private function loadChildren(
@@ -69,6 +71,16 @@ class ConfigParser {
 			assert($childDoc instanceof Documentation\Autoloader);
 
 			switch( strtolower($childDoc->getType()) ) {
+				case 'composer':
+					if( !isset($treeExtra['composerAutoloaders']) ) {
+						throw new ConfigException('Composer autoloader unavailable for config project');
+					}
+
+					foreach( $treeExtra['composerAutoloaders'] as $composerAutoloader ) {
+						$loader->appendLoader($composerAutoloader);
+					}
+
+					break;
 				case 'psr0':
 					$loader->appendLoader(new Psr0($childDoc->getRoot()));
 					break;
@@ -132,6 +144,28 @@ class ConfigParser {
 		return $attributes;
 	}
 
+	/** @return ComposerAutoloader[] */
+	private function getComposerAutoloaders( string $projectRoot ) : array {
+		$vendorDirectory = rtrim($projectRoot, ' /\\') . DIRECTORY_SEPARATOR . 'vendor';
+		if( !is_dir($vendorDirectory) || !is_file($vendorDirectory . DIRECTORY_SEPARATOR . 'autoload.php') ) {
+			return [];
+		}
+
+		$vendorDirectory = realpath($vendorDirectory);
+		if( $vendorDirectory === false ) {
+			return [];
+		}
+
+		$autoloaders = [];
+		foreach( ClassLoader::getRegisteredLoaders() as $directory => $loader ) {
+			if( realpath($directory) === $vendorDirectory ) {
+				$autoloaders[] = new ComposerAutoloader($loader);
+			}
+		}
+
+		return $autoloaders;
+	}
+
 	/**
 	 * Parse a config file
 	 *
@@ -163,7 +197,12 @@ class ConfigParser {
 
 		$docRoot = new Documentation\DocRoot($attributeTree);
 		if( $root->nodeName === 'mddoc' ) {
-			$this->loadChildren($root, $docRoot, $attributeTree);
+			$treeExtra = [];
+			if( $composerAutoloaders = $this->getComposerAutoloaders(dirname($filename)) ) {
+				$treeExtra['composerAutoloaders'] = $composerAutoloaders;
+			}
+
+			$this->loadChildren($root, $docRoot, $attributeTree, $treeExtra);
 		} else {
 			if( $root->nodeName ) {
 				throw new ConfigException("XML Root element `{$root->nodeName}` is invalid. Expected mddoc.");

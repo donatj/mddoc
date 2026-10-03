@@ -32,4 +32,5 @@ jobs:
         run: make test
 
       - name: Check generated documentation
+        if: matrix.php-versions == '8.5'
         run: ./composer/bin/mddoc --dry-run=true .mddoc.xml.dist
