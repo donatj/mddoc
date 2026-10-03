@@ -6,6 +6,7 @@ use donatj\MDDoc\ElementFactory;
 use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\MDDoc;
 use donatj\MDDoc\Runner\ConfigParser;
+use donatj\MDDoc\Runner\FileDocumentationOutputStrategy;
 use donatj\MDDoc\Runner\TextUI;
 use PHPUnit\Framework\TestCase;
 
@@ -86,7 +87,7 @@ PHP
 			)));
 
 			$ui     = new TextUI(STDOUT, STDERR);
-			$parser = new ConfigParser(new ElementFactory($ui), $ui);
+			$parser = new ConfigParser(new ElementFactory($ui, new FileDocumentationOutputStrategy($ui)), $ui);
 			try {
 				$parser->parse($config);
 				self::fail('Expected unavailable Composer autoloader to fail.');
