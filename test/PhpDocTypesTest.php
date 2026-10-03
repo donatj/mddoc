@@ -49,11 +49,11 @@ class PhpDocTypesTest extends TestCase {
 				'function find(callable(string|int): bool $filter): array<string,int>',
 				"function multiLineMagicSignature(\n\t\\DateTimeImmutable \$createdAt,\n\t\\DateTimeImmutable \$updatedAt,\n\t\\DateTimeImmutable \$publishedAt,\n\t\\DateTimeImmutable \$archivedAt,\n): \\DateTimeImmutable",
 				"function multiLineCallableMagicSignature(\n\tcallable(string,int): bool \$filter,\n\t\\DateTimeImmutable \$createdAt,\n\t\\DateTimeImmutable \$updatedAt,\n\t\\DateTimeImmutable \$publishedAt,\n): \\DateTimeImmutable",
-				'function optionalParameters(string $required, int $count = 1, ?string $label = \\null)',
+				"function optionalParameters(\n\tstring \$required,\n\tint \$count = 1,\n\t?string \$label = \\null,\n)",
 				'@var array{label: string,callback: callable(string|int): bool}',
 				'***\\RuntimeException***',
 				'***\\Psr\\Log\\LoggerInterface***',
-				'function dnf((\\Countable&\\Iterator)|\\Stringable $value): (\\Countable&\\Iterator)|\\Stringable',
+				"function dnf(\n\t(\\Countable&\\Iterator)|\\Stringable \$value,\n): (\\Countable&\\Iterator)|\\Stringable",
 				"function multiLineSignature(\n\t\\DateTimeImmutable \$createdAt,\n\t\\DateTimeImmutable \$updatedAt,\n\t\\DateTimeImmutable \$publishedAt,\n\t\\DateTimeImmutable \$archivedAt,\n): \\DateTimeImmutable",
 				"function multiLineDefaultSignature(\n\tarray \$labels = ['first', 'second'],\n\t\\DateTimeImmutable \$createdAt,\n\t\\DateTimeImmutable \$updatedAt,\n\t\\DateTimeImmutable \$publishedAt,\n): \\DateTimeImmutable",
 				"function aMethodWithAnIntentionallyLongNameThatStillRequiresWrappingEvenThoughItDoesNotHaveAnyParametersAtAll(\n): \\DateTimeImmutable",
@@ -69,6 +69,72 @@ class PhpDocTypesTest extends TestCase {
 			self::assertStringNotContainsString('Undocumented Method:', $markdown);
 			self::assertStringNotContainsString('### Parameters:', $markdown);
 			self::assertStringNotContainsString('### Returns:', $markdown);
+		} finally {
+			foreach( [ $config ?? null, $output ?? null ] as $file ) {
+				if( $file !== null && file_exists($file) ) {
+					unlink($file);
+				}
+			}
+
+			rmdir($tempDir);
+		}
+	}
+
+	public function testSignatureWrapLengthCanBeConfiguredOrDisabled() : void {
+		$tempDir = sys_get_temp_dir() . '/mddoc-signature-wrap-length-' . uniqid('', true);
+		self::assertTrue(mkdir($tempDir, 0700));
+
+		try {
+			$output = $tempDir . '/README.md';
+			$source = realpath(__DIR__ . '/fixtures/phpdoc-types/GlobalImports.php');
+			$config = $tempDir . '/mddoc.xml';
+
+			self::assertIsString($source);
+			foreach( [ 120, 0 ] as $wrapLength ) {
+				self::assertNotFalse(file_put_contents($config, sprintf(
+					'<mddoc><docpage target="%s"><file name="%s" signature-wrap-length="%d" /></docpage></mddoc>',
+					htmlspecialchars($output, ENT_XML1),
+					htmlspecialchars($source, ENT_XML1),
+					$wrapLength
+				)));
+
+				new MDDoc([ 'mddoc', $config ]);
+
+				$markdown = file_get_contents($output);
+				self::assertIsString($markdown);
+				self::assertStringContainsString('function optionalParameters(string $required, int $count = 1, ?string $label = \\null)', $markdown);
+				self::assertStringNotContainsString("function optionalParameters(\n", $markdown);
+			}
+		} finally {
+			foreach( [ $config ?? null, $output ?? null ] as $file ) {
+				if( $file !== null && file_exists($file) ) {
+					unlink($file);
+				}
+			}
+
+			rmdir($tempDir);
+		}
+	}
+
+	public function testSignatureWrapLengthRejectsNegativeValues() : void {
+		$tempDir = sys_get_temp_dir() . '/mddoc-signature-wrap-length-' . uniqid('', true);
+		self::assertTrue(mkdir($tempDir, 0700));
+
+		try {
+			$output = $tempDir . '/README.md';
+			$source = realpath(__DIR__ . '/fixtures/phpdoc-types/GlobalImports.php');
+			$config = $tempDir . '/mddoc.xml';
+
+			self::assertIsString($source);
+			self::assertNotFalse(file_put_contents($config, sprintf(
+				'<mddoc><docpage target="%s"><file name="%s" signature-wrap-length="-1" /></docpage></mddoc>',
+				htmlspecialchars($output, ENT_XML1),
+				htmlspecialchars($source, ENT_XML1)
+			)));
+
+			[ $exitCode, $error ] = $this->runMDDoc($config);
+			self::assertSame(1, $exitCode, $error);
+			self::assertStringContainsString('Configuration error; signature-wrap-length must be a non-negative integer.', $error);
 		} finally {
 			foreach( [ $config ?? null, $output ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {
@@ -112,6 +178,19 @@ class PhpDocTypesTest extends TestCase {
 
 			rmdir($tempDir);
 		}
+	}
+
+	/** @return array{int,string} */
+	private function runMDDoc( string $config ) : array {
+		$command = implode(' ', [
+			escapeshellarg(PHP_BINARY),
+			escapeshellarg(__DIR__ . '/../composer/bin/mddoc'),
+			escapeshellarg($config),
+		]) . ' 2>&1';
+
+		exec($command, $output, $exitCode);
+
+		return [ $exitCode, implode(PHP_EOL, $output) ];
 	}
 
 }

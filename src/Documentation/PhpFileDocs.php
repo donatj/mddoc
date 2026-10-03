@@ -8,6 +8,7 @@ namespace donatj\MDDoc\Documentation;
 
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
+use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Reflectors\Source\DocBlock;
 use donatj\MDDoc\Reflectors\Source\Element;
 use donatj\MDDoc\Reflectors\Source\Tag;
@@ -27,7 +28,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 	use LoggerAwareTrait;
 
-	private const MAX_SIGNATURE_LENGTH = 120;
+	private const DEFAULT_SIGNATURE_WRAP_LENGTH = 80;
 
 	/**
 	 * The file to document
@@ -62,6 +63,13 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	 * @mddoc-recurse true
 	 */
 	public const OPT_WARN_UNDOCUMENTED = 'warn-undocumented';
+
+	/**
+	 * Maximum signature length before wrapping. Defaults to 80. Set to 0 to disable wrapping.
+	 *
+	 * @mddoc-recurse true
+	 */
+	public const OPT_SIGNATURE_WRAP_LENGTH = 'signature-wrap-length';
 
 	private AutoloaderInterface $autoloader;
 
@@ -503,7 +511,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		$return = $returnType === 'mixed' ? '' : ": {$returnType}";
 
 		$signature = "function {$name}(" . implode(', ', $arguments) . "){$return}";
-		if( strlen($signature) <= self::MAX_SIGNATURE_LENGTH ) {
+		$wrapLength = $this->getSignatureWrapLength();
+		if( $wrapLength === null || strlen($signature) <= $wrapLength ) {
 			return $signature;
 		}
 
@@ -512,6 +521,21 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		}
 
 		return "function {$name}(\n\t" . implode(",\n\t", $arguments) . ",\n){$return}";
+	}
+
+	private function getSignatureWrapLength() : ?int {
+		$wrapLength = $this->getOption(self::OPT_SIGNATURE_WRAP_LENGTH, true);
+		if( $wrapLength === null ) {
+			return self::DEFAULT_SIGNATURE_WRAP_LENGTH;
+		}
+
+		if( !ctype_digit($wrapLength) ) {
+			throw new ConfigException(self::OPT_SIGNATURE_WRAP_LENGTH . ' must be a non-negative integer.');
+		}
+
+		$wrapLength = (int)$wrapLength;
+
+		return $wrapLength > 0 ? $wrapLength : null;
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {
