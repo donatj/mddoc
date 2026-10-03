@@ -8,6 +8,8 @@ use Psr\Log\LoggerInterface as Logger;
  * A source file that uses PHPDoc types beyond phpDocumentor/reflection's grammar.
  *
  * @method static array<string,int> find(callable(string|int): bool $filter) Finds matching values.
+ * @method static \DateTimeImmutable multiLineMagicSignature(\DateTimeImmutable $createdAt, \DateTimeImmutable $updatedAt, \DateTimeImmutable $publishedAt, \DateTimeImmutable $archivedAt)
+ * @method static \DateTimeImmutable multiLineCallableMagicSignature(callable(string, int): bool $filter, \DateTimeImmutable $createdAt, \DateTimeImmutable $updatedAt, \DateTimeImmutable $publishedAt)
  * @template T
  * @phpstan-type Item array-key
  */
@@ -83,6 +85,32 @@ class ModernTypes {
 
 	/** @return mixed */
 	public function dnf( (\Countable&\Iterator)|\Stringable $value ) : (\Countable&\Iterator)|\Stringable {
+	}
+
+	/** A method with a signature long enough to wrap in generated documentation. */
+	public function multiLineSignature(
+		\DateTimeImmutable $createdAt,
+		\DateTimeImmutable $updatedAt,
+		\DateTimeImmutable $publishedAt,
+		\DateTimeImmutable $archivedAt
+	) : \DateTimeImmutable {
+	}
+
+	/** A long signature with a comma-bearing default value. */
+	public function multiLineDefaultSignature(
+		array $labels = [ 'first', 'second' ],
+		\DateTimeImmutable $createdAt,
+		\DateTimeImmutable $updatedAt,
+		\DateTimeImmutable $publishedAt
+	) : \DateTimeImmutable {
+	}
+
+	/** A parameterless method whose generated signature still exceeds the line limit. */
+	public function aMethodWithAnIntentionallyLongNameThatStillRequiresWrappingEvenThoughItDoesNotHaveAnyParametersAtAll() : \DateTimeImmutable {
+	}
+
+	/** A variadic method. */
+	public function variadicSignature( string ...$values ) : void {
 	}
 
 	public function undocumented( string $name = '' ) : string {
