@@ -131,9 +131,10 @@ all children
 Multiple autoloaders can be specified, and they will be checked in the order  
 they are specified  
   
-The composer type uses the Composer autoloader registered for the project  
-containing the configuration file. It finds project and dependency classes  
-without loading them.  
+The composer type uses a Composer autoloader registered for the configuration  
+file's directory. Its vendor/autoload.php file must exist, and its loader  
+must already be registered in the current process. It finds project and  
+dependency classes without loading them.  
   
 #### Attributes:  
   
