@@ -65,7 +65,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	public const OPT_WARN_UNDOCUMENTED = 'warn-undocumented';
 
 	/**
-	 * Maximum signature length before wrapping. Defaults to 80. Set to 0 or a negative value to disable wrapping.
+	 * Maximum signature length before wrapping. Defaults to 80. Set to 0 to disable wrapping.
 	 *
 	 * @mddoc-recurse true
 	 */
@@ -529,8 +529,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			return self::DEFAULT_SIGNATURE_WRAP_LENGTH;
 		}
 
-		if( !preg_match('/^-?\d+$/', $wrapLength) ) {
-			throw new ConfigException(self::OPT_SIGNATURE_WRAP_LENGTH . ' must be an integer.');
+		if( !ctype_digit($wrapLength) ) {
+			throw new ConfigException(self::OPT_SIGNATURE_WRAP_LENGTH . ' must be a non-negative integer.');
 		}
 
 		$wrapLength = (int)$wrapLength;

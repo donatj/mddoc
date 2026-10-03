@@ -90,7 +90,7 @@ class PhpDocTypesTest extends TestCase {
 			$config = $tempDir . '/mddoc.xml';
 
 			self::assertIsString($source);
-			foreach( [ 120, 0, -1 ] as $wrapLength ) {
+			foreach( [ 120, 0 ] as $wrapLength ) {
 				self::assertNotFalse(file_put_contents($config, sprintf(
 					'<mddoc><docpage target="%s"><file name="%s" signature-wrap-length="%d" /></docpage></mddoc>',
 					htmlspecialchars($output, ENT_XML1),

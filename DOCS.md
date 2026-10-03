@@ -1227,7 +1227,7 @@ class PhpFileDocs {
 	public const OPT_SKIP_METHOD_RETURNS = 'skip-method-returns';
 	/** Generate warning for undocumented methods. Defaults to "true". */
 	public const OPT_WARN_UNDOCUMENTED = 'warn-undocumented';
-	/** Maximum signature length before wrapping. Defaults to 80. Set to 0 or a negative value to disable wrapping. */
+	/** Maximum signature length before wrapping. Defaults to 80. Set to 0 to disable wrapping. */
 	public const OPT_SIGNATURE_WRAP_LENGTH = 'signature-wrap-length';
 }
 ```
