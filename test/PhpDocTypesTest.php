@@ -116,6 +116,36 @@ class PhpDocTypesTest extends TestCase {
 		}
 	}
 
+	public function testSignatureWrapLengthRejectsNegativeValues() : void {
+		$tempDir = sys_get_temp_dir() . '/mddoc-signature-wrap-length-' . uniqid('', true);
+		self::assertTrue(mkdir($tempDir, 0700));
+
+		try {
+			$output = $tempDir . '/README.md';
+			$source = realpath(__DIR__ . '/fixtures/phpdoc-types/GlobalImports.php');
+			$config = $tempDir . '/mddoc.xml';
+
+			self::assertIsString($source);
+			self::assertNotFalse(file_put_contents($config, sprintf(
+				'<mddoc><docpage target="%s"><file name="%s" signature-wrap-length="-1" /></docpage></mddoc>',
+				htmlspecialchars($output, ENT_XML1),
+				htmlspecialchars($source, ENT_XML1)
+			)));
+
+			[ $exitCode, $error ] = $this->runMDDoc($config);
+			self::assertSame(1, $exitCode, $error);
+			self::assertStringContainsString('Configuration error; signature-wrap-length must be a non-negative integer.', $error);
+		} finally {
+			foreach( [ $config ?? null, $output ?? null ] as $file ) {
+				if( $file !== null && file_exists($file) ) {
+					unlink($file);
+				}
+			}
+
+			rmdir($tempDir);
+		}
+	}
+
 	public function testUndocumentedMethodWarningCanBeDisabled() : void {
 		$tempDir = sys_get_temp_dir() . '/mddoc-undocumented-method-' . uniqid('', true);
 		self::assertTrue(mkdir($tempDir, 0700));
@@ -148,6 +178,19 @@ class PhpDocTypesTest extends TestCase {
 
 			rmdir($tempDir);
 		}
+	}
+
+	/** @return array{int,string} */
+	private function runMDDoc( string $config ) : array {
+		$command = implode(' ', [
+			escapeshellarg(PHP_BINARY),
+			escapeshellarg(__DIR__ . '/../composer/bin/mddoc'),
+			escapeshellarg($config),
+		]) . ' 2>&1';
+
+		exec($command, $output, $exitCode);
+
+		return [ $exitCode, implode(PHP_EOL, $output) ];
 	}
 
 }
