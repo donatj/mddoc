@@ -65,7 +65,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	public const OPT_WARN_UNDOCUMENTED = 'warn-undocumented';
 
 	/**
-	 * Maximum signature length before wrapping. Defaults to 80.
+	 * Maximum signature length before wrapping. Defaults to 80. Set to 0 or a negative value to disable wrapping.
 	 *
 	 * @mddoc-recurse true
 	 */
@@ -511,7 +511,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		$return = $returnType === 'mixed' ? '' : ": {$returnType}";
 
 		$signature = "function {$name}(" . implode(', ', $arguments) . "){$return}";
-		if( strlen($signature) <= $this->getSignatureWrapLength() ) {
+		$wrapLength = $this->getSignatureWrapLength();
+		if( $wrapLength === null || strlen($signature) <= $wrapLength ) {
 			return $signature;
 		}
 
@@ -522,17 +523,19 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		return "function {$name}(\n\t" . implode(",\n\t", $arguments) . ",\n){$return}";
 	}
 
-	private function getSignatureWrapLength() : int {
+	private function getSignatureWrapLength() : ?int {
 		$wrapLength = $this->getOption(self::OPT_SIGNATURE_WRAP_LENGTH, true);
 		if( $wrapLength === null ) {
 			return self::DEFAULT_SIGNATURE_WRAP_LENGTH;
 		}
 
-		if( !ctype_digit($wrapLength) ) {
-			throw new ConfigException(self::OPT_SIGNATURE_WRAP_LENGTH . ' must be a non-negative integer.');
+		if( !preg_match('/^-?\d+$/', $wrapLength) ) {
+			throw new ConfigException(self::OPT_SIGNATURE_WRAP_LENGTH . ' must be an integer.');
 		}
 
-		return (int)$wrapLength;
+		$wrapLength = (int)$wrapLength;
+
+		return $wrapLength > 0 ? $wrapLength : null;
 	}
 
 	private function descriptionFormat( string ...$args ) : DocumentDepth {

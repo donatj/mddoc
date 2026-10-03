@@ -80,7 +80,7 @@ class PhpDocTypesTest extends TestCase {
 		}
 	}
 
-	public function testSignatureWrapLengthCanBeConfigured() : void {
+	public function testSignatureWrapLengthCanBeConfiguredOrDisabled() : void {
 		$tempDir = sys_get_temp_dir() . '/mddoc-signature-wrap-length-' . uniqid('', true);
 		self::assertTrue(mkdir($tempDir, 0700));
 
@@ -90,18 +90,21 @@ class PhpDocTypesTest extends TestCase {
 			$config = $tempDir . '/mddoc.xml';
 
 			self::assertIsString($source);
-			self::assertNotFalse(file_put_contents($config, sprintf(
-				'<mddoc><docpage target="%s"><file name="%s" signature-wrap-length="120" /></docpage></mddoc>',
-				htmlspecialchars($output, ENT_XML1),
-				htmlspecialchars($source, ENT_XML1)
-			)));
+			foreach( [ 120, 0, -1 ] as $wrapLength ) {
+				self::assertNotFalse(file_put_contents($config, sprintf(
+					'<mddoc><docpage target="%s"><file name="%s" signature-wrap-length="%d" /></docpage></mddoc>',
+					htmlspecialchars($output, ENT_XML1),
+					htmlspecialchars($source, ENT_XML1),
+					$wrapLength
+				)));
 
-			new MDDoc([ 'mddoc', $config ]);
+				new MDDoc([ 'mddoc', $config ]);
 
-			$markdown = file_get_contents($output);
-			self::assertIsString($markdown);
-			self::assertStringContainsString('function optionalParameters(string $required, int $count = 1, ?string $label = \\null)', $markdown);
-			self::assertStringNotContainsString("function optionalParameters(\n", $markdown);
+				$markdown = file_get_contents($output);
+				self::assertIsString($markdown);
+				self::assertStringContainsString('function optionalParameters(string $required, int $count = 1, ?string $label = \\null)', $markdown);
+				self::assertStringNotContainsString("function optionalParameters(\n", $markdown);
+			}
 		} finally {
 			foreach( [ $config ?? null, $output ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {
