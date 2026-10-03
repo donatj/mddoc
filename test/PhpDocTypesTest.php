@@ -72,12 +72,23 @@ class PhpDocTypesTest extends TestCase {
 
 			$voidFunction = strstr($markdown, 'function documentedVoidFunction(): void');
 			self::assertIsString($voidFunction);
-			self::assertStringNotContainsString('### Return Value', $voidFunction);
+			$nextFunction = strpos($voidFunction, "\n# Function:", 1);
+			self::assertStringNotContainsString('### Return Value', $nextFunction === false ? $voidFunction : substr($voidFunction, 0, $nextFunction));
+
+			$documentedVoidFunction = strstr($markdown, 'function documentedVoidFunctionWithDescription(): void');
+			self::assertIsString($documentedVoidFunction);
+			self::assertStringContainsString('### Return Value', $documentedVoidFunction);
+			self::assertStringContainsString('- ***void*** - Writes output.', $documentedVoidFunction);
 
 			$voidMethod = strstr($markdown, 'function variadicSignature(string ...$values): void');
 			self::assertIsString($voidMethod);
 			$nextMethod = strpos($voidMethod, "\n## Method:", 1);
 			self::assertStringNotContainsString('### Return Value', $nextMethod === false ? $voidMethod : substr($voidMethod, 0, $nextMethod));
+
+			$documentedVoidMethod = strstr($markdown, 'function documentedVoidMethodWithDescription(): void');
+			self::assertIsString($documentedVoidMethod);
+			self::assertStringContainsString('### Return Value', $documentedVoidMethod);
+			self::assertStringContainsString('- ***void*** - Writes output.', $documentedVoidMethod);
 		} finally {
 			foreach( [ $config ?? null, $output ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {

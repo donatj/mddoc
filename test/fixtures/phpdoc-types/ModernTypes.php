@@ -117,6 +117,14 @@ class ModernTypes {
 	public function variadicSignature( string ...$values ) : void {
 	}
 
+	/**
+	 * A void method whose result is documented.
+	 *
+	 * @return void Writes output.
+	 */
+	public function documentedVoidMethodWithDescription() : void {
+	}
+
 	public function undocumented( string $name = '' ) : string {
 		return $name;
 	}

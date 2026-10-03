@@ -28,3 +28,11 @@ function optionalParameters( string $required, int $count = 1, ?string $label = 
  */
 function documentedVoidFunction() : void {
 }
+
+/**
+ * A function whose void result is documented.
+ *
+ * @return void Writes output.
+ */
+function documentedVoidFunctionWithDescription() : void {
+}
