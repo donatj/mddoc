@@ -132,16 +132,16 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					$subDocument->appendChild($paramDoc);
 				}
 
-				$returnDoc = new DocumentDepth;
-				$subDocument->appendChild($returnDoc);
-
 				$return = current($block->getTagsByName('return'));
 				if( $return ) {
 					if( !$return->isValid() ) {
 						$this->logInvalidTag('Invalid @return tag', $func, $filename, $name, $return);
 					} elseif( $return->getType() === null ) {
 						$this->logInvalidTag('Unknown @return tag', $func, $filename, $name, $return);
-					} else {
+					} elseif( strtolower($return->getType()) !== 'void' || trim($return->getDescription()) !== '' ) {
+						$returnDoc = new DocumentDepth;
+						$subDocument->appendChild($returnDoc);
+
 						$returnDoc->appendChild(new Header('Return Value'));
 						$returnDoc->appendChild(new MdText('- ' . $this->formatType($return->getType(), 'void') . (($returnDescr = (string)$return->getDescription()) ? ' - ' . $returnDescr : '')));
 					}
@@ -424,7 +424,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						if( $return = current($firstBlock->getTagsByName('return')) ) {
 							if( !$return->isValid() ) {
 								$this->logInvalidTag('Invalid @return tag', $class, $filename, $name, $return);
-							} else {
+							} elseif( strtolower($return->getType() ?? '') !== 'void' || trim($return->getDescription()) !== '' ) {
 								$returnDoc = new DocumentDepth;
 								$subDocument->appendChild($returnDoc);
 
