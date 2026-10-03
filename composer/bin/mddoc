@@ -1,17 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-$files = [
-	__DIR__ . '/../../vendor/autoload.php',
-	__DIR__ . '/../../../../autoload.php',
-];
-
-foreach( $files as $file ) {
-	if( file_exists($file) ) {
-		require $file;
-		break;
-	}
-}
+require $_composer_autoload_path ?? __DIR__ . '/../../vendor/autoload.php';
 
 
 new \donatj\MDDoc\MDDoc($argv);
