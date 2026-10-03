@@ -21,7 +21,9 @@ A simple autoloader chain
 ### Method: MultiLoader->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface ...$loaders)
+function __construct(
+	\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface ...$loaders,
+)
 ```
 
 ---
@@ -43,7 +45,9 @@ Locate the filename of a given class
 ### Method: MultiLoader->appendLoader
 
 ```php
-function appendLoader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $loader): void
+function appendLoader(
+	\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $loader,
+): void
 ```
 
 ---
@@ -130,7 +134,10 @@ Locate the filename of a given class
 ### Method: AbstractDocPart->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -166,7 +173,10 @@ function output(int $depth)
 ### Method: AbstractElement->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -214,7 +224,9 @@ function getDocumentationChildren(): array
 ### Method: AbstractNestedDoc->addChildren
 
 ```php
-function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void
+function addChildren(
+	\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children,
+): void
 ```
 
 ---
@@ -222,7 +234,10 @@ function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...
 ### Method: AbstractNestedDoc->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -272,7 +287,10 @@ class Autoloader {
 ### Method: Autoloader->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -348,7 +366,10 @@ function output(int $depth): string
 ### Method: Badge->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -410,7 +431,10 @@ function output(int $depth): string
 ### Method: BadgeCoveralls->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -471,7 +495,10 @@ function output(int $depth): string
 ### Method: BadgeGitHubActions->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -534,7 +561,10 @@ function output(int $depth): string
 ### Method: BadgePoser->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -599,7 +629,10 @@ function output(int $depth): string
 ### Method: BadgeScrutinizer->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -659,7 +692,10 @@ function output(int $depth): string
 ### Method: BadgeShielded->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -720,7 +756,10 @@ function output(int $depth): string
 ### Method: BadgeTravis->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -772,7 +811,10 @@ function output(int $depth): \donatj\MDDom\Paragraph
 ### Method: ComposerInstall->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -808,7 +850,10 @@ function output(int $depth): \donatj\MDDom\Paragraph
 ### Method: ComposerRequires->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -896,7 +941,9 @@ function getDocumentationChildren(): array
 ### Method: DocPage->addChildren
 
 ```php
-function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void
+function addChildren(
+	\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children,
+): void
 ```
 
 ---
@@ -904,7 +951,10 @@ function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...
 ### Method: DocPage->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -964,7 +1014,9 @@ function getDocumentationChildren(): array
 ### Method: DocRoot->addChildren
 
 ```php
-function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void
+function addChildren(
+	\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children,
+): void
 ```
 
 ---
@@ -972,7 +1024,10 @@ function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...
 ### Method: DocRoot->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -1030,7 +1085,10 @@ function output(int $depth): \donatj\MDDom\AbstractElement
 ### Method: ExecOutput->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -1074,7 +1132,10 @@ function output(int $depth): \donatj\MDDom\Paragraph
 ### Method: IncludeFile->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -1098,7 +1159,9 @@ function getTextContent(): string
 ### Method: AutoloaderAware->setAutoloader
 
 ```php
-function setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader): void
+function setAutoloader(
+	\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader,
+): void
 ```
 
 ## Class: donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
@@ -1118,7 +1181,10 @@ function output(int $depth)
 ### Method: DocumentationInterface->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent,
+)
 ```
 
 ## Class: donatj\MDDoc\Documentation\Interfaces\DocumentationOutputStrategyAware
@@ -1136,7 +1202,10 @@ function setDocumentationOutputStrategy(
 ### Method: ElementInterface->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent,
+)
 ```
 
 ## Class: donatj\MDDoc\Documentation\PhpFileDocs
@@ -1158,6 +1227,8 @@ class PhpFileDocs {
 	public const OPT_SKIP_METHOD_RETURNS = 'skip-method-returns';
 	/** Generate warning for undocumented methods. Defaults to "true". */
 	public const OPT_WARN_UNDOCUMENTED = 'warn-undocumented';
+	/** Maximum signature length before wrapping. Defaults to 80. */
+	public const OPT_SIGNATURE_WRAP_LENGTH = 'signature-wrap-length';
 }
 ```
 
@@ -1176,7 +1247,9 @@ function output(int $depth)
 ### Method: PhpFileDocs->setAutoloader
 
 ```php
-function setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader): void
+function setAutoloader(
+	\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader,
+): void
 ```
 
 ---
@@ -1184,7 +1257,10 @@ function setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface 
 ### Method: PhpFileDocs->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -1220,7 +1296,9 @@ class RecursiveDirectory {
 ### Method: RecursiveDirectory->setAutoloader
 
 ```php
-function setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader): void
+function setAutoloader(
+	\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader,
+): void
 ```
 
 ---
@@ -1264,7 +1342,9 @@ function getDocumentationChildren(): array
 ### Method: RecursiveDirectory->addChildren
 
 ```php
-function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void
+function addChildren(
+	\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children,
+): void
 ```
 
 ---
@@ -1272,7 +1352,10 @@ function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...
 ### Method: RecursiveDirectory->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -1346,7 +1429,9 @@ function getDocumentationChildren(): array
 ### Method: Replace->addChildren
 
 ```php
-function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void
+function addChildren(
+	\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children,
+): void
 ```
 
 ---
@@ -1354,7 +1439,10 @@ function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...
 ### Method: Replace->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -1424,7 +1512,9 @@ function getDocumentationChildren(): array
 ### Method: Section->addChildren
 
 ```php
-function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void
+function addChildren(
+	\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children,
+): void
 ```
 
 ---
@@ -1432,7 +1522,10 @@ function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...
 ### Method: Section->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -1482,7 +1575,10 @@ function output(int $depth): \donatj\MDDom\AbstractElement
 ### Method: Source->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -1518,7 +1614,10 @@ function output(int $depth): \donatj\MDDom\AbstractElement
 ### Method: Text->__construct
 
 ```php
-function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')
+function __construct(
+	\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree,
+	string $textContent = '',
+)
 ```
 
 ---
@@ -1580,7 +1679,11 @@ Return a populated DocumentationInterface of the corresponding tagName
 ### Method: ClassNotReadableException->__construct
 
 ```php
-function __construct(string $message, string $path, ?\Exception $previous_exception = null)
+function __construct(
+	string $message,
+	string $path,
+	?\Exception $previous_exception = null,
+)
 ```
 
 ---
@@ -1616,7 +1719,11 @@ function getTarget(): string
 ### Method: PathNotReadableException->__construct
 
 ```php
-function __construct(string $message, string $path, ?\Exception $previous_exception = null)
+function __construct(
+	string $message,
+	string $path,
+	?\Exception $previous_exception = null,
+)
 ```
 
 ---
@@ -1745,7 +1852,10 @@ function newInstance(
 ### Method: ConfigParser->__construct
 
 ```php
-function __construct(\donatj\MDDoc\ElementFactory $documentationFactory, \donatj\MDDoc\Runner\TextUI $ui)
+function __construct(
+	\donatj\MDDoc\ElementFactory $documentationFactory,
+	\donatj\MDDoc\Runner\TextUI $ui,
+)
 ```
 
 ---
@@ -1884,7 +1994,11 @@ function dumpOptions(string $additional): void
 ### Method: TextUI->dropError
 
 ```php
-function dropError(string $text, int $code = 1, ?string $additional = null): void
+function dropError(
+	string $text,
+	int $code = 1,
+	?string $additional = null,
+): void
 ```
 
 Output an Error before exiting with given error code

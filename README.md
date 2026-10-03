@@ -224,6 +224,7 @@ Generate documentation for a single PHP file
 - `method-filter` - Regex to filter methods by - specify methods to be matched  
 - `skip-method-returns` - Skip the method return section  
 - `warn-undocumented` _[recursive]_ - Generate warning for undocumented methods. Defaults to "true".  
+- `signature-wrap-length` _[recursive]_ - Maximum signature length before wrapping. Defaults to 80.  
   
 ### `<recursive-directory>…</recursive-directory>`  
   
