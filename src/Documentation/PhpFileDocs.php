@@ -152,7 +152,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		if( $class = $reflector->getReflector() ) {
 
 			if( !$this->getOption(self::OPT_SKIP_CLASS_HEADER, true) ) {
-				$document->appendChild(new Header('Class: ' . ltrim($class->getFqsen(), "\\") /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
+				$elementType = $class->isEnum() ? 'Enum' : 'Class';
+				$document->appendChild(new Header($elementType . ': ' . ltrim($class->getFqsen(), "\\") /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
 
 				if( $classBlock = $class->getDocBlock() ) {
 					if( $this->shouldSkip($classBlock) ) {
@@ -176,7 +177,13 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			);
 			//			}
 
-			$classInner .= "class {$class->getName()} {\n";
+			$classInner .= $class->isEnum() ? 'enum ' : 'class ';
+			$classInner .= $class->getName();
+			if( $class->getBackingType() !== null ) {
+				$classInner .= ': ' . $class->getBackingType();
+			}
+
+			$classInner .= " {\n";
 
 			if( !$this->getOption(self::OPT_SKIP_CLASS_CONSTANTS, true) ) {
 				$constantData = $reflector->getConstants();
@@ -216,11 +223,21 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						}
 					}
 
-					$classInner       .= sprintf("\t%s const %s = %s;\n",
-						$visibility,
-						$constant->getName(),
-						$constant->getValue()
-					);
+					if( $class->isEnum() ) {
+						$classInner .= "\tcase {$constant->getName()}";
+						if( $constant->getValue() !== null ) {
+							$classInner .= ' = ' . $constant->getValue();
+						}
+
+						$classInner .= ";\n";
+					} else {
+						$classInner .= sprintf("\t%s const %s = %s;\n",
+							$visibility,
+							$constant->getName(),
+							$constant->getValue()
+						);
+					}
+
 					$showClassPreview = true;
 				}
 			}
