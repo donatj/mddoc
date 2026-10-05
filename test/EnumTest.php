@@ -85,4 +85,48 @@ class EnumTest extends TestCase {
 		}
 	}
 
+	public function testEnumsIncludeTraitsInterfacesAndMethods() : void {
+		$tempDir = sys_get_temp_dir() . '/mddoc-enum-dependencies-' . uniqid('', true);
+		self::assertTrue(mkdir($tempDir, 0700));
+
+		try {
+			$output      = $tempDir . '/README.md';
+			$source      = realpath(__DIR__ . '/fixtures/enums/dependencies/State.php');
+			$sourceRoot  = realpath(__DIR__ . '/fixtures/enums/dependencies');
+			$config      = $tempDir . '/mddoc.xml';
+
+			self::assertIsString($source);
+			self::assertIsString($sourceRoot);
+			self::assertNotFalse(file_put_contents($config, sprintf(
+				'<mddoc><autoloader type="psr4" root="%s" namespace="MDDocTest\\EnumDependencies" /><docpage target="%s"><file name="%s" /></docpage></mddoc>',
+				htmlspecialchars($sourceRoot, ENT_XML1),
+				htmlspecialchars($output, ENT_XML1),
+				htmlspecialchars($source, ENT_XML1)
+			)));
+
+			new MDDoc([ 'mddoc', $config ]);
+
+			$markdown = file_get_contents($output);
+			self::assertIsString($markdown);
+			foreach( [
+				'Method: State->contractValue',
+				'Returns the value required by the contract.',
+				'Method: State->traitValue',
+				'Returns a value provided by the trait.',
+				'Method: State->enumValue',
+				'Returns a value defined directly on the enum.',
+			] as $needle ) {
+				self::assertStringContainsString($needle, $markdown);
+			}
+		} finally {
+			foreach( [ $config ?? null, $output ?? null ] as $file ) {
+				if( $file !== null && file_exists($file) ) {
+					unlink($file);
+				}
+			}
+
+			rmdir($tempDir);
+		}
+	}
+
 }

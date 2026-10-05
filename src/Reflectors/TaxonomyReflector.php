@@ -342,7 +342,14 @@ class TaxonomyReflector {
 						continue;
 					}
 
-					if( $next[0] === T_CLASS || $next[0] === T_INTERFACE || $next[0] === T_TRAIT || $next[0] === T_FUNCTION || (defined('T_ENUM') && $next[0] === constant('T_ENUM')) ) {
+					if(
+						$next[0] === T_CLASS
+						|| $next[0] === T_INTERFACE
+						|| $next[0] === T_TRAIT
+						|| $next[0] === T_FUNCTION
+						|| (defined('T_ENUM') && $next[0] === constant('T_ENUM'))
+						|| (!defined('T_ENUM') && $next[0] === T_STRING && strtolower($next[1]) === 'enum')
+					) {
 						return null;
 					}
 
