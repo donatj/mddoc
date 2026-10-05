@@ -185,23 +185,22 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 			$classInner .= " {\n";
 
-			if( !$this->getOption(self::OPT_SKIP_CLASS_CONSTANTS, true) ) {
-				$constantData = $reflector->getConstants();
-				foreach( $constantData as $constants ) {
-					$constant = reset($constants);
-					if( !$constant ) {
+			$constantData = $reflector->getConstants();
+			foreach( $constantData as $constants ) {
+				$constant = reset($constants);
+				if( !$constant || (!$constant->isEnumCase() && $this->getOption(self::OPT_SKIP_CLASS_CONSTANTS, true)) ) {
+					continue;
+				}
+
+				$visibility = (string)$constant->getVisibility();
+				if( $visibility === 'private' ) {
+					continue;
+				}
+
+				if( $constantBlock = $constant->getDocBlock() ) {
+					if( $this->shouldSkip($constantBlock) ) {
 						continue;
 					}
-
-					$visibility = (string)$constant->getVisibility();
-					if( $visibility === 'private' ) {
-						continue;
-					}
-
-					if( $constantBlock = $constant->getDocBlock() ) {
-						if( $this->shouldSkip($constantBlock) ) {
-							continue;
-						}
 
 						$constParts = explode("\n",
 							$this->descriptionFormat(
@@ -221,25 +220,24 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						} elseif( count($constParts) === 1 ) {
 							$classInner .= "\t/** " . reset($constParts) . " */\n";
 						}
-					}
-
-					if( $class->isEnum() ) {
-						$classInner .= "\tcase {$constant->getName()}";
-						if( $constant->getValue() !== null ) {
-							$classInner .= ' = ' . $constant->getValue();
-						}
-
-						$classInner .= ";\n";
-					} else {
-						$classInner .= sprintf("\t%s const %s = %s;\n",
-							$visibility,
-							$constant->getName(),
-							$constant->getValue()
-						);
-					}
-
-					$showClassPreview = true;
 				}
+
+				if( $constant->isEnumCase() ) {
+					$classInner .= "\tcase {$constant->getName()}";
+					if( $constant->getValue() !== null ) {
+						$classInner .= ' = ' . $constant->getValue();
+					}
+
+					$classInner .= ";\n";
+				} else {
+					$classInner .= sprintf("\t%s const %s = %s;\n",
+						$visibility,
+						$constant->getName(),
+						$constant->getValue()
+					);
+				}
+
+				$showClassPreview = true;
 			}
 
 			$propertyData = $reflector->getProperties();

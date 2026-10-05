@@ -17,6 +17,7 @@ class Element {
 	private ?string $value;
 	private string $kind;
 	private ?string $backingType;
+	private bool $enumCase;
 
 	/**
 	 * @param Argument[] $arguments
@@ -31,7 +32,8 @@ class Element {
 		string $returnType = 'mixed',
 		?string $value = null,
 		string $kind = 'class',
-		?string $backingType = null
+		?string $backingType = null,
+		bool $enumCase = false
 	) {
 		$this->name       = $name;
 		$this->fqsen      = $fqsen;
@@ -43,6 +45,7 @@ class Element {
 		$this->value      = $value;
 		$this->kind       = $kind;
 		$this->backingType = $backingType;
+		$this->enumCase   = $enumCase;
 	}
 
 	public function getName() : string {
@@ -90,6 +93,10 @@ class Element {
 
 	public function getBackingType() : ?string {
 		return $this->backingType;
+	}
+
+	public function isEnumCase() : bool {
+		return $this->enumCase;
 	}
 
 }

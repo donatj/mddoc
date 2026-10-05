@@ -167,7 +167,10 @@ class TaxonomyReflector {
 					false,
 					[],
 					'mixed',
-					$statement->expr === null ? null : $this->prettyPrinter->prettyPrintExpr($statement->expr)
+					$statement->expr === null ? null : $this->prettyPrinter->prettyPrintExpr($statement->expr),
+					'class',
+					null,
+					true
 				);
 				$this->data['constants'][$enumCase->getName()][] = $enumCase;
 			} elseif( $statement instanceof Property ) {
