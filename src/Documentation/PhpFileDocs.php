@@ -152,7 +152,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		if( $class = $reflector->getReflector() ) {
 
 			if( !$this->getOption(self::OPT_SKIP_CLASS_HEADER, true) ) {
-				$document->appendChild(new Header('Class: ' . ltrim($class->getFqsen(), "\\") /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
+				$elementType = $class->isEnum() ? 'Enum' : 'Class';
+				$document->appendChild(new Header($elementType . ': ' . ltrim($class->getFqsen(), "\\") /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
 
 				if( $classBlock = $class->getDocBlock() ) {
 					if( $this->shouldSkip($classBlock) ) {
@@ -167,34 +168,35 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 			$classInner = "<?php\n";
 
-			// @todo figure some stuff out
-			//			$ns = $class->getLocation();
-			//			drop($ns);
-			//			if( $ns->__toString() ) {
-			$classInner .= sprintf("namespace %s;\n\n",
-				trim(substr((string)$class->getFqsen(), 0, 0 - strlen($class->getName())), '\\')
-			);
-			//			}
+			$namespace = trim(substr((string)$class->getFqsen(), 0, 0 - strlen($class->getName())), '\\');
+			if( $namespace !== '' ) {
+				$classInner .= sprintf("namespace %s;\n\n", $namespace);
+			}
 
-			$classInner .= "class {$class->getName()} {\n";
+			$classInner .= $class->isEnum() ? 'enum ' : 'class ';
+			$classInner .= $class->getName();
+			if( $class->getBackingType() !== null ) {
+				$classInner .= ': ' . $class->getBackingType();
+			}
 
-			if( !$this->getOption(self::OPT_SKIP_CLASS_CONSTANTS, true) ) {
-				$constantData = $reflector->getConstants();
-				foreach( $constantData as $constants ) {
-					$constant = reset($constants);
-					if( !$constant ) {
+			$classInner .= " {\n";
+
+			$constantData = $reflector->getConstants();
+			foreach( $constantData as $constants ) {
+				$constant = reset($constants);
+				if( !$constant || (!$constant->isEnumCase() && $this->getOption(self::OPT_SKIP_CLASS_CONSTANTS, true)) ) {
+					continue;
+				}
+
+				$visibility = (string)$constant->getVisibility();
+				if( $visibility === 'private' ) {
+					continue;
+				}
+
+				if( $constantBlock = $constant->getDocBlock() ) {
+					if( $this->shouldSkip($constantBlock) ) {
 						continue;
 					}
-
-					$visibility = (string)$constant->getVisibility();
-					if( $visibility === 'private' ) {
-						continue;
-					}
-
-					if( $constantBlock = $constant->getDocBlock() ) {
-						if( $this->shouldSkip($constantBlock) ) {
-							continue;
-						}
 
 						$constParts = explode("\n",
 							$this->descriptionFormat(
@@ -214,15 +216,24 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						} elseif( count($constParts) === 1 ) {
 							$classInner .= "\t/** " . reset($constParts) . " */\n";
 						}
+				}
+
+				if( $constant->isEnumCase() ) {
+					$classInner .= "\tcase {$constant->getName()}";
+					if( $constant->getValue() !== null ) {
+						$classInner .= ' = ' . $constant->getValue();
 					}
 
-					$classInner       .= sprintf("\t%s const %s = %s;\n",
+					$classInner .= ";\n";
+				} else {
+					$classInner .= sprintf("\t%s const %s = %s;\n",
 						$visibility,
 						$constant->getName(),
 						$constant->getValue()
 					);
-					$showClassPreview = true;
 				}
+
+				$showClassPreview = true;
 			}
 
 			$propertyData = $reflector->getProperties();

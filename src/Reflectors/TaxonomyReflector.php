@@ -14,6 +14,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Interface_;
@@ -98,14 +100,14 @@ class TaxonomyReflector {
 			} elseif( $node instanceof Function_ ) {
 				$function                            = $this->elementFromFunction($node, $namespace, $imports);
 				$this->functions[$function->getName()] = $function;
-			} elseif( $node instanceof Class_ || $node instanceof Interface_ || $node instanceof Trait_ ) {
+			} elseif( $node instanceof Class_ || $node instanceof Enum_ || $node instanceof Interface_ || $node instanceof Trait_ ) {
 				$this->registerClassReflector($node, $namespace, $imports);
 			}
 		}
 	}
 
 	/**
-	 * @param Class_|Interface_|Trait_ $node
+	 * @param Class_|Enum_|Interface_|Trait_ $node
 	 * @param array<string,string> $imports
 	 */
 	private function registerClassReflector( Node $node, string $namespace, array $imports ) : void {
@@ -113,7 +115,14 @@ class TaxonomyReflector {
 		$reflector = new Element(
 			$node->name === null ? '' : $node->name->toString(),
 			$this->getNamespacedName($node),
-			$classDocBlock
+			$classDocBlock,
+			'public',
+			false,
+			[],
+			'mixed',
+			null,
+			$node instanceof Enum_ ? 'enum' : 'class',
+			$node instanceof Enum_ && $node->scalarType !== null ? $this->typeFromNode($node->scalarType) : null
 		);
 		$typeNames = $classDocBlock === null ? [] : $classDocBlock->getTypeNames();
 
@@ -149,6 +158,21 @@ class TaxonomyReflector {
 					);
 					$this->data['constants'][$constant->getName()][] = $constant;
 				}
+			} elseif( $statement instanceof EnumCase ) {
+				$enumCase = new Element(
+					$statement->name->toString(),
+					$reflector->getFqsen() . '::' . $statement->name->toString(),
+					$this->docBlockParser->parse($this->getDocComment($statement), $namespace, $imports, $typeNames),
+					'public',
+					false,
+					[],
+					'mixed',
+					$statement->expr === null ? null : $this->prettyPrinter->prettyPrintExpr($statement->expr),
+					'class',
+					null,
+					true
+				);
+				$this->data['constants'][$enumCase->getName()][] = $enumCase;
 			} elseif( $statement instanceof Property ) {
 				foreach( $statement->props as $property ) {
 					$default = $property->default === null ? null : $this->prettyPrinter->prettyPrintExpr($property->default);
@@ -171,7 +195,7 @@ class TaxonomyReflector {
 			$this->mergeDependency((string)$node->extends);
 		}
 
-		if( $node instanceof Class_ || $node instanceof Trait_ ) {
+		if( $node instanceof Class_ || $node instanceof Enum_ || $node instanceof Trait_ ) {
 			foreach( $node->stmts as $statement ) {
 				if( $statement instanceof TraitUse ) {
 					foreach( $statement->traits as $trait ) {
@@ -187,7 +211,7 @@ class TaxonomyReflector {
 			}
 		}
 
-		if( $node instanceof Class_ ) {
+		if( $node instanceof Class_ || $node instanceof Enum_ ) {
 			foreach( $node->implements as $interface ) {
 				$this->mergeDependency((string)$interface);
 			}
@@ -318,7 +342,14 @@ class TaxonomyReflector {
 						continue;
 					}
 
-					if( $next[0] === T_CLASS || $next[0] === T_INTERFACE || $next[0] === T_TRAIT || $next[0] === T_FUNCTION || (defined('T_ENUM') && $next[0] === constant('T_ENUM')) ) {
+					if(
+						$next[0] === T_CLASS
+						|| $next[0] === T_INTERFACE
+						|| $next[0] === T_TRAIT
+						|| $next[0] === T_FUNCTION
+						|| (defined('T_ENUM') && $next[0] === constant('T_ENUM'))
+						|| ($next[0] === T_STRING && strtolower($next[1]) === 'enum')
+					) {
 						return null;
 					}
 

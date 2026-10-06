@@ -16,6 +16,9 @@ class FileDocBlocksTest extends TestCase {
 
 		$globalClassDoc = $factory->newInstance(__DIR__ . '/fixtures/file-docblocks/GlobalClass.php', $loader)->getFileDocBlock();
 		self::assertNull($globalClassDoc);
+
+		$globalEnumDoc = $factory->newInstance(__DIR__ . '/fixtures/file-docblocks/GlobalEnum.php', $loader)->getFileDocBlock();
+		self::assertNull($globalEnumDoc);
 	}
 
 }
