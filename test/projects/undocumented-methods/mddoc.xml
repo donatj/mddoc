@@ -1,0 +1,5 @@
+<mddoc>
+	<docpage target="README.md">
+		<file name="src/Example.php" warn-undocumented="false"/>
+	</docpage>
+</mddoc>
