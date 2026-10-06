@@ -129,4 +129,37 @@ class EnumTest extends TestCase {
 		}
 	}
 
+	public function testGlobalEnumsDoNotEmitEmptyNamespaceDeclarations() : void {
+		$tempDir = sys_get_temp_dir() . '/mddoc-global-enum-' . uniqid('', true);
+		self::assertTrue(mkdir($tempDir, 0700));
+
+		try {
+			$output = $tempDir . '/README.md';
+			$source = realpath(__DIR__ . '/fixtures/file-docblocks/GlobalEnum.php');
+			$config = $tempDir . '/mddoc.xml';
+
+			self::assertIsString($source);
+			self::assertNotFalse(file_put_contents($config, sprintf(
+				'<mddoc><docpage target="%s"><file name="%s" /></docpage></mddoc>',
+				htmlspecialchars($output, ENT_XML1),
+				htmlspecialchars($source, ENT_XML1)
+			)));
+
+			new MDDoc([ 'mddoc', $config ]);
+
+			$markdown = file_get_contents($output);
+			self::assertIsString($markdown);
+			self::assertStringContainsString("<?php\nenum GlobalEnum {", $markdown);
+			self::assertStringNotContainsString('namespace ;', $markdown);
+		} finally {
+			foreach( [ $config ?? null, $output ?? null ] as $file ) {
+				if( $file !== null && file_exists($file) ) {
+					unlink($file);
+				}
+			}
+
+			rmdir($tempDir);
+		}
+	}
+
 }

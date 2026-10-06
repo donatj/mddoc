@@ -168,14 +168,10 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 			$classInner = "<?php\n";
 
-			// @todo figure some stuff out
-			//			$ns = $class->getLocation();
-			//			drop($ns);
-			//			if( $ns->__toString() ) {
-			$classInner .= sprintf("namespace %s;\n\n",
-				trim(substr((string)$class->getFqsen(), 0, 0 - strlen($class->getName())), '\\')
-			);
-			//			}
+			$namespace = trim(substr((string)$class->getFqsen(), 0, 0 - strlen($class->getName())), '\\');
+			if( $namespace !== '' ) {
+				$classInner .= sprintf("namespace %s;\n\n", $namespace);
+			}
 
 			$classInner .= $class->isEnum() ? 'enum ' : 'class ';
 			$classInner .= $class->getName();
