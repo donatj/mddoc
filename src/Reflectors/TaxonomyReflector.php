@@ -95,13 +95,35 @@ class TaxonomyReflector {
 	 */
 	private function registerStatements( array $nodes, string $namespace = '', array $imports = [] ) : void {
 		foreach( $nodes as $node ) {
-			if( $node instanceof Namespace_ ) {
-				$this->registerStatements($node->stmts, $node->name === null ? '' : $node->name->toString(), $this->importsFromNodes($node->stmts));
-			} elseif( $node instanceof Function_ ) {
-				$function                            = $this->elementFromFunction($node, $namespace, $imports);
-				$this->functions[$function->getName()] = $function;
-			} elseif( $node instanceof Class_ || $node instanceof Enum_ || $node instanceof Interface_ || $node instanceof Trait_ ) {
-				$this->registerClassReflector($node, $namespace, $imports);
+			$this->registerNode($node, $namespace, $imports);
+		}
+	}
+
+	/** @param array<string,string> $imports */
+	private function registerNode( Node $node, string $namespace, array $imports ) : void {
+		if( $node instanceof Namespace_ ) {
+			$this->registerStatements($node->stmts, $node->name === null ? '' : $node->name->toString(), $this->importsFromNodes($node->stmts));
+
+			return;
+		}
+
+		if( $node instanceof Function_ ) {
+			$function                            = $this->elementFromFunction($node, $namespace, $imports);
+			$this->functions[$function->getName()] = $function;
+		} elseif( ($node instanceof Class_ && $node->name !== null) || $node instanceof Enum_ || $node instanceof Interface_ || $node instanceof Trait_ ) {
+			$this->registerClassReflector($node, $namespace, $imports);
+		}
+
+		foreach( $node->getSubNodeNames() as $subNodeName ) {
+			$subNode = $node->$subNodeName;
+			if( $subNode instanceof Node ) {
+				$this->registerNode($subNode, $namespace, $imports);
+			} elseif( is_array($subNode) ) {
+				foreach( $subNode as $childNode ) {
+					if( $childNode instanceof Node ) {
+						$this->registerNode($childNode, $namespace, $imports);
+					}
+				}
 			}
 		}
 	}
