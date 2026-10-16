@@ -80,7 +80,8 @@ namespace Example;
 class Widget {
 
 	/** Render the widget. */
-	public function render() : void {
+	public function render(int $depth) : string {
+		return (string)$depth;
 	}
 
 	/** Build a widget. */
@@ -100,7 +101,7 @@ namespace Example;
 interface WidgetContract {
 
 	/** Render the widget. */
-	public function render() : void;
+	public function render(int $depth) : string;
 
 }
 PHP
@@ -119,10 +120,10 @@ PHP
 			foreach( [
 				'# Table of Contents',
 				'- [class Example\\Widget](#mddoc-class-example-widget)',
-				'    - [function render](#mddoc-method-example-widget-render)',
-				'    - [function build](#mddoc-method-example-widget-build)',
+				'    - [function render(int $depth): string](#mddoc-method-example-widget-render)',
+				'    - [function build(): self](#mddoc-method-example-widget-build)',
 				'- [interface Example\\WidgetContract](#mddoc-interface-example-widgetcontract)',
-				'    - [function render](#mddoc-method-example-widgetcontract-render)',
+				'    - [function render(int $depth): string](#mddoc-method-example-widgetcontract-render)',
 				'# <a id="mddoc-class-example-widget"></a>Class: Example\\Widget',
 				'## <a id="mddoc-method-example-widget-render"></a>Method: Widget->render',
 				'## <a id="mddoc-method-example-widget-build"></a>Method: Widget::build',

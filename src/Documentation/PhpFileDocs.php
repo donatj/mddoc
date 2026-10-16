@@ -320,7 +320,6 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$methodLabel  = "Magic Method: {$class->getName()}{$operator}{$name}";
 				$methodAnchor = $this->anchorId('magic-method', $class->getFqsen() . '::' . $name);
 				$subDocument->appendChild($this->header($methodLabel, $tableOfContentsEnabled ? $methodAnchor : null));
-				$this->addTableOfContentsMethod('Magic Method', $name, $methodAnchor);
 
 				$args     = [];
 				$argParts = $docMethod->getArguments();
@@ -333,8 +332,12 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					$args[] = $prefix . '$' . $argPart['name'];
 				}
 
+				$returnType = (string)$docMethod->getReturnType();
+				$tableOfContentsSignature = $this->getFunctionSignature($name, $args, $returnType, false);
+				$this->addTableOfContentsMethod('Magic Method', $tableOfContentsSignature, $methodAnchor);
+
 				$subDocument->appendChild(
-					new CodeBlock($this->getFunctionSignature($name, $args, (string)$docMethod->getReturnType()), 'php')
+					new CodeBlock($this->getFunctionSignature($name, $args, $returnType), 'php')
 				);
 
 				if( $docMethodDescr = $docMethod->getDescription() ) {
@@ -399,7 +402,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					$methodLabel  = "Method: {$class->getName()}{$operator}{$name}";
 					$methodAnchor = $this->anchorId('method', $class->getFqsen() . '::' . $name);
 					$subDocument->appendChild($this->header($methodLabel, $tableOfContentsEnabled ? $methodAnchor : null));
-					$this->addTableOfContentsMethod('Method', $name, $methodAnchor);
+					$tableOfContentsSignature = $this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType(), false);
+					$this->addTableOfContentsMethod('Method', $tableOfContentsSignature, $methodAnchor);
 
 					$subDocument->appendChild(
 						new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType()), 'php')
@@ -469,7 +473,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					$methodLabel  = "Method: {$class->getName()}{$operator}{$name}";
 					$methodAnchor = $this->anchorId('method', $class->getFqsen() . '::' . $name);
 					$subDocument->appendChild($this->header($methodLabel, $tableOfContentsEnabled ? $methodAnchor : null));
-					$this->addTableOfContentsMethod('Method', $name, $methodAnchor);
+					$tableOfContentsSignature = $this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType(), false);
+					$this->addTableOfContentsMethod('Method', $tableOfContentsSignature, $methodAnchor);
 					$subDocument->appendChild(new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType()), 'php'));
 					if( $this->getOption(self::OPT_WARN_UNDOCUMENTED, true) !== 'false' ) {
 						$subDocument->appendChild(new MdText('Undocumented'));
@@ -581,12 +586,12 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	/**
 	 * @param string[] $arguments
 	 */
-	private function getFunctionSignature( string $name, array $arguments, string $returnType ) : string {
+	private function getFunctionSignature( string $name, array $arguments, string $returnType, bool $wrap = true ) : string {
 		$return = $returnType === 'mixed' ? '' : ": {$returnType}";
 
 		$signature = "function {$name}(" . implode(', ', $arguments) . "){$return}";
 		$wrapLength = $this->getSignatureWrapLength();
-		if( $wrapLength === null || strlen($signature) <= $wrapLength ) {
+		if( !$wrap || $wrapLength === null || strlen($signature) <= $wrapLength ) {
 			return $signature;
 		}
 

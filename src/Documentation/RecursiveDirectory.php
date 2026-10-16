@@ -103,7 +103,7 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 			$output .= sprintf("- [%s %s](#%s)\n", strtolower($entry['type']), $entry['name'], $entry['anchor']);
 
 			foreach( $entry['methods'] as $method ) {
-				$output .= sprintf("    - [function %s](#%s)\n", $method['name'], $method['anchor']);
+				$output .= sprintf("    - [%s](#%s)\n", $method['name'], $method['anchor']);
 			}
 		}
 
