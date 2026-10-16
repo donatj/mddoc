@@ -100,10 +100,10 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 	private function tableOfContentsMarkdown( array $entries ) : string {
 		$output = '';
 		foreach( $entries as $entry ) {
-			$output .= sprintf("- %s: [%s](#%s)\n", $entry['type'], $entry['name'], $entry['anchor']);
+			$output .= sprintf("- [%s %s](#%s)\n", strtolower($entry['type']), $entry['name'], $entry['anchor']);
 
 			foreach( $entry['methods'] as $method ) {
-				$output .= sprintf("    - %s: [%s](#%s)\n", $method['type'], $method['name'], $method['anchor']);
+				$output .= sprintf("    - [function %s](#%s)\n", $method['name'], $method['anchor']);
 			}
 		}
 

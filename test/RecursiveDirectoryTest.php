@@ -118,11 +118,11 @@ PHP
 			self::assertIsString($markdown);
 			foreach( [
 				'# Table of Contents',
-				'- Class: [Example\\Widget](#mddoc-class-example-widget)',
-				'    - Method: [render](#mddoc-method-example-widget-render)',
-				'    - Method: [build](#mddoc-method-example-widget-build)',
-				'- Interface: [Example\\WidgetContract](#mddoc-interface-example-widgetcontract)',
-				'    - Method: [render](#mddoc-method-example-widgetcontract-render)',
+				'- [class Example\\Widget](#mddoc-class-example-widget)',
+				'    - [function render](#mddoc-method-example-widget-render)',
+				'    - [function build](#mddoc-method-example-widget-build)',
+				'- [interface Example\\WidgetContract](#mddoc-interface-example-widgetcontract)',
+				'    - [function render](#mddoc-method-example-widgetcontract-render)',
 				'# <a id="mddoc-class-example-widget"></a>Class: Example\\Widget',
 				'## <a id="mddoc-method-example-widget-render"></a>Method: Widget->render',
 				'## <a id="mddoc-method-example-widget-build"></a>Method: Widget::build',
