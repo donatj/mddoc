@@ -320,7 +320,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$methodLabel  = "Magic Method: {$class->getName()}{$operator}{$name}";
 				$methodAnchor = $this->anchorId('magic-method', $class->getFqsen() . '::' . $name);
 				$subDocument->appendChild($this->header($methodLabel, $tableOfContentsEnabled ? $methodAnchor : null));
-				$this->addTableOfContentsMethod('Magic Method', $class->getName() . $operator . $name, $methodAnchor);
+				$this->addTableOfContentsMethod('Magic Method', $name, $methodAnchor);
 
 				$args     = [];
 				$argParts = $docMethod->getArguments();
@@ -399,7 +399,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					$methodLabel  = "Method: {$class->getName()}{$operator}{$name}";
 					$methodAnchor = $this->anchorId('method', $class->getFqsen() . '::' . $name);
 					$subDocument->appendChild($this->header($methodLabel, $tableOfContentsEnabled ? $methodAnchor : null));
-					$this->addTableOfContentsMethod('Method', $class->getName() . $operator . $name, $methodAnchor);
+					$this->addTableOfContentsMethod('Method', $name, $methodAnchor);
 
 					$subDocument->appendChild(
 						new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType()), 'php')
@@ -469,7 +469,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					$methodLabel  = "Method: {$class->getName()}{$operator}{$name}";
 					$methodAnchor = $this->anchorId('method', $class->getFqsen() . '::' . $name);
 					$subDocument->appendChild($this->header($methodLabel, $tableOfContentsEnabled ? $methodAnchor : null));
-					$this->addTableOfContentsMethod('Method', $class->getName() . $operator . $name, $methodAnchor);
+					$this->addTableOfContentsMethod('Method', $name, $methodAnchor);
 					$subDocument->appendChild(new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType()), 'php'));
 					if( $this->getOption(self::OPT_WARN_UNDOCUMENTED, true) !== 'false' ) {
 						$subDocument->appendChild(new MdText('Undocumented'));
