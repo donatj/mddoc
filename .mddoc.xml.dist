@@ -48,7 +48,8 @@ This very README you are reading (also including [DOCS.md](DOCS.md)) is generate
 			<section title="Full API Docs (WIP)">
 				<docpage target="DOCS.md">
 					<section title="Full API Docs (WIP)">
-						<recursive-directory warn-undocumented="false" name="src"/>
+						<text>Set `table-of-contents="true"` on a `recursive-directory` to link documented types and methods.</text>
+						<recursive-directory table-of-contents="true" warn-undocumented="false" name="src"/>
 					</section>
 				</docpage>
 			</section>

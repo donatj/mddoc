@@ -1,8 +1,237 @@
 # Full API Docs (WIP)
 
-## Class: donatj\MDDoc\Autoloaders\ComposerAutoloader
+Set `table-of-contents="true"` on a `recursive-directory` to link documented types and methods.
 
-### Method: ComposerAutoloader->__construct
+## Table of Contents
+
+- [class donatj\MDDoc\Autoloaders\ComposerAutoloader](#mddoc-class-donatj-mddoc-autoloaders-composerautoloader)
+    - [function __construct(\Composer\Autoload\ClassLoader $loader)](#mddoc-method-donatj-mddoc-autoloaders-composerautoloader-construct)
+    - [function __invoke(string $className): ?string](#mddoc-method-donatj-mddoc-autoloaders-composerautoloader-invoke)
+- [interface donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface](#mddoc-interface-donatj-mddoc-autoloaders-interfaces-autoloaderinterface)
+    - [function __invoke(string $className): ?string](#mddoc-method-donatj-mddoc-autoloaders-interfaces-autoloaderinterface-invoke)
+- [class donatj\MDDoc\Autoloaders\MultiLoader](#mddoc-class-donatj-mddoc-autoloaders-multiloader)
+    - [function __construct(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface ...$loaders)](#mddoc-method-donatj-mddoc-autoloaders-multiloader-construct)
+    - [function __invoke(string $className): ?string](#mddoc-method-donatj-mddoc-autoloaders-multiloader-invoke)
+    - [function appendLoader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $loader): void](#mddoc-method-donatj-mddoc-autoloaders-multiloader-appendloader)
+    - [function count(): int](#mddoc-method-donatj-mddoc-autoloaders-multiloader-count)
+- [class donatj\MDDoc\Autoloaders\NullLoader](#mddoc-class-donatj-mddoc-autoloaders-nullloader)
+    - [function __invoke(string $className): ?string](#mddoc-method-donatj-mddoc-autoloaders-nullloader-invoke)
+- [class donatj\MDDoc\Autoloaders\Psr0](#mddoc-class-donatj-mddoc-autoloaders-psr0)
+    - [function __construct(string $path)](#mddoc-method-donatj-mddoc-autoloaders-psr0-construct)
+    - [function __invoke(string $className): ?string](#mddoc-method-donatj-mddoc-autoloaders-psr0-invoke)
+- [class donatj\MDDoc\Autoloaders\Psr4](#mddoc-class-donatj-mddoc-autoloaders-psr4)
+    - [function __construct(string $root_namespace, string $path)](#mddoc-method-donatj-mddoc-autoloaders-psr4-construct)
+    - [function __invoke(string $className): ?string](#mddoc-method-donatj-mddoc-autoloaders-psr4-invoke)
+- [class donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-class-donatj-mddoc-documentation-abstractdocpart)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-abstractdocpart-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-abstractdocpart-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-abstractdocpart-gettextcontent)
+    - [function output(int $depth)](#mddoc-method-donatj-mddoc-documentation-abstractdocpart-output)
+- [class donatj\MDDoc\Documentation\AbstractElement](#mddoc-class-donatj-mddoc-documentation-abstractelement)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-abstractelement-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-abstractelement-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-abstractelement-gettextcontent)
+- [class donatj\MDDoc\Documentation\AbstractNestedDoc](#mddoc-class-donatj-mddoc-documentation-abstractnesteddoc)
+    - [function getChildren(): array](#mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-getchildren)
+    - [function getDocumentationChildren(): array](#mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-getdocumentationchildren)
+    - [function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void](#mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-addchildren)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-gettextcontent)
+    - [function output(int $depth)](#mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-output)
+- [class donatj\MDDoc\Documentation\Autoloader](#mddoc-class-donatj-mddoc-documentation-autoloader)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-autoloader-construct)
+    - [function getType(): string](#mddoc-method-donatj-mddoc-documentation-autoloader-gettype)
+    - [function getRoot(): string](#mddoc-method-donatj-mddoc-documentation-autoloader-getroot)
+    - [function getNamespace(): string](#mddoc-method-donatj-mddoc-documentation-autoloader-getnamespace)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-autoloader-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-autoloader-gettextcontent)
+- [class donatj\MDDoc\Documentation\Badges\Badge](#mddoc-class-donatj-mddoc-documentation-badges-badge)
+    - [function output(int $depth): string](#mddoc-method-donatj-mddoc-documentation-badges-badge-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-badges-badge-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-badges-badge-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-badges-badge-gettextcontent)
+- [class donatj\MDDoc\Documentation\Badges\BadgeCoveralls](#mddoc-class-donatj-mddoc-documentation-badges-badgecoveralls)
+    - [function output(int $depth): string](#mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-gettextcontent)
+    - [function setLogger(\Psr\Log\LoggerInterface $logger): void](#mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-setlogger)
+- [class donatj\MDDoc\Documentation\Badges\BadgeGitHubActions](#mddoc-class-donatj-mddoc-documentation-badges-badgegithubactions)
+    - [function output(int $depth): string](#mddoc-method-donatj-mddoc-documentation-badges-badgegithubactions-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-badges-badgegithubactions-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-badges-badgegithubactions-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-badges-badgegithubactions-gettextcontent)
+- [class donatj\MDDoc\Documentation\Badges\BadgePoser](#mddoc-class-donatj-mddoc-documentation-badges-badgeposer)
+    - [function output(int $depth): string](#mddoc-method-donatj-mddoc-documentation-badges-badgeposer-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-badges-badgeposer-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-badges-badgeposer-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-badges-badgeposer-gettextcontent)
+- [class donatj\MDDoc\Documentation\Badges\BadgeScrutinizer](#mddoc-class-donatj-mddoc-documentation-badges-badgescrutinizer)
+    - [function output(int $depth): string](#mddoc-method-donatj-mddoc-documentation-badges-badgescrutinizer-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-badges-badgescrutinizer-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-badges-badgescrutinizer-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-badges-badgescrutinizer-gettextcontent)
+- [class donatj\MDDoc\Documentation\Badges\BadgeShielded](#mddoc-class-donatj-mddoc-documentation-badges-badgeshielded)
+    - [function output(int $depth): string](#mddoc-method-donatj-mddoc-documentation-badges-badgeshielded-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-badges-badgeshielded-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-badges-badgeshielded-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-badges-badgeshielded-gettextcontent)
+- [class donatj\MDDoc\Documentation\Badges\BadgeTravis](#mddoc-class-donatj-mddoc-documentation-badges-badgetravis)
+    - [function output(int $depth): string](#mddoc-method-donatj-mddoc-documentation-badges-badgetravis-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-badges-badgetravis-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-badges-badgetravis-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-badges-badgetravis-gettextcontent)
+- [class donatj\MDDoc\Documentation\ComposerInstall](#mddoc-class-donatj-mddoc-documentation-composerinstall)
+    - [function output(int $depth): \donatj\MDDom\Paragraph](#mddoc-method-donatj-mddoc-documentation-composerinstall-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-composerinstall-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-composerinstall-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-composerinstall-gettextcontent)
+- [class donatj\MDDoc\Documentation\ComposerRequires](#mddoc-class-donatj-mddoc-documentation-composerrequires)
+    - [function output(int $depth): \donatj\MDDom\Paragraph](#mddoc-method-donatj-mddoc-documentation-composerrequires-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-composerrequires-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-composerrequires-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-composerrequires-gettextcontent)
+- [class donatj\MDDoc\Documentation\DocPage](#mddoc-class-donatj-mddoc-documentation-docpage)
+    - [function output(int $depth): string](#mddoc-method-donatj-mddoc-documentation-docpage-output)
+    - [function setDocumentationOutputStrategy(\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy): void](#mddoc-method-donatj-mddoc-documentation-docpage-setdocumentationoutputstrategy)
+    - [function getChildren(): array](#mddoc-method-donatj-mddoc-documentation-docpage-getchildren)
+    - [function getDocumentationChildren(): array](#mddoc-method-donatj-mddoc-documentation-docpage-getdocumentationchildren)
+    - [function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void](#mddoc-method-donatj-mddoc-documentation-docpage-addchildren)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-docpage-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-docpage-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-docpage-gettextcontent)
+- [class donatj\MDDoc\Documentation\DocRoot](#mddoc-class-donatj-mddoc-documentation-docroot)
+    - [function output(int $depth)](#mddoc-method-donatj-mddoc-documentation-docroot-output)
+    - [function getChildren(): array](#mddoc-method-donatj-mddoc-documentation-docroot-getchildren)
+    - [function getDocumentationChildren(): array](#mddoc-method-donatj-mddoc-documentation-docroot-getdocumentationchildren)
+    - [function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void](#mddoc-method-donatj-mddoc-documentation-docroot-addchildren)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-docroot-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-docroot-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-docroot-gettextcontent)
+- [class donatj\MDDoc\Documentation\Exceptions\ExecutionException](#mddoc-class-donatj-mddoc-documentation-exceptions-executionexception)
+- [class donatj\MDDoc\Documentation\Exceptions\UnhandledConfigTagException](#mddoc-class-donatj-mddoc-documentation-exceptions-unhandledconfigtagexception)
+- [class donatj\MDDoc\Documentation\ExecOutput](#mddoc-class-donatj-mddoc-documentation-execoutput)
+    - [function output(int $depth): \donatj\MDDom\AbstractElement](#mddoc-method-donatj-mddoc-documentation-execoutput-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-execoutput-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-execoutput-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-execoutput-gettextcontent)
+- [class donatj\MDDoc\Documentation\IncludeFile](#mddoc-class-donatj-mddoc-documentation-includefile)
+    - [function output(int $depth): \donatj\MDDom\Paragraph](#mddoc-method-donatj-mddoc-documentation-includefile-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-includefile-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-includefile-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-includefile-gettextcontent)
+- [interface donatj\MDDoc\Documentation\Interfaces\AutoloaderAware](#mddoc-interface-donatj-mddoc-documentation-interfaces-autoloaderaware)
+    - [function setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader): void](#mddoc-method-donatj-mddoc-documentation-interfaces-autoloaderaware-setautoloader)
+- [interface donatj\MDDoc\Documentation\Interfaces\DocumentationInterface](#mddoc-interface-donatj-mddoc-documentation-interfaces-documentationinterface)
+    - [function output(int $depth)](#mddoc-method-donatj-mddoc-documentation-interfaces-documentationinterface-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)](#mddoc-method-donatj-mddoc-documentation-interfaces-documentationinterface-construct)
+- [interface donatj\MDDoc\Documentation\Interfaces\DocumentationOutputStrategyAware](#mddoc-interface-donatj-mddoc-documentation-interfaces-documentationoutputstrategyaware)
+    - [function setDocumentationOutputStrategy(\donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy): void](#mddoc-method-donatj-mddoc-documentation-interfaces-documentationoutputstrategyaware-setdocumentationoutputstrategy)
+- [interface donatj\MDDoc\Documentation\Interfaces\ElementInterface](#mddoc-interface-donatj-mddoc-documentation-interfaces-elementinterface)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent)](#mddoc-method-donatj-mddoc-documentation-interfaces-elementinterface-construct)
+- [class donatj\MDDoc\Documentation\PhpFileDocs](#mddoc-class-donatj-mddoc-documentation-phpfiledocs)
+    - [function output(int $depth)](#mddoc-method-donatj-mddoc-documentation-phpfiledocs-output)
+    - [function setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader): void](#mddoc-method-donatj-mddoc-documentation-phpfiledocs-setautoloader)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-phpfiledocs-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-phpfiledocs-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-phpfiledocs-gettextcontent)
+    - [function setLogger(\Psr\Log\LoggerInterface $logger): void](#mddoc-method-donatj-mddoc-documentation-phpfiledocs-setlogger)
+- [class donatj\MDDoc\Documentation\RecursiveDirectory](#mddoc-class-donatj-mddoc-documentation-recursivedirectory)
+    - [function setAutoloader(\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoloader): void](#mddoc-method-donatj-mddoc-documentation-recursivedirectory-setautoloader)
+    - [function output(int $depth): \donatj\MDDom\Document](#mddoc-method-donatj-mddoc-documentation-recursivedirectory-output)
+    - [function getChildren(): array](#mddoc-method-donatj-mddoc-documentation-recursivedirectory-getchildren)
+    - [function getDocumentationChildren(): array](#mddoc-method-donatj-mddoc-documentation-recursivedirectory-getdocumentationchildren)
+    - [function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void](#mddoc-method-donatj-mddoc-documentation-recursivedirectory-addchildren)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-recursivedirectory-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-recursivedirectory-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-recursivedirectory-gettextcontent)
+    - [function setLogger(\Psr\Log\LoggerInterface $logger): void](#mddoc-method-donatj-mddoc-documentation-recursivedirectory-setlogger)
+- [class donatj\MDDoc\Documentation\Replace](#mddoc-class-donatj-mddoc-documentation-replace)
+    - [function output(int $depth): string](#mddoc-method-donatj-mddoc-documentation-replace-output)
+    - [function getChildren(): array](#mddoc-method-donatj-mddoc-documentation-replace-getchildren)
+    - [function getDocumentationChildren(): array](#mddoc-method-donatj-mddoc-documentation-replace-getdocumentationchildren)
+    - [function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void](#mddoc-method-donatj-mddoc-documentation-replace-addchildren)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-replace-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-replace-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-replace-gettextcontent)
+- [class donatj\MDDoc\Documentation\Section](#mddoc-class-donatj-mddoc-documentation-section)
+    - [function output(int $depth): \donatj\MDDom\DocumentDepth](#mddoc-method-donatj-mddoc-documentation-section-output)
+    - [function getChildren(): array](#mddoc-method-donatj-mddoc-documentation-section-getchildren)
+    - [function getDocumentationChildren(): array](#mddoc-method-donatj-mddoc-documentation-section-getdocumentationchildren)
+    - [function addChildren(\donatj\MDDoc\Documentation\Interfaces\ElementInterface ...$children): void](#mddoc-method-donatj-mddoc-documentation-section-addchildren)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-section-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-section-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-section-gettextcontent)
+- [class donatj\MDDoc\Documentation\Source](#mddoc-class-donatj-mddoc-documentation-source)
+    - [function output(int $depth): \donatj\MDDom\AbstractElement](#mddoc-method-donatj-mddoc-documentation-source-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-source-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-source-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-source-gettextcontent)
+- [class donatj\MDDoc\Documentation\Text](#mddoc-class-donatj-mddoc-documentation-text)
+    - [function output(int $depth): \donatj\MDDom\AbstractElement](#mddoc-method-donatj-mddoc-documentation-text-output)
+    - [function __construct(\donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent = '')](#mddoc-method-donatj-mddoc-documentation-text-construct)
+    - [function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart](#mddoc-method-donatj-mddoc-documentation-text-getparent)
+    - [function getTextContent(): string](#mddoc-method-donatj-mddoc-documentation-text-gettextcontent)
+- [class donatj\MDDoc\ElementFactory](#mddoc-class-donatj-mddoc-elementfactory)
+    - [function __construct(\donatj\MDDoc\Runner\TextUI $ui, \donatj\MDDoc\Runner\DocumentationOutputStrategy $documentationOutputStrategy)](#mddoc-method-donatj-mddoc-elementfactory-construct)
+    - [function makeFromTag(string $tagName, \donatj\MDDoc\Runner\ImmutableAttributeTree $attributeTree, string $textContent): \donatj\MDDoc\Documentation\Interfaces\ElementInterface](#mddoc-method-donatj-mddoc-elementfactory-makefromtag)
+- [class donatj\MDDoc\Exceptions\ClassNotReadableException](#mddoc-class-donatj-mddoc-exceptions-classnotreadableexception)
+    - [function __construct(string $message, string $path, ?\Exception $previous_exception = null)](#mddoc-method-donatj-mddoc-exceptions-classnotreadableexception-construct)
+    - [function getPath(): string](#mddoc-method-donatj-mddoc-exceptions-classnotreadableexception-getpath)
+- [class donatj\MDDoc\Exceptions\ConfigException](#mddoc-class-donatj-mddoc-exceptions-configexception)
+- [class donatj\MDDoc\Exceptions\DryRunMismatchException](#mddoc-class-donatj-mddoc-exceptions-dryrunmismatchexception)
+    - [function __construct(string $target)](#mddoc-method-donatj-mddoc-exceptions-dryrunmismatchexception-construct)
+    - [function getTarget(): string](#mddoc-method-donatj-mddoc-exceptions-dryrunmismatchexception-gettarget)
+- [class donatj\MDDoc\Exceptions\MDDocException](#mddoc-class-donatj-mddoc-exceptions-mddocexception)
+- [class donatj\MDDoc\Exceptions\PathNotReadableException](#mddoc-class-donatj-mddoc-exceptions-pathnotreadableexception)
+    - [function __construct(string $message, string $path, ?\Exception $previous_exception = null)](#mddoc-method-donatj-mddoc-exceptions-pathnotreadableexception-construct)
+    - [function getPath(): string](#mddoc-method-donatj-mddoc-exceptions-pathnotreadableexception-getpath)
+- [class donatj\MDDoc\Exceptions\TargetNotWritableException](#mddoc-class-donatj-mddoc-exceptions-targetnotwritableexception)
+- [class donatj\MDDoc\MDDoc](#mddoc-class-donatj-mddoc-mddoc)
+    - [function __construct(array $args)](#mddoc-method-donatj-mddoc-mddoc-construct)
+- [class donatj\MDDoc\Reflectors\TaxonomyReflector](#mddoc-class-donatj-mddoc-reflectors-taxonomyreflector)
+    - [function __construct(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader, \donatj\MDDoc\Reflectors\TaxonomyReflectorFactory $parserFactory)](#mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-construct)
+    - [function getReflector(): ?\donatj\MDDoc\Reflectors\Source\Element](#mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getreflector)
+    - [function getDocMethods(): array](#mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getdocmethods)
+    - [function getMethods(): array](#mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getmethods)
+    - [function getConstants(): array](#mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getconstants)
+    - [function getProperties(): array](#mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getproperties)
+    - [function getFunctions(): array](#mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getfunctions)
+- [class donatj\MDDoc\Reflectors\TaxonomyReflectorFactory](#mddoc-class-donatj-mddoc-reflectors-taxonomyreflectorfactory)
+    - [function newInstance(string $filename, \donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader): \donatj\MDDoc\Reflectors\TaxonomyReflector](#mddoc-method-donatj-mddoc-reflectors-taxonomyreflectorfactory-newinstance)
+- [class donatj\MDDoc\Runner\ConfigParser](#mddoc-class-donatj-mddoc-runner-configparser)
+    - [function __construct(\donatj\MDDoc\ElementFactory $documentationFactory, \donatj\MDDoc\Runner\TextUI $ui)](#mddoc-method-donatj-mddoc-runner-configparser-construct)
+    - [function parse(string $filename): \donatj\MDDoc\Documentation\DocRoot](#mddoc-method-donatj-mddoc-runner-configparser-parse)
+- [interface donatj\MDDoc\Runner\DocumentationOutputStrategy](#mddoc-interface-donatj-mddoc-runner-documentationoutputstrategy)
+    - [function write(string $target, callable $render): bool](#mddoc-method-donatj-mddoc-runner-documentationoutputstrategy-write)
+- [class donatj\MDDoc\Runner\DryRunDocumentationOutputStrategy](#mddoc-class-donatj-mddoc-runner-dryrundocumentationoutputstrategy)
+    - [function write(string $target, callable $render): bool](#mddoc-method-donatj-mddoc-runner-dryrundocumentationoutputstrategy-write)
+- [class donatj\MDDoc\Runner\FileDocumentationOutputStrategy](#mddoc-class-donatj-mddoc-runner-filedocumentationoutputstrategy)
+    - [function __construct(\Psr\Log\LoggerInterface $logger)](#mddoc-method-donatj-mddoc-runner-filedocumentationoutputstrategy-construct)
+    - [function write(string $target, callable $render): bool](#mddoc-method-donatj-mddoc-runner-filedocumentationoutputstrategy-write)
+- [class donatj\MDDoc\Runner\ImmutableAttributeTree](#mddoc-class-donatj-mddoc-runner-immutableattributetree)
+    - [function withAttr(array $attributes): self](#mddoc-method-donatj-mddoc-runner-immutableattributetree-withattr)
+    - [function shallowValue(string $attr): ?string](#mddoc-method-donatj-mddoc-runner-immutableattributetree-shallowvalue)
+    - [function deepValue(string $attr): ?string](#mddoc-method-donatj-mddoc-runner-immutableattributetree-deepvalue)
+- [class donatj\MDDoc\Runner\TextUI](#mddoc-class-donatj-mddoc-runner-textui)
+    - [function __construct($STDOUT, $STDERR)](#mddoc-method-donatj-mddoc-runner-textui-construct)
+    - [function dumpOptions(string $additional): void](#mddoc-method-donatj-mddoc-runner-textui-dumpoptions)
+    - [function dropError(string $text, int $code = 1, ?string $additional = null): void](#mddoc-method-donatj-mddoc-runner-textui-droperror)
+    - [function println(string $text = ''): void](#mddoc-method-donatj-mddoc-runner-textui-println)
+    - [function log($level, $message, array $context = []): void](#mddoc-method-donatj-mddoc-runner-textui-log)
+    - [function emergency(string|\Stringable $message, array $context = []): void](#mddoc-method-donatj-mddoc-runner-textui-emergency)
+    - [function alert(string|\Stringable $message, array $context = []): void](#mddoc-method-donatj-mddoc-runner-textui-alert)
+    - [function critical(string|\Stringable $message, array $context = []): void](#mddoc-method-donatj-mddoc-runner-textui-critical)
+    - [function error(string|\Stringable $message, array $context = []): void](#mddoc-method-donatj-mddoc-runner-textui-error)
+    - [function warning(string|\Stringable $message, array $context = []): void](#mddoc-method-donatj-mddoc-runner-textui-warning)
+    - [function notice(string|\Stringable $message, array $context = []): void](#mddoc-method-donatj-mddoc-runner-textui-notice)
+    - [function info(string|\Stringable $message, array $context = []): void](#mddoc-method-donatj-mddoc-runner-textui-info)
+    - [function debug(string|\Stringable $message, array $context = []): void](#mddoc-method-donatj-mddoc-runner-textui-debug)
+
+## <a id="mddoc-class-donatj-mddoc-autoloaders-composerautoloader"></a>Class: donatj\MDDoc\Autoloaders\ComposerAutoloader
+
+### <a id="mddoc-method-donatj-mddoc-autoloaders-composerautoloader-construct"></a>Method: ComposerAutoloader->__construct
 
 ```php
 function __construct(\Composer\Autoload\ClassLoader $loader)
@@ -10,7 +239,7 @@ function __construct(\Composer\Autoload\ClassLoader $loader)
 
 ---
 
-### Method: ComposerAutoloader->__invoke
+### <a id="mddoc-method-donatj-mddoc-autoloaders-composerautoloader-invoke"></a>Method: ComposerAutoloader->__invoke
 
 ```php
 function __invoke(string $className): ?string
@@ -22,9 +251,9 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - Filename when the class is found, null otherwise
 
-## Class: donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
+## <a id="mddoc-interface-donatj-mddoc-autoloaders-interfaces-autoloaderinterface"></a>Interface: donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface
 
-### Method: AutoloaderInterface->__invoke
+### <a id="mddoc-method-donatj-mddoc-autoloaders-interfaces-autoloaderinterface-invoke"></a>Method: AutoloaderInterface->__invoke
 
 ```php
 function __invoke(string $className): ?string
@@ -36,11 +265,11 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - Filename when the class is found, null otherwise
 
-## Class: donatj\MDDoc\Autoloaders\MultiLoader
+## <a id="mddoc-class-donatj-mddoc-autoloaders-multiloader"></a>Class: donatj\MDDoc\Autoloaders\MultiLoader
 
 A simple autoloader chain
 
-### Method: MultiLoader->__construct
+### <a id="mddoc-method-donatj-mddoc-autoloaders-multiloader-construct"></a>Method: MultiLoader->__construct
 
 ```php
 function __construct(
@@ -50,7 +279,7 @@ function __construct(
 
 ---
 
-### Method: MultiLoader->__invoke
+### <a id="mddoc-method-donatj-mddoc-autoloaders-multiloader-invoke"></a>Method: MultiLoader->__invoke
 
 ```php
 function __invoke(string $className): ?string
@@ -64,7 +293,7 @@ Locate the filename of a given class
 
 ---
 
-### Method: MultiLoader->appendLoader
+### <a id="mddoc-method-donatj-mddoc-autoloaders-multiloader-appendloader"></a>Method: MultiLoader->appendLoader
 
 ```php
 function appendLoader(
@@ -74,15 +303,15 @@ function appendLoader(
 
 ---
 
-### Method: MultiLoader->count
+### <a id="mddoc-method-donatj-mddoc-autoloaders-multiloader-count"></a>Method: MultiLoader->count
 
 ```php
 function count(): int
 ```
 
-## Class: donatj\MDDoc\Autoloaders\NullLoader
+## <a id="mddoc-class-donatj-mddoc-autoloaders-nullloader"></a>Class: donatj\MDDoc\Autoloaders\NullLoader
 
-### Method: NullLoader->__invoke
+### <a id="mddoc-method-donatj-mddoc-autoloaders-nullloader-invoke"></a>Method: NullLoader->__invoke
 
 ```php
 function __invoke(string $className): ?string
@@ -94,11 +323,11 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - Filename when the class is found, null otherwise
 
-## Class: donatj\MDDoc\Autoloaders\Psr0
+## <a id="mddoc-class-donatj-mddoc-autoloaders-psr0"></a>Class: donatj\MDDoc\Autoloaders\Psr0
 
 Class Psr0
 
-### Method: Psr0->__construct
+### <a id="mddoc-method-donatj-mddoc-autoloaders-psr0-construct"></a>Method: Psr0->__construct
 
 ```php
 function __construct(string $path)
@@ -110,7 +339,7 @@ function __construct(string $path)
 
 ---
 
-### Method: Psr0->__invoke
+### <a id="mddoc-method-donatj-mddoc-autoloaders-psr0-invoke"></a>Method: Psr0->__invoke
 
 ```php
 function __invoke(string $className): ?string
@@ -122,11 +351,11 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - Filename when the class is found, null otherwise
 
-## Class: donatj\MDDoc\Autoloaders\Psr4
+## <a id="mddoc-class-donatj-mddoc-autoloaders-psr4"></a>Class: donatj\MDDoc\Autoloaders\Psr4
 
 Class Psr4
 
-### Method: Psr4->__construct
+### <a id="mddoc-method-donatj-mddoc-autoloaders-psr4-construct"></a>Method: Psr4->__construct
 
 ```php
 function __construct(string $root_namespace, string $path)
@@ -139,7 +368,7 @@ function __construct(string $root_namespace, string $path)
 
 ---
 
-### Method: Psr4->__invoke
+### <a id="mddoc-method-donatj-mddoc-autoloaders-psr4-invoke"></a>Method: Psr4->__invoke
 
 ```php
 function __invoke(string $className): ?string
@@ -151,9 +380,9 @@ Locate the filename of a given class
 
 - ***string*** | ***null*** - Filename when the class is found, null otherwise
 
-## Class: donatj\MDDoc\Documentation\AbstractDocPart
+## <a id="mddoc-class-donatj-mddoc-documentation-abstractdocpart"></a>Class: donatj\MDDoc\Documentation\AbstractDocPart
 
-### Method: AbstractDocPart->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractdocpart-construct"></a>Method: AbstractDocPart->__construct
 
 ```php
 function __construct(
@@ -164,7 +393,7 @@ function __construct(
 
 ---
 
-### Method: AbstractDocPart->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractdocpart-getparent"></a>Method: AbstractDocPart->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -172,7 +401,7 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: AbstractDocPart->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractdocpart-gettextcontent"></a>Method: AbstractDocPart->getTextContent
 
 ```php
 function getTextContent(): string
@@ -180,7 +409,7 @@ function getTextContent(): string
 
 ---
 
-### Method: AbstractDocPart->output
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractdocpart-output"></a>Method: AbstractDocPart->output
 
 ```php
 function output(int $depth)
@@ -190,9 +419,9 @@ function output(int $depth)
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
-## Class: donatj\MDDoc\Documentation\AbstractElement
+## <a id="mddoc-class-donatj-mddoc-documentation-abstractelement"></a>Class: donatj\MDDoc\Documentation\AbstractElement
 
-### Method: AbstractElement->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractelement-construct"></a>Method: AbstractElement->__construct
 
 ```php
 function __construct(
@@ -203,7 +432,7 @@ function __construct(
 
 ---
 
-### Method: AbstractElement->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractelement-getparent"></a>Method: AbstractElement->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -211,15 +440,15 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: AbstractElement->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractelement-gettextcontent"></a>Method: AbstractElement->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\AbstractNestedDoc
+## <a id="mddoc-class-donatj-mddoc-documentation-abstractnesteddoc"></a>Class: donatj\MDDoc\Documentation\AbstractNestedDoc
 
-### Method: AbstractNestedDoc->getChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-getchildren"></a>Method: AbstractNestedDoc->getChildren
 
 ```php
 function getChildren(): array
@@ -231,7 +460,7 @@ function getChildren(): array
 
 ---
 
-### Method: AbstractNestedDoc->getDocumentationChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-getdocumentationchildren"></a>Method: AbstractNestedDoc->getDocumentationChildren
 
 ```php
 function getDocumentationChildren(): array
@@ -243,7 +472,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: AbstractNestedDoc->addChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-addchildren"></a>Method: AbstractNestedDoc->addChildren
 
 ```php
 function addChildren(
@@ -253,7 +482,7 @@ function addChildren(
 
 ---
 
-### Method: AbstractNestedDoc->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-construct"></a>Method: AbstractNestedDoc->__construct
 
 ```php
 function __construct(
@@ -264,7 +493,7 @@ function __construct(
 
 ---
 
-### Method: AbstractNestedDoc->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-getparent"></a>Method: AbstractNestedDoc->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -272,7 +501,7 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: AbstractNestedDoc->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-gettextcontent"></a>Method: AbstractNestedDoc->getTextContent
 
 ```php
 function getTextContent(): string
@@ -280,7 +509,7 @@ function getTextContent(): string
 
 ---
 
-### Method: AbstractNestedDoc->output
+### <a id="mddoc-method-donatj-mddoc-documentation-abstractnesteddoc-output"></a>Method: AbstractNestedDoc->output
 
 ```php
 function output(int $depth)
@@ -290,7 +519,7 @@ function output(int $depth)
 
 - ***\donatj\MDDom\AbstractElement*** | ***string*** | ***void*** - Cannot be annotated as also accepts __toString-able objects
 
-## Class: donatj\MDDoc\Documentation\Autoloader
+## <a id="mddoc-class-donatj-mddoc-documentation-autoloader"></a>Class: donatj\MDDoc\Documentation\Autoloader
 
 ```php
 <?php
@@ -306,7 +535,7 @@ class Autoloader {
 }
 ```
 
-### Method: Autoloader->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-autoloader-construct"></a>Method: Autoloader->__construct
 
 ```php
 function __construct(
@@ -317,7 +546,7 @@ function __construct(
 
 ---
 
-### Method: Autoloader->getType
+### <a id="mddoc-method-donatj-mddoc-documentation-autoloader-gettype"></a>Method: Autoloader->getType
 
 ```php
 function getType(): string
@@ -325,7 +554,7 @@ function getType(): string
 
 ---
 
-### Method: Autoloader->getRoot
+### <a id="mddoc-method-donatj-mddoc-documentation-autoloader-getroot"></a>Method: Autoloader->getRoot
 
 ```php
 function getRoot(): string
@@ -333,7 +562,7 @@ function getRoot(): string
 
 ---
 
-### Method: Autoloader->getNamespace
+### <a id="mddoc-method-donatj-mddoc-documentation-autoloader-getnamespace"></a>Method: Autoloader->getNamespace
 
 ```php
 function getNamespace(): string
@@ -341,7 +570,7 @@ function getNamespace(): string
 
 ---
 
-### Method: Autoloader->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-autoloader-getparent"></a>Method: Autoloader->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -349,13 +578,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: Autoloader->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-autoloader-gettextcontent"></a>Method: Autoloader->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Badges\Badge
+## <a id="mddoc-class-donatj-mddoc-documentation-badges-badge"></a>Class: donatj\MDDoc\Documentation\Badges\Badge
 
 ```php
 <?php
@@ -373,7 +602,7 @@ class Badge {
 }
 ```
 
-### Method: Badge->output
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badge-output"></a>Method: Badge->output
 
 ```php
 function output(int $depth): string
@@ -385,7 +614,7 @@ function output(int $depth): string
 
 ---
 
-### Method: Badge->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badge-construct"></a>Method: Badge->__construct
 
 ```php
 function __construct(
@@ -396,7 +625,7 @@ function __construct(
 
 ---
 
-### Method: Badge->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badge-getparent"></a>Method: Badge->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -404,13 +633,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: Badge->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badge-gettextcontent"></a>Method: Badge->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Badges\BadgeCoveralls
+## <a id="mddoc-class-donatj-mddoc-documentation-badges-badgecoveralls"></a>Class: donatj\MDDoc\Documentation\Badges\BadgeCoveralls
 
 ```php
 <?php
@@ -438,7 +667,7 @@ class BadgeCoveralls {
 
 ---
 
-### Method: BadgeCoveralls->output
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-output"></a>Method: BadgeCoveralls->output
 
 ```php
 function output(int $depth): string
@@ -450,7 +679,7 @@ function output(int $depth): string
 
 ---
 
-### Method: BadgeCoveralls->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-construct"></a>Method: BadgeCoveralls->__construct
 
 ```php
 function __construct(
@@ -461,7 +690,7 @@ function __construct(
 
 ---
 
-### Method: BadgeCoveralls->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-getparent"></a>Method: BadgeCoveralls->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -469,7 +698,7 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: BadgeCoveralls->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-gettextcontent"></a>Method: BadgeCoveralls->getTextContent
 
 ```php
 function getTextContent(): string
@@ -477,7 +706,7 @@ function getTextContent(): string
 
 ---
 
-### Method: BadgeCoveralls->setLogger
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgecoveralls-setlogger"></a>Method: BadgeCoveralls->setLogger
 
 ```php
 function setLogger(\Psr\Log\LoggerInterface $logger): void
@@ -487,7 +716,7 @@ Sets a logger.
 
 Sets a logger instance on the object.
 
-## Class: donatj\MDDoc\Documentation\Badges\BadgeGitHubActions
+## <a id="mddoc-class-donatj-mddoc-documentation-badges-badgegithubactions"></a>Class: donatj\MDDoc\Documentation\Badges\BadgeGitHubActions
 
 ```php
 <?php
@@ -514,7 +743,7 @@ class BadgeGitHubActions {
 
 ---
 
-### Method: BadgeGitHubActions->output
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgegithubactions-output"></a>Method: BadgeGitHubActions->output
 
 ```php
 function output(int $depth): string
@@ -526,7 +755,7 @@ function output(int $depth): string
 
 ---
 
-### Method: BadgeGitHubActions->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgegithubactions-construct"></a>Method: BadgeGitHubActions->__construct
 
 ```php
 function __construct(
@@ -537,7 +766,7 @@ function __construct(
 
 ---
 
-### Method: BadgeGitHubActions->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgegithubactions-getparent"></a>Method: BadgeGitHubActions->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -545,13 +774,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: BadgeGitHubActions->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgegithubactions-gettextcontent"></a>Method: BadgeGitHubActions->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Badges\BadgePoser
+## <a id="mddoc-class-donatj-mddoc-documentation-badges-badgeposer"></a>Class: donatj\MDDoc\Documentation\Badges\BadgePoser
 
 ```php
 <?php
@@ -580,7 +809,7 @@ class BadgePoser {
 
 ---
 
-### Method: BadgePoser->output
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgeposer-output"></a>Method: BadgePoser->output
 
 ```php
 function output(int $depth): string
@@ -592,7 +821,7 @@ function output(int $depth): string
 
 ---
 
-### Method: BadgePoser->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgeposer-construct"></a>Method: BadgePoser->__construct
 
 ```php
 function __construct(
@@ -603,7 +832,7 @@ function __construct(
 
 ---
 
-### Method: BadgePoser->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgeposer-getparent"></a>Method: BadgePoser->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -611,13 +840,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: BadgePoser->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgeposer-gettextcontent"></a>Method: BadgePoser->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Badges\BadgeScrutinizer
+## <a id="mddoc-class-donatj-mddoc-documentation-badges-badgescrutinizer"></a>Class: donatj\MDDoc\Documentation\Badges\BadgeScrutinizer
 
 ```php
 <?php
@@ -648,7 +877,7 @@ class BadgeScrutinizer {
 
 ---
 
-### Method: BadgeScrutinizer->output
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgescrutinizer-output"></a>Method: BadgeScrutinizer->output
 
 ```php
 function output(int $depth): string
@@ -660,7 +889,7 @@ function output(int $depth): string
 
 ---
 
-### Method: BadgeScrutinizer->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgescrutinizer-construct"></a>Method: BadgeScrutinizer->__construct
 
 ```php
 function __construct(
@@ -671,7 +900,7 @@ function __construct(
 
 ---
 
-### Method: BadgeScrutinizer->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgescrutinizer-getparent"></a>Method: BadgeScrutinizer->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -679,13 +908,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: BadgeScrutinizer->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgescrutinizer-gettextcontent"></a>Method: BadgeScrutinizer->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Badges\BadgeShielded
+## <a id="mddoc-class-donatj-mddoc-documentation-badges-badgeshielded"></a>Class: donatj\MDDoc\Documentation\Badges\BadgeShielded
 
 ```php
 <?php
@@ -711,7 +940,7 @@ class BadgeShielded {
 
 ---
 
-### Method: BadgeShielded->output
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgeshielded-output"></a>Method: BadgeShielded->output
 
 ```php
 function output(int $depth): string
@@ -723,7 +952,7 @@ function output(int $depth): string
 
 ---
 
-### Method: BadgeShielded->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgeshielded-construct"></a>Method: BadgeShielded->__construct
 
 ```php
 function __construct(
@@ -734,7 +963,7 @@ function __construct(
 
 ---
 
-### Method: BadgeShielded->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgeshielded-getparent"></a>Method: BadgeShielded->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -742,13 +971,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: BadgeShielded->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgeshielded-gettextcontent"></a>Method: BadgeShielded->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Badges\BadgeTravis
+## <a id="mddoc-class-donatj-mddoc-documentation-badges-badgetravis"></a>Class: donatj\MDDoc\Documentation\Badges\BadgeTravis
 
 ```php
 <?php
@@ -775,7 +1004,7 @@ class BadgeTravis {
 
 ---
 
-### Method: BadgeTravis->output
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgetravis-output"></a>Method: BadgeTravis->output
 
 ```php
 function output(int $depth): string
@@ -787,7 +1016,7 @@ function output(int $depth): string
 
 ---
 
-### Method: BadgeTravis->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgetravis-construct"></a>Method: BadgeTravis->__construct
 
 ```php
 function __construct(
@@ -798,7 +1027,7 @@ function __construct(
 
 ---
 
-### Method: BadgeTravis->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgetravis-getparent"></a>Method: BadgeTravis->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -806,13 +1035,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: BadgeTravis->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-badges-badgetravis-gettextcontent"></a>Method: BadgeTravis->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\ComposerInstall
+## <a id="mddoc-class-donatj-mddoc-documentation-composerinstall"></a>Class: donatj\MDDoc\Documentation\ComposerInstall
 
 ```php
 <?php
@@ -830,7 +1059,7 @@ class ComposerInstall {
 }
 ```
 
-### Method: ComposerInstall->output
+### <a id="mddoc-method-donatj-mddoc-documentation-composerinstall-output"></a>Method: ComposerInstall->output
 
 ```php
 function output(int $depth): \donatj\MDDom\Paragraph
@@ -842,7 +1071,7 @@ function output(int $depth): \donatj\MDDom\Paragraph
 
 ---
 
-### Method: ComposerInstall->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-composerinstall-construct"></a>Method: ComposerInstall->__construct
 
 ```php
 function __construct(
@@ -853,7 +1082,7 @@ function __construct(
 
 ---
 
-### Method: ComposerInstall->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-composerinstall-getparent"></a>Method: ComposerInstall->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -861,15 +1090,15 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: ComposerInstall->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-composerinstall-gettextcontent"></a>Method: ComposerInstall->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\ComposerRequires
+## <a id="mddoc-class-donatj-mddoc-documentation-composerrequires"></a>Class: donatj\MDDoc\Documentation\ComposerRequires
 
-### Method: ComposerRequires->output
+### <a id="mddoc-method-donatj-mddoc-documentation-composerrequires-output"></a>Method: ComposerRequires->output
 
 ```php
 function output(int $depth): \donatj\MDDom\Paragraph
@@ -881,7 +1110,7 @@ function output(int $depth): \donatj\MDDom\Paragraph
 
 ---
 
-### Method: ComposerRequires->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-composerrequires-construct"></a>Method: ComposerRequires->__construct
 
 ```php
 function __construct(
@@ -892,7 +1121,7 @@ function __construct(
 
 ---
 
-### Method: ComposerRequires->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-composerrequires-getparent"></a>Method: ComposerRequires->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -900,13 +1129,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: ComposerRequires->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-composerrequires-gettextcontent"></a>Method: ComposerRequires->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\DocPage
+## <a id="mddoc-class-donatj-mddoc-documentation-docpage"></a>Class: donatj\MDDoc\Documentation\DocPage
 
 ```php
 <?php
@@ -926,7 +1155,7 @@ class DocPage {
 }
 ```
 
-### Method: DocPage->output
+### <a id="mddoc-method-donatj-mddoc-documentation-docpage-output"></a>Method: DocPage->output
 
 ```php
 function output(int $depth): string
@@ -938,7 +1167,7 @@ function output(int $depth): string
 
 ---
 
-### Method: DocPage->setDocumentationOutputStrategy
+### <a id="mddoc-method-donatj-mddoc-documentation-docpage-setdocumentationoutputstrategy"></a>Method: DocPage->setDocumentationOutputStrategy
 
 ```php
 function setDocumentationOutputStrategy(
@@ -948,7 +1177,7 @@ function setDocumentationOutputStrategy(
 
 ---
 
-### Method: DocPage->getChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-docpage-getchildren"></a>Method: DocPage->getChildren
 
 ```php
 function getChildren(): array
@@ -960,7 +1189,7 @@ function getChildren(): array
 
 ---
 
-### Method: DocPage->getDocumentationChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-docpage-getdocumentationchildren"></a>Method: DocPage->getDocumentationChildren
 
 ```php
 function getDocumentationChildren(): array
@@ -972,7 +1201,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: DocPage->addChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-docpage-addchildren"></a>Method: DocPage->addChildren
 
 ```php
 function addChildren(
@@ -982,7 +1211,7 @@ function addChildren(
 
 ---
 
-### Method: DocPage->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-docpage-construct"></a>Method: DocPage->__construct
 
 ```php
 function __construct(
@@ -993,7 +1222,7 @@ function __construct(
 
 ---
 
-### Method: DocPage->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-docpage-getparent"></a>Method: DocPage->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1001,15 +1230,15 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: DocPage->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-docpage-gettextcontent"></a>Method: DocPage->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\DocRoot
+## <a id="mddoc-class-donatj-mddoc-documentation-docroot"></a>Class: donatj\MDDoc\Documentation\DocRoot
 
-### Method: DocRoot->output
+### <a id="mddoc-method-donatj-mddoc-documentation-docroot-output"></a>Method: DocRoot->output
 
 ```php
 function output(int $depth)
@@ -1021,7 +1250,7 @@ function output(int $depth)
 
 ---
 
-### Method: DocRoot->getChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-docroot-getchildren"></a>Method: DocRoot->getChildren
 
 ```php
 function getChildren(): array
@@ -1033,7 +1262,7 @@ function getChildren(): array
 
 ---
 
-### Method: DocRoot->getDocumentationChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-docroot-getdocumentationchildren"></a>Method: DocRoot->getDocumentationChildren
 
 ```php
 function getDocumentationChildren(): array
@@ -1045,7 +1274,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: DocRoot->addChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-docroot-addchildren"></a>Method: DocRoot->addChildren
 
 ```php
 function addChildren(
@@ -1055,7 +1284,7 @@ function addChildren(
 
 ---
 
-### Method: DocRoot->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-docroot-construct"></a>Method: DocRoot->__construct
 
 ```php
 function __construct(
@@ -1066,7 +1295,7 @@ function __construct(
 
 ---
 
-### Method: DocRoot->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-docroot-getparent"></a>Method: DocRoot->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1074,17 +1303,17 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: DocRoot->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-docroot-gettextcontent"></a>Method: DocRoot->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Exceptions\ExecutionException
+## <a id="mddoc-class-donatj-mddoc-documentation-exceptions-executionexception"></a>Class: donatj\MDDoc\Documentation\Exceptions\ExecutionException
 
-## Class: donatj\MDDoc\Documentation\Exceptions\UnhandledConfigTagException
+## <a id="mddoc-class-donatj-mddoc-documentation-exceptions-unhandledconfigtagexception"></a>Class: donatj\MDDoc\Documentation\Exceptions\UnhandledConfigTagException
 
-## Class: donatj\MDDoc\Documentation\ExecOutput
+## <a id="mddoc-class-donatj-mddoc-documentation-execoutput"></a>Class: donatj\MDDoc\Documentation\ExecOutput
 
 ```php
 <?php
@@ -1104,7 +1333,7 @@ class ExecOutput {
 }
 ```
 
-### Method: ExecOutput->output
+### <a id="mddoc-method-donatj-mddoc-documentation-execoutput-output"></a>Method: ExecOutput->output
 
 ```php
 function output(int $depth): \donatj\MDDom\AbstractElement
@@ -1116,7 +1345,7 @@ function output(int $depth): \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: ExecOutput->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-execoutput-construct"></a>Method: ExecOutput->__construct
 
 ```php
 function __construct(
@@ -1127,7 +1356,7 @@ function __construct(
 
 ---
 
-### Method: ExecOutput->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-execoutput-getparent"></a>Method: ExecOutput->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1135,13 +1364,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: ExecOutput->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-execoutput-gettextcontent"></a>Method: ExecOutput->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\IncludeFile
+## <a id="mddoc-class-donatj-mddoc-documentation-includefile"></a>Class: donatj\MDDoc\Documentation\IncludeFile
 
 ```php
 <?php
@@ -1153,7 +1382,7 @@ class IncludeFile {
 }
 ```
 
-### Method: IncludeFile->output
+### <a id="mddoc-method-donatj-mddoc-documentation-includefile-output"></a>Method: IncludeFile->output
 
 ```php
 function output(int $depth): \donatj\MDDom\Paragraph
@@ -1163,7 +1392,7 @@ function output(int $depth): \donatj\MDDom\Paragraph
 
 ---
 
-### Method: IncludeFile->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-includefile-construct"></a>Method: IncludeFile->__construct
 
 ```php
 function __construct(
@@ -1174,7 +1403,7 @@ function __construct(
 
 ---
 
-### Method: IncludeFile->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-includefile-getparent"></a>Method: IncludeFile->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1182,15 +1411,15 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: IncludeFile->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-includefile-gettextcontent"></a>Method: IncludeFile->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
+## <a id="mddoc-interface-donatj-mddoc-documentation-interfaces-autoloaderaware"></a>Interface: donatj\MDDoc\Documentation\Interfaces\AutoloaderAware
 
-### Method: AutoloaderAware->setAutoloader
+### <a id="mddoc-method-donatj-mddoc-documentation-interfaces-autoloaderaware-setautoloader"></a>Method: AutoloaderAware->setAutoloader
 
 ```php
 function setAutoloader(
@@ -1198,9 +1427,9 @@ function setAutoloader(
 ): void
 ```
 
-## Class: donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
+## <a id="mddoc-interface-donatj-mddoc-documentation-interfaces-documentationinterface"></a>Interface: donatj\MDDoc\Documentation\Interfaces\DocumentationInterface
 
-### Method: DocumentationInterface->output
+### <a id="mddoc-method-donatj-mddoc-documentation-interfaces-documentationinterface-output"></a>Method: DocumentationInterface->output
 
 ```php
 function output(int $depth)
@@ -1212,7 +1441,7 @@ function output(int $depth)
 
 ---
 
-### Method: DocumentationInterface->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-interfaces-documentationinterface-construct"></a>Method: DocumentationInterface->__construct
 
 ```php
 function __construct(
@@ -1221,9 +1450,9 @@ function __construct(
 )
 ```
 
-## Class: donatj\MDDoc\Documentation\Interfaces\DocumentationOutputStrategyAware
+## <a id="mddoc-interface-donatj-mddoc-documentation-interfaces-documentationoutputstrategyaware"></a>Interface: donatj\MDDoc\Documentation\Interfaces\DocumentationOutputStrategyAware
 
-### Method: DocumentationOutputStrategyAware->setDocumentationOutputStrategy
+### <a id="mddoc-method-donatj-mddoc-documentation-interfaces-documentationoutputstrategyaware-setdocumentationoutputstrategy"></a>Method: DocumentationOutputStrategyAware->setDocumentationOutputStrategy
 
 ```php
 function setDocumentationOutputStrategy(
@@ -1231,9 +1460,9 @@ function setDocumentationOutputStrategy(
 ): void
 ```
 
-## Class: donatj\MDDoc\Documentation\Interfaces\ElementInterface
+## <a id="mddoc-interface-donatj-mddoc-documentation-interfaces-elementinterface"></a>Interface: donatj\MDDoc\Documentation\Interfaces\ElementInterface
 
-### Method: ElementInterface->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-interfaces-elementinterface-construct"></a>Method: ElementInterface->__construct
 
 ```php
 function __construct(
@@ -1242,7 +1471,7 @@ function __construct(
 )
 ```
 
-## Class: donatj\MDDoc\Documentation\PhpFileDocs
+## <a id="mddoc-class-donatj-mddoc-documentation-phpfiledocs"></a>Class: donatj\MDDoc\Documentation\PhpFileDocs
 
 ```php
 <?php
@@ -1266,7 +1495,7 @@ class PhpFileDocs {
 }
 ```
 
-### Method: PhpFileDocs->output
+### <a id="mddoc-method-donatj-mddoc-documentation-phpfiledocs-output"></a>Method: PhpFileDocs->output
 
 ```php
 function output(int $depth)
@@ -1278,7 +1507,7 @@ function output(int $depth)
 
 ---
 
-### Method: PhpFileDocs->setAutoloader
+### <a id="mddoc-method-donatj-mddoc-documentation-phpfiledocs-setautoloader"></a>Method: PhpFileDocs->setAutoloader
 
 ```php
 function setAutoloader(
@@ -1288,7 +1517,7 @@ function setAutoloader(
 
 ---
 
-### Method: PhpFileDocs->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-phpfiledocs-construct"></a>Method: PhpFileDocs->__construct
 
 ```php
 function __construct(
@@ -1299,7 +1528,7 @@ function __construct(
 
 ---
 
-### Method: PhpFileDocs->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-phpfiledocs-getparent"></a>Method: PhpFileDocs->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1307,7 +1536,7 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: PhpFileDocs->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-phpfiledocs-gettextcontent"></a>Method: PhpFileDocs->getTextContent
 
 ```php
 function getTextContent(): string
@@ -1315,7 +1544,7 @@ function getTextContent(): string
 
 ---
 
-### Method: PhpFileDocs->setLogger
+### <a id="mddoc-method-donatj-mddoc-documentation-phpfiledocs-setlogger"></a>Method: PhpFileDocs->setLogger
 
 ```php
 function setLogger(\Psr\Log\LoggerInterface $logger): void
@@ -1325,7 +1554,7 @@ Sets a logger.
 
 Sets a logger instance on the object.
 
-## Class: donatj\MDDoc\Documentation\RecursiveDirectory
+## <a id="mddoc-class-donatj-mddoc-documentation-recursivedirectory"></a>Class: donatj\MDDoc\Documentation\RecursiveDirectory
 
 ```php
 <?php
@@ -1339,7 +1568,7 @@ class RecursiveDirectory {
 }
 ```
 
-### Method: RecursiveDirectory->setAutoloader
+### <a id="mddoc-method-donatj-mddoc-documentation-recursivedirectory-setautoloader"></a>Method: RecursiveDirectory->setAutoloader
 
 ```php
 function setAutoloader(
@@ -1349,7 +1578,7 @@ function setAutoloader(
 
 ---
 
-### Method: RecursiveDirectory->output
+### <a id="mddoc-method-donatj-mddoc-documentation-recursivedirectory-output"></a>Method: RecursiveDirectory->output
 
 ```php
 function output(int $depth): \donatj\MDDom\Document
@@ -1361,7 +1590,7 @@ function output(int $depth): \donatj\MDDom\Document
 
 ---
 
-### Method: RecursiveDirectory->getChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-recursivedirectory-getchildren"></a>Method: RecursiveDirectory->getChildren
 
 ```php
 function getChildren(): array
@@ -1373,7 +1602,7 @@ function getChildren(): array
 
 ---
 
-### Method: RecursiveDirectory->getDocumentationChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-recursivedirectory-getdocumentationchildren"></a>Method: RecursiveDirectory->getDocumentationChildren
 
 ```php
 function getDocumentationChildren(): array
@@ -1385,7 +1614,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: RecursiveDirectory->addChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-recursivedirectory-addchildren"></a>Method: RecursiveDirectory->addChildren
 
 ```php
 function addChildren(
@@ -1395,7 +1624,7 @@ function addChildren(
 
 ---
 
-### Method: RecursiveDirectory->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-recursivedirectory-construct"></a>Method: RecursiveDirectory->__construct
 
 ```php
 function __construct(
@@ -1406,7 +1635,7 @@ function __construct(
 
 ---
 
-### Method: RecursiveDirectory->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-recursivedirectory-getparent"></a>Method: RecursiveDirectory->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1414,7 +1643,7 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: RecursiveDirectory->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-recursivedirectory-gettextcontent"></a>Method: RecursiveDirectory->getTextContent
 
 ```php
 function getTextContent(): string
@@ -1422,7 +1651,7 @@ function getTextContent(): string
 
 ---
 
-### Method: RecursiveDirectory->setLogger
+### <a id="mddoc-method-donatj-mddoc-documentation-recursivedirectory-setlogger"></a>Method: RecursiveDirectory->setLogger
 
 ```php
 function setLogger(\Psr\Log\LoggerInterface $logger): void
@@ -1432,7 +1661,7 @@ Sets a logger.
 
 Sets a logger instance on the object.
 
-## Class: donatj\MDDoc\Documentation\Replace
+## <a id="mddoc-class-donatj-mddoc-documentation-replace"></a>Class: donatj\MDDoc\Documentation\Replace
 
 ```php
 <?php
@@ -1448,7 +1677,7 @@ class Replace {
 }
 ```
 
-### Method: Replace->output
+### <a id="mddoc-method-donatj-mddoc-documentation-replace-output"></a>Method: Replace->output
 
 ```php
 function output(int $depth): string
@@ -1460,7 +1689,7 @@ function output(int $depth): string
 
 ---
 
-### Method: Replace->getChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-replace-getchildren"></a>Method: Replace->getChildren
 
 ```php
 function getChildren(): array
@@ -1472,7 +1701,7 @@ function getChildren(): array
 
 ---
 
-### Method: Replace->getDocumentationChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-replace-getdocumentationchildren"></a>Method: Replace->getDocumentationChildren
 
 ```php
 function getDocumentationChildren(): array
@@ -1484,7 +1713,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: Replace->addChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-replace-addchildren"></a>Method: Replace->addChildren
 
 ```php
 function addChildren(
@@ -1494,7 +1723,7 @@ function addChildren(
 
 ---
 
-### Method: Replace->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-replace-construct"></a>Method: Replace->__construct
 
 ```php
 function __construct(
@@ -1505,7 +1734,7 @@ function __construct(
 
 ---
 
-### Method: Replace->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-replace-getparent"></a>Method: Replace->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1513,13 +1742,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: Replace->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-replace-gettextcontent"></a>Method: Replace->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Section
+## <a id="mddoc-class-donatj-mddoc-documentation-section"></a>Class: donatj\MDDoc\Documentation\Section
 
 ```php
 <?php
@@ -1531,7 +1760,7 @@ class Section {
 }
 ```
 
-### Method: Section->output
+### <a id="mddoc-method-donatj-mddoc-documentation-section-output"></a>Method: Section->output
 
 ```php
 function output(int $depth): \donatj\MDDom\DocumentDepth
@@ -1543,7 +1772,7 @@ function output(int $depth): \donatj\MDDom\DocumentDepth
 
 ---
 
-### Method: Section->getChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-section-getchildren"></a>Method: Section->getChildren
 
 ```php
 function getChildren(): array
@@ -1555,7 +1784,7 @@ function getChildren(): array
 
 ---
 
-### Method: Section->getDocumentationChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-section-getdocumentationchildren"></a>Method: Section->getDocumentationChildren
 
 ```php
 function getDocumentationChildren(): array
@@ -1567,7 +1796,7 @@ function getDocumentationChildren(): array
 
 ---
 
-### Method: Section->addChildren
+### <a id="mddoc-method-donatj-mddoc-documentation-section-addchildren"></a>Method: Section->addChildren
 
 ```php
 function addChildren(
@@ -1577,7 +1806,7 @@ function addChildren(
 
 ---
 
-### Method: Section->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-section-construct"></a>Method: Section->__construct
 
 ```php
 function __construct(
@@ -1588,7 +1817,7 @@ function __construct(
 
 ---
 
-### Method: Section->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-section-getparent"></a>Method: Section->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1596,13 +1825,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: Section->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-section-gettextcontent"></a>Method: Section->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Source
+## <a id="mddoc-class-donatj-mddoc-documentation-source"></a>Class: donatj\MDDoc\Documentation\Source
 
 Class Source
 
@@ -1618,7 +1847,7 @@ class Source {
 }
 ```
 
-### Method: Source->output
+### <a id="mddoc-method-donatj-mddoc-documentation-source-output"></a>Method: Source->output
 
 ```php
 function output(int $depth): \donatj\MDDom\AbstractElement
@@ -1630,7 +1859,7 @@ function output(int $depth): \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: Source->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-source-construct"></a>Method: Source->__construct
 
 ```php
 function __construct(
@@ -1641,7 +1870,7 @@ function __construct(
 
 ---
 
-### Method: Source->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-source-getparent"></a>Method: Source->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1649,15 +1878,15 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: Source->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-source-gettextcontent"></a>Method: Source->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\Documentation\Text
+## <a id="mddoc-class-donatj-mddoc-documentation-text"></a>Class: donatj\MDDoc\Documentation\Text
 
-### Method: Text->output
+### <a id="mddoc-method-donatj-mddoc-documentation-text-output"></a>Method: Text->output
 
 ```php
 function output(int $depth): \donatj\MDDom\AbstractElement
@@ -1669,7 +1898,7 @@ function output(int $depth): \donatj\MDDom\AbstractElement
 
 ---
 
-### Method: Text->__construct
+### <a id="mddoc-method-donatj-mddoc-documentation-text-construct"></a>Method: Text->__construct
 
 ```php
 function __construct(
@@ -1680,7 +1909,7 @@ function __construct(
 
 ---
 
-### Method: Text->getParent
+### <a id="mddoc-method-donatj-mddoc-documentation-text-getparent"></a>Method: Text->getParent
 
 ```php
 function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
@@ -1688,13 +1917,13 @@ function getParent(): ?\donatj\MDDoc\Documentation\AbstractDocPart
 
 ---
 
-### Method: Text->getTextContent
+### <a id="mddoc-method-donatj-mddoc-documentation-text-gettextcontent"></a>Method: Text->getTextContent
 
 ```php
 function getTextContent(): string
 ```
 
-## Class: donatj\MDDoc\ElementFactory
+## <a id="mddoc-class-donatj-mddoc-elementfactory"></a>Class: donatj\MDDoc\ElementFactory
 
 Links XML Tags to their Given Documentation Generator
 
@@ -1707,7 +1936,7 @@ class ElementFactory {
 }
 ```
 
-### Method: ElementFactory->__construct
+### <a id="mddoc-method-donatj-mddoc-elementfactory-construct"></a>Method: ElementFactory->__construct
 
 ```php
 function __construct(
@@ -1720,7 +1949,7 @@ ElementFactory constructor.
 
 ---
 
-### Method: ElementFactory->makeFromTag
+### <a id="mddoc-method-donatj-mddoc-elementfactory-makefromtag"></a>Method: ElementFactory->makeFromTag
 
 ```php
 function makeFromTag(
@@ -1732,9 +1961,9 @@ function makeFromTag(
 
 Return a populated DocumentationInterface of the corresponding tagName
 
-## Class: donatj\MDDoc\Exceptions\ClassNotReadableException
+## <a id="mddoc-class-donatj-mddoc-exceptions-classnotreadableexception"></a>Class: donatj\MDDoc\Exceptions\ClassNotReadableException
 
-### Method: ClassNotReadableException->__construct
+### <a id="mddoc-method-donatj-mddoc-exceptions-classnotreadableexception-construct"></a>Method: ClassNotReadableException->__construct
 
 ```php
 function __construct(
@@ -1746,17 +1975,17 @@ function __construct(
 
 ---
 
-### Method: ClassNotReadableException->getPath
+### <a id="mddoc-method-donatj-mddoc-exceptions-classnotreadableexception-getpath"></a>Method: ClassNotReadableException->getPath
 
 ```php
 function getPath(): string
 ```
 
-## Class: donatj\MDDoc\Exceptions\ConfigException
+## <a id="mddoc-class-donatj-mddoc-exceptions-configexception"></a>Class: donatj\MDDoc\Exceptions\ConfigException
 
-## Class: donatj\MDDoc\Exceptions\DryRunMismatchException
+## <a id="mddoc-class-donatj-mddoc-exceptions-dryrunmismatchexception"></a>Class: donatj\MDDoc\Exceptions\DryRunMismatchException
 
-### Method: DryRunMismatchException->__construct
+### <a id="mddoc-method-donatj-mddoc-exceptions-dryrunmismatchexception-construct"></a>Method: DryRunMismatchException->__construct
 
 ```php
 function __construct(string $target)
@@ -1764,17 +1993,17 @@ function __construct(string $target)
 
 ---
 
-### Method: DryRunMismatchException->getTarget
+### <a id="mddoc-method-donatj-mddoc-exceptions-dryrunmismatchexception-gettarget"></a>Method: DryRunMismatchException->getTarget
 
 ```php
 function getTarget(): string
 ```
 
-## Class: donatj\MDDoc\Exceptions\MDDocException
+## <a id="mddoc-class-donatj-mddoc-exceptions-mddocexception"></a>Class: donatj\MDDoc\Exceptions\MDDocException
 
-## Class: donatj\MDDoc\Exceptions\PathNotReadableException
+## <a id="mddoc-class-donatj-mddoc-exceptions-pathnotreadableexception"></a>Class: donatj\MDDoc\Exceptions\PathNotReadableException
 
-### Method: PathNotReadableException->__construct
+### <a id="mddoc-method-donatj-mddoc-exceptions-pathnotreadableexception-construct"></a>Method: PathNotReadableException->__construct
 
 ```php
 function __construct(
@@ -1786,19 +2015,19 @@ function __construct(
 
 ---
 
-### Method: PathNotReadableException->getPath
+### <a id="mddoc-method-donatj-mddoc-exceptions-pathnotreadableexception-getpath"></a>Method: PathNotReadableException->getPath
 
 ```php
 function getPath(): string
 ```
 
-## Class: donatj\MDDoc\Exceptions\TargetNotWritableException
+## <a id="mddoc-class-donatj-mddoc-exceptions-targetnotwritableexception"></a>Class: donatj\MDDoc\Exceptions\TargetNotWritableException
 
-## Class: donatj\MDDoc\MDDoc
+## <a id="mddoc-class-donatj-mddoc-mddoc"></a>Class: donatj\MDDoc\MDDoc
 
 Application MDDoc
 
-### Method: MDDoc->__construct
+### <a id="mddoc-method-donatj-mddoc-mddoc-construct"></a>Method: MDDoc->__construct
 
 ```php
 function __construct(array $args)
@@ -1808,9 +2037,9 @@ function __construct(array $args)
 
 - ***string[]*** `$args`
 
-## Class: donatj\MDDoc\Reflectors\TaxonomyReflector
+## <a id="mddoc-class-donatj-mddoc-reflectors-taxonomyreflector"></a>Class: donatj\MDDoc\Reflectors\TaxonomyReflector
 
-### Method: TaxonomyReflector->__construct
+### <a id="mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-construct"></a>Method: TaxonomyReflector->__construct
 
 ```php
 function __construct(
@@ -1824,7 +2053,7 @@ function __construct(
 
 ---
 
-### Method: TaxonomyReflector->getReflector
+### <a id="mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getreflector"></a>Method: TaxonomyReflector->getReflector
 
 ```php
 function getReflector(): ?\donatj\MDDoc\Reflectors\Source\Element
@@ -1834,7 +2063,7 @@ Returns the source class, interface, or trait declaration.
 
 ---
 
-### Method: TaxonomyReflector->getDocMethods
+### <a id="mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getdocmethods"></a>Method: TaxonomyReflector->getDocMethods
 
 ```php
 function getDocMethods(): array
@@ -1846,7 +2075,7 @@ function getDocMethods(): array
 
 ---
 
-### Method: TaxonomyReflector->getMethods
+### <a id="mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getmethods"></a>Method: TaxonomyReflector->getMethods
 
 ```php
 function getMethods(): array
@@ -1858,7 +2087,7 @@ function getMethods(): array
 
 ---
 
-### Method: TaxonomyReflector->getConstants
+### <a id="mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getconstants"></a>Method: TaxonomyReflector->getConstants
 
 ```php
 function getConstants(): array
@@ -1870,7 +2099,7 @@ function getConstants(): array
 
 ---
 
-### Method: TaxonomyReflector->getProperties
+### <a id="mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getproperties"></a>Method: TaxonomyReflector->getProperties
 
 ```php
 function getProperties(): array
@@ -1882,7 +2111,7 @@ function getProperties(): array
 
 ---
 
-### Method: TaxonomyReflector->getFunctions
+### <a id="mddoc-method-donatj-mddoc-reflectors-taxonomyreflector-getfunctions"></a>Method: TaxonomyReflector->getFunctions
 
 ```php
 function getFunctions(): array
@@ -1892,9 +2121,9 @@ function getFunctions(): array
 
 - ***array<string,\donatj\MDDoc\Reflectors\Source\Element>***
 
-## Class: donatj\MDDoc\Reflectors\TaxonomyReflectorFactory
+## <a id="mddoc-class-donatj-mddoc-reflectors-taxonomyreflectorfactory"></a>Class: donatj\MDDoc\Reflectors\TaxonomyReflectorFactory
 
-### Method: TaxonomyReflectorFactory->newInstance
+### <a id="mddoc-method-donatj-mddoc-reflectors-taxonomyreflectorfactory-newinstance"></a>Method: TaxonomyReflectorFactory->newInstance
 
 ```php
 function newInstance(
@@ -1905,9 +2134,9 @@ function newInstance(
 
 **Throws**: `\donatj\MDDoc\Exceptions\ClassNotReadableException`
 
-## Class: donatj\MDDoc\Runner\ConfigParser
+## <a id="mddoc-class-donatj-mddoc-runner-configparser"></a>Class: donatj\MDDoc\Runner\ConfigParser
 
-### Method: ConfigParser->__construct
+### <a id="mddoc-method-donatj-mddoc-runner-configparser-construct"></a>Method: ConfigParser->__construct
 
 ```php
 function __construct(
@@ -1918,7 +2147,7 @@ function __construct(
 
 ---
 
-### Method: ConfigParser->parse
+### <a id="mddoc-method-donatj-mddoc-runner-configparser-parse"></a>Method: ConfigParser->parse
 
 ```php
 function parse(string $filename): \donatj\MDDoc\Documentation\DocRoot
@@ -1932,21 +2161,9 @@ Parse a config file
 
 - ***\donatj\MDDoc\Documentation\DocRoot***
 
-## Class: donatj\MDDoc\Runner\DocumentationOutputStrategy
+## <a id="mddoc-interface-donatj-mddoc-runner-documentationoutputstrategy"></a>Interface: donatj\MDDoc\Runner\DocumentationOutputStrategy
 
-### Method: DocumentationOutputStrategy->write
-
-```php
-function write(string $target, callable $render): bool
-```
-
-#### Parameters
-
-- ***callable(): string*** `$render`
-
-## Class: donatj\MDDoc\Runner\DryRunDocumentationOutputStrategy
-
-### Method: DryRunDocumentationOutputStrategy->write
+### <a id="mddoc-method-donatj-mddoc-runner-documentationoutputstrategy-write"></a>Method: DocumentationOutputStrategy->write
 
 ```php
 function write(string $target, callable $render): bool
@@ -1956,9 +2173,21 @@ function write(string $target, callable $render): bool
 
 - ***callable(): string*** `$render`
 
-## Class: donatj\MDDoc\Runner\FileDocumentationOutputStrategy
+## <a id="mddoc-class-donatj-mddoc-runner-dryrundocumentationoutputstrategy"></a>Class: donatj\MDDoc\Runner\DryRunDocumentationOutputStrategy
 
-### Method: FileDocumentationOutputStrategy->__construct
+### <a id="mddoc-method-donatj-mddoc-runner-dryrundocumentationoutputstrategy-write"></a>Method: DryRunDocumentationOutputStrategy->write
+
+```php
+function write(string $target, callable $render): bool
+```
+
+#### Parameters
+
+- ***callable(): string*** `$render`
+
+## <a id="mddoc-class-donatj-mddoc-runner-filedocumentationoutputstrategy"></a>Class: donatj\MDDoc\Runner\FileDocumentationOutputStrategy
+
+### <a id="mddoc-method-donatj-mddoc-runner-filedocumentationoutputstrategy-construct"></a>Method: FileDocumentationOutputStrategy->__construct
 
 ```php
 function __construct(\Psr\Log\LoggerInterface $logger)
@@ -1966,7 +2195,7 @@ function __construct(\Psr\Log\LoggerInterface $logger)
 
 ---
 
-### Method: FileDocumentationOutputStrategy->write
+### <a id="mddoc-method-donatj-mddoc-runner-filedocumentationoutputstrategy-write"></a>Method: FileDocumentationOutputStrategy->write
 
 ```php
 function write(string $target, callable $render): bool
@@ -1976,11 +2205,11 @@ function write(string $target, callable $render): bool
 
 - ***callable(): string*** `$render`
 
-## Class: donatj\MDDoc\Runner\ImmutableAttributeTree
+## <a id="mddoc-class-donatj-mddoc-runner-immutableattributetree"></a>Class: donatj\MDDoc\Runner\ImmutableAttributeTree
 
 ImmutableAttributeTree is a helper for reading XML Attributes
 
-### Method: ImmutableAttributeTree->withAttr
+### <a id="mddoc-method-donatj-mddoc-runner-immutableattributetree-withattr"></a>Method: ImmutableAttributeTree->withAttr
 
 ```php
 function withAttr(array $attributes): self
@@ -1998,7 +2227,7 @@ Returns a clone of this ImmutableAttributeTree with another depth of attributes 
 
 ---
 
-### Method: ImmutableAttributeTree->shallowValue
+### <a id="mddoc-method-donatj-mddoc-runner-immutableattributetree-shallowvalue"></a>Method: ImmutableAttributeTree->shallowValue
 
 ```php
 function shallowValue(string $attr): ?string
@@ -2012,7 +2241,7 @@ Fetch an attribute value by key from the top-most element.
 
 ---
 
-### Method: ImmutableAttributeTree->deepValue
+### <a id="mddoc-method-donatj-mddoc-runner-immutableattributetree-deepvalue"></a>Method: ImmutableAttributeTree->deepValue
 
 ```php
 function deepValue(string $attr): ?string
@@ -2024,9 +2253,9 @@ Fetch the first attribute value by key from the starting with the top-most eleme
 
 - ***string*** | ***null*** - Returns null on not found.
 
-## Class: donatj\MDDoc\Runner\TextUI
+## <a id="mddoc-class-donatj-mddoc-runner-textui"></a>Class: donatj\MDDoc\Runner\TextUI
 
-### Method: TextUI->__construct
+### <a id="mddoc-method-donatj-mddoc-runner-textui-construct"></a>Method: TextUI->__construct
 
 ```php
 function __construct($STDOUT, $STDERR)
@@ -2041,7 +2270,7 @@ UserInterface constructor.
 
 ---
 
-### Method: TextUI->dumpOptions
+### <a id="mddoc-method-donatj-mddoc-runner-textui-dumpoptions"></a>Method: TextUI->dumpOptions
 
 ```php
 function dumpOptions(string $additional): void
@@ -2049,7 +2278,7 @@ function dumpOptions(string $additional): void
 
 ---
 
-### Method: TextUI->dropError
+### <a id="mddoc-method-donatj-mddoc-runner-textui-droperror"></a>Method: TextUI->dropError
 
 ```php
 function dropError(
@@ -2069,7 +2298,7 @@ Output an Error before exiting with given error code
 
 ---
 
-### Method: TextUI->println
+### <a id="mddoc-method-donatj-mddoc-runner-textui-println"></a>Method: TextUI->println
 
 ```php
 function println(string $text = ''): void
@@ -2077,7 +2306,7 @@ function println(string $text = ''): void
 
 ---
 
-### Method: TextUI->log
+### <a id="mddoc-method-donatj-mddoc-runner-textui-log"></a>Method: TextUI->log
 
 ```php
 function log($level, $message, array $context = []): void
@@ -2095,7 +2324,7 @@ Logs with an arbitrary level.
 
 ---
 
-### Method: TextUI->emergency
+### <a id="mddoc-method-donatj-mddoc-runner-textui-emergency"></a>Method: TextUI->emergency
 
 ```php
 function emergency(string|\Stringable $message, array $context = []): void
@@ -2111,7 +2340,7 @@ System is unusable.
 
 ---
 
-### Method: TextUI->alert
+### <a id="mddoc-method-donatj-mddoc-runner-textui-alert"></a>Method: TextUI->alert
 
 ```php
 function alert(string|\Stringable $message, array $context = []): void
@@ -2133,7 +2362,7 @@ trigger the SMS alerts and wake you up.
 
 ---
 
-### Method: TextUI->critical
+### <a id="mddoc-method-donatj-mddoc-runner-textui-critical"></a>Method: TextUI->critical
 
 ```php
 function critical(string|\Stringable $message, array $context = []): void
@@ -2153,7 +2382,7 @@ Example: Application component unavailable, unexpected exception.
 
 ---
 
-### Method: TextUI->error
+### <a id="mddoc-method-donatj-mddoc-runner-textui-error"></a>Method: TextUI->error
 
 ```php
 function error(string|\Stringable $message, array $context = []): void
@@ -2171,7 +2400,7 @@ be logged and monitored.
 
 ---
 
-### Method: TextUI->warning
+### <a id="mddoc-method-donatj-mddoc-runner-textui-warning"></a>Method: TextUI->warning
 
 ```php
 function warning(string|\Stringable $message, array $context = []): void
@@ -2193,7 +2422,7 @@ that are not necessarily wrong.
 
 ---
 
-### Method: TextUI->notice
+### <a id="mddoc-method-donatj-mddoc-runner-textui-notice"></a>Method: TextUI->notice
 
 ```php
 function notice(string|\Stringable $message, array $context = []): void
@@ -2209,7 +2438,7 @@ Normal but significant events.
 
 ---
 
-### Method: TextUI->info
+### <a id="mddoc-method-donatj-mddoc-runner-textui-info"></a>Method: TextUI->info
 
 ```php
 function info(string|\Stringable $message, array $context = []): void
@@ -2229,7 +2458,7 @@ Example: User logs in, SQL logs.
 
 ---
 
-### Method: TextUI->debug
+### <a id="mddoc-method-donatj-mddoc-runner-textui-debug"></a>Method: TextUI->debug
 
 ```php
 function debug(string|\Stringable $message, array $context = []): void

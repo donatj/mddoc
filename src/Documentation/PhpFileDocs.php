@@ -29,6 +29,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	use LoggerAwareTrait;
 
 	private const DEFAULT_SIGNATURE_WRAP_LENGTH = 80;
+	private const TABLE_OF_CONTENTS             = 'table-of-contents';
 
 	/**
 	 * The file to document
@@ -74,6 +75,11 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	private AutoloaderInterface $autoloader;
 
 	/**
+	 * @var array{type:string,name:string,anchor:string,methods:list<array{type:string,name:string,anchor:string}>}|null
+	 */
+	private ?array $tableOfContents = null;
+
+	/**
 	 * @return AbstractElement|string
 	 */
 	public function output( int $depth ) {
@@ -91,8 +97,10 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	 * @return AbstractElement|string
 	 */
 	private function scanSourceFile( string $filename, int $depth ) {
-		$document = new DocumentDepth;
-		$factory  = new TaxonomyReflectorFactory;
+		$document                       = new DocumentDepth;
+		$factory                        = new TaxonomyReflectorFactory;
+		$tableOfContentsEnabled         = $this->hasTableOfContents();
+		$this->tableOfContents          = null;
 
 		$reflector = $factory->newInstance($filename, $this->autoloader);
 
@@ -152,8 +160,19 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		if( $class = $reflector->getReflector() ) {
 
 			if( !$this->getOption(self::OPT_SKIP_CLASS_HEADER, true) ) {
-				$elementType = $class->isEnum() ? 'Enum' : 'Class';
-				$document->appendChild(new Header($elementType . ': ' . ltrim($class->getFqsen(), "\\") /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
+				$elementType = ucfirst($class->getKind());
+				$className   = ltrim($class->getFqsen(), "\\");
+				$classAnchor = $this->anchorId($class->getKind(), $class->getFqsen());
+
+				$document->appendChild($this->header($elementType . ': ' . $className, $tableOfContentsEnabled ? $classAnchor : null));
+				if( $tableOfContentsEnabled ) {
+					$this->tableOfContents = [
+						'type'    => $elementType,
+						'name'    => $className,
+						'anchor'  => $classAnchor,
+						'methods' => [],
+					];
+				}
 
 				if( $classBlock = $class->getDocBlock() ) {
 					if( $this->shouldSkip($classBlock) ) {
@@ -173,7 +192,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$classInner .= sprintf("namespace %s;\n\n", $namespace);
 			}
 
-			$classInner .= $class->isEnum() ? 'enum ' : 'class ';
+			$classInner .= $class->getKind() . ' ';
 			$classInner .= $class->getName();
 			if( $class->getBackingType() !== null ) {
 				$classInner .= ': ' . $class->getBackingType();
@@ -298,9 +317,9 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 				$operator = $docMethod->isStatic() ? '::' : '->';
 
-				$subDocument->appendChild(
-					new Header("Magic Method: {$class->getName()}{$operator}{$name}")
-				);
+				$methodLabel  = "Magic Method: {$class->getName()}{$operator}{$name}";
+				$methodAnchor = $this->anchorId('magic-method', $class->getFqsen() . '::' . $name);
+				$subDocument->appendChild($this->header($methodLabel, $tableOfContentsEnabled ? $methodAnchor : null));
 
 				$args     = [];
 				$argParts = $docMethod->getArguments();
@@ -313,8 +332,12 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 					$args[] = $prefix . '$' . $argPart['name'];
 				}
 
+				$returnType = (string)$docMethod->getReturnType();
+				$tableOfContentsSignature = $this->getFunctionSignature($name, $args, $returnType, false);
+				$this->addTableOfContentsMethod('Magic Method', $tableOfContentsSignature, $methodAnchor);
+
 				$subDocument->appendChild(
-					new CodeBlock($this->getFunctionSignature($name, $args, (string)$docMethod->getReturnType()), 'php')
+					new CodeBlock($this->getFunctionSignature($name, $args, $returnType), 'php')
 				);
 
 				if( $docMethodDescr = $docMethod->getDescription() ) {
@@ -376,9 +399,11 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				}
 
 				if( $firstBlock ) {
-					$subDocument->appendChild(
-						new Header("Method: {$class->getName()}{$operator}{$name}")
-					);
+					$methodLabel  = "Method: {$class->getName()}{$operator}{$name}";
+					$methodAnchor = $this->anchorId('method', $class->getFqsen() . '::' . $name);
+					$subDocument->appendChild($this->header($methodLabel, $tableOfContentsEnabled ? $methodAnchor : null));
+					$tableOfContentsSignature = $this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType(), false);
+					$this->addTableOfContentsMethod('Method', $tableOfContentsSignature, $methodAnchor);
 
 					$subDocument->appendChild(
 						new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType()), 'php')
@@ -445,7 +470,11 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 						}
 					}
 				} else {
-					$subDocument->appendChild(new Header("Method: {$class->getName()}{$operator}{$name}"));
+					$methodLabel  = "Method: {$class->getName()}{$operator}{$name}";
+					$methodAnchor = $this->anchorId('method', $class->getFqsen() . '::' . $name);
+					$subDocument->appendChild($this->header($methodLabel, $tableOfContentsEnabled ? $methodAnchor : null));
+					$tableOfContentsSignature = $this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType(), false);
+					$this->addTableOfContentsMethod('Method', $tableOfContentsSignature, $methodAnchor);
 					$subDocument->appendChild(new CodeBlock($this->getFunctionSignature($name, $this->getArgumentStrings($method), (string)$method->getReturnType()), 'php'));
 					if( $this->getOption(self::OPT_WARN_UNDOCUMENTED, true) !== 'false' ) {
 						$subDocument->appendChild(new MdText('Undocumented'));
@@ -455,6 +484,45 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 		}
 
 		return $document;
+	}
+
+	/**
+	 * @return array{type:string,name:string,anchor:string,methods:list<array{type:string,name:string,anchor:string}>}|null
+	 * @mddoc-ignore
+	 */
+	public function getTableOfContents() : ?array {
+		return $this->tableOfContents;
+	}
+
+	private function hasTableOfContents() : bool {
+		return strtolower($this->getOption(self::TABLE_OF_CONTENTS, true) ?? 'false') === 'true';
+	}
+
+	private function header( string $title, ?string $anchor ) : Header {
+		return new Header($anchor === null ? $title : new MdText(sprintf('<a id="%s"></a>%s', $anchor, $title)));
+	}
+
+	private function anchorId( string $type, string $name ) : string {
+		$identifier = preg_replace('/[^a-z0-9]+/', '-', strtolower($name));
+		$identifier = trim((string)$identifier, '-');
+
+		if( $identifier === '' ) {
+			$identifier = substr(sha1($name), 0, 12);
+		}
+
+		return 'mddoc-' . $type . '-' . $identifier;
+	}
+
+	private function addTableOfContentsMethod( string $type, string $name, string $anchor ) : void {
+		if( $this->tableOfContents === null ) {
+			return;
+		}
+
+		$this->tableOfContents['methods'][] = [
+			'type'   => $type,
+			'name'   => $name,
+			'anchor' => $anchor,
+		];
 	}
 
 	private function shouldSkip( ?DocBlock $block ) : bool {
@@ -518,12 +586,12 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	/**
 	 * @param string[] $arguments
 	 */
-	private function getFunctionSignature( string $name, array $arguments, string $returnType ) : string {
+	private function getFunctionSignature( string $name, array $arguments, string $returnType, bool $wrap = true ) : string {
 		$return = $returnType === 'mixed' ? '' : ": {$returnType}";
 
 		$signature = "function {$name}(" . implode(', ', $arguments) . "){$return}";
 		$wrapLength = $this->getSignatureWrapLength();
-		if( $wrapLength === null || strlen($signature) <= $wrapLength ) {
+		if( !$wrap || $wrapLength === null || strlen($signature) <= $wrapLength ) {
 			return $signature;
 		}
 
