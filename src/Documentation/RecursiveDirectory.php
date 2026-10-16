@@ -9,6 +9,9 @@ namespace donatj\MDDoc\Documentation;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Documentation\Interfaces\AutoloaderAware;
 use donatj\MDDom\Document;
+use donatj\MDDom\DocumentDepth;
+use donatj\MDDom\Header;
+use donatj\MDDom\Text as MdText;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -24,6 +27,8 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 	public const OPT_NAME = 'name';
 	/** A regex to filter files by - specify files to be matched */
 	public const OPT_FILE_FILTER = 'file-filter';
+
+	private const TABLE_OF_CONTENTS = 'table-of-contents';
 
 	private AutoloaderInterface $autoloader;
 
@@ -52,6 +57,8 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 			$this->addChildren($class);
 		}
 
+		$outputs         = [];
+		$tableOfContents = [];
 		foreach( $this->getDocumentationChildren() as $child ) {
 			if( $child instanceof AutoloaderAware ) {
 				$child->setAutoloader($this->autoloader);
@@ -62,10 +69,45 @@ class RecursiveDirectory extends AbstractNestedDoc implements AutoloaderAware, L
 				continue;
 			}
 
+			$outputs[] = $output;
+
+			if( $child instanceof PhpFileDocs && ($entry = $child->getTableOfContents()) !== null ) {
+				$tableOfContents[] = $entry;
+			}
+	}
+
+		if( $this->hasTableOfContents() && $tableOfContents ) {
+			$tableDocument = new DocumentDepth;
+			$tableDocument->appendChild(new Header('Table of Contents'));
+			$tableDocument->appendChild(new MdText($this->tableOfContentsMarkdown($tableOfContents)));
+			$document->appendChild($tableDocument);
+		}
+
+		foreach( $outputs as $output ) {
 			$document->appendChild($output);
 		}
 
 		return $document;
+	}
+
+	private function hasTableOfContents() : bool {
+		return strtolower($this->getOption(self::TABLE_OF_CONTENTS, true) ?? 'false') === 'true';
+	}
+
+	/**
+	 * @param list<array{type:string,name:string,anchor:string,methods:list<array{type:string,name:string,anchor:string}>}> $entries
+	 */
+	private function tableOfContentsMarkdown( array $entries ) : string {
+		$output = '';
+		foreach( $entries as $entry ) {
+			$output .= sprintf("- [%s: %s](#%s)\n", $entry['type'], $entry['name'], $entry['anchor']);
+
+			foreach( $entry['methods'] as $method ) {
+				$output .= sprintf("    - [%s: %s](#%s)\n", $method['type'], $method['name'], $method['anchor']);
+			}
+		}
+
+		return rtrim($output);
 	}
 
 	protected function init() : void {

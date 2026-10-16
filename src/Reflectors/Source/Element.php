@@ -87,6 +87,11 @@ class Element {
 		return $this->value;
 	}
 
+	/** Return the kind of source declaration. */
+	public function getKind() : string {
+		return $this->kind;
+	}
+
 	public function isEnum() : bool {
 		return $this->kind === 'enum';
 	}

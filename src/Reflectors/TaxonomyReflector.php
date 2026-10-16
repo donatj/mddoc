@@ -121,7 +121,7 @@ class TaxonomyReflector {
 			[],
 			'mixed',
 			null,
-			$node instanceof Enum_ ? 'enum' : 'class',
+			$this->classKind($node),
 			$node instanceof Enum_ && $node->scalarType !== null ? $this->typeFromNode($node->scalarType) : null
 		);
 		$typeNames = $classDocBlock === null ? [] : $classDocBlock->getTypeNames();
@@ -216,6 +216,23 @@ class TaxonomyReflector {
 				$this->mergeDependency((string)$interface);
 			}
 		}
+	}
+
+	/** @param Class_|Enum_|Interface_|Trait_ $node */
+	private function classKind( Node $node ) : string {
+		if( $node instanceof Enum_ ) {
+			return 'enum';
+		}
+
+		if( $node instanceof Interface_ ) {
+			return 'interface';
+		}
+
+		if( $node instanceof Trait_ ) {
+			return 'trait';
+		}
+
+		return 'class';
 	}
 
 	private function mergeDependency( string $name ) : void {
