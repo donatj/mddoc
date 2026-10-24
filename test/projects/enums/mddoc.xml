@@ -1,0 +1,8 @@
+<mddoc>
+	<autoloader type="psr4" root="src" namespace="Example\EnumDependencies"/>
+	<docpage target="README.md">
+		<file name="src/UnbackedState.php"/>
+		<file name="src/BackedState.php"/>
+		<file name="src/State.php"/>
+	</docpage>
+</mddoc>

@@ -1,0 +1,132 @@
+<?php
+
+namespace Example;
+
+use Psr\Log\LoggerInterface as Logger;
+
+/**
+ * A source file that uses modern PHPDoc types.
+ *
+ * @method static array<string,int> find(callable(string|int): bool $filter) Finds matching values.
+ * @method static \DateTimeImmutable multiLineMagicSignature(\DateTimeImmutable $createdAt, \DateTimeImmutable $updatedAt, \DateTimeImmutable $publishedAt, \DateTimeImmutable $archivedAt)
+ * @method static \DateTimeImmutable multiLineCallableMagicSignature(callable(string, int): bool $filter, \DateTimeImmutable $createdAt, \DateTimeImmutable $updatedAt, \DateTimeImmutable $publishedAt)
+ * @template T
+ * @phpstan-type Item array-key
+ */
+class ModernTypes {
+
+	/** @var array{label: string, callback: callable(string|int): bool} */
+	public $shape;
+
+	/**
+	 * Process values with a callback.
+	 *
+	 * @param array<string> $names Names to process.
+	 * @param callable(string|int): bool $filter Decides whether a value is included.
+	 * @param callable(string $value, int ...$values): bool $formatter Formats a value.
+	 * @return array{items: list<string>, count: positive-int} Processed values and their count.
+	 * @throws \RuntimeException When processing fails.
+	 */
+	public function process( $names, $filter, $formatter ) {
+	}
+
+	/**
+	 * @param (string|int)[] $compound
+	 */
+	public function compoundArray( $compound ) {
+	}
+
+	/**
+	 * @param iterable<covariant string, contravariant int, *> $variance
+	 */
+	public function variance( $variance ) {
+	}
+
+	/**
+	 * @param Logger<string> $loggers
+	 */
+	public function genericAlias( $loggers ) {
+	}
+
+	/**
+	 * @param T $template
+	 * @param Item $item
+	 * @param array-key $key
+	 */
+	public function contextualTypes( $template, $item, $key ) {
+	}
+
+	/**
+	 * @phpstan-import-type ExternalItem from ExternalTypes
+	 * @phpstan-import-type OtherItem from ExternalTypes as ImportedItem
+	 * @param ExternalItem $external
+	 * @param ImportedItem $imported
+	 */
+	public function importedAliases( $external, $imported ) {
+	}
+
+	/**
+	 * @param \Countable&(\Iterator|\Stringable) $intersection
+	 */
+	public function compoundIntersection( $intersection ) {
+	}
+
+	/**
+	 * @param (\Countable&\Iterator)|\Stringable $union
+	 */
+	public function compoundUnion( $union ) {
+	}
+
+	/**
+	 * @param ?(\Countable|\Iterator) $nullable
+	 */
+	public function nullableCompound( $nullable ) {
+	}
+
+	/** @return mixed */
+	public function dnf( (\Countable&\Iterator)|\Stringable $value ) : (\Countable&\Iterator)|\Stringable {
+	}
+
+	/** A method with a signature long enough to wrap in generated documentation. */
+	public function multiLineSignature(
+		\DateTimeImmutable $createdAt,
+		\DateTimeImmutable $updatedAt,
+		\DateTimeImmutable $publishedAt,
+		\DateTimeImmutable $archivedAt
+	) : \DateTimeImmutable {
+	}
+
+	/** A long signature with a comma-bearing default value. */
+	public function multiLineDefaultSignature(
+		array $labels = [ 'first', 'second' ],
+		\DateTimeImmutable $createdAt,
+		\DateTimeImmutable $updatedAt,
+		\DateTimeImmutable $publishedAt
+	) : \DateTimeImmutable {
+	}
+
+	/** A parameterless method whose generated signature still exceeds the line limit. */
+	public function aMethodWithAnIntentionallyLongNameThatStillRequiresWrappingEvenThoughItDoesNotHaveAnyParametersAtAll() : \DateTimeImmutable {
+	}
+
+	/**
+	 * A variadic method.
+	 *
+	 * @return void
+	 */
+	public function variadicSignature( string ...$values ) : void {
+	}
+
+	/**
+	 * A void method whose result is documented.
+	 *
+	 * @return void Writes output.
+	 */
+	public function documentedVoidMethodWithDescription() : void {
+	}
+
+	public function undocumented( string $name = '' ) : string {
+		return $name;
+	}
+
+}

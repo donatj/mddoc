@@ -1,0 +1,6 @@
+<mddoc>
+	<docpage target="README.md">
+		<file name="src/ModernTypes.php"/>
+		<file name="src/functions.php"/>
+	</docpage>
+</mddoc>

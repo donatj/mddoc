@@ -1,0 +1,5 @@
+<mddoc>
+	<docpage target="README.md" skip-class-constants="true">
+		<file name="src/State.php"/>
+	</docpage>
+</mddoc>

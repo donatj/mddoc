@@ -1,0 +1,6 @@
+<mddoc>
+	<autoloader type="psr4" root="src" namespace="Example"/>
+	<docpage target="README.md">
+		<recursive-directory name="src"/>
+	</docpage>
+</mddoc>
