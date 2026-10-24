@@ -1,6 +1,8 @@
 <?php
 
 use donatj\MDDoc\MDDoc;
+use donatj\MDDoc\Autoloaders\NullLoader;
+use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use PHPUnit\Framework\TestCase;
 
 class ConditionalFunctionTest extends TestCase {
@@ -17,7 +19,7 @@ class ConditionalFunctionTest extends TestCase {
 
 			self::assertIsString($sourceRoot);
 
-			foreach( [ 'FunctionGuard.php', 'TryFunction.php', 'FunctionDeclarations.php', 'ClassMethodDeclarations.php', 'ClassGuard.php', 'EnumGuard.php', 'InterfaceGuard.php', 'TraitGuard.php', 'MultipleClasses.php', 'SameFileDependency/ParentClass.php' ] as $file ) {
+			foreach( [ 'FunctionGuard.php', 'TryFunction.php', 'FunctionDeclarations.php', 'ClassMethodDeclarations.php', 'ClassGuard.php', 'EnumGuard.php', 'InterfaceGuard.php', 'TraitGuard.php', 'MultipleClasses.php', 'SameFileDependency/ParentClass.php', 'CrossFile/A.php' ] as $file ) {
 				$source = realpath(__DIR__ . '/fixtures/conditional-functions/' . $file);
 				self::assertIsString($source);
 				$files .= sprintf('<file name="%s" />', htmlspecialchars($source, ENT_XML1));
@@ -54,6 +56,10 @@ class ConditionalFunctionTest extends TestCase {
 			self::assertStringContainsString('Class: MDDocTest\\SameFileDependency\\ChildClass', $markdown);
 			self::assertStringContainsString('Method: ChildClass->parentMethod', $markdown);
 			self::assertStringContainsString('Method: ChildClass->childMethod', $markdown);
+			self::assertStringContainsString('Class: MDDocTest\\CrossFile\\Local', $markdown);
+			self::assertStringContainsString('Method: Local->aMethod', $markdown);
+			self::assertStringContainsString('Method: Local->bMethod', $markdown);
+			self::assertStringContainsString('Method: Local->localMethod', $markdown);
 		} finally {
 			foreach( [ $config ?? null, $output ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {
@@ -63,6 +69,17 @@ class ConditionalFunctionTest extends TestCase {
 
 			rmdir($tempDir);
 		}
+	}
+
+	public function testFirstClassReflectorPreservesSourceOrder() : void {
+		$source = realpath(__DIR__ . '/fixtures/conditional-functions/ForwardDependency.php');
+		self::assertIsString($source);
+
+		$reflector = (new TaxonomyReflectorFactory)->newInstance($source, new NullLoader);
+		$class = $reflector->getReflector();
+
+		self::assertNotNull($class);
+		self::assertSame('ChildClass', $class->getName());
 	}
 
 }

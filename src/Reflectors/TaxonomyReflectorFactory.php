@@ -14,10 +14,15 @@ class TaxonomyReflectorFactory {
 	 */
 	public function newInstance( string $filename, AutoloaderInterface $autoLoader ) : TaxonomyReflector {
 		if( !isset($this->parsers[$filename]) ) {
-			$this->parsers[$filename] = new TaxonomyReflector($filename, $autoLoader, $this);
+			new TaxonomyReflector($filename, $autoLoader, $this);
 		}
 
 		return $this->parsers[$filename];
+	}
+
+	/** @mddoc-ignore */
+	public function register( string $filename, TaxonomyReflector $parser ) : void {
+		$this->parsers[$filename] = $parser;
 	}
 
 }

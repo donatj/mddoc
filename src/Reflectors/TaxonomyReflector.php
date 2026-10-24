@@ -48,7 +48,11 @@ class TaxonomyReflector {
 	/**
 	 * @throws ClassNotReadableException
 	 */
-	public function __construct( string $filename, AutoloaderInterface $autoLoader, TaxonomyReflectorFactory $parserFactory ) {
+	public function __construct(
+		string $filename,
+		AutoloaderInterface $autoLoader,
+		TaxonomyReflectorFactory $parserFactory
+	) {
 		$this->autoLoader     = $autoLoader;
 		$this->parserFactory  = $parserFactory;
 		$this->docBlockParser = new DocBlockParser;
@@ -74,7 +78,9 @@ class TaxonomyReflector {
 
 		$declarations    = $this->collectStatements($nodes, '', $this->importsFromNodes($nodes));
 		$this->functions = $declarations['functions'];
-		$this->classes   = $this->resolveDependencies($declarations['classes']);
+		$this->classes   = $declarations['classes'];
+		$this->parserFactory->register($filename, $this);
+		$this->resolveDependencies();
 	}
 
 	/**
@@ -274,15 +280,25 @@ class TaxonomyReflector {
 	 * @param array<string,ClassDefinition> $classes
 	 * @return array<string,ClassDefinition>
 	 */
-	private function resolveDependencies( array $classes ) : array {
+	private function resolveClassDefinitions( array $classes ) : array {
 		$resolved  = [];
 		$resolving = [];
 
-		foreach( $classes as $name => $class ) {
-			$resolved[$name] = $this->resolveClassDependencies($class, $classes, $resolved, $resolving);
+		foreach( $classes as $class ) {
+			$this->resolveClassDependencies($class, $classes, $resolved, $resolving);
 		}
 
-		return $resolved;
+		$definitions = [];
+		foreach( $classes as $name => $class ) {
+			$definitions[$name] = $resolved[$name] ?? $class;
+		}
+
+		return $definitions;
+	}
+
+	/** @mddoc-ignore */
+	public function resolveDependencies() : void {
+		$this->classes = $this->resolveClassDefinitions($this->classes);
 	}
 
 	/**
