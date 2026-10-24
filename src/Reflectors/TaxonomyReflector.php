@@ -36,34 +36,55 @@ class TaxonomyReflector {
 	private TaxonomyReflectorFactory $parserFactory;
 
 	/** @var array<string,ClassDefinition> */
-	private array $classes = [];
+	private array $classes;
 
 	/** @var array<string,Element> */
-	private array $functions = [];
+	private array $functions;
 
 	private DocBlockParser $docBlockParser;
-	private ?DocBlock $fileDocBlock = null;
+	private ?DocBlock $fileDocBlock;
 	private Standard $prettyPrinter;
+
+	/**
+	 * @mddoc-ignore
+	 * @param array<string,ClassDefinition> $classes
+	 * @param array<string,Element> $functions
+	 */
+	private function __construct(
+		AutoloaderInterface $autoLoader,
+		TaxonomyReflectorFactory $parserFactory,
+		DocBlockParser $docBlockParser,
+		?DocBlock $fileDocBlock,
+		Standard $prettyPrinter,
+		array $classes,
+		array $functions
+	) {
+		$this->autoLoader     = $autoLoader;
+		$this->parserFactory  = $parserFactory;
+		$this->docBlockParser = $docBlockParser;
+		$this->fileDocBlock   = $fileDocBlock;
+		$this->prettyPrinter  = $prettyPrinter;
+		$this->classes        = $classes;
+		$this->functions      = $functions;
+	}
 
 	/**
 	 * @throws ClassNotReadableException
 	 */
-	public function __construct(
+	public static function fromFile(
 		string $filename,
 		AutoloaderInterface $autoLoader,
 		TaxonomyReflectorFactory $parserFactory
-	) {
-		$this->autoLoader     = $autoLoader;
-		$this->parserFactory  = $parserFactory;
-		$this->docBlockParser = new DocBlockParser;
-		$this->prettyPrinter  = new Standard;
+	) : self {
+		$docBlockParser = new DocBlockParser;
+		$prettyPrinter  = new Standard;
 
 		$source = @file_get_contents($filename);
 		if( $source === false ) {
 			throw new ClassNotReadableException('failed to read class file', $filename);
 		}
 
-		$this->fileDocBlock = $this->docBlockParser->parse($this->getFileDocComment($source));
+		$fileDocBlock = $docBlockParser->parse(self::getFileDocComment($source));
 
 		try {
 			$parser = (new ParserFactory)->createForNewestSupportedVersion();
@@ -76,9 +97,18 @@ class TaxonomyReflector {
 			throw new ClassNotReadableException('failed to read class file', $filename, $ex);
 		}
 
-		$declarations    = $this->collectStatements($nodes, '', $this->importsFromNodes($nodes));
-		$this->functions = $declarations['functions'];
-		$this->classes   = $declarations['classes'];
+		$reflector = new self($autoLoader, $parserFactory, $docBlockParser, $fileDocBlock, $prettyPrinter, [], []);
+		$declarations = $reflector->collectStatements($nodes, '', $reflector->importsFromNodes($nodes));
+
+		return new self(
+			$autoLoader,
+			$parserFactory,
+			$docBlockParser,
+			$fileDocBlock,
+			$prettyPrinter,
+			$declarations['classes'],
+			$declarations['functions']
+		);
 	}
 
 	/**
@@ -279,51 +309,57 @@ class TaxonomyReflector {
 	 * @return array<string,ClassDefinition>
 	 */
 	private function resolveClassDefinitions( array $classes ) : array {
-		$resolved  = [];
-		$resolving = [];
+		$resolved = [];
 
 		foreach( $classes as $class ) {
-			$this->resolveClassDependencies($class, $classes, $resolved, $resolving);
+			$resolution = $this->resolveClassDependencies($class, $classes, $resolved, []);
+			$resolved   = $resolution['resolved'];
 		}
 
-		$definitions = [];
-		foreach( $classes as $name => $class ) {
-			$definitions[$name] = $resolved[$name] ?? $class;
-		}
-
-		return $definitions;
+		return array_replace($classes, $resolved);
 	}
 
 	/** @mddoc-ignore */
-	public function resolveDependencies() : void {
-		$this->classes = $this->resolveClassDefinitions($this->classes);
+	public function withResolvedDependencies() : self {
+		return new self(
+			$this->autoLoader,
+			$this->parserFactory,
+			$this->docBlockParser,
+			$this->fileDocBlock,
+			$this->prettyPrinter,
+			$this->resolveClassDefinitions($this->classes),
+			$this->functions
+		);
 	}
 
 	/**
 	 * @param array<string,ClassDefinition> $classes
 	 * @param array<string,ClassDefinition> $resolved
 	 * @param array<string,true> $resolving
+	 * @return array{class:ClassDefinition,resolved:array<string,ClassDefinition>}
 	 */
 	private function resolveClassDependencies(
 		ClassDefinition $class,
 		array $classes,
-		array &$resolved,
-		array &$resolving
-	) : ClassDefinition {
+		array $resolved,
+		array $resolving
+	) : array {
 		$name = $class->getReflector()->getFqsen();
 		if( isset($resolved[$name]) ) {
-			return $resolved[$name];
+			return [ 'class' => $resolved[$name], 'resolved' => $resolved ];
 		}
 
 		if( isset($resolving[$name]) ) {
-			return $class;
+			return [ 'class' => $class, 'resolved' => $resolved ];
 		}
 
-		$resolving[$name] = true;
+		$resolving = $resolving + [ $name => true ];
 		foreach( $class->getDependencies() as $dependencyName ) {
 			$dependency = $this->findClass($classes, $dependencyName);
 			if( $dependency !== null ) {
-				$dependency = $this->resolveClassDependencies($dependency, $classes, $resolved, $resolving);
+				$resolution = $this->resolveClassDependencies($dependency, $classes, $resolved, $resolving);
+				$dependency = $resolution['class'];
+				$resolved   = $resolution['resolved'];
 			} else {
 				$filename = ($this->autoLoader)($dependencyName);
 				if( $filename !== null && is_readable($filename) ) {
@@ -336,10 +372,10 @@ class TaxonomyReflector {
 			}
 		}
 
-		unset($resolving[$name]);
-		$resolved[$name] = $class;
-
-		return $class;
+		return [
+			'class'    => $class,
+			'resolved' => $resolved + [ $name => $class ],
+		];
 	}
 
 	private function getClassReference( Name $name, string $namespace ) : string {
@@ -424,7 +460,7 @@ class TaxonomyReflector {
 		return $comment === null ? null : $comment->getText();
 	}
 
-	private function getFileDocComment( string $source ) : ?string {
+	private static function getFileDocComment( string $source ) : ?string {
 		$tokens = token_get_all($source);
 		foreach( $tokens as $index => $token ) {
 			if( !is_array($token) ) {

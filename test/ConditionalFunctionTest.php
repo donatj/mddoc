@@ -2,6 +2,7 @@
 
 use donatj\MDDoc\MDDoc;
 use donatj\MDDoc\Autoloaders\NullLoader;
+use donatj\MDDoc\Reflectors\TaxonomyReflector;
 use donatj\MDDoc\Reflectors\TaxonomyReflectorFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -80,6 +81,23 @@ class ConditionalFunctionTest extends TestCase {
 
 		self::assertNotNull($class);
 		self::assertSame('ChildClass', $class->getName());
+	}
+
+	public function testResolvingDependenciesReturnsANewReflector() : void {
+		$source = realpath(__DIR__ . '/fixtures/conditional-functions/SameFileDependency/ParentClass.php');
+		self::assertIsString($source);
+
+		$factory = new TaxonomyReflectorFactory;
+		$unresolved = TaxonomyReflector::fromFile($source, new NullLoader, $factory);
+		$resolved = $unresolved->withResolvedDependencies();
+
+		$unresolvedClass = $unresolved->getClass('MDDocTest\\SameFileDependency\\ChildClass');
+		$resolvedClass = $resolved->getClass('MDDocTest\\SameFileDependency\\ChildClass');
+
+		self::assertNotNull($unresolvedClass);
+		self::assertNotNull($resolvedClass);
+		self::assertArrayNotHasKey('parentMethod', $unresolvedClass->getMethods());
+		self::assertArrayHasKey('parentMethod', $resolvedClass->getMethods());
 	}
 
 }
