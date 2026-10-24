@@ -21,6 +21,12 @@ function nativeReturn() : int {
 function optionalParameters( string $required, int $count = 1, ?string $label = null ) {
 }
 
+function literalDefaults( bool $enabled = false, ?string $label = null ) {
+}
+
+function compositeLiteralDefaults( array $values = [ false, null, true ] ) {
+}
+
 /**
  * A function that does not return a value.
  *

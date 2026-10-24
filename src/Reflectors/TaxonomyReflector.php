@@ -26,7 +26,6 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 
@@ -72,7 +71,7 @@ class TaxonomyReflector {
 			$nodes  = $parser->parse($source);
 
 			$traverser = new NodeTraverser;
-			$traverser->addVisitor(new NameResolver);
+			$traverser->addVisitor(new LanguageLiteralNameResolver);
 			$nodes = $traverser->traverse($nodes ?? []);
 		} catch( \Exception $ex ) {
 			throw new ClassNotReadableException('failed to read class file', $filename, $ex);
@@ -186,7 +185,7 @@ class TaxonomyReflector {
 						false,
 						[],
 						'mixed',
-						$this->prettyPrinter->prettyPrintExpr($const->value)
+						$this->formatExpression($const->value)
 					);
 					$class = $class->withConstant($constant);
 				}
@@ -199,7 +198,7 @@ class TaxonomyReflector {
 					false,
 					[],
 					'mixed',
-					$statement->expr === null ? null : $this->prettyPrinter->prettyPrintExpr($statement->expr),
+					$statement->expr === null ? null : $this->formatExpression($statement->expr),
 					'class',
 					null,
 					true
@@ -207,7 +206,7 @@ class TaxonomyReflector {
 				$class = $class->withConstant($enumCase);
 			} elseif( $statement instanceof Property ) {
 				foreach( $statement->props as $property ) {
-					$default = $property->default === null ? null : $this->prettyPrinter->prettyPrintExpr($property->default);
+					$default = $property->default === null ? null : $this->formatExpression($property->default);
 					$sourceProperty = new Element(
 						$property->name->toString(),
 						$reflector->getFqsen() . '::$' . $property->name->toString(),
@@ -258,7 +257,7 @@ class TaxonomyReflector {
 				continue;
 			}
 
-			$default = $param->default === null ? null : $this->prettyPrinter->prettyPrintExpr($param->default);
+			$default = $param->default === null ? null : $this->formatExpression($param->default);
 			$property = new Element(
 				$param->var->name,
 				$class->getFqsen() . '::$' . $param->var->name,
@@ -411,12 +410,16 @@ class TaxonomyReflector {
 			$arguments[] = new Argument(
 				$param->var->name,
 				$this->typeFromNode($param->type),
-				$param->default === null ? null : $this->prettyPrinter->prettyPrintExpr($param->default),
+				$param->default === null ? null : $this->formatExpression($param->default),
 				$param->variadic
 			);
 		}
 
 		return $arguments;
+	}
+
+	private function formatExpression( Node\Expr $expression ) : string {
+		return $this->prettyPrinter->prettyPrintExpr($expression);
 	}
 
 	private function getNamespacedName( Node $node ) : string {
