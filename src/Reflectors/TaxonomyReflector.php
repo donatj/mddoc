@@ -186,7 +186,7 @@ class TaxonomyReflector {
 						false,
 						[],
 						'mixed',
-						$this->prettyPrinter->prettyPrintExpr($const->value)
+						$this->formatExpression($const->value)
 					);
 					$class = $class->withConstant($constant);
 				}
@@ -199,7 +199,7 @@ class TaxonomyReflector {
 					false,
 					[],
 					'mixed',
-					$statement->expr === null ? null : $this->prettyPrinter->prettyPrintExpr($statement->expr),
+					$statement->expr === null ? null : $this->formatExpression($statement->expr),
 					'class',
 					null,
 					true
@@ -207,7 +207,7 @@ class TaxonomyReflector {
 				$class = $class->withConstant($enumCase);
 			} elseif( $statement instanceof Property ) {
 				foreach( $statement->props as $property ) {
-					$default = $property->default === null ? null : $this->prettyPrinter->prettyPrintExpr($property->default);
+					$default = $property->default === null ? null : $this->formatExpression($property->default);
 					$sourceProperty = new Element(
 						$property->name->toString(),
 						$reflector->getFqsen() . '::$' . $property->name->toString(),
@@ -258,7 +258,7 @@ class TaxonomyReflector {
 				continue;
 			}
 
-			$default = $param->default === null ? null : $this->prettyPrinter->prettyPrintExpr($param->default);
+			$default = $param->default === null ? null : $this->formatExpression($param->default);
 			$property = new Element(
 				$param->var->name,
 				$class->getFqsen() . '::$' . $param->var->name,
@@ -411,12 +411,23 @@ class TaxonomyReflector {
 			$arguments[] = new Argument(
 				$param->var->name,
 				$this->typeFromNode($param->type),
-				$param->default === null ? null : $this->prettyPrinter->prettyPrintExpr($param->default),
+				$param->default === null ? null : $this->formatExpression($param->default),
 				$param->variadic
 			);
 		}
 
 		return $arguments;
+	}
+
+	private function formatExpression( Node\Expr $expression ) : string {
+		if( $expression instanceof Node\Expr\ConstFetch ) {
+			$name = strtolower(ltrim($expression->name->toString(), '\\'));
+			if( in_array($name, [ 'false', 'null', 'true' ], true) ) {
+				return $name;
+			}
+		}
+
+		return $this->prettyPrinter->prettyPrintExpr($expression);
 	}
 
 	private function getNamespacedName( Node $node ) : string {
