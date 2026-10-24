@@ -32,6 +32,8 @@ use PhpParser\PrettyPrinter\Standard;
 
 class TaxonomyReflector {
 
+	private const LANGUAGE_LITERALS = [ 'false', 'null', 'true' ];
+
 	private string $filename;
 	private AutoloaderInterface $autoLoader;
 	private TaxonomyReflectorFactory $parserFactory;
@@ -422,7 +424,7 @@ class TaxonomyReflector {
 	private function formatExpression( Node\Expr $expression ) : string {
 		if( $expression instanceof Node\Expr\ConstFetch ) {
 			$name = strtolower(ltrim($expression->name->toString(), '\\'));
-			if( in_array($name, [ 'false', 'null', 'true' ], true) ) {
+			if( in_array($name, self::LANGUAGE_LITERALS, true) ) {
 				return $name;
 			}
 		}
