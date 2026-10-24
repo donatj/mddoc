@@ -58,6 +58,7 @@ class ConditionalFunctionTest extends TestCase {
 			self::assertStringContainsString('Method: ChildClass->parentMethod', $markdown);
 			self::assertStringContainsString('Method: ChildClass->childMethod', $markdown);
 			self::assertStringContainsString('Class: MDDocTest\\CrossFile\\Local', $markdown);
+			self::assertStringContainsString('Method: Local->rootMethod', $markdown);
 			self::assertStringContainsString('Method: Local->aMethod', $markdown);
 			self::assertStringContainsString('Method: Local->bMethod', $markdown);
 			self::assertStringContainsString('Method: Local->localMethod', $markdown);

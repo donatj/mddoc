@@ -297,6 +297,20 @@ class TaxonomyReflector {
 		return $reflector;
 	}
 
+	/** @mddoc-ignore */
+	public function withResolvedClass( string $name ) : self {
+		$class = $this->findClass($this->classes, $name);
+		if( $class === null ) {
+			return $this;
+		}
+
+		$resolution = $this->resolveClassDependencies($class, $this->classes, [], []);
+		$reflector = clone $this;
+		$reflector->classes = array_replace($this->classes, [ $class->getReflector()->getFqsen() => $resolution['class'] ]);
+
+		return $reflector;
+	}
+
 	/**
 	 * @param array<string,ClassDefinition> $classes
 	 * @param array<string,ClassDefinition> $resolved
@@ -328,7 +342,7 @@ class TaxonomyReflector {
 			} else {
 				$filename = ($this->autoLoader)($dependencyName);
 				if( $filename !== null && is_readable($filename) ) {
-					$dependency = $this->parserFactory->newInstance($filename, $this->autoLoader)->getClass($dependencyName);
+					$dependency = $this->parserFactory->resolveClass($filename, $dependencyName, $this->autoLoader);
 				}
 			}
 

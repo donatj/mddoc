@@ -2,7 +2,15 @@
 
 namespace MDDocTest\CrossFile;
 
-class A {
+class Root {
+
+	/** Documents a method on Root. */
+	public function rootMethod() : void {
+	}
+
+}
+
+class A extends Root {
 
 	/** Documents a method on A. */
 	public function aMethod() : void {
