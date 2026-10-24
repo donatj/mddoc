@@ -72,54 +72,74 @@ class TaxonomyReflector {
 			throw new ClassNotReadableException('failed to read class file', $filename, $ex);
 		}
 
-		$this->registerStatements($nodes, '', $this->importsFromNodes($nodes));
-		$this->resolveDependencies();
+		$declarations    = $this->collectStatements($nodes, '', $this->importsFromNodes($nodes));
+		$this->functions = $declarations['functions'];
+		$this->classes   = $this->resolveDependencies($declarations['classes']);
 	}
 
 	/**
 	 * @param Node[] $nodes
 	 * @param array<string,string> $imports
+	 * @return array{functions:array<string,Element>,classes:array<string,ClassDefinition>}
 	 */
-	private function registerStatements( array $nodes, string $namespace = '', array $imports = [] ) : void {
+	private function collectStatements( array $nodes, string $namespace = '', array $imports = [] ) : array {
+		$functions = [];
+		$classes   = [];
+
 		foreach( $nodes as $node ) {
-			$this->registerNode($node, $namespace, $imports);
+			$declarations = $this->collectNode($node, $namespace, $imports);
+			$functions    = array_merge($functions, $declarations['functions']);
+			$classes      = array_merge($classes, $declarations['classes']);
 		}
+
+		return [ 'functions' => $functions, 'classes' => $classes ];
 	}
 
-	/** @param array<string,string> $imports */
-	private function registerNode( Node $node, string $namespace, array $imports ) : void {
+	/**
+	 * @param array<string,string> $imports
+	 * @return array{functions:array<string,Element>,classes:array<string,ClassDefinition>}
+	 */
+	private function collectNode( Node $node, string $namespace, array $imports ) : array {
 		if( $node instanceof Namespace_ ) {
-			$this->registerStatements($node->stmts, $node->name === null ? '' : $node->name->toString(), $this->importsFromNodes($node->stmts));
-
-			return;
+			return $this->collectStatements($node->stmts, $node->name === null ? '' : $node->name->toString(), $this->importsFromNodes($node->stmts));
 		}
+
+		$functions = [];
+		$classes   = [];
 
 		if( $node instanceof Function_ ) {
 			$function                            = $this->elementFromFunction($node, $namespace, $imports);
-			$this->functions[$function->getName()] = $function;
+			$functions[$function->getName()] = $function;
 		} elseif( ($node instanceof Class_ && $node->name !== null) || $node instanceof Enum_ || $node instanceof Interface_ || $node instanceof Trait_ ) {
-			$this->registerClassReflector($node, $namespace, $imports);
+			$class = $this->classDefinitionFromNode($node, $namespace, $imports);
+			$classes[$class->getReflector()->getFqsen()] = $class;
 		}
 
 		foreach( $node->getSubNodeNames() as $subNodeName ) {
 			$subNode = $node->$subNodeName;
 			if( $subNode instanceof Node ) {
-				$this->registerNode($subNode, $namespace, $imports);
+				$declarations = $this->collectNode($subNode, $namespace, $imports);
+				$functions    = array_merge($functions, $declarations['functions']);
+				$classes      = array_merge($classes, $declarations['classes']);
 			} elseif( is_array($subNode) ) {
 				foreach( $subNode as $childNode ) {
 					if( $childNode instanceof Node ) {
-						$this->registerNode($childNode, $namespace, $imports);
+						$declarations = $this->collectNode($childNode, $namespace, $imports);
+						$functions    = array_merge($functions, $declarations['functions']);
+						$classes      = array_merge($classes, $declarations['classes']);
 					}
 				}
 			}
 		}
+
+		return [ 'functions' => $functions, 'classes' => $classes ];
 	}
 
 	/**
 	 * @param Class_|Enum_|Interface_|Trait_ $node
 	 * @param array<string,string> $imports
 	 */
-	private function registerClassReflector( Node $node, string $namespace, array $imports ) : void {
+	private function classDefinitionFromNode( Node $node, string $namespace, array $imports ) : ClassDefinition {
 		$classDocBlock = $this->docBlockParser->parse($this->getDocComment($node), $namespace, $imports);
 		$reflector = new Element(
 			$node->name === null ? '' : $node->name->toString(),
@@ -135,21 +155,20 @@ class TaxonomyReflector {
 		);
 		$class     = new ClassDefinition($reflector);
 		$typeNames = $classDocBlock === null ? [] : $classDocBlock->getTypeNames();
-		$this->classes[$reflector->getFqsen()] = $class;
 
 		if( $docBlock = $reflector->getDocBlock() ) {
 			foreach( $docBlock->getTagsByName('method') as $docMethod ) {
-				$class->addDocMethod($docMethod);
+				$class = $class->withDocMethod($docMethod);
 			}
 		}
 
 		foreach( $node->stmts as $statement ) {
 			if( $statement instanceof ClassMethod ) {
 				$method = $this->elementFromMethod($statement, $reflector->getFqsen(), $namespace, $imports, $typeNames);
-				$class->addMethod($method);
+				$class = $class->withMethod($method);
 
 				if( $method->getName() === '__construct' ) {
-					$this->registerPromotedProperties($statement, $reflector, $class);
+					$class = $this->withPromotedProperties($statement, $reflector, $class);
 				}
 			} elseif( $statement instanceof ClassConst && !($node instanceof Trait_) ) {
 				foreach( $statement->consts as $const ) {
@@ -163,7 +182,7 @@ class TaxonomyReflector {
 						'mixed',
 						$this->prettyPrinter->prettyPrintExpr($const->value)
 					);
-					$class->addConstant($constant);
+					$class = $class->withConstant($constant);
 				}
 			} elseif( $statement instanceof EnumCase ) {
 				$enumCase = new Element(
@@ -179,7 +198,7 @@ class TaxonomyReflector {
 					null,
 					true
 				);
-				$class->addConstant($enumCase);
+				$class = $class->withConstant($enumCase);
 			} elseif( $statement instanceof Property ) {
 				foreach( $statement->props as $property ) {
 					$default = $property->default === null ? null : $this->prettyPrinter->prettyPrintExpr($property->default);
@@ -193,20 +212,20 @@ class TaxonomyReflector {
 						'mixed',
 						$default
 					);
-					$class->addProperty($sourceProperty);
+					$class = $class->withProperty($sourceProperty);
 				}
 			}
 		}
 
 		if( $node instanceof Class_ && $node->extends !== null ) {
-			$class->addDependency($this->getClassReference($node->extends, $namespace));
+			$class = $class->withDependency($this->getClassReference($node->extends, $namespace));
 		}
 
 		if( $node instanceof Class_ || $node instanceof Enum_ || $node instanceof Trait_ ) {
 			foreach( $node->stmts as $statement ) {
 				if( $statement instanceof TraitUse ) {
 					foreach( $statement->traits as $trait ) {
-						$class->addDependency($this->getClassReference($trait, $namespace));
+						$class = $class->withDependency($this->getClassReference($trait, $namespace));
 					}
 				}
 			}
@@ -214,18 +233,20 @@ class TaxonomyReflector {
 
 		if( $node instanceof Interface_ ) {
 			foreach( $node->extends as $interface ) {
-				$class->addDependency($this->getClassReference($interface, $namespace));
+				$class = $class->withDependency($this->getClassReference($interface, $namespace));
 			}
 		}
 
 		if( $node instanceof Class_ || $node instanceof Enum_ ) {
 			foreach( $node->implements as $interface ) {
-				$class->addDependency($this->getClassReference($interface, $namespace));
+				$class = $class->withDependency($this->getClassReference($interface, $namespace));
 			}
 		}
+
+		return $class;
 	}
 
-	private function registerPromotedProperties( ClassMethod $method, Element $class, ClassDefinition $definition ) : void {
+	private function withPromotedProperties( ClassMethod $method, Element $class, ClassDefinition $definition ) : ClassDefinition {
 		foreach( $method->params as $param ) {
 			if( $param->flags === 0 ) {
 				continue;
@@ -243,48 +264,68 @@ class TaxonomyReflector {
 				$default
 			);
 
-			$definition->addProperty($property);
+			$definition = $definition->withProperty($property);
 		}
-	}
 
-	private function resolveDependencies() : void {
-		$resolved  = [];
-		$resolving = [];
-
-		foreach( $this->classes as $class ) {
-			$this->resolveClassDependencies($class, $resolved, $resolving);
-		}
+		return $definition;
 	}
 
 	/**
-	 * @param array<string,true> $resolved
+	 * @param array<string,ClassDefinition> $classes
+	 * @return array<string,ClassDefinition>
+	 */
+	private function resolveDependencies( array $classes ) : array {
+		$resolved  = [];
+		$resolving = [];
+
+		foreach( $classes as $name => $class ) {
+			$resolved[$name] = $this->resolveClassDependencies($class, $classes, $resolved, $resolving);
+		}
+
+		return $resolved;
+	}
+
+	/**
+	 * @param array<string,ClassDefinition> $classes
+	 * @param array<string,ClassDefinition> $resolved
 	 * @param array<string,true> $resolving
 	 */
-	private function resolveClassDependencies( ClassDefinition $class, array &$resolved, array &$resolving ) : void {
+	private function resolveClassDependencies(
+		ClassDefinition $class,
+		array $classes,
+		array &$resolved,
+		array &$resolving
+	) : ClassDefinition {
 		$name = $class->getReflector()->getFqsen();
-		if( isset($resolved[$name]) || isset($resolving[$name]) ) {
-			return;
+		if( isset($resolved[$name]) ) {
+			return $resolved[$name];
+		}
+
+		if( isset($resolving[$name]) ) {
+			return $class;
 		}
 
 		$resolving[$name] = true;
 		foreach( $class->getDependencies() as $dependencyName ) {
-			$dependency = $this->getClass($dependencyName);
+			$dependency = $this->findClass($classes, $dependencyName);
 			if( $dependency !== null ) {
-				$this->resolveClassDependencies($dependency, $resolved, $resolving);
+				$dependency = $this->resolveClassDependencies($dependency, $classes, $resolved, $resolving);
 			} else {
 				$filename = ($this->autoLoader)($dependencyName);
-				if( $filename !== null && is_readable($filename) && !$this->parserFactory->isParsing($filename) ) {
+				if( $filename !== null && is_readable($filename) ) {
 					$dependency = $this->parserFactory->newInstance($filename, $this->autoLoader)->getClass($dependencyName);
 				}
 			}
 
 			if( $dependency !== null ) {
-				$class->mergeDependency($dependency);
+				$class = $class->withMergedDependency($dependency);
 			}
 		}
 
 		unset($resolving[$name]);
-		$resolved[$name] = true;
+		$resolved[$name] = $class;
+
+		return $class;
 	}
 
 	private function getClassReference( Name $name, string $namespace ) : string {
@@ -517,7 +558,14 @@ class TaxonomyReflector {
 
 	/** @mddoc-ignore */
 	public function getClass( string $name ) : ?ClassDefinition {
-		foreach( $this->classes as $class ) {
+		return $this->findClass($this->classes, $name);
+	}
+
+	/**
+	 * @param array<string,ClassDefinition> $classes
+	 */
+	private function findClass( array $classes, string $name ) : ?ClassDefinition {
+		foreach( $classes as $class ) {
 			if( strcasecmp(ltrim($class->getReflector()->getFqsen(), '\\'), ltrim($name, '\\')) === 0 ) {
 				return $class;
 			}

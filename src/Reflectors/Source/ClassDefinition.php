@@ -3,7 +3,7 @@
 namespace donatj\MDDoc\Reflectors\Source;
 
 /** @mddoc-ignore */
-class ClassDefinition {
+final class ClassDefinition {
 
 	private Element $reflector;
 
@@ -33,24 +33,39 @@ class ClassDefinition {
 		return $this->reflector;
 	}
 
-	public function addDocMethod( Tag $method ) : void {
-		$this->data['docMethods'][$method->getMethodName()][] = $method;
+	public function withDocMethod( Tag $method ) : self {
+		$definition = clone $this;
+		$definition->data['docMethods'][$method->getMethodName()][] = $method;
+
+		return $definition;
 	}
 
-	public function addMethod( Element $method ) : void {
-		$this->data['methods'][$method->getName()][] = $method;
+	public function withMethod( Element $method ) : self {
+		$definition = clone $this;
+		$definition->data['methods'][$method->getName()][] = $method;
+
+		return $definition;
 	}
 
-	public function addConstant( Element $constant ) : void {
-		$this->data['constants'][$constant->getName()][] = $constant;
+	public function withConstant( Element $constant ) : self {
+		$definition = clone $this;
+		$definition->data['constants'][$constant->getName()][] = $constant;
+
+		return $definition;
 	}
 
-	public function addProperty( Element $property ) : void {
-		$this->data['properties'][$property->getName()][] = $property;
+	public function withProperty( Element $property ) : self {
+		$definition = clone $this;
+		$definition->data['properties'][$property->getName()][] = $property;
+
+		return $definition;
 	}
 
-	public function addDependency( string $dependency ) : void {
-		$this->dependencies[] = $dependency;
+	public function withDependency( string $dependency ) : self {
+		$definition = clone $this;
+		$definition->dependencies[] = $dependency;
+
+		return $definition;
 	}
 
 	/** @return list<string> */
@@ -58,30 +73,33 @@ class ClassDefinition {
 		return $this->dependencies;
 	}
 
-	public function mergeDependency( self $dependency ) : void {
+	public function withMergedDependency( self $dependency ) : self {
+		$definition = clone $this;
 		foreach( $dependency->data['docMethods'] as $name => $methods ) {
 			foreach( $methods as $method ) {
-				$this->data['docMethods'][$name][] = $method;
+				$definition->data['docMethods'][$name][] = $method;
 			}
 		}
 
 		foreach( $dependency->data['methods'] as $name => $methods ) {
 			foreach( $methods as $method ) {
-				$this->data['methods'][$name][] = $method;
+				$definition->data['methods'][$name][] = $method;
 			}
 		}
 
 		foreach( $dependency->data['constants'] as $name => $constants ) {
 			foreach( $constants as $constant ) {
-				$this->data['constants'][$name][] = $constant;
+				$definition->data['constants'][$name][] = $constant;
 			}
 		}
 
 		foreach( $dependency->data['properties'] as $name => $properties ) {
 			foreach( $properties as $property ) {
-				$this->data['properties'][$name][] = $property;
+				$definition->data['properties'][$name][] = $property;
 			}
 		}
+
+		return $definition;
 	}
 
 	/** @return array<string,list<Tag>> */
