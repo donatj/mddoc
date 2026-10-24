@@ -10,18 +10,22 @@ class ConditionalFunctionTest extends TestCase {
 		self::assertTrue(mkdir($tempDir, 0700));
 
 		try {
-			$output = $tempDir . '/README.md';
-			$config = $tempDir . '/mddoc.xml';
-			$files  = '';
+			$output     = $tempDir . '/README.md';
+			$config     = $tempDir . '/mddoc.xml';
+			$sourceRoot = realpath(__DIR__ . '/fixtures/conditional-functions');
+			$files      = '';
 
-			foreach( [ 'FunctionGuard.php', 'TryFunction.php', 'FunctionDeclarations.php', 'ClassMethodDeclarations.php', 'ClassGuard.php', 'EnumGuard.php', 'InterfaceGuard.php', 'TraitGuard.php' ] as $file ) {
+			self::assertIsString($sourceRoot);
+
+			foreach( [ 'FunctionGuard.php', 'TryFunction.php', 'FunctionDeclarations.php', 'ClassMethodDeclarations.php', 'ClassGuard.php', 'EnumGuard.php', 'InterfaceGuard.php', 'TraitGuard.php', 'MultipleClasses.php', 'SameFileDependency/ParentClass.php' ] as $file ) {
 				$source = realpath(__DIR__ . '/fixtures/conditional-functions/' . $file);
 				self::assertIsString($source);
 				$files .= sprintf('<file name="%s" />', htmlspecialchars($source, ENT_XML1));
 			}
 
 			self::assertNotFalse(file_put_contents($config, sprintf(
-				'<mddoc><docpage target="%s">%s</docpage></mddoc>',
+				'<mddoc><autoloader type="psr4" root="%s" namespace="MDDocTest" /><docpage target="%s">%s</docpage></mddoc>',
+				htmlspecialchars($sourceRoot, ENT_XML1),
 				htmlspecialchars($output, ENT_XML1),
 				$files
 			)));
@@ -43,6 +47,13 @@ class ConditionalFunctionTest extends TestCase {
 			self::assertStringContainsString('Enum: MDDocTest\\ConditionallyDeclaredEnum', $markdown);
 			self::assertStringContainsString('Class: MDDocTest\\ConditionallyDeclaredInterface', $markdown);
 			self::assertStringContainsString('Class: MDDocTest\\ConditionallyDeclaredTrait', $markdown);
+			self::assertStringContainsString('Class: LocalClass', $markdown);
+			self::assertStringContainsString('Method: LocalClass->localMethod', $markdown);
+			self::assertStringContainsString('Class: MainClass', $markdown);
+			self::assertStringContainsString('Method: MainClass->mainMethod', $markdown);
+			self::assertStringContainsString('Class: MDDocTest\\SameFileDependency\\ChildClass', $markdown);
+			self::assertStringContainsString('Method: ChildClass->parentMethod', $markdown);
+			self::assertStringContainsString('Method: ChildClass->childMethod', $markdown);
 		} finally {
 			foreach( [ $config ?? null, $output ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {

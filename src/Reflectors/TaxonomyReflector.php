@@ -5,6 +5,7 @@ namespace donatj\MDDoc\Reflectors;
 use donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface;
 use donatj\MDDoc\Exceptions\ClassNotReadableException;
 use donatj\MDDoc\Reflectors\Source\Argument;
+use donatj\MDDoc\Reflectors\Source\ClassDefinition;
 use donatj\MDDoc\Reflectors\Source\DocBlock;
 use donatj\MDDoc\Reflectors\Source\DocBlockParser;
 use donatj\MDDoc\Reflectors\Source\Element;
@@ -32,19 +33,10 @@ use PhpParser\PrettyPrinter\Standard;
 class TaxonomyReflector {
 
 	private AutoloaderInterface $autoLoader;
-
-	/**
-	 * @var array{
-	 *     docMethods:array<string,list<\donatj\MDDoc\Reflectors\Source\Tag>>,
-	 *     methods:array<string,list<Element>>,
-	 *     constants:array<string,list<Element>>,
-	 *     properties:array<string,list<Element>>
-	 * }
-	 */
-	private array $data;
-
 	private TaxonomyReflectorFactory $parserFactory;
-	private ?Element $reflector = null;
+
+	/** @var array<string,ClassDefinition> */
+	private array $classes = [];
 
 	/** @var array<string,Element> */
 	private array $functions = [];
@@ -61,12 +53,6 @@ class TaxonomyReflector {
 		$this->parserFactory  = $parserFactory;
 		$this->docBlockParser = new DocBlockParser;
 		$this->prettyPrinter  = new Standard;
-		$this->data           = [
-			'docMethods' => [],
-			'methods'    => [],
-			'constants'  => [],
-			'properties' => [],
-		];
 
 		$source = @file_get_contents($filename);
 		if( $source === false ) {
@@ -87,6 +73,7 @@ class TaxonomyReflector {
 		}
 
 		$this->registerStatements($nodes, '', $this->importsFromNodes($nodes));
+		$this->resolveDependencies();
 	}
 
 	/**
@@ -146,25 +133,23 @@ class TaxonomyReflector {
 			$node instanceof Enum_ ? 'enum' : 'class',
 			$node instanceof Enum_ && $node->scalarType !== null ? $this->typeFromNode($node->scalarType) : null
 		);
+		$class     = new ClassDefinition($reflector);
 		$typeNames = $classDocBlock === null ? [] : $classDocBlock->getTypeNames();
-
-		if( !$this->reflector ) {
-			$this->reflector = $reflector;
-		}
+		$this->classes[$reflector->getFqsen()] = $class;
 
 		if( $docBlock = $reflector->getDocBlock() ) {
 			foreach( $docBlock->getTagsByName('method') as $docMethod ) {
-				$this->data['docMethods'][$docMethod->getMethodName()][] = $docMethod;
+				$class->addDocMethod($docMethod);
 			}
 		}
 
 		foreach( $node->stmts as $statement ) {
 			if( $statement instanceof ClassMethod ) {
 				$method = $this->elementFromMethod($statement, $reflector->getFqsen(), $namespace, $imports, $typeNames);
-				$this->data['methods'][$method->getName()][] = $method;
+				$class->addMethod($method);
 
 				if( $method->getName() === '__construct' ) {
-					$this->registerPromotedProperties($statement, $reflector);
+					$this->registerPromotedProperties($statement, $reflector, $class);
 				}
 			} elseif( $statement instanceof ClassConst && !($node instanceof Trait_) ) {
 				foreach( $statement->consts as $const ) {
@@ -178,7 +163,7 @@ class TaxonomyReflector {
 						'mixed',
 						$this->prettyPrinter->prettyPrintExpr($const->value)
 					);
-					$this->data['constants'][$constant->getName()][] = $constant;
+					$class->addConstant($constant);
 				}
 			} elseif( $statement instanceof EnumCase ) {
 				$enumCase = new Element(
@@ -194,7 +179,7 @@ class TaxonomyReflector {
 					null,
 					true
 				);
-				$this->data['constants'][$enumCase->getName()][] = $enumCase;
+				$class->addConstant($enumCase);
 			} elseif( $statement instanceof Property ) {
 				foreach( $statement->props as $property ) {
 					$default = $property->default === null ? null : $this->prettyPrinter->prettyPrintExpr($property->default);
@@ -208,20 +193,20 @@ class TaxonomyReflector {
 						'mixed',
 						$default
 					);
-					$this->data['properties'][$sourceProperty->getName()][] = $sourceProperty;
+					$class->addProperty($sourceProperty);
 				}
 			}
 		}
 
 		if( $node instanceof Class_ && $node->extends !== null ) {
-			$this->mergeDependency((string)$node->extends);
+			$class->addDependency($this->getClassReference($node->extends, $namespace));
 		}
 
 		if( $node instanceof Class_ || $node instanceof Enum_ || $node instanceof Trait_ ) {
 			foreach( $node->stmts as $statement ) {
 				if( $statement instanceof TraitUse ) {
 					foreach( $statement->traits as $trait ) {
-						$this->mergeDependency((string)$trait);
+						$class->addDependency($this->getClassReference($trait, $namespace));
 					}
 				}
 			}
@@ -229,26 +214,18 @@ class TaxonomyReflector {
 
 		if( $node instanceof Interface_ ) {
 			foreach( $node->extends as $interface ) {
-				$this->mergeDependency((string)$interface);
+				$class->addDependency($this->getClassReference($interface, $namespace));
 			}
 		}
 
 		if( $node instanceof Class_ || $node instanceof Enum_ ) {
 			foreach( $node->implements as $interface ) {
-				$this->mergeDependency((string)$interface);
+				$class->addDependency($this->getClassReference($interface, $namespace));
 			}
 		}
 	}
 
-	private function mergeDependency( string $name ) : void {
-		$filename = ($this->autoLoader)($name);
-		if( $filename && is_readable($filename) ) {
-			$parser     = $this->parserFactory->newInstance($filename, $this->autoLoader);
-			$this->data = array_merge_recursive($this->data, $parser->data);
-		}
-	}
-
-	private function registerPromotedProperties( ClassMethod $method, Element $class ) : void {
+	private function registerPromotedProperties( ClassMethod $method, Element $class, ClassDefinition $definition ) : void {
 		foreach( $method->params as $param ) {
 			if( $param->flags === 0 ) {
 				continue;
@@ -266,8 +243,61 @@ class TaxonomyReflector {
 				$default
 			);
 
-			$this->data['properties'][$property->getName()][] = $property;
+			$definition->addProperty($property);
 		}
+	}
+
+	private function resolveDependencies() : void {
+		$resolved  = [];
+		$resolving = [];
+
+		foreach( $this->classes as $class ) {
+			$this->resolveClassDependencies($class, $resolved, $resolving);
+		}
+	}
+
+	/**
+	 * @param array<string,true> $resolved
+	 * @param array<string,true> $resolving
+	 */
+	private function resolveClassDependencies( ClassDefinition $class, array &$resolved, array &$resolving ) : void {
+		$name = $class->getReflector()->getFqsen();
+		if( isset($resolved[$name]) || isset($resolving[$name]) ) {
+			return;
+		}
+
+		$resolving[$name] = true;
+		foreach( $class->getDependencies() as $dependencyName ) {
+			$dependency = $this->getClass($dependencyName);
+			if( $dependency !== null ) {
+				$this->resolveClassDependencies($dependency, $resolved, $resolving);
+			} else {
+				$filename = ($this->autoLoader)($dependencyName);
+				if( $filename !== null && is_readable($filename) && !$this->parserFactory->isParsing($filename) ) {
+					$dependency = $this->parserFactory->newInstance($filename, $this->autoLoader)->getClass($dependencyName);
+				}
+			}
+
+			if( $dependency !== null ) {
+				$class->mergeDependency($dependency);
+			}
+		}
+
+		unset($resolving[$name]);
+		$resolved[$name] = true;
+	}
+
+	private function getClassReference( Name $name, string $namespace ) : string {
+		if( $name instanceof FullyQualified ) {
+			return '\\' . $name->toString();
+		}
+
+		$namespacedName = $name->getAttribute('namespacedName');
+		if( $namespacedName instanceof Name ) {
+			return '\\' . $namespacedName->toString();
+		}
+
+		return '\\' . ($namespace === '' ? '' : $namespace . '\\') . $name->toString();
 	}
 
 	/** @param array<string,string> $imports */
@@ -472,7 +502,28 @@ class TaxonomyReflector {
 
 	/** Returns the source class, interface, or trait declaration. */
 	public function getReflector() : ?Element {
-		return $this->reflector;
+		$class = reset($this->classes);
+
+		return $class === false ? null : $class->getReflector();
+	}
+
+	/**
+	 * @mddoc-ignore
+	 * @return list<ClassDefinition>
+	 */
+	public function getClasses() : array {
+		return array_values($this->classes);
+	}
+
+	/** @mddoc-ignore */
+	public function getClass( string $name ) : ?ClassDefinition {
+		foreach( $this->classes as $class ) {
+			if( strcasecmp(ltrim($class->getReflector()->getFqsen(), '\\'), ltrim($name, '\\')) === 0 ) {
+				return $class;
+			}
+		}
+
+		return null;
 	}
 
 	/** @mddoc-ignore */
@@ -484,28 +535,36 @@ class TaxonomyReflector {
 	 * @return array<string,list<\donatj\MDDoc\Reflectors\Source\Tag>>
 	 */
 	public function getDocMethods() : array {
-		return $this->data['docMethods'];
+		$class = reset($this->classes);
+
+		return $class === false ? [] : $class->getDocMethods();
 	}
 
 	/**
 	 * @return array<string,list<Element>>
 	 */
 	public function getMethods() : array {
-		return $this->data['methods'];
+		$class = reset($this->classes);
+
+		return $class === false ? [] : $class->getMethods();
 	}
 
 	/**
 	 * @return array<string,list<Element>>
 	 */
 	public function getConstants() : array {
-		return $this->data['constants'];
+		$class = reset($this->classes);
+
+		return $class === false ? [] : $class->getConstants();
 	}
 
 	/**
 	 * @return array<string,list<Element>>
 	 */
 	public function getProperties() : array {
-		return $this->data['properties'];
+		$class = reset($this->classes);
+
+		return $class === false ? [] : $class->getProperties();
 	}
 
 	/**

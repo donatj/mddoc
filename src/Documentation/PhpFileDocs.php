@@ -93,6 +93,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 	private function scanSourceFile( string $filename, int $depth ) {
 		$document = new DocumentDepth;
 		$factory  = new TaxonomyReflectorFactory;
+		$hasContent = false;
 
 		$reflector = $factory->newInstance($filename, $this->autoloader);
 
@@ -103,6 +104,8 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			if( $this->shouldSkip($block) ) {
 				continue;
 			}
+
+			$hasContent = true;
 
 			$name = $func->getName();
 			$fqfn = preg_replace('/\s*\(.*$/', '', (string)$func->getFqsen());
@@ -149,17 +152,20 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			}
 		}
 
-		if( $class = $reflector->getReflector() ) {
+		foreach( $reflector->getClasses() as $definition ) {
+			$class = $definition->getReflector();
+			$classBlock = $class->getDocBlock();
+			if( $this->shouldSkip($classBlock) ) {
+				continue;
+			}
+
+			$hasContent = true;
 
 			if( !$this->getOption(self::OPT_SKIP_CLASS_HEADER, true) ) {
 				$elementType = $class->isEnum() ? 'Enum' : 'Class';
 				$document->appendChild(new Header($elementType . ': ' . ltrim($class->getFqsen(), "\\") /* . ' \\[ ', new Code('\\' . $class->getNamespace()), ' \\]' */));
 
-				if( $classBlock = $class->getDocBlock() ) {
-					if( $this->shouldSkip($classBlock) ) {
-						return '';
-					}
-
+				if( $classBlock ) {
 					$document->appendChild(new Paragraph($this->getDocStr($classBlock)));
 				}
 			}
@@ -181,7 +187,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 
 			$classInner .= " {\n";
 
-			$constantData = $reflector->getConstants();
+			$constantData = $definition->getConstants();
 			foreach( $constantData as $constants ) {
 				$constant = reset($constants);
 				if( !$constant || (!$constant->isEnumCase() && $this->getOption(self::OPT_SKIP_CLASS_CONSTANTS, true)) ) {
@@ -236,7 +242,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$showClassPreview = true;
 			}
 
-			$propertyData = $reflector->getProperties();
+			$propertyData = $definition->getProperties();
 			foreach( $propertyData as $properties ) {
 
 				$property = reset($properties);
@@ -280,7 +286,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				$document->appendChild(new CodeBlock($classInner, 'php'));
 			}
 
-			$docMethodData = $reflector->getDocMethods();
+			$docMethodData = $definition->getDocMethods();
 			$i             = 0;
 			foreach( $docMethodData as $docMethods ) {
 				$i++;
@@ -326,7 +332,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 				}
 			}
 
-			$methodData = $reflector->getMethods();
+			$methodData = $definition->getMethods();
 
 			$i = 0;
 			foreach( $methodData as $methods ) {
@@ -454,7 +460,7 @@ class PhpFileDocs extends AbstractDocPart implements AutoloaderAware, LoggerAwar
 			}
 		}
 
-		return $document;
+		return $hasContent ? $document : '';
 	}
 
 	private function shouldSkip( ?DocBlock $block ) : bool {
