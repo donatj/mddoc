@@ -1810,16 +1810,14 @@ function __construct(array $args)
 
 ## Class: donatj\MDDoc\Reflectors\TaxonomyReflector
 
----
-
-### Method: TaxonomyReflector::fromFile
+### Method: TaxonomyReflector->__construct
 
 ```php
-function fromFile(
+function __construct(
 	string $filename,
 	\donatj\MDDoc\Autoloaders\Interfaces\AutoloaderInterface $autoLoader,
 	\donatj\MDDoc\Reflectors\TaxonomyReflectorFactory $parserFactory,
-): self
+)
 ```
 
 **Throws**: `\donatj\MDDoc\Exceptions\ClassNotReadableException`

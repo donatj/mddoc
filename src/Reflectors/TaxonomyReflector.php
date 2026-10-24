@@ -46,45 +46,24 @@ class TaxonomyReflector {
 	private Standard $prettyPrinter;
 
 	/**
-	 * @mddoc-ignore
-	 * @param array<string,ClassDefinition> $classes
-	 * @param array<string,Element> $functions
-	 */
-	private function __construct(
-		AutoloaderInterface $autoLoader,
-		TaxonomyReflectorFactory $parserFactory,
-		DocBlockParser $docBlockParser,
-		?DocBlock $fileDocBlock,
-		Standard $prettyPrinter,
-		array $classes,
-		array $functions
-	) {
-		$this->autoLoader     = $autoLoader;
-		$this->parserFactory  = $parserFactory;
-		$this->docBlockParser = $docBlockParser;
-		$this->fileDocBlock   = $fileDocBlock;
-		$this->prettyPrinter  = $prettyPrinter;
-		$this->classes        = $classes;
-		$this->functions      = $functions;
-	}
-
-	/**
 	 * @throws ClassNotReadableException
 	 */
-	public static function fromFile(
+	public function __construct(
 		string $filename,
 		AutoloaderInterface $autoLoader,
 		TaxonomyReflectorFactory $parserFactory
-	) : self {
-		$docBlockParser = new DocBlockParser;
-		$prettyPrinter  = new Standard;
+	) {
+		$this->autoLoader     = $autoLoader;
+		$this->parserFactory  = $parserFactory;
+		$this->docBlockParser = new DocBlockParser;
+		$this->prettyPrinter  = new Standard;
 
 		$source = @file_get_contents($filename);
 		if( $source === false ) {
 			throw new ClassNotReadableException('failed to read class file', $filename);
 		}
 
-		$fileDocBlock = $docBlockParser->parse(self::getFileDocComment($source));
+		$this->fileDocBlock = $this->docBlockParser->parse(self::getFileDocComment($source));
 
 		try {
 			$parser = (new ParserFactory)->createForNewestSupportedVersion();
@@ -97,18 +76,9 @@ class TaxonomyReflector {
 			throw new ClassNotReadableException('failed to read class file', $filename, $ex);
 		}
 
-		$reflector = new self($autoLoader, $parserFactory, $docBlockParser, $fileDocBlock, $prettyPrinter, [], []);
-		$declarations = $reflector->collectStatements($nodes, '', $reflector->importsFromNodes($nodes));
-
-		return new self(
-			$autoLoader,
-			$parserFactory,
-			$docBlockParser,
-			$fileDocBlock,
-			$prettyPrinter,
-			$declarations['classes'],
-			$declarations['functions']
-		);
+		$declarations    = $this->collectStatements($nodes, '', $this->importsFromNodes($nodes));
+		$this->functions = $declarations['functions'];
+		$this->classes   = $declarations['classes'];
 	}
 
 	/**
@@ -321,15 +291,10 @@ class TaxonomyReflector {
 
 	/** @mddoc-ignore */
 	public function withResolvedDependencies() : self {
-		return new self(
-			$this->autoLoader,
-			$this->parserFactory,
-			$this->docBlockParser,
-			$this->fileDocBlock,
-			$this->prettyPrinter,
-			$this->resolveClassDefinitions($this->classes),
-			$this->functions
-		);
+		$reflector = clone $this;
+		$reflector->classes = $this->resolveClassDefinitions($this->classes);
+
+		return $reflector;
 	}
 
 	/**

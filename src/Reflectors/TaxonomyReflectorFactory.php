@@ -17,7 +17,7 @@ class TaxonomyReflectorFactory {
 			return $this->parsers[$filename];
 		}
 
-		$parser = TaxonomyReflector::fromFile($filename, $autoLoader, $this);
+		$parser = new TaxonomyReflector($filename, $autoLoader, $this);
 		$this->parsers[$filename] = $parser;
 		$parser = $parser->withResolvedDependencies();
 		$this->parsers[$filename] = $parser;

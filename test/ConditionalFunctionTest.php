@@ -88,7 +88,7 @@ class ConditionalFunctionTest extends TestCase {
 		self::assertIsString($source);
 
 		$factory = new TaxonomyReflectorFactory;
-		$unresolved = TaxonomyReflector::fromFile($source, new NullLoader, $factory);
+		$unresolved = new TaxonomyReflector($source, new NullLoader, $factory);
 		$resolved = $unresolved->withResolvedDependencies();
 
 		$unresolvedClass = $unresolved->getClass('MDDocTest\\SameFileDependency\\ChildClass');
