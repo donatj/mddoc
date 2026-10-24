@@ -13,16 +13,15 @@ class TaxonomyReflectorFactory {
 	 * @throws \donatj\MDDoc\Exceptions\ClassNotReadableException
 	 */
 	public function newInstance( string $filename, AutoloaderInterface $autoLoader ) : TaxonomyReflector {
-		if( !isset($this->parsers[$filename]) ) {
-			new TaxonomyReflector($filename, $autoLoader, $this);
+		if( isset($this->parsers[$filename]) ) {
+			return $this->parsers[$filename];
 		}
 
-		return $this->parsers[$filename];
-	}
-
-	/** @mddoc-ignore */
-	public function register( string $filename, TaxonomyReflector $parser ) : void {
+		$parser = new TaxonomyReflector($filename, $autoLoader, $this);
 		$this->parsers[$filename] = $parser;
+		$parser->resolveDependencies();
+
+		return $parser;
 	}
 
 }

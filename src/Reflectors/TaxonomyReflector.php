@@ -79,8 +79,6 @@ class TaxonomyReflector {
 		$declarations    = $this->collectStatements($nodes, '', $this->importsFromNodes($nodes));
 		$this->functions = $declarations['functions'];
 		$this->classes   = $declarations['classes'];
-		$this->parserFactory->register($filename, $this);
-		$this->resolveDependencies();
 	}
 
 	/**
