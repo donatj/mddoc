@@ -26,13 +26,10 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 
 class TaxonomyReflector {
-
-	private const LANGUAGE_LITERALS = [ 'false', 'null', 'true' ];
 
 	private string $filename;
 	private AutoloaderInterface $autoLoader;
@@ -74,30 +71,7 @@ class TaxonomyReflector {
 			$nodes  = $parser->parse($source);
 
 			$traverser = new NodeTraverser;
-			$traverser->addVisitor(new class(self::LANGUAGE_LITERALS) extends NameResolver {
-
-				/** @var list<string> */
-				private array $literals;
-
-				/** @param list<string> $literals */
-				public function __construct( array $literals ) {
-					parent::__construct();
-					$this->literals = $literals;
-				}
-
-				protected function resolveName( Name $name, int $type ) : Name {
-					if(
-						$type === Use_::TYPE_CONSTANT
-						&& !($name instanceof FullyQualified)
-						&& in_array(strtolower($name->toString()), $this->literals, true)
-					) {
-						return $name;
-					}
-
-					return parent::resolveName($name, $type);
-				}
-
-			});
+			$traverser->addVisitor(new LanguageLiteralNameResolver);
 			$nodes = $traverser->traverse($nodes ?? []);
 		} catch( \Exception $ex ) {
 			throw new ClassNotReadableException('failed to read class file', $filename, $ex);
