@@ -32,6 +32,7 @@ use PhpParser\PrettyPrinter\Standard;
 
 class TaxonomyReflector {
 
+	private string $filename;
 	private AutoloaderInterface $autoLoader;
 	private TaxonomyReflectorFactory $parserFactory;
 
@@ -53,6 +54,7 @@ class TaxonomyReflector {
 		AutoloaderInterface $autoLoader,
 		TaxonomyReflectorFactory $parserFactory
 	) {
+		$this->filename       = $filename;
 		$this->autoLoader     = $autoLoader;
 		$this->parserFactory  = $parserFactory;
 		$this->docBlockParser = new DocBlockParser;
@@ -112,8 +114,8 @@ class TaxonomyReflector {
 		$classes   = [];
 
 		if( $node instanceof Function_ ) {
-			$function                            = $this->elementFromFunction($node, $namespace, $imports);
-			$functions[$function->getName()] = $function;
+			$function = $this->elementFromFunction($node, $namespace, $imports);
+			$functions[$function->getFqsen()] = $function;
 		} elseif( ($node instanceof Class_ && $node->name !== null) || $node instanceof Enum_ || $node instanceof Interface_ || $node instanceof Trait_ ) {
 			$class = $this->classDefinitionFromNode($node, $namespace, $imports);
 			$classes[$class->getReflector()->getFqsen()] = $class;
@@ -275,10 +277,11 @@ class TaxonomyReflector {
 	}
 
 	/**
+	 * @mddoc-ignore
 	 * @param array<string,ClassDefinition> $classes
 	 * @return array<string,ClassDefinition>
 	 */
-	private function resolveClassDefinitions( array $classes ) : array {
+	public function resolveClassDefinitions( array $classes ) : array {
 		$resolved = [];
 
 		foreach( $classes as $class ) {
@@ -291,22 +294,16 @@ class TaxonomyReflector {
 
 	/** @mddoc-ignore */
 	public function withResolvedDependencies() : self {
-		$reflector = clone $this;
-		$reflector->classes = $this->resolveClassDefinitions($this->classes);
-
-		return $reflector;
+		return $this->parserFactory->newInstance($this->filename, $this->autoLoader);
 	}
 
-	/** @mddoc-ignore */
-	public function withResolvedClass( string $name ) : self {
-		$class = $this->findClass($this->classes, $name);
-		if( $class === null ) {
-			return $this;
-		}
-
-		$resolution = $this->resolveClassDependencies($class, $this->classes, [], []);
+	/**
+	 * @mddoc-ignore
+	 * @param array<string,ClassDefinition> $definitions
+	 */
+	public function withResolvedDefinitions( array $definitions ) : self {
 		$reflector = clone $this;
-		$reflector->classes = array_replace($this->classes, [ $class->getReflector()->getFqsen() => $resolution['class'] ]);
+		$reflector->classes = array_replace($this->classes, array_intersect_key($definitions, $this->classes));
 
 		return $reflector;
 	}
@@ -335,20 +332,15 @@ class TaxonomyReflector {
 		$resolving = $resolving + [ $name => true ];
 		foreach( $class->getDependencies() as $dependencyName ) {
 			$dependency = $this->findClass($classes, $dependencyName);
-			if( $dependency !== null ) {
-				$resolution = $this->resolveClassDependencies($dependency, $classes, $resolved, $resolving);
-				$dependency = $resolution['class'];
-				$resolved   = $resolution['resolved'];
-			} else {
-				$filename = ($this->autoLoader)($dependencyName);
-				if( $filename !== null && is_readable($filename) ) {
-					$dependency = $this->parserFactory->resolveClass($filename, $dependencyName, $this->autoLoader);
-				}
+			if( $dependency === null ) {
+				continue;
 			}
 
-			if( $dependency !== null ) {
-				$class = $class->withMergedDependency($dependency);
-			}
+			$resolution = $this->resolveClassDependencies($dependency, $classes, $resolved, $resolving);
+			$dependency = $resolution['class'];
+			$resolved   = $resolution['resolved'];
+
+			$class = $class->withMergedDependency($dependency);
 		}
 
 		return [
@@ -583,6 +575,19 @@ class TaxonomyReflector {
 	 */
 	public function getClasses() : array {
 		return array_values($this->classes);
+	}
+
+	/**
+	 * @mddoc-ignore
+	 * @return list<string>
+	 */
+	public function getDependencyNames() : array {
+		$dependencies = [];
+		foreach( $this->classes as $class ) {
+			$dependencies = array_merge($dependencies, $class->getDependencies());
+		}
+
+		return array_values(array_unique($dependencies));
 	}
 
 	/** @mddoc-ignore */

@@ -20,7 +20,7 @@ class ConditionalFunctionTest extends TestCase {
 
 			self::assertIsString($sourceRoot);
 
-			foreach( [ 'FunctionGuard.php', 'TryFunction.php', 'FunctionDeclarations.php', 'ClassMethodDeclarations.php', 'ClassGuard.php', 'EnumGuard.php', 'InterfaceGuard.php', 'TraitGuard.php', 'MultipleClasses.php', 'SameFileDependency/ParentClass.php', 'CrossFile/A.php' ] as $file ) {
+			foreach( [ 'FunctionGuard.php', 'TryFunction.php', 'FunctionDeclarations.php', 'FunctionNamespaces.php', 'ClassMethodDeclarations.php', 'ClassGuard.php', 'EnumGuard.php', 'InterfaceGuard.php', 'TraitGuard.php', 'MultipleClasses.php', 'SameFileDependency/ParentClass.php', 'CrossFile/A.php', 'CrossFileGraph/A.php' ] as $file ) {
 				$source = realpath(__DIR__ . '/fixtures/conditional-functions/' . $file);
 				self::assertIsString($source);
 				$files .= sprintf('<file name="%s" />', htmlspecialchars($source, ENT_XML1));
@@ -43,6 +43,8 @@ class ConditionalFunctionTest extends TestCase {
 			self::assertStringContainsString('Function: \\try_declared_function', $markdown);
 			self::assertStringContainsString('Function: \\function_containing_declarations', $markdown);
 			self::assertStringContainsString('Function: \\named_function_inside_function', $markdown);
+			self::assertStringContainsString('Function: \\MDDocTest\\First\\shared_helper', $markdown);
+			self::assertStringContainsString('Function: \\MDDocTest\\Second\\shared_helper', $markdown);
 			self::assertStringContainsString('Class: ClassInsideFunction', $markdown);
 			self::assertStringContainsString('Function: \\named_function_inside_class_method', $markdown);
 			self::assertStringContainsString('Class: ClassInsideClassMethod', $markdown);
@@ -62,6 +64,8 @@ class ConditionalFunctionTest extends TestCase {
 			self::assertStringContainsString('Method: Local->aMethod', $markdown);
 			self::assertStringContainsString('Method: Local->bMethod', $markdown);
 			self::assertStringContainsString('Method: Local->localMethod', $markdown);
+			self::assertStringContainsString('Class: MDDocTest\\CrossFileGraph\\Z', $markdown);
+			self::assertStringContainsString('Method: Z->cMethod', $markdown);
 		} finally {
 			foreach( [ $config ?? null, $output ?? null ] as $file ) {
 				if( $file !== null && file_exists($file) ) {
