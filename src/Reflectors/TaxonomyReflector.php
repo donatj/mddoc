@@ -26,7 +26,9 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
+use PhpParser\NodeVisitorAbstract;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 
@@ -422,11 +424,37 @@ class TaxonomyReflector {
 	}
 
 	private function formatExpression( Node\Expr $expression ) : string {
-		if( $expression instanceof Node\Expr\ConstFetch ) {
-			$name = strtolower(ltrim($expression->name->toString(), '\\'));
-			if( in_array($name, self::LANGUAGE_LITERALS, true) ) {
-				return $name;
+		$traverser = new NodeTraverser;
+		$traverser->addVisitor(new CloningVisitor);
+		$traverser->addVisitor(new class(self::LANGUAGE_LITERALS) extends NodeVisitorAbstract {
+
+			/** @var list<string> */
+			private array $literals;
+
+			/** @param list<string> $literals */
+			public function __construct( array $literals ) {
+				$this->literals = $literals;
 			}
+
+			public function enterNode( Node $node ) : ?Node {
+				if( !$node instanceof Node\Expr\ConstFetch ) {
+					return null;
+				}
+
+				$name = strtolower(ltrim($node->name->toString(), '\\'));
+				if( !in_array($name, $this->literals, true) ) {
+					return null;
+				}
+
+				return new Node\Expr\ConstFetch(new Name($name), $node->getAttributes());
+			}
+
+		});
+
+		$nodes = $traverser->traverse([ $expression ]);
+		$expression = $nodes[0];
+		if( !$expression instanceof Node\Expr ) {
+			throw new \LogicException('Expression traversal returned an invalid node.');
 		}
 
 		return $this->prettyPrinter->prettyPrintExpr($expression);

@@ -51,6 +51,7 @@ class PhpDocTypesTest extends TestCase {
 				"function multiLineCallableMagicSignature(\n\tcallable(string,int): bool \$filter,\n\t\\DateTimeImmutable \$createdAt,\n\t\\DateTimeImmutable \$updatedAt,\n\t\\DateTimeImmutable \$publishedAt,\n): \\DateTimeImmutable",
 				"function optionalParameters(\n\tstring \$required,\n\tint \$count = 1,\n\t?string \$label = null,\n)",
 				'function literalDefaults(bool $enabled = false, ?string $label = null)',
+				'function compositeLiteralDefaults(array $values = [false, null, true])',
 				'@var array{label: string,callback: callable(string|int): bool}',
 				'***\\RuntimeException***',
 				'***\\Psr\\Log\\LoggerInterface***',
@@ -125,6 +126,7 @@ class PhpDocTypesTest extends TestCase {
 				self::assertIsString($markdown);
 				self::assertStringContainsString('function optionalParameters(string $required, int $count = 1, ?string $label = null)', $markdown);
 				self::assertStringContainsString('function literalDefaults(bool $enabled = false, ?string $label = null)', $markdown);
+				self::assertStringContainsString('function compositeLiteralDefaults(array $values = [false, null, true])', $markdown);
 				self::assertStringNotContainsString("function optionalParameters(\n", $markdown);
 			}
 		} finally {
