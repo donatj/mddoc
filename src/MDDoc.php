@@ -22,6 +22,8 @@ class MDDoc {
 	private const CONFIG_FILES = [
 		"mddoc.xml",
 		".mddoc.xml",
+		"mddoc.dist.xml",
+		".mddoc.dist.xml",
 		"mddoc.xml.dist",
 		".mddoc.xml.dist",
 	];
