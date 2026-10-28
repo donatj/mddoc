@@ -8,6 +8,7 @@ use donatj\MDDoc\Exceptions\ConfigException;
 use donatj\MDDoc\Exceptions\DryRunMismatchException;
 use donatj\MDDoc\Exceptions\MDDocException;
 use donatj\MDDoc\Exceptions\PathNotReadableException;
+use donatj\MDDoc\Runner\ConfigFinder;
 use donatj\MDDoc\Runner\ConfigParser;
 use donatj\MDDoc\Runner\DocumentationOutputStrategy;
 use donatj\MDDoc\Runner\DryRunDocumentationOutputStrategy;
@@ -18,15 +19,6 @@ use donatj\MDDoc\Runner\TextUI;
  * Application MDDoc
  */
 class MDDoc {
-
-	private const CONFIG_FILES = [
-		"mddoc.xml",
-		".mddoc.xml",
-		"mddoc.dist.xml",
-		".mddoc.dist.xml",
-		"mddoc.xml.dist",
-		".mddoc.xml.dist",
-	];
 
 	private DocumentationOutputStrategy $documentationOutputStrategy;
 
@@ -103,13 +95,7 @@ class MDDoc {
 			return current($flags->args());
 		}
 
-		foreach( self::CONFIG_FILES as $configFile ) {
-			if( file_exists($configFile) ) {
-				return $configFile;
-			}
-		}
-
-		throw new ConfigException('No config file found');
+		return (new ConfigFinder)->find('file_exists');
 	}
 
 	private static function versionMarker( TextUI $ui ) : void {

@@ -1,39 +1,27 @@
 <?php
 
-use donatj\MDDoc\MDDoc;
+use donatj\MDDoc\Exceptions\ConfigException;
+use donatj\MDDoc\Runner\ConfigFinder;
 use PHPUnit\Framework\TestCase;
 
 class ConfigDiscoveryTest extends TestCase {
 
-	public function testDistXmlConfigIsPreferredOverXmlDistConfig() : void {
-		$tempDir = sys_get_temp_dir() . '/mddoc-config-discovery-' . uniqid('', true);
-		$cwd     = getcwd();
-		$configs = [ 'mddoc.dist.xml', '.mddoc.dist.xml', 'mddoc.xml.dist', '.mddoc.xml.dist' ];
-		self::assertIsString($cwd);
-		self::assertTrue(mkdir($tempDir, 0700));
+	public function testConfigPreferenceOrder() : void {
+		$files = [ 'mddoc.xml', '.mddoc.xml', 'mddoc.dist.xml', '.mddoc.dist.xml', 'mddoc.xml.dist', '.mddoc.xml.dist' ];
 
-		try {
-			self::assertTrue(chdir($tempDir));
-			foreach( $configs as $config ) {
-				file_put_contents($config, '<mddoc><docpage target="README.md"><text>' . $config . '</text></docpage></mddoc>');
-			}
-
-			foreach( $configs as $config ) {
-				new MDDoc([ 'mddoc' ]);
-				self::assertSame($config, file_get_contents('README.md'));
-				unlink($config);
-			}
-		} finally {
-			chdir($cwd);
-			foreach( array_merge($configs, [ 'README.md' ]) as $file ) {
-				$path = $tempDir . '/' . $file;
-				if( file_exists($path) ) {
-					unlink($path);
-				}
-			}
-
-			rmdir($tempDir);
+		while( $files ) {
+			self::assertSame($files[0], (new ConfigFinder)->find(
+				static fn( string $file ) : bool => in_array($file, $files, true)
+			));
+			array_shift($files);
 		}
+	}
+
+	public function testMissingConfig() : void {
+		$this->expectException(ConfigException::class);
+		$this->expectExceptionMessage('No config file found');
+
+		(new ConfigFinder)->find(static fn( string $file ) : bool => false);
 	}
 
 }

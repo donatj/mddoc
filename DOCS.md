@@ -1905,6 +1905,22 @@ function newInstance(
 
 **Throws**: `\donatj\MDDoc\Exceptions\ClassNotReadableException`
 
+## Class: donatj\MDDoc\Runner\ConfigFinder
+
+### Method: ConfigFinder->find
+
+```php
+function find(callable $fileExists): string
+```
+
+Find the first existing config file in preference order.
+
+#### Parameters
+
+- ***callable(string): bool*** `$fileExists`
+
+**Throws**: `\donatj\MDDoc\Exceptions\ConfigException`
+
 ## Class: donatj\MDDoc\Runner\ConfigParser
 
 ### Method: ConfigParser->__construct
